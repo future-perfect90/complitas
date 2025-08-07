@@ -1,11 +1,8 @@
 <?php
+require_once(__DIR__ . '/Conf.php');
 
-/**
- * Class Database
- */
 class Database
 {
-
     private $conn;
 
     /**
@@ -13,17 +10,16 @@ class Database
      */
     public function connect(): ?PDO
     {
-        //TODO::Implement ENV for values
-    
-        $username = 'root'; // Default username, change as needed
-        $password = 'root'; // Default password, change as needed
-        $dbname = 'complitas'; // Default database name, change as needed
-        $host = 'localhost'; // Default host, change as needed
-        $port = 8889; // Default port, change as needed
 
-        
-            try {
-                $conn = new PDO(
+        $dbCredentials = (new Conf())->DbCredentials();
+        $username = $dbCredentials['username'];
+        $password = $dbCredentials['password'];
+        $dbname = $dbCredentials['dbname'];
+        $host = $dbCredentials['host'];
+        $port = $dbCredentials['port'];
+
+        try {
+            $conn = new PDO(
                     'mysql:host=' . $host . ';port=' . $port . ';dbname=' . $dbname . ';charset=utf8mb4',
                     $username,
                     $password,
