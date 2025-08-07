@@ -14,6 +14,6 @@ CREATE TABLE IF NOT EXISTS `companies` (
     `vat_no` VARCHAR(255),
     `company_reg_no` VARCHAR(255),
     `email` VARCHAR(255),
-    `telephone` VARCHAR(255),
+    `telephone` VARCHAR(13),
     PRIMARY KEY (`id`)
 );

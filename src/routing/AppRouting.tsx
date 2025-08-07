@@ -1,5 +1,7 @@
 import { useRoutes, type RouteObject } from 'react-router-dom';
 import About from '../pages/AboutUs';
+import AddCompany from '../pages/company/AddCompany';
+import ListCompanies from '../pages/company/ListCompanies';
 import Dashboard from '../pages/Dashboard';
 import Home from '../pages/Home';
 import Login from '../pages/Login';
@@ -14,6 +16,8 @@ const AppRoutes = () => {
 				{ path: '/', element: <Home /> },
 				{ path: '/about', element: <About /> },
 				{ path: '/login', element: <Login /> },
+				{ path: '/company', element: <AddCompany /> },
+				{ path: '/companyList', element: <ListCompanies /> },
 			],
 		},
 		{
