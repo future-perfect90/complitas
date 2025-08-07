@@ -1,18 +1,20 @@
+import { useAuth0 } from '@auth0/auth0-react';
 import { Link } from 'react-router-dom';
 
 export default function Navigation() {
-	//check if the user is authenticated
-	const isAuthenticated = false; // Replace with actual authentication logic
-	let navLinks = [
-		{ title: 'Home', href: '/' },
-		{ title: 'About', href: '/about' },
-		{
-			title: isAuthenticated ? 'Log out' : 'Log in',
-			href: isAuthenticated ? '/logout' : '/login',
-		},
-	];
-	if (isAuthenticated) {
-		navLinks.push({ title: 'Dashboard', href: '/dashboard' });
+	const { isAuthenticated } = useAuth0();
+	let navLinks;
+	if (!isAuthenticated) {
+		navLinks = [
+			{ title: 'Home', href: '/' },
+			{ title: 'About', href: '/about' },
+			{ title: 'Log in', href: '/login' },
+		];
+	} else {
+		navLinks = [
+			{ title: 'Dashboard', href: '/dashboard' },
+			{ title: 'Log out', href: '/logout' },
+		];
 	}
 
 	return (

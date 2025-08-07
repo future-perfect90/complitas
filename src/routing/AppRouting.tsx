@@ -2,6 +2,8 @@ import { useRoutes, type RouteObject } from 'react-router-dom';
 import About from '../pages/AboutUs';
 import Dashboard from '../pages/Dashboard';
 import Home from '../pages/Home';
+import Login from '../pages/Login';
+import Logout from '../pages/Logout';
 import PrivateRoute from './PrivateRoute';
 import PublicRoute from './PublicRoute';
 const AppRoutes = () => {
@@ -11,11 +13,15 @@ const AppRoutes = () => {
 			children: [
 				{ path: '/', element: <Home /> },
 				{ path: '/about', element: <About /> },
+				{ path: '/login', element: <Login /> },
 			],
 		},
 		{
 			element: <PrivateRoute />,
-			children: [{ path: '/dashboard', element: <Dashboard /> }],
+			children: [
+				{ path: '/dashboard', element: <Dashboard /> },
+				{ path: '/logout', element: <Logout /> },
+			],
 		},
 	];
 	return useRoutes(appRoutes);

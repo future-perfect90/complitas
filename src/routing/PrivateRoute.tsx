@@ -1,8 +1,13 @@
+import { useAuth0 } from '@auth0/auth0-react';
 import { Navigate, Outlet } from 'react-router-dom';
 const PrivateRoute = () => {
-	const isAuthenticated = true; // Replace with actual authentication logic
+	const { isAuthenticated, isLoading } = useAuth0();
+	console.log('PrivateRoute', { isAuthenticated, isLoading });
+	if (isLoading) {
+		return <div>Loading ...</div>;
+	}
 
-	return isAuthenticated ? <Navigate to="/dashboard" replace /> : <Outlet />;
+	return isAuthenticated ? <Outlet /> : <Navigate to="/login" replace />;
 };
 
 export default PrivateRoute;
