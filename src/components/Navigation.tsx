@@ -1,0 +1,35 @@
+import { Link } from 'react-router-dom';
+
+export default function Navigation() {
+	//check if the user is authenticated
+	const isAuthenticated = false; // Replace with actual authentication logic
+	let navLinks = [
+		{ title: 'Home', href: '/' },
+		{ title: 'About', href: '/about' },
+		{
+			title: isAuthenticated ? 'Log out' : 'Log in',
+			href: isAuthenticated ? '/logout' : '/login',
+		},
+	];
+	if (isAuthenticated) {
+		navLinks.push({ title: 'Dashboard', href: '/dashboard' });
+	}
+
+	return (
+		<nav className="flex justify-between items-center bg-black shadow-md py-4 px-4 md:px-8">
+			<div className="text-xl md:text-2xl font-bold">
+				<Link to="/">Complitas</Link>
+			</div>
+			<div className="flex gap-4 md:gap-8">
+				{navLinks.map((link) => (
+					<Link
+						to={link.href}
+						key={link.title}
+						className="text-base p-2 md:py-2 md:px-4 rounded transition-colors duration-200 hover:bg-white/10">
+						{link.title}
+					</Link>
+				))}
+			</div>
+		</nav>
+	);
+}
