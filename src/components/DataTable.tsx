@@ -1,3 +1,4 @@
+import { Button } from './Button';
 type TableProps = {
 	headings: HeadingProps[];
 	data: DataProps[];
@@ -51,17 +52,16 @@ export const DataTable = ({
 								</td>
 							))}
 							<td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-								<button
+								<Button
 									onClick={() => handleEdit(item.id)}
-									className="text-indigo-600 hover:text-indigo-900 mr-4">
-									Edit
-								</button>
-								<button
+									label="Edit"
+									className={'bg-indigo-900'}
+								/>
+								<Button
 									onClick={() => handleDelete(item.id)}
-									className="text-red-600 hover:text-red-900">
-									{' '}
-									Delete
-								</button>
+									label="Delete"
+									className={'bg-red-900'}
+								/>
 							</td>
 						</tr>
 					))}
