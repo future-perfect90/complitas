@@ -1,40 +1,19 @@
 import { useEffect, useState } from 'react';
+import { DataTable } from '../../components/DataTable';
 import type { Company } from './types';
-// The main component for the application.
-// This component renders the company details form with validation.
+
 const ListCompanies = () => {
+	//TODO::Add in authed access only
 	// const { isAuthenticated, getAccessTokenSilently } = useAuth0();
 	// const [token, setToken] = useState<string | null>(null);
-	// useEffect(() => {
-	// 	const fetchToken = async () => {
-	// 		if (isAuthenticated) {
-	// 			try {
-	// 				const accessToken = await getAccessTokenSilently({
-	// 					authorizationParams: {
-	// 						audience: import.meta.env.VITE_AUTH0_AUDIENCE,
-	// 					},
-	// 				});
-	// 				setToken(accessToken);
-	// 			} catch (e) {
-	// 				console.error(e);
-	// 			}
-	// 		}
-	// 	};
-	// 	fetchToken();
-	// }, [isAuthenticated, getAccessTokenSilently]);
 
-	// State to store the list of companies.
 	const [companies, setCompanies] = useState([]);
-	// State for managing loading status.
 	const [loading, setLoading] = useState(true);
-	// State for managing error messages.
 	const [error, setError] = useState(null);
+	const [searchTerm, setSearchTerm] = useState('');
 
-	// useEffect hook to fetch data when the component mounts.
 	useEffect(() => {
-		// Placeholder URL for your PHP API endpoint.
 		const API_URL = `${import.meta.env.VITE_API_BASE_URL}/company/list.php`;
-
 		const fetchCompanies = async () => {
 			try {
 				const response = await fetch(API_URL, {
@@ -45,7 +24,6 @@ const ListCompanies = () => {
 					// },
 				});
 
-				// Handle non-successful responses from the API.
 				if (!response.ok) {
 					throw new Error(`API error: ${response.statusText}`);
 				}
@@ -53,10 +31,8 @@ const ListCompanies = () => {
 				const data = await response.json();
 				setCompanies(data);
 			} catch (e: any) {
-				// Catch and display any errors during the fetch.
 				setError(e.message);
 			} finally {
-				// Set loading to false once the request is complete.
 				setLoading(false);
 			}
 		};
@@ -64,17 +40,28 @@ const ListCompanies = () => {
 		fetchCompanies();
 	}, []);
 
+	const filteredCompanies = companies.filter((company: Company) =>
+		company.company_name.toLowerCase().includes(searchTerm.toLowerCase())
+	);
+
+	const tableHeadings = [
+		{ key: 'company_name', label: 'Company Name' },
+		{ key: 'address_line_1', label: 'Address' },
+		{ key: 'city', label: 'City' },
+		{ key: 'country', label: 'Country' },
+		{ key: 'email', label: 'Email' },
+		{ key: 'telephone', label: 'Telephone' },
+	];
+
 	// Handler for the Edit button.
 	const handleEdit = (companyId: number) => {
-		// In a real application, you would use React Router to navigate.
-		// window.location.href = `/edit-company/${companyId}`;
+		//TODO::Handle edit company
 		alert(`Editing company with ID: ${companyId}`);
 		console.log(`Redirecting to edit page for company ID: ${companyId}`);
 	};
 
-	// Handler for the Delete button.
 	const handleDelete = (companyId: number) => {
-		// In a real application, you would send a DELETE request to the API.
+		//TODO::Handle delete company
 		const isConfirmed = window.confirm(
 			`Are you sure you want to delete company with ID: ${companyId}?`
 		);
@@ -84,7 +71,6 @@ const ListCompanies = () => {
 		}
 	};
 
-	// Display loading message while the data is being fetched.
 	if (loading) {
 		return (
 			<div className="min-h-screen flex items-center justify-center">
@@ -93,7 +79,6 @@ const ListCompanies = () => {
 		);
 	}
 
-	// Display error message if the fetch failed.
 	if (error) {
 		return (
 			<div className="min-h-screen flex items-center justify-center">
@@ -102,7 +87,6 @@ const ListCompanies = () => {
 		);
 	}
 
-	// Display a message if there are no companies to show.
 	if (companies.length === 0) {
 		return (
 			<div className="min-h-screen flex items-center justify-center">
@@ -111,92 +95,32 @@ const ListCompanies = () => {
 		);
 	}
 
-	// Render the table with company data.
 	return (
-		<div className="min-h-screen bg-gray-100 p-4 sm:p-6 lg:p-8 dark:bg-gray-900">
+		<div className="min-h-screen bg-gray-100 p-4 sm:p-6 lg:p-8">
 			<div className="bg-white rounded-xl shadow-2xl overflow-hidden">
 				<h1 className="text-3xl font-extrabold text-center p-6 text-gray-900 border-b-2">
 					Company List
 				</h1>
-				<div className="overflow-x-auto">
-					<table className="min-w-full divide-y divide-gray-200">
-						<thead className="bg-gray-50">
-							<tr>
-								<th
-									scope="col"
-									className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-									Company Name
-								</th>
-								<th
-									scope="col"
-									className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-									Address
-								</th>
-								<th
-									scope="col"
-									className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-									City
-								</th>
-								<th
-									scope="col"
-									className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-									Country
-								</th>
-								<th
-									scope="col"
-									className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-									Email
-								</th>
-								<th
-									scope="col"
-									className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-									Telephone
-								</th>
-								<th
-									scope="col"
-									className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-									Actions
-								</th>
-							</tr>
-						</thead>
-						<tbody className="bg-white divide-y divide-gray-200">
-							{companies.map((company: Company) => (
-								<tr key={company.id}>
-									<td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-										{company.company_name}
-									</td>
-									<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-										{company.address_line_1} {company.address_line_2}
-									</td>
-									<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-										{company.city}
-									</td>
-									<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-										{company.country}
-									</td>
-									<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-										{company.email}
-									</td>
-									<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-										{company.telephone}
-									</td>
-									<td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-										<button
-											onClick={() => handleEdit(company.id)}
-											className="text-indigo-600 hover:text-indigo-900 mr-4">
-											Edit
-										</button>
-										<button
-											onClick={() => handleDelete(company.id)}
-											className="text-red-600 hover:text-red-900">
-											Delete
-										</button>
-									</td>
-								</tr>
-							))}
-						</tbody>
-					</table>
+				<div className="p-4">
+					<input
+						type="text"
+						placeholder="Search by company name..."
+						value={searchTerm}
+						onChange={(e) => setSearchTerm(e.target.value)}
+						className="w-full p-2 border rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 dark:text-gray-900"
+					/>
 				</div>
+				{filteredCompanies.length > 0 ?
+					<DataTable
+						data={filteredCompanies}
+						headings={tableHeadings}
+						handleEdit={handleEdit}
+						handleDelete={handleDelete}
+					/>
+				:	<div className="p-4 text-center text-gray-500">
+						No companies found matching your search.
+					</div>
+				}
 			</div>
 		</div>
 	);
