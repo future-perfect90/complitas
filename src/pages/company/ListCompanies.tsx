@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import { Button } from '../../components/Button';
 import { DataTable } from '../../components/DataTable';
 import { TextInput } from '../../components/InputField';
+import { Modal } from '../../components/Modal';
+import AddCompany from './AddCompany';
 import type { Company } from './types';
 
 const ListCompanies = () => {
@@ -15,8 +17,10 @@ const ListCompanies = () => {
 	const [searchTerm, setSearchTerm] = useState('');
 	const [isModalOpen, setIsModalOpen] = useState(false);
 
-	const handleOpen = () => {
-		setIsModalOpen(true);
+	const toggleModal = () => {
+		setIsModalOpen(!isModalOpen);
+		console.log('hit');
+		return <AddCompany />;
 	};
 
 	// Define function that will close the modal
@@ -121,7 +125,7 @@ const ListCompanies = () => {
 					/>
 					<Button
 						label="Add Company"
-						onClick={handleOpen}
+						onClick={toggleModal}
 						className={'float-right bg-purple-900'}
 					/>
 				</div>
@@ -137,6 +141,9 @@ const ListCompanies = () => {
 					</div>
 				}
 			</div>
+			<Modal isOpen={isModalOpen} onClose={toggleModal}>
+				<AddCompany />
+			</Modal>
 		</div>
 	);
 };

@@ -31,19 +31,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         ];
 
         $result = $company->create($companyData);
-        
-        if ($result) {
-            http_response_code(201);
-            echo json_encode(['message' => 'Company created successfully', 'id' => $result]);
+
+        if(!$result['success']) {
+            if($result['message'] === 'Company already exists') {
+                http_response_code(409);
+                echo json_encode($result);
+            }
+            else {
+                http_response_code(500);
+                echo json_encode($result);
+            }
         } else {
-            http_response_code(500);
-            echo json_encode(['message' => 'Failed to create company']);
+            http_response_code(201);
+            echo json_encode([$result]);
         }
     } else {
-        http_response_code(400);
-        echo json_encode(['message' => 'Invalid data provided']);
+        http_response_code(405); // Method Not Allowed
+        echo json_encode(['errors' => 'Method not allowed']);
     }
-} else {
-    http_response_code(405); // Method Not Allowed
-    echo json_encode(['message' => 'Method not allowed']);
 }

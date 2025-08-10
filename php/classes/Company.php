@@ -17,17 +17,20 @@ class Company
     public function listAll(): array
     {
         $stmt = $this->pdo->query("SELECT id, company_name, address_line_1, address_line_2, address_line_3, city, county, post_code, country, vat_no, company_reg_no, email, telephone FROM companies");
-        return $stmt->fetchAll();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    /**
-     * Creates a new company record.
-     *
-     * @param array $companyData An associative array of company data.
-     * @return string|null The UUID of the new company, or null on failure.
-     */
-    public function create(array $companyData): ?string
+    public function create(array $companyData): array
     {
+        $lookup = "SELECT count(id) FROM companies WHERE company_name = :company_name";
+        $stmt = $this->pdo->prepare($lookup);
+        $stmt->bindParam(':company_name', $companyData['company_name']);
+        $stmt->execute();
+        $rowCount = $stmt->fetchColumn();
+        if($rowCount > 0){
+            return ['success' => false, 'message' => 'Company already exists'];
+        }
+
         $sql = "INSERT INTO companies (company_name, address_line_1, address_line_2, address_line_3, city, county, post_code, country, vat_no, company_reg_no, email, telephone) 
                 VALUES (:company_name, :address_line_1, :address_line_2, :address_line_3, :city, :county, :post_code, :country, :vat_no, :company_reg_no, :email, :telephone)";
         
@@ -48,7 +51,7 @@ class Company
         
         $stmt->execute();
 
-        return $stmt->rowCount() ? $this->pdo->lastInsertId() : null;
+        return ($stmt->rowCount() > 0) ? ['success' => true, 'message' => 'Company created'] : ['success' => false, 'message' => 'Something went wrong'];
     }
 
     /**
