@@ -92,26 +92,6 @@ const AddCompany = () => {
 				console.error(error);
 			} finally {
 			}
-
-			// try {
-			// 	axios
-			// 		.post(
-			// 			`${import.meta.env.VITE_API_BASE_URL}/company/add.php`,
-			// 			formData,
-			// 			{
-			// 				headers: { Authorization: `Bearer ${token}` },
-			// 			}
-			// 		)
-			// 		.then((response) => {
-			// 			console.log(response.data);
-			// 		})
-			// 		.catch((error) => {
-			// 			console.error(error);
-			// 		});
-			// } catch (error) {
-			// 	console.error('Error accessing API:', error);
-			// 	return;
-			// }
 		} else {
 			// Validation failed. Errors are already in the state and displayed.
 			alert('Please correct the form errors.');
