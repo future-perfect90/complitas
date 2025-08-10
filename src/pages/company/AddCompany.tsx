@@ -1,5 +1,4 @@
 import { useAuth0 } from '@auth0/auth0-react';
-import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import type { ErrorsType } from './types';
 // The main component for the application.
@@ -73,24 +72,46 @@ const AddCompany = () => {
 		e.preventDefault();
 		if (validate()) {
 			try {
-				axios
-					.post(
-						`${import.meta.env.VITE_API_BASE_URL}/company/add.php`,
-						formData,
-						{
-							headers: { Authorization: `Bearer ${token}` },
-						}
-					)
-					.then((response) => {
-						console.log(response.data);
-					})
-					.catch((error) => {
-						console.error(error);
-					});
-			} catch (error) {
-				console.error('Error accessing API:', error);
-				return;
+				const response = await fetch(
+					`${import.meta.env.VITE_API_BASE_URL}/company/add.php`,
+					{
+						method: 'POST',
+						body: JSON.stringify(formData),
+						// You would include the JWT from your Auth0 login here
+						// headers: {
+						// 	Authorization: `Bearer ${token}`,
+						// },
+					}
+				);
+
+				if (!response.ok) {
+					throw new Error(`API error: ${response.statusText}`);
+				}
+				await response.json();
+			} catch (error: any) {
+				console.error(error);
+			} finally {
 			}
+
+			// try {
+			// 	axios
+			// 		.post(
+			// 			`${import.meta.env.VITE_API_BASE_URL}/company/add.php`,
+			// 			formData,
+			// 			{
+			// 				headers: { Authorization: `Bearer ${token}` },
+			// 			}
+			// 		)
+			// 		.then((response) => {
+			// 			console.log(response.data);
+			// 		})
+			// 		.catch((error) => {
+			// 			console.error(error);
+			// 		});
+			// } catch (error) {
+			// 	console.error('Error accessing API:', error);
+			// 	return;
+			// }
 		} else {
 			// Validation failed. Errors are already in the state and displayed.
 			alert('Please correct the form errors.');

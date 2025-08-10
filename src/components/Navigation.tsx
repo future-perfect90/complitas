@@ -18,9 +18,11 @@ export default function Navigation() {
 	}
 
 	return (
-		<nav className="flex justify-between items-center bg-black shadow-md py-4 px-4 md:px-8">
+		<nav className="flex justify-between items-center bg-white shadow-md py-4 px-4 md:px-8">
 			<div className="text-xl md:text-2xl font-bold">
-				<Link to="/">Complitas</Link>
+				<Link to="/">
+					<img className="w-30 h-3xs" src="tlogo_text.png" />
+				</Link>
 			</div>
 			<div className="flex gap-4 md:gap-8">
 				{navLinks.map((link) => (

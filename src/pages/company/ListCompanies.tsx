@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
+import { Button } from '../../components/Button';
 import { DataTable } from '../../components/DataTable';
+import { TextInput } from '../../components/InputField';
 import type { Company } from './types';
 
 const ListCompanies = () => {
@@ -11,6 +13,16 @@ const ListCompanies = () => {
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState(null);
 	const [searchTerm, setSearchTerm] = useState('');
+	const [isModalOpen, setIsModalOpen] = useState(false);
+
+	const handleOpen = () => {
+		setIsModalOpen(true);
+	};
+
+	// Define function that will close the modal
+	const handleClose = () => {
+		setIsModalOpen(false);
+	};
 
 	useEffect(() => {
 		const API_URL = `${import.meta.env.VITE_API_BASE_URL}/company/list.php`;
@@ -102,12 +114,15 @@ const ListCompanies = () => {
 					Company List
 				</h1>
 				<div className="p-4">
-					<input
-						type="text"
+					<TextInput
 						placeholder="Search by company name..."
-						value={searchTerm}
-						onChange={(e) => setSearchTerm(e.target.value)}
-						className="w-full p-2 border rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 dark:text-gray-900"
+						text={searchTerm}
+						onChange={(e: any) => setSearchTerm(e.target.value)}
+					/>
+					<Button
+						label="Add Company"
+						onClick={handleOpen}
+						className={'float-right bg-purple-900'}
 					/>
 				</div>
 				{filteredCompanies.length > 0 ?
