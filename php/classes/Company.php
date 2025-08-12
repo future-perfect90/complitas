@@ -27,13 +27,13 @@ class Company
         $stmt->bindParam(':company_name', $companyData['name']);
         $stmt->execute();
         $rowCount = $stmt->fetchColumn();
-        if($rowCount > 0){
+        if ($rowCount > 0) {
             return ['success' => false, 'message' => 'Company already exists'];
         }
 
         $sql = "INSERT INTO companies (name, address1, address2, address3, city, county, postCode, country, vatNo, companyRegNo, email, telephone) 
                 VALUES (:company_name, :address_line_1, :address_line_2, :address_line_3, :city, :county, :post_code, :country, :vat_no, :company_reg_no, :email, :telephone)";
-        
+
         $stmt = $this->pdo->prepare($sql);
 
         $stmt->bindParam(':company_name', $companyData['name']);
@@ -48,7 +48,7 @@ class Company
         $stmt->bindParam(':company_reg_no', $companyData['companyRegNo']);
         $stmt->bindParam(':email', $companyData['email']);
         $stmt->bindParam(':telephone', $companyData['telephone']);
-        
+
         $stmt->execute();
 
         return ($stmt->rowCount() > 0) ? ['success' => true, 'message' => 'Company created'] : ['success' => false, 'message' => 'Something went wrong'];
@@ -66,7 +66,7 @@ class Company
         $stmt = $this->pdo->prepare($sql);
         $stmt->bindParam(':id', $id);
         $stmt->execute();
-        
+
         $result = $stmt->fetch();
         return $result !== false ? $result : null;
     }
@@ -78,27 +78,26 @@ class Company
      * @param array $companyData An associative array of data to update.
      * @return bool True on success, false on failure.
      */
-    public function update(string $id, array $companyData): bool
+    public function update(string $id, array $companyData): array
     {
         // Dynamically build the SET clause for the update statement.
         $setClauses = [];
         $bindings = [];
         foreach ($companyData as $key => $value) {
-            $setClauses[] = "'$key' = :$key";
+            $setClauses[] = "$key = :$key";
             $bindings[":$key"] = $value;
         }
 
         if (empty($setClauses)) {
-            return false; // Nothing to update.
+            return ['success' => false, 'message' => 'Nothing to update']; // Nothing to update.
         }
-
         $sql = "UPDATE companies SET " . implode(', ', $setClauses) . " WHERE id = :id";
         $bindings[':id'] = $id;
 
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute($bindings);
-        
-        return $stmt->rowCount() > 0;
+
+        return ($stmt->rowCount() > 0) ? ['success' => true, 'message' => 'Company updated'] : ['success' => false, 'message' => 'Something went wrong'];
     }
 
     /**
@@ -113,7 +112,7 @@ class Company
         $stmt = $this->pdo->prepare($sql);
         $stmt->bindParam(':id', $id);
         $stmt->execute();
-        
+
         return $stmt->rowCount() > 0;
     }
 }

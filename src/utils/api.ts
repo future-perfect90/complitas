@@ -15,12 +15,7 @@ export async function getCompany(id: number) {
 	return r.data;
 }
 
-// export async function createCompany(payload: Partial<Company>) {
-// 	const r = await api.post<Company>('/company/add.php', payload);
-// 	return r.data;
-// }
-
-export async function createCompany(payload: Partial<Company>) {
+export async function createCompany(payload: Company) {
 	await fetch(`${import.meta.env.VITE_API_BASE_URL}/company/add.php`, {
 		method: 'POST',
 		body: JSON.stringify(payload),
@@ -31,9 +26,15 @@ export async function createCompany(payload: Partial<Company>) {
 	});
 }
 
-export async function updateCompany(id: number, payload: Partial<Company>) {
-	const r = await api.put<Company>(`/company/update.php?id=${id}`, payload);
-	return r.data;
+export async function updateCompany(payload: Company) {
+	await fetch(`${import.meta.env.VITE_API_BASE_URL}/company/update.php`, {
+		method: 'PUT',
+		body: JSON.stringify(payload),
+		// You would include the JWT from your Auth0 login here
+		// headers: {
+		// 	Authorization: `Bearer ${token}`,
+		// },
+	});
 }
 
 export async function deleteCompany(id: number) {

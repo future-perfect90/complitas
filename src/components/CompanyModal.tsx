@@ -31,9 +31,11 @@ const CompanyModal: React.FC<Props> = ({
 	const [companyRegNo, setCompanyRegNo] = useState('');
 	const [telephone, setTelephone] = useState('');
 	const [email, setEmail] = useState('');
+	const [id, setId] = useState(0);
 
 	useEffect(() => {
 		if (initialData) {
+			setId(initialData.id || 0);
 			setName(initialData.name);
 			setAddress1(initialData.address1);
 			setAddress2(initialData.address2 || '');
@@ -47,6 +49,7 @@ const CompanyModal: React.FC<Props> = ({
 			setTelephone(initialData.telephone);
 			setEmail(initialData.email);
 		} else {
+			setId(0);
 			setName('');
 			setAddress1('');
 			setAddress2('');
@@ -64,7 +67,6 @@ const CompanyModal: React.FC<Props> = ({
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
-
 		// Validation
 		const phoneRegex = /^[0-9\-\+\s\(\)]+$/;
 		const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -84,10 +86,18 @@ const CompanyModal: React.FC<Props> = ({
 
 		try {
 			if (initialData) {
-				await updateCompany(initialData.id, {
+				await updateCompany({
+					id,
 					name,
 					address1,
 					address2,
+					address3,
+					city,
+					county,
+					country,
+					postCode,
+					vatNo,
+					companyRegNo,
 					telephone,
 					email,
 				});
