@@ -8,7 +8,8 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
 $data = json_decode(file_get_contents("php://input"), true);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if ($data && isset($data['company_name']) && isset($data['vat_no']) && isset($data['company_reg_no'])) {
+    // if ($data && isset($data['company_name']) && isset($data['vat_no']) && isset($data['company_reg_no'])) {
+    if($data) {
         require_once(__DIR__ . '/../../classes/Database.php');
         require_once(__DIR__ . '/../../classes/Company.php');
 
@@ -16,16 +17,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $company = new Company($db);
 
         $companyData = [
-            'company_name' => $data['company_name'],
-            'address_line_1' => $data['address_line_1'] ?? '',
-            'address_line_2' => $data['address_line_2'] ?? '',
-            'address_line_3' => $data['address_line_3'] ?? '',
+            'name' => $data['name'],
+            'address1' => $data['address1'] ?? '',
+            'address2' => $data['address2'] ?? '',
+            'address3' => $data['address3'] ?? '',
             'city' => $data['city'] ?? '',
             'county' => $data['county'] ?? '',
-            'post_code' => $data['post_code'] ?? '',
+            'postCode' => $data['postCode'] ?? '',
             'country' => $data['country'] ?? '',
-            'vat_no' => $data['vat_no'],
-            'company_reg_no' => $data['company_reg_no'],
+            'vatNo' => $data['vatNo'],
+            'companyRegNo' => $data['companyRegNo'],
             'email' => $data['email'] ?? '',
             'telephone' => $data['telephone'] ?? ''
         ];

@@ -16,36 +16,36 @@ class Company
      */
     public function listAll(): array
     {
-        $stmt = $this->pdo->query("SELECT id, company_name, address_line_1, address_line_2, address_line_3, city, county, post_code, country, vat_no, company_reg_no, email, telephone FROM companies");
+        $stmt = $this->pdo->query("SELECT id, name, address1, address2, address3, city, county, postCode, country, vatNo, companyRegNo, email, telephone FROM companies");
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function create(array $companyData): array
     {
-        $lookup = "SELECT count(id) FROM companies WHERE company_name = :company_name";
+        $lookup = "SELECT count(id) FROM companies WHERE name = :company_name";
         $stmt = $this->pdo->prepare($lookup);
-        $stmt->bindParam(':company_name', $companyData['company_name']);
+        $stmt->bindParam(':company_name', $companyData['name']);
         $stmt->execute();
         $rowCount = $stmt->fetchColumn();
         if($rowCount > 0){
             return ['success' => false, 'message' => 'Company already exists'];
         }
 
-        $sql = "INSERT INTO companies (company_name, address_line_1, address_line_2, address_line_3, city, county, post_code, country, vat_no, company_reg_no, email, telephone) 
+        $sql = "INSERT INTO companies (name, address1, address2, address3, city, county, postCode, country, vatNo, companyRegNo, email, telephone) 
                 VALUES (:company_name, :address_line_1, :address_line_2, :address_line_3, :city, :county, :post_code, :country, :vat_no, :company_reg_no, :email, :telephone)";
         
         $stmt = $this->pdo->prepare($sql);
 
-        $stmt->bindParam(':company_name', $companyData['company_name']);
-        $stmt->bindParam(':address_line_1', $companyData['address_line_1']);
-        $stmt->bindParam(':address_line_2', $companyData['address_line_2']);
-        $stmt->bindParam(':address_line_3', $companyData['address_line_3']);
+        $stmt->bindParam(':company_name', $companyData['name']);
+        $stmt->bindParam(':address_line_1', $companyData['address1']);
+        $stmt->bindParam(':address_line_2', $companyData['address2']);
+        $stmt->bindParam(':address_line_3', $companyData['address3']);
         $stmt->bindParam(':city', $companyData['city']);
         $stmt->bindParam(':county', $companyData['county']);
-        $stmt->bindParam(':post_code', $companyData['post_code']);
+        $stmt->bindParam(':post_code', $companyData['postCode']);
         $stmt->bindParam(':country', $companyData['country']);
-        $stmt->bindParam(':vat_no', $companyData['vat_no']);
-        $stmt->bindParam(':company_reg_no', $companyData['company_reg_no']);
+        $stmt->bindParam(':vat_no', $companyData['vatNo']);
+        $stmt->bindParam(':company_reg_no', $companyData['companyRegNo']);
         $stmt->bindParam(':email', $companyData['email']);
         $stmt->bindParam(':telephone', $companyData['telephone']);
         
@@ -62,7 +62,7 @@ class Company
      */
     public function getById(string $id): ?array
     {
-        $sql = "SELECT id, company_name, address_line_1, address_line_2, address_line_3, city, county, post_code, country, vat_no, company_reg_no, email, telephone FROM companies WHERE id = :id";
+        $sql = "SELECT id, name, address1, address2, address3, city, county, postCode, country, vatNo, companyRegNo, email, telephone FROM companies WHERE id = :id";
         $stmt = $this->pdo->prepare($sql);
         $stmt->bindParam(':id', $id);
         $stmt->execute();
