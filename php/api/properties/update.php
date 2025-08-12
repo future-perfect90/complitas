@@ -6,14 +6,18 @@ header("Access-Control-Max-Age: 3600");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
 $data = json_decode(file_get_contents("php://input"), true);
+
 if ($data) {
     require_once(__DIR__ . '/../../classes/Database.php');
-    require_once(__DIR__ . '/../../classes/Company.php');
+    require_once(__DIR__ . '/../../classes/Properties.php');
     $db = (new Database())->connect();
-    $company = new Company($db);
-    $companyId = $data['id'];
+    $property = new Properties($db);
 
-    $result = $company->update($companyId, $data['payload']);
+    $propertyId = $data['id'];
+
+
+    $result = $property->update($propertyId, $data['payload']);
+    var_dump($result);
     if ($result['success']) {
         http_response_code(204);
         echo json_encode($result);

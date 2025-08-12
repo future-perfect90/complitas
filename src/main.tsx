@@ -19,7 +19,7 @@ createRoot(document.getElementById('root')!).render(
 			useRefreshTokens={true}>
 			<BrowserRouter>
 				<App />
-				<ToastContainer position="top-right" autoClose={3000} hideProgressBar />
+				<ToastContainer position="top-right" autoClose={2000} hideProgressBar />
 			</BrowserRouter>
 		</Auth0Provider>
 	</StrictMode>

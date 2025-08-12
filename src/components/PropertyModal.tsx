@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
-import type { Company } from '../types';
-import { createCompany, updateCompany } from '../utils/api';
+import type { Property } from '../types';
+import { createProperty, updateProperty } from '../utils/api';
 import { Button } from './Button';
 import Modal from './Modal';
 import TextField from './TextField';
@@ -10,10 +10,10 @@ interface Props {
 	isOpen: boolean;
 	onClose: () => void;
 	onSuccess: () => void;
-	initialData?: Company;
+	initialData?: Property;
 }
 
-const CompanyModal: React.FC<Props> = ({
+const PropertyModal: React.FC<Props> = ({
 	isOpen,
 	onClose,
 	onSuccess,
@@ -27,8 +27,7 @@ const CompanyModal: React.FC<Props> = ({
 	const [county, setCounty] = useState('');
 	const [country, setCountry] = useState('');
 	const [postCode, setPostCode] = useState('');
-	const [vatNo, setVatNo] = useState('');
-	const [companyRegNo, setCompanyRegNo] = useState('');
+	const [managerName, setManagerName] = useState('');
 	const [telephone, setTelephone] = useState('');
 	const [email, setEmail] = useState('');
 	const [id, setId] = useState('');
@@ -44,8 +43,7 @@ const CompanyModal: React.FC<Props> = ({
 			setCounty(initialData.county);
 			setCountry(initialData.country);
 			setPostCode(initialData.postCode);
-			setVatNo(initialData.vatNo);
-			setCompanyRegNo(initialData.companyRegNo);
+			setManagerName(initialData.managerName);
 			setTelephone(initialData.telephone);
 			setEmail(initialData.email);
 		} else {
@@ -58,8 +56,7 @@ const CompanyModal: React.FC<Props> = ({
 			setCounty('');
 			setCountry('');
 			setPostCode('');
-			setVatNo('');
-			setCompanyRegNo('');
+			setManagerName('');
 			setTelephone('');
 			setEmail('');
 		}
@@ -84,55 +81,62 @@ const CompanyModal: React.FC<Props> = ({
 			return;
 		}
 
-		if (initialData) {
-			await updateCompany(
-				{
-					name,
-					address1,
-					address2,
-					address3,
-					city,
-					county,
-					country,
-					postCode,
-					vatNo,
-					companyRegNo,
-					telephone,
-					email,
-				},
-				id
-			);
-			toast.success('Company updated successfully!');
-		} else {
-			await createCompany({
-				name,
-				address1,
-				address2,
-				address3,
-				city,
-				county,
-				country,
-				postCode,
-				vatNo,
-				companyRegNo,
-				telephone,
-				email,
-			});
-			toast.success('Company created successfully!');
+		const companyIdFromToken = '156659f4-77b3-11f0-910a-6a02ccf97a78';
+
+		try {
+			if (initialData) {
+				await updateProperty(
+					{
+						name,
+						address1,
+						address2,
+						address3,
+						city,
+						county,
+						country,
+						postCode,
+						managerName,
+						telephone,
+						email,
+					},
+					id
+				);
+				toast.success('Property updated successfully!');
+			} else {
+				await createProperty(
+					{
+						name,
+						address1,
+						address2,
+						address3,
+						city,
+						county,
+						country,
+						postCode,
+						email,
+						telephone,
+						managerName,
+					},
+					companyIdFromToken
+				);
+				toast.success('Property created successfully!');
+			}
+			onSuccess();
+			onClose();
+		} catch {
+			toast.error('Error saving property.');
 		}
-		onSuccess();
-		onClose();
 	};
 
 	return (
 		<Modal
 			isOpen={isOpen}
 			onClose={onClose}
-			title={initialData ? 'Edit Company' : 'Add Company'}>
+			title={initialData ? 'Edit Property' : 'Add Property'}>
 			<form onSubmit={handleSubmit}>
 				<div className="grid grid-cols-2 gap-4">
 					<TextField
-						label="Company Name"
+						label="Property Name"
 						value={name}
 						onChange={(e: any) => setName(e.target.value)}
 						required
@@ -174,14 +178,9 @@ const CompanyModal: React.FC<Props> = ({
 						onChange={(e: any) => setCountry(e.target.value)}
 					/>
 					<TextField
-						label="Vat No"
-						value={vatNo}
-						onChange={(e: any) => setVatNo(e.target.value)}
-					/>
-					<TextField
-						label="Company Reg No"
-						value={companyRegNo}
-						onChange={(e: any) => setCompanyRegNo(e.target.value)}
+						label="Manager Name"
+						value={managerName}
+						onChange={(e: any) => setManagerName(e.target.value)}
 					/>
 					<TextField
 						label="Telephone Number"
@@ -209,4 +208,4 @@ const CompanyModal: React.FC<Props> = ({
 	);
 };
 
-export default CompanyModal;
+export default PropertyModal;

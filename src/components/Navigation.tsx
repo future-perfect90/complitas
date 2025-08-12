@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Button } from './Button';
 
 export default function Navigation() {
-	const { isAuthenticated, loginWithRedirect } = useAuth0();
+	const { isAuthenticated, loginWithRedirect, logout } = useAuth0();
 	const navLinks =
 		!isAuthenticated ?
 			[
@@ -13,7 +13,7 @@ export default function Navigation() {
 		:	[
 				{ title: 'Dashboard', href: '/dashboard' },
 				{ title: 'Companies', href: '/companies' },
-				{ title: 'Log out', href: '/logout' },
+				{ title: 'Properties', href: '/properties' },
 			];
 
 	return (
@@ -32,13 +32,20 @@ export default function Navigation() {
 						{link.title}
 					</Link>
 				))}
-				{!isAuthenticated && (
+				{!isAuthenticated ?
 					<Button
 						label="Log in"
 						onClick={() => loginWithRedirect()}
 						className="text-base p-2 md:py-2 md:px-4 text-[#646cff] disabled:hover"
 					/>
-				)}
+				:	<Button
+						label="Log out"
+						onClick={() =>
+							logout({ logoutParams: { returnTo: window.location.origin } })
+						}
+						className="text-base p-2 md:py-2 md:px-4 text-[#646cff] disabled:hover"
+					/>
+				}
 			</div>
 		</nav>
 	);

@@ -3,8 +3,7 @@ import About from '../pages/AboutUs';
 import CompanyList from '../pages/CompanyList';
 import Dashboard from '../pages/Dashboard';
 import Home from '../pages/Home';
-import Login from '../pages/Login';
-import Logout from '../pages/Logout';
+import PropertyList from '../pages/PropertyList';
 import PrivateRoute from './PrivateRoute';
 import PublicRoute from './PublicRoute';
 const AppRoutes = () => {
@@ -14,7 +13,6 @@ const AppRoutes = () => {
 			children: [
 				{ path: '/', element: <Home /> },
 				{ path: '/about', element: <About /> },
-				{ path: '/login', element: <Login /> },
 			],
 		},
 		{
@@ -22,7 +20,7 @@ const AppRoutes = () => {
 			children: [
 				{ path: '/dashboard', element: <Dashboard /> },
 				{ path: '/companies', element: <CompanyList /> },
-				{ path: '/logout', element: <Logout /> },
+				{ path: '/properties', element: <PropertyList /> },
 			],
 		},
 	];

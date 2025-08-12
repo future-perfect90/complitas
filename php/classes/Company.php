@@ -9,11 +9,6 @@ class Company
         $this->pdo = $pdo;
     }
 
-    /**
-     * Retrieves a list of all companies.
-     *
-     * @return array An array of company records.
-     */
     public function listAll(): array
     {
         $stmt = $this->pdo->query("SELECT id, name, address1, address2, address3, city, county, postCode, country, vatNo, companyRegNo, email, telephone FROM companies");
@@ -54,12 +49,6 @@ class Company
         return ($stmt->rowCount() > 0) ? ['success' => true, 'message' => 'Company created'] : ['success' => false, 'message' => 'Something went wrong'];
     }
 
-    /**
-     * Retrieves a single company record by its ID.
-     *
-     * @param string $id The UUID of the company.
-     * @return array|null The company record, or null if not found.
-     */
     public function getById(string $id): ?array
     {
         $sql = "SELECT id, name, address1, address2, address3, city, county, postCode, country, vatNo, companyRegNo, email, telephone FROM companies WHERE id = :id";
@@ -67,17 +56,10 @@ class Company
         $stmt->bindParam(':id', $id);
         $stmt->execute();
 
-        $result = $stmt->fetch();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
         return $result !== false ? $result : null;
     }
 
-    /**
-     * Updates an existing company record.
-     *
-     * @param string $id The UUID of the company.
-     * @param array $companyData An associative array of data to update.
-     * @return bool True on success, false on failure.
-     */
     public function update(string $id, array $companyData): array
     {
         // Dynamically build the SET clause for the update statement.
@@ -93,26 +75,18 @@ class Company
         }
         $sql = "UPDATE companies SET " . implode(', ', $setClauses) . " WHERE id = :id";
         $bindings[':id'] = $id;
-
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute($bindings);
 
         return ($stmt->rowCount() > 0) ? ['success' => true, 'message' => 'Company updated'] : ['success' => false, 'message' => 'Something went wrong'];
     }
 
-    /**
-     * Deletes a company record by its ID.
-     *
-     * @param string $id The UUID of the company.
-     * @return bool True on success, false on failure.
-     */
     public function delete(string $id): bool
     {
         $sql = "DELETE FROM companies WHERE id = :id";
         $stmt = $this->pdo->prepare($sql);
         $stmt->bindParam(':id', $id);
         $stmt->execute();
-
-        return $stmt->rowCount() > 0;
+        return $stmt->execute();
     }
 }
