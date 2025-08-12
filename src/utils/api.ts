@@ -1,14 +1,15 @@
 import type { Company } from '../types';
 
+const jwt = localStorage.getItem('auth_token');
+
 export async function getCompanies() {
 	const response = await fetch(
 		`${import.meta.env.VITE_API_BASE_URL}/company/list.php`,
 		{
 			method: 'GET',
-			// You would include the JWT from your Auth0 login here
-			// headers: {
-			// 	Authorization: `Bearer ${token}`,
-			// },
+			headers: {
+				Authorization: `Bearer ${jwt}`,
+			},
 		}
 	);
 	if (!response.ok) {

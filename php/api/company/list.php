@@ -13,7 +13,7 @@ $company = new Company($db);
 
 $companies = $company->listAll();
 
-if(!empty($companies)) {
+if (!empty($companies)) {
     http_response_code(200);
     echo json_encode($companies);
 } else {

@@ -3,7 +3,6 @@ import { Outlet } from 'react-router-dom';
 
 const PublicRoute = () => {
 	const { isAuthenticated } = useAuth0();
-	console.log('PublicRoute', { isAuthenticated });
 	// return !isAuthenticated ? <Outlet /> : <Navigate to="/" replace />;
 	return <Outlet />; // Public routes are accessible to everyone, no authentication check needed.
 };

@@ -1,11 +1,31 @@
 import { useAuth0 } from '@auth0/auth0-react';
+import { useEffect } from 'react';
 
 export default function Dashboard() {
-	const { user, isAuthenticated, isLoading } = useAuth0();
+	const { user, isAuthenticated, isLoading, getAccessTokenWithPopup } =
+		useAuth0();
 
-	if (isLoading) {
-		return <div>Loading ...</div>;
-	}
+	useEffect(() => {
+		const fetchToken = async () => {
+			try {
+				// Opens a small popup and gets the token without redirect
+				const token = await getAccessTokenWithPopup({
+					authorizationParams: {
+						audience: import.meta.env.VITE_AUTH0_AUDIENCE,
+					},
+				});
+				localStorage.setItem('auth_token', token || '');
+			} catch (err) {
+				console.error('Token fetch error', err);
+			}
+		};
+
+		if (isAuthenticated) {
+			fetchToken();
+		}
+	}, [isAuthenticated, getAccessTokenWithPopup]);
+
+	if (isLoading) return <div>Loading ...</div>;
 
 	return (
 		<>

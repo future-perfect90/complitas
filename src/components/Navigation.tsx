@@ -1,22 +1,20 @@
 import { useAuth0 } from '@auth0/auth0-react';
 import { Link } from 'react-router-dom';
+import { Button } from './Button';
 
 export default function Navigation() {
-	const { isAuthenticated } = useAuth0();
-	let navLinks;
-	if (!isAuthenticated) {
-		navLinks = [
-			{ title: 'Home', href: '/' },
-			{ title: 'About', href: '/about' },
-			{ title: 'Log in', href: '/login' },
-		];
-	} else {
-		navLinks = [
-			{ title: 'Dashboard', href: '/dashboard' },
-			{ title: 'Companies', href: '/companies' },
-			{ title: 'Log out', href: '/logout' },
-		];
-	}
+	const { isAuthenticated, loginWithRedirect } = useAuth0();
+	const navLinks =
+		!isAuthenticated ?
+			[
+				{ title: 'Home', href: '/' },
+				{ title: 'About', href: '/about' },
+			]
+		:	[
+				{ title: 'Dashboard', href: '/dashboard' },
+				{ title: 'Companies', href: '/companies' },
+				{ title: 'Log out', href: '/logout' },
+			];
 
 	return (
 		<nav className="flex justify-between items-center bg-white shadow-md py-4 px-4 md:px-8">
@@ -34,6 +32,13 @@ export default function Navigation() {
 						{link.title}
 					</Link>
 				))}
+				{!isAuthenticated && (
+					<Button
+						label="Log in"
+						onClick={() => loginWithRedirect()}
+						className="text-base p-2 md:py-2 md:px-4 text-[#646cff] disabled:hover"
+					/>
+				)}
 			</div>
 		</nav>
 	);
