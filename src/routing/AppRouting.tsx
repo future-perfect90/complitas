@@ -15,13 +15,13 @@ const AppRoutes = () => {
 				{ path: '/', element: <Home /> },
 				{ path: '/about', element: <About /> },
 				{ path: '/login', element: <Login /> },
-				{ path: '/companyList', element: <CompanyList /> },
 			],
 		},
 		{
 			element: <PrivateRoute />,
 			children: [
 				{ path: '/dashboard', element: <Dashboard /> },
+				{ path: '/companies', element: <CompanyList /> },
 				{ path: '/logout', element: <Logout /> },
 			],
 		},

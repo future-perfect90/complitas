@@ -13,6 +13,7 @@ export default function Navigation() {
 	} else {
 		navLinks = [
 			{ title: 'Dashboard', href: '/dashboard' },
+			{ title: 'Companies', href: '/companies' },
 			{ title: 'Log out', href: '/logout' },
 		];
 	}
@@ -21,7 +22,7 @@ export default function Navigation() {
 		<nav className="flex justify-between items-center bg-white shadow-md py-4 px-4 md:px-8">
 			<div className="text-xl md:text-2xl font-bold">
 				<Link to="/">
-					<img className="w-30 h-3xs" src="tlogo_text.png" />
+					<img className="w-30 h-3xs" src="complitas_logo_with_text.png" />
 				</Link>
 			</div>
 			<div className="flex gap-4 md:gap-8">

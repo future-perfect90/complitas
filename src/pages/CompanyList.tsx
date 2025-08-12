@@ -12,6 +12,7 @@ const CompanyList: React.FC = () => {
 	const fetchCompanies = async () => {
 		try {
 			const data = await getCompanies();
+			console.log(data);
 			setCompanies(data);
 		} catch {
 			toast.error('Failed to load companies.');
@@ -20,6 +21,7 @@ const CompanyList: React.FC = () => {
 
 	useEffect(() => {
 		fetchCompanies();
+		console.log(companies);
 	}, []);
 
 	const handleEdit = async (id: number) => {
@@ -58,10 +60,6 @@ const CompanyList: React.FC = () => {
 					Add Company
 				</button>
 			</div>
-			<h2 className="text-white-900">
-				TODO::Delete to refecth companies, update cmpany information, fix toast
-				notifications
-			</h2>
 			<div className="bg-white shadow rounded overflow-hidden">
 				<table className="min-w-full min-w-xl">
 					<thead className="bg-gray-100">

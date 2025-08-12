@@ -1,18 +1,38 @@
-import axios from 'axios';
 import type { Company } from '../types';
 
-const api = axios.create({
-	baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:4000',
-});
-
 export async function getCompanies() {
-	const r = await api.get<Company[]>('/company/list.php');
-	return r.data;
+	const response = await fetch(
+		`${import.meta.env.VITE_API_BASE_URL}/company/list.php`,
+		{
+			method: 'GET',
+			// You would include the JWT from your Auth0 login here
+			// headers: {
+			// 	Authorization: `Bearer ${token}`,
+			// },
+		}
+	);
+	if (!response.ok) {
+		throw new Error(`Response status: ${response.status}`);
+	}
+	console.log(response);
+	return response.json();
 }
 
 export async function getCompany(id: number) {
-	const r = await api.get<Company>(`/company/get.php?id=${id}`);
-	return r.data;
+	const response = await fetch(
+		`${import.meta.env.VITE_API_BASE_URL}/company/get.php?id=${id}`,
+		{
+			method: 'GET',
+			// You would include the JWT from your Auth0 login here
+			// headers: {
+			// 	Authorization: `Bearer ${token}`,
+			// },
+		}
+	);
+	if (!response.ok) {
+		throw new Error(`Response status: ${response.status}`);
+	}
+	return response.json();
 }
 
 export async function createCompany(payload: Company) {
