@@ -16,7 +16,6 @@ export async function getCompanies() {
 	if (!response.ok) {
 		throw new Error(`Response status: ${response.status}`);
 	}
-	console.log(response);
 	return response.json();
 }
 
@@ -104,7 +103,6 @@ export async function getProperties(companyId: string) {
 	if (!response.ok) {
 		throw new Error(`Response status: ${response.status}`);
 	}
-	console.log(response);
 	return response.json();
 }
 

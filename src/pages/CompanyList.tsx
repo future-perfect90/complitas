@@ -12,7 +12,6 @@ const CompanyList: React.FC = () => {
 	const fetchCompanies = async () => {
 		try {
 			const data = await getCompanies();
-			console.log(data);
 			setCompanies(data);
 		} catch {
 			toast.error('Failed to load companies.');
@@ -21,7 +20,6 @@ const CompanyList: React.FC = () => {
 
 	useEffect(() => {
 		fetchCompanies();
-		console.log(companies);
 	}, []);
 
 	const handleEdit = async (id: string) => {

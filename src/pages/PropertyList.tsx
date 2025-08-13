@@ -16,7 +16,6 @@ const PropertyList: React.FC = () => {
 			// const companyId = 'e81e211c-77bb-11f0-910a-6a02ccf97a78'; //metropolitan
 
 			const data = await getProperties(companyId);
-			console.log(data);
 			setProperties(data);
 		} catch {
 			console.log('Failed to load properties.');
@@ -25,7 +24,6 @@ const PropertyList: React.FC = () => {
 
 	useEffect(() => {
 		fetchProperties();
-		console.log(properties);
 	}, []);
 
 	const handleEdit = async (id: string) => {

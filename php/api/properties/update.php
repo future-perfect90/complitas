@@ -17,7 +17,7 @@ if ($data) {
 
 
     $result = $property->update($propertyId, $data['payload']);
-    var_dump($result);
+
     if ($result['success']) {
         http_response_code(204);
         echo json_encode($result);
