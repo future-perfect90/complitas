@@ -10,7 +10,8 @@ require_once(__DIR__ . '/../../classes/Company.php');
 
 $db = (new Database())->connect();
 $company = new Company($db);
-
+$jwt = $_SERVER["HTTP_AUTHORIZATION"];
+// $variable = (new Conf())->authenticateToken(token: $jwt);
 $companies = $company->listAll();
 
 if (!empty($companies)) {

@@ -30,6 +30,9 @@ export default function Dashboard() {
 	return (
 		<>
 			<h1>Dashboard</h1>
+			<h2>TODO::Lock down API's to use Auth0 token</h2>
+			<h2>TODO::Create new users for the company so they can extract the create properties only for them based on claims in Auth0 token</h2>
+			<h2>TODO::GET clientID from token when retrieving properties</h2>
 
 			{isAuthenticated ?
 				<>
