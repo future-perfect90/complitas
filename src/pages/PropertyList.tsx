@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
-import PropertyModal from '../components/PropertyModal';
+import PropertyModal from '../components/modals/PropertyModal';
 import type { Property } from '../types';
 import { deleteProperty, getProperties, getProperty } from '../utils/api';
 
@@ -12,8 +12,8 @@ const PropertyList: React.FC = () => {
 	const fetchProperties = async () => {
 		try {
 			//TODO::GET THIS FROM THE USERS LOGGED IN TOKEN
-			const companyId = '156659f4-77b3-11f0-910a-6a02ccf97a78'; //first port
-			// const companyId = 'e81e211c-77bb-11f0-910a-6a02ccf97a78'; //metropolitan
+			// const companyId = '156659f4-77b3-11f0-910a-6a02ccf97a78'; //first port
+			const companyId = 'e81e211c-77bb-11f0-910a-6a02ccf97a78'; //metropolitan
 
 			const data = await getProperties(companyId);
 			setProperties(data);

@@ -14,6 +14,7 @@ export default function Navigation() {
 				{ title: 'Dashboard', href: '/dashboard' },
 				{ title: 'Companies', href: '/companies' },
 				{ title: 'Properties', href: '/properties' },
+				{ title: 'Users', href: '/users' },
 			];
 
 	return (

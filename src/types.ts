@@ -28,3 +28,9 @@ export interface Property {
 	telephone: string;
 	email: string;
 }
+export interface User {
+	id?: string;
+	name: string;
+	email: string;
+	password: string;
+}

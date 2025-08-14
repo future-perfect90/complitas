@@ -1,4 +1,4 @@
-import type { Company, Property } from '../types';
+import type { Company, Property, User } from '../types';
 
 const jwt = localStorage.getItem('auth_token');
 
@@ -174,4 +174,39 @@ export async function deleteProperty(id: string) {
 		throw new Error(`Response status: ${response.status}`);
 	}
 	return response.ok;
+}
+
+export async function createUser(payload: User, companyId: string) {
+	const response = await fetch(
+		`${import.meta.env.VITE_API_BASE_URL}/user-management/add.php`,
+		{
+			method: 'POST',
+			body: JSON.stringify({ payload, companyId }),
+			headers: {
+				Authorization: `Bearer ${jwt}`,
+				'Content-Type': 'application/json',
+			},
+		}
+	);
+	if (!response.ok) {
+		throw new Error(`Response status: ${response.status}`);
+	}
+	return response.json();
+}
+
+export async function getUsers(companyId: string) {
+	const response = await fetch(
+		`${import.meta.env.VITE_API_BASE_URL}/user-management/list.php?companyId=${companyId}`,
+		{
+			method: 'GET',
+			headers: {
+				Authorization: `Bearer ${jwt}`,
+				'Content-Type': 'application/json',
+			},
+		}
+	);
+	if (!response.ok) {
+		throw new Error(`Response status: ${response.status}`);
+	}
+	return response.json();
 }

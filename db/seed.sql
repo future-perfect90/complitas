@@ -52,3 +52,15 @@ VALUES ('Forge Court', 'Melton Road', 'Syston', 'Leicester', 'Leicestershire', '
 
 INSERT INTO properties (name, address1, address2, city, county, postCode, country, managerName, email, telephone, companyId)
 VALUES ('Checkland Road', 'Checkland Road', '', 'Leicester', 'Leicestershire', 'LE4 8FE', 'United Kingdom', 'Steve Charles','steve@metropolitan.org.uk', '01162697290', 'e81e211c-77bb-11f0-910a-6a02ccf97a78')
+
+CREATE TABLE `user` (
+    `id` VARCHAR(36) NOT NULL DEFAULT (UUID()) PRIMARY KEY,
+    `name` VARCHAR(255) NOT NULL,
+    `email` VARCHAR(255),
+    `companyId` VARCHAR(36) NOT NULL,
+    `createdAt` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `createdBy` VARCHAR(255) DEFAULT NULL,
+    CONSTRAINT fk_companies_user
+    FOREIGN KEY (companyId)
+    REFERENCES companies (id) ON DELETE CASCADE
+)

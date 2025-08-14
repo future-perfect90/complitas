@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
-import type { Property } from '../types';
-import { createProperty, updateProperty } from '../utils/api';
-import { Button } from './Button';
-import Modal from './Modal';
-import TextField from './TextField';
+import type { Property } from '../../types';
+import { createProperty, updateProperty } from '../../utils/api';
+import { Button } from '../Button';
+import Modal from '../Modal';
+import TextField from '../TextField';
 
 interface Props {
 	isOpen: boolean;
