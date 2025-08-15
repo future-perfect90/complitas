@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import PropertyModal from '../components/modals/PropertyModal';
+import { useAuthMeta } from '../context/AuthProvider';
 import type { Property } from '../types';
 import { deleteProperty, getProperties, getProperty } from '../utils/api';
 
@@ -8,14 +9,13 @@ const PropertyList: React.FC = () => {
 	const [properties, setProperties] = useState<Property[]>([]);
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [editData, setEditData] = useState<Property | undefined>(undefined);
+	const authMeta = useAuthMeta();
+	const companyUuid = authMeta?.companyUuid || '';
+	const isLoading = authMeta?.isLoading;
 
-	const fetchProperties = async () => {
+	const fetchProperties = async (companyUuid: string) => {
 		try {
-			//TODO::GET THIS FROM THE USERS LOGGED IN TOKEN
-			// const companyId = '156659f4-77b3-11f0-910a-6a02ccf97a78'; //first port
-			const companyId = 'e81e211c-77bb-11f0-910a-6a02ccf97a78'; //metropolitan
-
-			const data = await getProperties(companyId);
+			const data = await getProperties(companyUuid);
 			setProperties(data);
 		} catch {
 			console.log('Failed to load properties.');
@@ -23,8 +23,10 @@ const PropertyList: React.FC = () => {
 	};
 
 	useEffect(() => {
-		fetchProperties();
-	}, []);
+		if (!isLoading && companyUuid) {
+			fetchProperties(companyUuid);
+		}
+	}, [companyUuid, isLoading]);
 
 	const handleEdit = async (id: string) => {
 		try {
@@ -42,12 +44,15 @@ const PropertyList: React.FC = () => {
 		try {
 			await deleteProperty(id);
 			toast.success('Property deleted successfully!');
-			fetchProperties();
+			fetchProperties(companyUuid);
 		} catch {
 			toast.error('Error deleting property.');
 		}
 	};
 
+	if (isLoading) {
+		return <div className="max-w-4xl mx-auto p-4">Loading...</div>;
+	}
 	return (
 		<div className="max-w-4xl mx-auto p-4">
 			<div className="flex justify-between items-center mb-4">
@@ -112,7 +117,7 @@ const PropertyList: React.FC = () => {
 			<PropertyModal
 				isOpen={isModalOpen}
 				onClose={() => setIsModalOpen(false)}
-				onSuccess={fetchProperties}
+				onSuccess={() => companyUuid && fetchProperties(companyUuid)}
 				initialData={editData}
 			/>
 		</div>

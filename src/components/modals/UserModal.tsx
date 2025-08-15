@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
+import { useAuthMeta } from '../../context/AuthProvider';
 import type { User } from '../../types';
 import { createUser } from '../../utils/api';
 import { Button } from '../Button';
@@ -43,26 +44,17 @@ const UserModal: React.FC<Props> = ({
 			return;
 		}
 
-		// const companyIdFromToken = '156659f4-77b3-11f0-910a-6a02ccf97a78';
-		const companyIdFromToken = 'e81e211c-77bb-11f0-910a-6a02ccf97a78'; //metropolitan
+		const authMeta = useAuthMeta();
+		const companyUuid = authMeta?.companyUuid || '';
 
 		try {
 			if (initialData) {
 				// await updateUser(
 				// 	{
 				// 		name,
-				// 		address1,
-				// 		address2,
-				// 		address3,
-				// 		city,
-				// 		county,
-				// 		country,
-				// 		postCode,
-				// 		managerName,
-				// 		telephone,
 				// 		email,
 				// 	},
-				// 	id
+				// 	companyUuid
 				// );
 				//toast.success('User updated successfully!');
 			} else {
@@ -72,7 +64,7 @@ const UserModal: React.FC<Props> = ({
 						email,
 						password,
 					},
-					companyIdFromToken
+					companyUuid
 				);
 				toast.success('User created successfully!');
 			}

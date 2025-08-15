@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import UserModal from '../components/modals/UserModal';
+import { useAuthMeta } from '../context/AuthProvider';
+
 import type { User } from '../types';
 import { getUsers } from '../utils/api';
 
@@ -8,12 +10,12 @@ const UserList: React.FC = () => {
 	const [users, setUsers] = useState<User[]>([]);
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [editData, setEditData] = useState<User | undefined>(undefined);
+	const authMeta = useAuthMeta();
+	const companyUuid = authMeta?.companyUuid || '';
 
-	const fetchUsers = async () => {
+	const fetchUsers = async (companyUuid: string) => {
 		try {
-			// const companyId = '156659f4-77b3-11f0-910a-6a02ccf97a78'; //first port
-			const companyId = 'e81e211c-77bb-11f0-910a-6a02ccf97a78'; //metropolitan
-			const data = await getUsers(companyId);
+			const data = await getUsers(companyUuid);
 			setUsers(data);
 		} catch {
 			toast.error('Failed to load users.');
@@ -21,8 +23,10 @@ const UserList: React.FC = () => {
 	};
 
 	useEffect(() => {
-		fetchUsers();
-	}, []);
+		if (companyUuid) {
+			fetchUsers(companyUuid);
+		}
+	}, [companyUuid]);
 
 	// const handleEdit = async (id: string) => {
 	// 	try {
@@ -102,7 +106,7 @@ const UserList: React.FC = () => {
 			<UserModal
 				isOpen={isModalOpen}
 				onClose={() => setIsModalOpen(false)}
-				onSuccess={fetchUsers}
+				onSuccess={() => fetchUsers(companyUuid)}
 				initialData={editData}
 			/>
 		</div>
