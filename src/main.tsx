@@ -14,6 +14,7 @@ createRoot(document.getElementById('root')!).render(
 			authorizationParams={{
 				redirect_uri: `${window.location.origin}/dashboard`,
 				audience: `${import.meta.env.VITE_AUTH0_AUDIENCE}`,
+				scope: 'read:current_user_metadata',
 			}}
 			cacheLocation="localstorage"
 			useRefreshTokens={true}>

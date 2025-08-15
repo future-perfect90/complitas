@@ -3,6 +3,8 @@
 use Auth0\SDK\Auth0;
 use Auth0\SDK\Configuration\SdkConfiguration;
 use Auth0\SDK\Contract\API\ManagementInterface;
+use Ramsey\Uuid\Uuid;
+
 
 require_once(__DIR__ . '/Conf.php');
 class User
@@ -24,7 +26,7 @@ class User
             clientId: $auth0config['clientId'],
             clientSecret: $auth0config['clientSecret'],
             audience: [$auth0config['audience']],
-            scope: ['create:users', 'read:users']
+            scope: ['create:users', 'read:users', 'read:current_user']
         );
 
         $auth0 = new Auth0($config);
@@ -42,26 +44,28 @@ class User
             return ['success' => false, 'message' => 'User already exists'];
         }
 
-        $sql = "INSERT INTO user (name, email, companyId) 
-                VALUES (:name, :email, :company_id)";
-
+        $sql = "INSERT INTO user (id, name, email, companyId) 
+                VALUES (:uuid, :name, :email, :company_id)";
         $stmt = $this->pdo->prepare($sql);
 
+        $uuid = Uuid::uuid4()->toString();
+        $stmt->bindParam(':uuid', $uuid);
         $stmt->bindParam(':name', $name);
         $stmt->bindParam(':email', $email);
         $stmt->bindParam(':company_id', $companyId);
         $stmt->execute();
-
+        $userId = $this->pdo->lastInsertId();
         //Add user to auth0
         if ($stmt->rowCount() > 0) {
             $mgmt = $this->constuctAuth0();
             $response = $mgmt->users()->create(
                 connection: 'Username-Password-Authentication',
                 body: [
+                    'name' => $name,
                     'email' => $email,
                     'password' => $password,
                     'email_verified' => false,
-                    'user_metadata' => ['companyId' => $companyId],
+                    'app_metadata' => ['companyId' => $companyId, 'uuid' => $uuid],
                 ]
             );
         }
