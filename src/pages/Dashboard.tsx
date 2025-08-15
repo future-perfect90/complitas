@@ -49,9 +49,6 @@ export default function Dashboard() {
 		<>
 			<h1>Dashboard</h1>
 			<h2>TODO::Lock down API's to use Auth0 token</h2>
-			<h2>TODO:Add metadata to context to add companyId</h2>
-			<h2>TODO::GET clientID from token when retrieving properties</h2>
-
 			{isAuthenticated ?
 				<>
 					<h2 className="text-3xl">Welcome to your dashboard {user?.name}</h2>
