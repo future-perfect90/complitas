@@ -290,34 +290,30 @@ export async function getTeams(companyId: string) {
 	return response.json();
 }
 
-export async function getTeamMembers(teamId: string) {
-	const response = await fetch(
-		`${import.meta.env.VITE_API_BASE_URL}/teams/listTeamMembers.php?teamId=${teamId}`,
-		{
-			method: 'GET',
-			headers: {
-				Authorization: `Bearer ${jwt}`,
-				'Content-Type': 'application/json',
-			},
-		}
-	);
+export async function getTeamMembers(companyId: string, inTeam: boolean) {
+	const url = `${import.meta.env.VITE_API_BASE_URL}/teams/listTeamMembers.php?companyId=${companyId}&inTeam=${inTeam}`;
+	const response = await fetch(url, {
+		method: 'GET',
+		headers: {
+			Authorization: `Bearer ${jwt}`,
+			'Content-Type': 'application/json',
+		},
+	});
 	if (!response.ok) {
 		throw new Error(`Response status: ${response.status}`);
 	}
 	return response.json();
 }
 
-export async function getUsersWithNoTeam(companyId: string) {
-	const response = await fetch(
-		`${import.meta.env.VITE_API_BASE_URL}/teams/listTeamMembers.php?companyId=${companyId}`,
-		{
-			method: 'GET',
-			headers: {
-				Authorization: `Bearer ${jwt}`,
-				'Content-Type': 'application/json',
-			},
-		}
-	);
+export async function removeFromTeam(userId: string, teamId: string) {
+	const url = `${import.meta.env.VITE_API_BASE_URL}/teams/removeFromTeam.php?userId=${userId}&teamId=${teamId}`;
+	const response = await fetch(url, {
+		method: 'DELETE',
+		headers: {
+			Authorization: `Bearer ${jwt}`,
+			'Content-Type': 'application/json',
+		},
+	});
 	if (!response.ok) {
 		throw new Error(`Response status: ${response.status}`);
 	}

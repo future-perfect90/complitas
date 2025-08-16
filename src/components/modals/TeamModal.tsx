@@ -43,8 +43,8 @@ const TeamModal: React.FC<Props> = ({ isOpen, onClose, onSuccess }) => {
 					/>
 				</div>
 				<div className="flex justify-end gap-2 mt-4">
-					<Button label="Cancel" onClick={onClose} className="bg-red-400" />
-					<Button label="Create" className="bg-green-400" />
+					<Button label="Cancel" onClick={onClose} className="bg-red-400 py-2 px-5" />
+					<Button label="Create" className="bg-green-400 py-2 px-5" />
 				</div>
 			</form>
 		</Modal>

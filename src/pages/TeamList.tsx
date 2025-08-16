@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import TeamAssignmentModal from '../components/modals/TeamAssignmentModal';
+import TeamMembersModal from '../components/modals/TeamMembersModal';
 import TeamModal from '../components/modals/TeamModal';
 import { useAuthMeta } from '../context/AuthProvider';
 import type { Team } from '../types';
@@ -71,9 +72,13 @@ const TeamList: React.FC = () => {
 			</div>
 			<div>
 				<ul>
-					<li>Clear list after adding team member</li>
 					<li>
-						View teams show all members on team with button to remove from team
+						After removing last user, should show message that no users are left
+					</li>
+					<li>
+						after adding members, they should be able to be viewed - get lists
+						on main component and pass children to modal, so on success refetch
+						data
 					</li>
 					<li>
 						DB to do lookup before trying to add user that user is not apart of
@@ -134,12 +139,13 @@ const TeamList: React.FC = () => {
 				teamId={id}
 				teamName={teamName}
 			/>
-			{/* <TeamMembersModal
+			<TeamMembersModal
 				isOpen={viewMembersModalOpen}
 				onClose={() => setViewMembersModalOpen(false)}
 				onSuccess={() => companyUuid && fetchTeams(companyUuid)}
-                teams
-			/> */}
+				teamId={id}
+				teamName={teamName}
+			/>
 		</div>
 	);
 };

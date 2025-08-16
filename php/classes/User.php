@@ -136,4 +136,12 @@ class User
 
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    public function removeTeamMembers(string $userId, string $teamId): bool
+    {
+        $stmt = $this->pdo->prepare("DELETE FROM team_members WHERE userId = :user_id AND teamId = :team_id");
+        $stmt->bindParam(':user_id', $userId);
+        $stmt->bindParam(':team_id', $teamId);
+        return $stmt->execute();
+    }
 }

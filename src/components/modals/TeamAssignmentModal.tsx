@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { type MultiValue } from 'react-select';
 import { toast } from 'react-toastify';
 import { useAuthMeta } from '../../context/AuthProvider';
-import { assignToTeam, getUsersWithNoTeam } from '../../utils/api';
+import { assignToTeam, getTeamMembers } from '../../utils/api';
 import { Button } from '../Button';
 import Modal from '../Modal';
 import MultiSelect, { type OptionType } from '../MultiSelect';
@@ -39,7 +39,7 @@ const TeamAssignmentModal: React.FC<Props> = ({
 	const fetchUsersWithNoTeam = async (companyUuid: string) => {
 		setLoading(true);
 		try {
-			const selectableUsers = await getUsersWithNoTeam(companyUuid);
+			const selectableUsers = await getTeamMembers(companyUuid, false);
 			const memberOptions = selectableUsers.map((member: Member) => ({
 				value: member.id,
 				label: `${member.name} (${member.email})`,
@@ -99,9 +99,9 @@ const TeamAssignmentModal: React.FC<Props> = ({
 					</div>
 				}
 				<div className="flex justify-end gap-2 mt-4">
-					<Button label="Cancel" onClick={onClose} className="bg-red-400" />
+					<Button label="Cancel" onClick={onClose} className="bg-red-400 py-2 px-5" />
 					{members && members.length > 0 && (
-						<Button label="Add members" className="bg-green-400" />
+						<Button label="Add members" className="bg-green-400 py-2 px-5" />
 					)}
 				</div>
 			</form>

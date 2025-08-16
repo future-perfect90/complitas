@@ -6,8 +6,9 @@ require_once __DIR__ . '/../../classes/User.php';
 $db = (new Database())->connect();
 $user = new User($db);
 $companyId = $_GET['companyId'];
+$inTeam = $_GET['inTeam'] === 'true';
 
-$teamMembers = $user->listTeamMembers($companyId);
+$teamMembers = $user->listTeamMembers($companyId, $inTeam);
 
 if (!empty($teamMembers)) {
     http_response_code(200);
