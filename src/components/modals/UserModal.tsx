@@ -23,6 +23,8 @@ const UserModal: React.FC<Props> = ({
 	const [name, setName] = useState('');
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
+	const authMeta = useAuthMeta();
+	const companyUuid = authMeta?.companyUuid || '';
 
 	useEffect(() => {
 		if (initialData) {
@@ -43,9 +45,6 @@ const UserModal: React.FC<Props> = ({
 			toast.error('Invalid email address.');
 			return;
 		}
-
-		const authMeta = useAuthMeta();
-		const companyUuid = authMeta?.companyUuid || '';
 
 		try {
 			if (initialData) {

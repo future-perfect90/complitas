@@ -34,3 +34,9 @@ export interface User {
 	email: string;
 	password: string;
 }
+
+export interface Team {
+	id?: string;
+	name: string;
+	companyId: string;
+}

@@ -15,6 +15,7 @@ export default function Navigation() {
 				{ title: 'Companies', href: '/companies' },
 				{ title: 'Properties', href: '/properties' },
 				{ title: 'Users', href: '/users' },
+				{ title: 'Teams', href: '/teams' },
 			];
 
 	return (

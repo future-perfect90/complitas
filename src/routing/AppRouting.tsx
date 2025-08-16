@@ -4,6 +4,7 @@ import CompanyList from '../pages/CompanyList';
 import Dashboard from '../pages/Dashboard';
 import Home from '../pages/Home';
 import PropertyList from '../pages/PropertyList';
+import TeamList from '../pages/TeamList';
 import UserList from '../pages/UserManagementList';
 import PrivateRoute from './PrivateRoute';
 import PublicRoute from './PublicRoute';
@@ -23,6 +24,7 @@ const AppRoutes = () => {
 				{ path: '/companies', element: <CompanyList /> },
 				{ path: '/properties', element: <PropertyList /> },
 				{ path: '/users', element: <UserList /> },
+				{ path: '/teams', element: <TeamList /> },
 			],
 		},
 	];

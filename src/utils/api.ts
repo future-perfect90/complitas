@@ -1,3 +1,4 @@
+import type { MultiValue } from 'react-select';
 import type { Company, Property, User } from '../types';
 
 const jwt = localStorage.getItem('auth_token');
@@ -197,6 +198,118 @@ export async function createUser(payload: User, companyId: string) {
 export async function getUsers(companyId: string) {
 	const response = await fetch(
 		`${import.meta.env.VITE_API_BASE_URL}/user-management/list.php?companyId=${companyId}`,
+		{
+			method: 'GET',
+			headers: {
+				Authorization: `Bearer ${jwt}`,
+				'Content-Type': 'application/json',
+			},
+		}
+	);
+	if (!response.ok) {
+		throw new Error(`Response status: ${response.status}`);
+	}
+	return response.json();
+}
+
+export async function createTeam(name: string, companyId: string) {
+	const response = await fetch(
+		`${import.meta.env.VITE_API_BASE_URL}/teams/add.php`,
+		{
+			method: 'POST',
+			body: JSON.stringify({ name, companyId }),
+			headers: {
+				Authorization: `Bearer ${jwt}`,
+				'Content-Type': 'application/json',
+			},
+		}
+	);
+	if (!response.ok) {
+		throw new Error(`Response status: ${response.status}`);
+	}
+	return response.json();
+}
+interface MemberOption {
+	value: string;
+	name: string;
+}
+
+export async function assignToTeam(
+	userId: MultiValue<MemberOption>,
+	teamId: string
+) {
+	const response = await fetch(
+		`${import.meta.env.VITE_API_BASE_URL}/teams/assignToTeam.php`,
+		{
+			method: 'POST',
+			body: JSON.stringify({ userId, teamId }),
+			headers: {
+				Authorization: `Bearer ${jwt}`,
+				'Content-Type': 'application/json',
+			},
+		}
+	);
+	if (!response.ok) {
+		throw new Error(`Response status: ${response.status}`);
+	}
+	return response.json();
+}
+
+export async function assignTeamToProperty(propertyId: string, teamId: string) {
+	const response = await fetch(
+		`${import.meta.env.VITE_API_BASE_URL}/teams/assignTeamToProperty.php`,
+		{
+			method: 'POST',
+			body: JSON.stringify({ propertyId, teamId }),
+			headers: {
+				Authorization: `Bearer ${jwt}`,
+				'Content-Type': 'application/json',
+			},
+		}
+	);
+	if (!response.ok) {
+		throw new Error(`Response status: ${response.status}`);
+	}
+	return response.json();
+}
+
+export async function getTeams(companyId: string) {
+	const response = await fetch(
+		`${import.meta.env.VITE_API_BASE_URL}/teams/listTeams.php?companyId=${companyId}`,
+		{
+			method: 'GET',
+			headers: {
+				Authorization: `Bearer ${jwt}`,
+				'Content-Type': 'application/json',
+			},
+		}
+	);
+	if (!response.ok) {
+		throw new Error(`Response status: ${response.status}`);
+	}
+	return response.json();
+}
+
+export async function getTeamMembers(teamId: string) {
+	const response = await fetch(
+		`${import.meta.env.VITE_API_BASE_URL}/teams/listTeamMembers.php?teamId=${teamId}`,
+		{
+			method: 'GET',
+			headers: {
+				Authorization: `Bearer ${jwt}`,
+				'Content-Type': 'application/json',
+			},
+		}
+	);
+	if (!response.ok) {
+		throw new Error(`Response status: ${response.status}`);
+	}
+	return response.json();
+}
+
+export async function getUsersWithNoTeam(companyId: string) {
+	const response = await fetch(
+		`${import.meta.env.VITE_API_BASE_URL}/teams/listTeamMembers.php?companyId=${companyId}`,
 		{
 			method: 'GET',
 			headers: {

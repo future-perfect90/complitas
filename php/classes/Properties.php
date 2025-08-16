@@ -75,7 +75,7 @@ class Properties
         }
 
         if (empty($setClauses)) {
-            return ['success' => false, 'message' => 'Nothing to update']; // Nothing to update.
+            return ['success' => false, 'message' => 'Nothing to update'];
         }
         $sql = "UPDATE properties SET " . implode(', ', $setClauses) . " WHERE id = :id";
         $bindings[':id'] = $id;
@@ -92,5 +92,14 @@ class Properties
         $stmt = $this->pdo->prepare($sql);
         $stmt->bindParam(':id', $id);
         return $stmt->execute();
+    }
+
+    public function assignTeamToProperty(string $teamId, string $propertyId): array
+    {
+        $stmt = $this->pdo->prepare('INSERT INTO team_properties (teamId, propertyId) VALUES (:team_id, :property_id');
+        $stmt->bindParam(':team_id', $teamId);
+        $stmt->bindParam(':property_id', $propertyId);
+        $stmt->execute();
+        return $stmt->rowCount() > 0 ?  ['success' => true, 'message' => 'Property assigned to team'] :  ['success' => false, 'message' => 'Something went wrong'];
     }
 }

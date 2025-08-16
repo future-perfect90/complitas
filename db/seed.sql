@@ -64,3 +64,22 @@ CREATE TABLE `user` (
     FOREIGN KEY (companyId)
     REFERENCES companies (id) ON DELETE CASCADE
 )
+
+CREATE TABLE teams (
+    `id` VARCHAR(36) NOT NULL DEFAULT (UUID()) PRIMARY KEY,
+    `companyId` VARCHAR(36) NOT NULL REFERENCES companies(id) ON DELETE CASCADE,
+    `name` VARCHAR(255) NOT NULL,
+    `createdAt` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE team_members (
+    `teamId` VARCHAR(36) NOT NULL REFERENCES teams(id) ON DELETE CASCADE,
+    `userId` VARCHAR(36) NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    PRIMARY KEY (teamId, userId)
+);
+
+CREATE TABLE team_properties (
+    `teamId` VARCHAR(36) NOT NULL REFERENCES teams(id) ON DELETE CASCADE,
+    `propertyId` VARCHAR(36) NOT NULL REFERENCES properties(id) ON DELETE CASCADE,
+    PRIMARY KEY (teamId, propertyId)
+);

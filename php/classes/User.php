@@ -54,7 +54,6 @@ class User
         $stmt->bindParam(':email', $email);
         $stmt->bindParam(':company_id', $companyId);
         $stmt->execute();
-        $userId = $this->pdo->lastInsertId();
         //Add user to auth0
         if ($stmt->rowCount() > 0) {
             $mgmt = $this->constuctAuth0();
@@ -80,6 +79,58 @@ class User
     public function listAll(string $companyId): array
     {
         $stmt = $this->pdo->prepare("SELECT id, name, email FROM user where companyId = :company_id");
+        $stmt->bindParam(':company_id', $companyId);
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function createTeam(string $name, string $companyId): array
+    {
+        $stmt = $this->pdo->prepare('INSERT INTO teams (name, companyId) VALUES (:name, :company_id)');
+        $stmt->bindParam(':name', $name);
+        $stmt->bindParam(':company_id', $companyId);
+        $stmt->execute();
+        return $stmt->rowCount() > 0 ?  ['success' => true, 'message' => 'Team created'] :  ['success' => false, 'message' => 'Something went wrong'];
+    }
+
+    public function assignToTeam(array $userIds, string $teamId)
+    {
+
+        $insert = 'INSERT INTO team_members (teamId, userId) VALUES ';
+        foreach ($userIds as $userId) {
+            $id = $userId['value'];
+            $insert .= "('$teamId', '$id'),";
+        }
+        $insert = rtrim($insert, ',');
+        $stmt = $this->pdo->prepare($insert);
+        $stmt->execute();
+
+        return $stmt->rowCount() > 0 ?  ['success' => true, 'message' => 'User\'s assigned to team'] :  ['success' => false, 'message' => 'Something went wrong'];
+    }
+
+    public function listTeams(string $companyId): array
+    {
+        $stmt = $this->pdo->prepare("SELECT id, name FROM teams where companyId = :company_id");
+        $stmt->bindParam(':company_id', $companyId);
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    // public function listTeamMembers(string $teamId): array
+    // {
+    //     $stmt = $this->pdo->prepare("SELECT u.id, u.name, u.email from user u LEFT JOINFROM team_members where teamId = :team_id");
+    //     $stmt->bindParam(':team_id', $teamId);
+    //     $stmt->execute();
+
+    //     return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    // }
+
+    public function listTeamMembers(string $companyId, bool $inTeam = false): array
+    {
+        $sql = $inTeam ? 'ut.teamId IS NOT NULL' : 'ut.teamId IS NULL';
+        $stmt = $this->pdo->prepare("SELECT u.id, u.name, u.email FROM user u LEFT JOIN team_members ut ON u.id = ut.userId WHERE u.companyId = :company_id AND $sql");
         $stmt->bindParam(':company_id', $companyId);
         $stmt->execute();
 
