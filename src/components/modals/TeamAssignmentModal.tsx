@@ -59,6 +59,7 @@ const TeamAssignmentModal: React.FC<Props> = ({
 							options={noTeamMembers}
 							value={chosenMembers}
 							onChange={setChosenMembers}
+							closeMenuOnSelect={false}
 						/>
 					</div>
 				:	<div>
