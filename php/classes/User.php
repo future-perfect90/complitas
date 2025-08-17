@@ -96,11 +96,16 @@ class User
 
     public function assignToTeam(array $userIds, string $teamId)
     {
+        $where = '';
+        foreach ($userIds as $userId) {
+            $id = $userId['value'];
+            $where .= "'$id',";
+        }
+        $where = rtrim($where, ',');
 
-        $lookup = "SELECT count(id) FROM team_members WHERE teamId = :team_id AND userId = :user_id";
+        $lookup = "SELECT count(*) FROM team_members WHERE teamId = :team_id AND userId IN ($where)";
         $stmt = $this->pdo->prepare($lookup);
         $stmt->bindParam(':team_id', $teamId);
-        $stmt->bindParam(':user_id', $user_id);
         $stmt->execute();
         $rowCount = $stmt->fetchColumn();
         if ($rowCount > 0) {
