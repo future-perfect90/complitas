@@ -93,13 +93,4 @@ class Properties
         $stmt->bindParam(':id', $id);
         return $stmt->execute();
     }
-
-    public function assignTeamToProperty(string $teamId, string $propertyId): array
-    {
-        $stmt = $this->pdo->prepare('INSERT INTO team_properties (teamId, propertyId) VALUES (:team_id, :property_id');
-        $stmt->bindParam(':team_id', $teamId);
-        $stmt->bindParam(':property_id', $propertyId);
-        $stmt->execute();
-        return $stmt->rowCount() > 0 ?  ['success' => true, 'message' => 'Property assigned to team'] :  ['success' => false, 'message' => 'Something went wrong'];
-    }
 }

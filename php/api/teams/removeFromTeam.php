@@ -1,15 +1,15 @@
 <?php
 require_once __DIR__ . '/../../shared/headers.php';
 require_once __DIR__ . '/../../classes/Database.php';
-require_once __DIR__ . '/../../classes/User.php';
+require_once __DIR__ . '/../../classes/Teams.php';
 
 $conn = (new Database())->connect();
-$user = new User($conn);
+$teams = new Teams($conn);
 
 $userId = $_GET['userId'] ?? null;
 $teamId = $_GET['teamId'] ?? null;
 if ($userId && $teamId) {
-    $result = $user->removeTeamMembers($userId, $teamId);
+    $result = $teams->removeTeamMembers($userId, $teamId);
 
     http_response_code(200);
     echo json_encode($result);

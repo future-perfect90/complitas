@@ -5,15 +5,15 @@ $data = json_decode(file_get_contents("php://input"), true);
 
 if ($data) {
     require_once __DIR__ . '/../../classes/Database.php';
-    require_once __DIR__ . '/../../classes/User.php';
+    require_once __DIR__ . '/../../classes/Teams.php';
 
-    $db = (new Database())->connect();
-    $user = new User($db);
+    $conn = (new Database())->connect();
+    $teams = new Teams($conn);
 
     $userId = $data['userId'];
     $teamId = $data['teamId'];
 
-    $result = $user->assignToTeam($userId, $teamId);
+    $result = $teams->assignToTeam($userId, $teamId);
 
     if (!$result['success']) {
         http_response_code(500);
