@@ -27,34 +27,10 @@ const TeamMembersModal: React.FC<Props> = ({
 	teamName,
 	teamMembers,
 }) => {
-	// const [teamMembers, setTeamMembers] = useState<Member[]>([]);
-	// const [loading, setLoading] = useState(true);
-
-	// const authMeta = useAuthMeta();
-	// const companyUuid = authMeta?.companyUuid || '';
-
-	// const fetchTeamMembers = async (companyUuid: string) => {
-	// 	setLoading(true);
-	// 	try {
-	// 		const currentMembers = await getTeamMembers(companyUuid, true);
-	// 		setTeamMembers(currentMembers);
-	// 	} catch {
-	// 		console.log('Problem retrieving user list');
-	// 	} finally {
-	// 		setLoading(false);
-	// 	}
-	// };
-
-	// useEffect(() => {
-	// 	if (companyUuid) {
-	// 		fetchTeamMembers(companyUuid);
-	// 	}
-	// }, [companyUuid]);
 
 	const handleRemove = async (userId: string) => {
 		try {
 			await removeFromTeam(userId, teamId);
-			// await fetchTeamMembers(companyUuid);
 			toast.success('Member removed from team!');
 			onSuccess();
 		} catch {

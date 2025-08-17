@@ -15,12 +15,6 @@ interface Props {
 	noTeamMembers: OptionType[];
 }
 
-interface Member {
-	id: string;
-	name: string;
-	email: string;
-}
-
 const TeamAssignmentModal: React.FC<Props> = ({
 	isOpen,
 	onClose,
@@ -29,35 +23,9 @@ const TeamAssignmentModal: React.FC<Props> = ({
 	teamName,
 	noTeamMembers,
 }) => {
-	// const [members, setMembers] = useState<OptionType[]>([]);
 	const [chosenMembers, setChosenMembers] = useState<MultiValue<OptionType>>(
 		[]
 	);
-	// const [loading, setLoading] = useState(true);
-	// const authMeta = useAuthMeta();
-	// const companyUuid = authMeta?.companyUuid || '';
-
-	// const fetchUsersWithNoTeam = async (companyUuid: string) => {
-	// 	setLoading(true);
-	// 	try {
-	// 		const selectableUsers = await getTeamMembers(companyUuid, false);
-	// 		const memberOptions = selectableUsers.map((member: Member) => ({
-	// 			value: member.id,
-	// 			label: `${member.name} (${member.email})`,
-	// 		}));
-	// 		setMembers(memberOptions);
-	// 	} catch {
-	// 		toast.error('Problem retrieving user list');
-	// 	} finally {
-	// 		setLoading(false);
-	// 	}
-	// };
-
-	// useEffect(() => {
-	// 	if (companyUuid) {
-	// 		fetchUsersWithNoTeam(companyUuid);
-	// 	}
-	// }, [companyUuid]);
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
@@ -91,7 +59,6 @@ const TeamAssignmentModal: React.FC<Props> = ({
 							options={noTeamMembers}
 							value={chosenMembers}
 							onChange={setChosenMembers}
-							// isDisabled={loading}
 						/>
 					</div>
 				:	<div>
