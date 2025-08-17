@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { type MultiValue } from 'react-select';
 import { toast } from 'react-toastify';
-import { useAuthMeta } from '../../context/AuthProvider';
-import { assignToTeam, getTeamMembers } from '../../utils/api';
+import { assignToTeam } from '../../utils/api';
 import { Button } from '../Button';
 import Modal from '../Modal';
 import MultiSelect, { type OptionType } from '../MultiSelect';
@@ -13,6 +12,7 @@ interface Props {
 	onSuccess: () => void;
 	teamId: string;
 	teamName: string;
+	noTeamMembers: OptionType[];
 }
 
 interface Member {
@@ -27,36 +27,37 @@ const TeamAssignmentModal: React.FC<Props> = ({
 	onSuccess,
 	teamId,
 	teamName,
+	noTeamMembers,
 }) => {
-	const [members, setMembers] = useState<OptionType[]>([]);
+	// const [members, setMembers] = useState<OptionType[]>([]);
 	const [chosenMembers, setChosenMembers] = useState<MultiValue<OptionType>>(
 		[]
 	);
-	const [loading, setLoading] = useState(true);
-	const authMeta = useAuthMeta();
-	const companyUuid = authMeta?.companyUuid || '';
+	// const [loading, setLoading] = useState(true);
+	// const authMeta = useAuthMeta();
+	// const companyUuid = authMeta?.companyUuid || '';
 
-	const fetchUsersWithNoTeam = async (companyUuid: string) => {
-		setLoading(true);
-		try {
-			const selectableUsers = await getTeamMembers(companyUuid, false);
-			const memberOptions = selectableUsers.map((member: Member) => ({
-				value: member.id,
-				label: `${member.name} (${member.email})`,
-			}));
-			setMembers(memberOptions);
-		} catch {
-			toast.error('Problem retrieving user list');
-		} finally {
-			setLoading(false);
-		}
-	};
+	// const fetchUsersWithNoTeam = async (companyUuid: string) => {
+	// 	setLoading(true);
+	// 	try {
+	// 		const selectableUsers = await getTeamMembers(companyUuid, false);
+	// 		const memberOptions = selectableUsers.map((member: Member) => ({
+	// 			value: member.id,
+	// 			label: `${member.name} (${member.email})`,
+	// 		}));
+	// 		setMembers(memberOptions);
+	// 	} catch {
+	// 		toast.error('Problem retrieving user list');
+	// 	} finally {
+	// 		setLoading(false);
+	// 	}
+	// };
 
-	useEffect(() => {
-		if (companyUuid) {
-			fetchUsersWithNoTeam(companyUuid);
-		}
-	}, [companyUuid]);
+	// useEffect(() => {
+	// 	if (companyUuid) {
+	// 		fetchUsersWithNoTeam(companyUuid);
+	// 	}
+	// }, [companyUuid]);
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
@@ -70,7 +71,6 @@ const TeamAssignmentModal: React.FC<Props> = ({
 				teamId
 			);
 			toast.success('Members added successfully!');
-			fetchUsersWithNoTeam(companyUuid);
 			setChosenMembers([]);
 			onSuccess();
 			onClose();
@@ -85,13 +85,13 @@ const TeamAssignmentModal: React.FC<Props> = ({
 			onClose={onClose}
 			title={`Add members to ${teamName}`}>
 			<form onSubmit={handleSubmit}>
-				{members && members.length > 0 ?
+				{noTeamMembers && noTeamMembers.length > 0 ?
 					<div className="grid grid-cols-2 gap-4">
 						<MultiSelect
-							options={members}
+							options={noTeamMembers}
 							value={chosenMembers}
 							onChange={setChosenMembers}
-							isDisabled={loading}
+							// isDisabled={loading}
 						/>
 					</div>
 				:	<div>
@@ -99,8 +99,12 @@ const TeamAssignmentModal: React.FC<Props> = ({
 					</div>
 				}
 				<div className="flex justify-end gap-2 mt-4">
-					<Button label="Cancel" onClick={onClose} className="bg-red-400 py-2 px-5" />
-					{members && members.length > 0 && (
+					<Button
+						label="Cancel"
+						onClick={onClose}
+						className="bg-red-400 py-2 px-5"
+					/>
+					{noTeamMembers && noTeamMembers.length > 0 && (
 						<Button label="Add members" className="bg-green-400 py-2 px-5" />
 					)}
 				</div>

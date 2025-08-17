@@ -10,11 +10,5 @@ $inTeam = $_GET['inTeam'] === 'true';
 
 $teamMembers = $user->listTeamMembers($companyId, $inTeam);
 
-if (!empty($teamMembers)) {
-    http_response_code(200);
-    echo json_encode($teamMembers);
-} else {
-    http_response_code(404);
-    $teams = ['message' => 'No users found'];
-    echo json_encode($teamMembers);
-}
+http_response_code(200);
+echo json_encode($teamMembers);

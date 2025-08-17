@@ -3,14 +3,24 @@ import { toast } from 'react-toastify';
 import TeamAssignmentModal from '../components/modals/TeamAssignmentModal';
 import TeamMembersModal from '../components/modals/TeamMembersModal';
 import TeamModal from '../components/modals/TeamModal';
+import { type OptionType } from '../components/MultiSelect';
 import { useAuthMeta } from '../context/AuthProvider';
 import type { Team } from '../types';
-import { getTeams } from '../utils/api';
+import { getTeamMembers, getTeams } from '../utils/api';
+
+interface Member {
+	id: string;
+	name: string;
+	email: string;
+}
 
 const TeamList: React.FC = () => {
 	const [id, setId] = useState('');
 	const [teamName, setTeamName] = useState('');
+	const [success, setSuccess] = useState(false);
 	const [teams, setTeams] = useState<Team[]>([]);
+	const [noTeamMembers, setNoTeamMembers] = useState<OptionType[]>([]);
+	const [teamMembers, setTeamMembers] = useState<Member[]>([]);
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [viewMembersModalOpen, setViewMembersModalOpen] = useState(false);
 	const [isTeamAssignmentModalOpen, setIsTeamAssignmentModalOpen] =
@@ -28,17 +38,42 @@ const TeamList: React.FC = () => {
 		}
 	};
 
+	const fetchUsersWithNoTeam = async (companyUuid: string) => {
+		try {
+			const selectableUsers = await getTeamMembers(companyUuid, false);
+			const memberOptions = selectableUsers.map((member: Member) => ({
+				value: member.id,
+				label: `${member.name} (${member.email})`,
+			}));
+			setNoTeamMembers(memberOptions);
+		} catch {
+			toast.error('Problem retrieving user list');
+		}
+	};
+
+	const fetchTeamMembers = async (companyUuid: string) => {
+		try {
+			const currentMembers = await getTeamMembers(companyUuid, true);
+			setTeamMembers(currentMembers);
+		} catch {
+			console.log('Problem retrieving user list');
+		}
+	};
+
 	useEffect(() => {
 		if (!isLoading && companyUuid) {
 			fetchTeams(companyUuid);
+			fetchTeamMembers(companyUuid);
 		}
-	}, [companyUuid, isLoading]);
+		setSuccess(false);
+	}, [companyUuid, isLoading, success]);
 
 	const handleAssignment = async (id: string, name: string) => {
 		try {
 			setId(id);
 			setTeamName(name);
 			setIsTeamAssignmentModalOpen(true);
+			fetchUsersWithNoTeam(companyUuid);
 		} catch {
 			toast.error('Error fetching user data.');
 		}
@@ -131,16 +166,29 @@ const TeamList: React.FC = () => {
 			<TeamAssignmentModal
 				isOpen={isTeamAssignmentModalOpen}
 				onClose={() => setIsTeamAssignmentModalOpen(false)}
-				onSuccess={() => companyUuid && fetchTeams(companyUuid)}
+				onSuccess={async () => {
+					if (companyUuid) {
+						await fetchTeams(companyUuid);
+						await fetchUsersWithNoTeam(companyUuid);
+						await fetchTeamMembers(companyUuid);
+					}
+				}}
 				teamId={id}
 				teamName={teamName}
+				noTeamMembers={noTeamMembers}
 			/>
 			<TeamMembersModal
 				isOpen={viewMembersModalOpen}
 				onClose={() => setViewMembersModalOpen(false)}
-				onSuccess={() => companyUuid && fetchTeams(companyUuid)}
+				onSuccess={async () => {
+					if (companyUuid) {
+						await fetchTeams(companyUuid);
+						await fetchTeamMembers(companyUuid);
+					}
+				}}
 				teamId={id}
 				teamName={teamName}
+				teamMembers={teamMembers}
 			/>
 		</div>
 	);
