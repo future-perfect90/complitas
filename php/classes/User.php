@@ -97,6 +97,16 @@ class User
     public function assignToTeam(array $userIds, string $teamId)
     {
 
+        $lookup = "SELECT count(id) FROM team_members WHERE teamId = :team_id AND userId = :user_id";
+        $stmt = $this->pdo->prepare($lookup);
+        $stmt->bindParam(':team_id', $teamId);
+        $stmt->bindParam(':user_id', $user_id);
+        $stmt->execute();
+        $rowCount = $stmt->fetchColumn();
+        if ($rowCount > 0) {
+            return ['success' => false, 'message' => 'User exists in team.'];
+        }
+
         $insert = 'INSERT INTO team_members (teamId, userId) VALUES ';
         foreach ($userIds as $userId) {
             $id = $userId['value'];
@@ -117,15 +127,6 @@ class User
 
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-
-    // public function listTeamMembers(string $teamId): array
-    // {
-    //     $stmt = $this->pdo->prepare("SELECT u.id, u.name, u.email from user u LEFT JOINFROM team_members where teamId = :team_id");
-    //     $stmt->bindParam(':team_id', $teamId);
-    //     $stmt->execute();
-
-    //     return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    // }
 
     public function listTeamMembers(string $companyId, bool $inTeam = false): array
     {

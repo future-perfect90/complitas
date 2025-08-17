@@ -80,10 +80,6 @@ const TeamList: React.FC = () => {
 						on main component and pass children to modal, so on success refetch
 						data
 					</li>
-					<li>
-						DB to do lookup before trying to add user that user is not apart of
-						a team first for validation
-					</li>
 				</ul>
 			</div>
 			<div className="bg-white shadow rounded overflow-hidden">
