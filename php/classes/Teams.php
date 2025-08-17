@@ -23,9 +23,12 @@ class Teams
     public function assignToTeam(array $userIds, string $teamId)
     {
         $where = '';
+        $insertString = 'INSERT INTO team_members (teamId, userId) VALUES ';
+
         foreach ($userIds as $userId) {
             $id = $userId['value'];
             $where .= "'$id',";
+            $insertString .= "('$teamId', '$id'),";
         }
         $where = rtrim($where, ',');
 
@@ -38,13 +41,8 @@ class Teams
             return ['success' => false, 'message' => 'User exists in team.'];
         }
 
-        $insert = 'INSERT INTO team_members (teamId, userId) VALUES ';
-        foreach ($userIds as $userId) {
-            $id = $userId['value'];
-            $insert .= "('$teamId', '$id'),";
-        }
-        $insert = rtrim($insert, ',');
-        $stmt = $this->pdo->prepare($insert);
+        $insertString = rtrim($insertString, ',');
+        $stmt = $this->pdo->prepare($insertString);
         $stmt->execute();
 
         return $stmt->rowCount() > 0 ?  ['success' => true, 'message' => 'User\'s assigned to team'] :  ['success' => false, 'message' => 'Something went wrong'];
@@ -77,12 +75,30 @@ class Teams
         return $stmt->execute();
     }
 
-    public function assignTeamToProperty(string $teamId, string $propertyId): array
+    public function assignTeamToProperty(string $teamId, array $propertyIds): array
     {
-        $stmt = $this->pdo->prepare('INSERT INTO team_properties (teamId, propertyId) VALUES (:team_id, :property_id');
+        $where = '';
+        $insertString = 'INSERT INTO team_properties (teamId, propertyId) VALUES ';
+        foreach ($propertyIds as $propertyId) {
+            $id = $propertyId['value'];
+            $where .= "'$id',";
+            $insertString .= "('$teamId', '$id'),";
+        }
+        $where = rtrim($where, ',');
+
+        $lookup = "SELECT count(*) FROM team_properties WHERE teamId = :team_id AND propertyId IN ($where)";
+        $stmt = $this->pdo->prepare($lookup);
         $stmt->bindParam(':team_id', $teamId);
-        $stmt->bindParam(':property_id', $propertyId);
         $stmt->execute();
-        return $stmt->rowCount() > 0 ?  ['success' => true, 'message' => 'Property assigned to team'] :  ['success' => false, 'message' => 'Something went wrong'];
+        $rowCount = $stmt->fetchColumn();
+        if ($rowCount > 0) {
+            return ['success' => false, 'message' => 'Team already manages property.'];
+        }
+
+        $insertString = rtrim($insertString, ',');
+        $stmt = $this->pdo->prepare($insertString);
+        $stmt->execute();
+
+        return $stmt->rowCount() > 0 ?  ['success' => true, 'message' => 'Team assigned to properties'] :  ['success' => false, 'message' => 'Something went wrong'];
     }
 }
