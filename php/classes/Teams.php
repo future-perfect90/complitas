@@ -22,17 +22,15 @@ class Teams
 
     public function assignToTeam(array $userIds, string $teamId)
     {
-        $where = '';
-        $insertString = 'INSERT INTO team_members (teamId, userId) VALUES ';
-
+        $ids = '';
         foreach ($userIds as $userId) {
             $id = $userId['value'];
-            $where .= "'$id',";
-            $insertString .= "('$teamId', '$id'),";
+            $ids .= "'$id',";
         }
-        $where = rtrim($where, ',');
+        $ids = rtrim($ids, ',');
+        $sql = "UPDATE user SET teamId = :team_id where id IN ($ids)";
 
-        $lookup = "SELECT count(*) FROM team_members WHERE teamId = :team_id AND userId IN ($where)";
+        $lookup = "SELECT count(*) FROM user WHERE teamId = :team_id and id IN ($ids)";
         $stmt = $this->pdo->prepare($lookup);
         $stmt->bindParam(':team_id', $teamId);
         $stmt->execute();
@@ -41,8 +39,8 @@ class Teams
             return ['success' => false, 'message' => 'User exists in team.'];
         }
 
-        $insertString = rtrim($insertString, ',');
-        $stmt = $this->pdo->prepare($insertString);
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindParam(':team_id', $teamId);
         $stmt->execute();
 
         return $stmt->rowCount() > 0 ?  ['success' => true, 'message' => 'User\'s assigned to team'] :  ['success' => false, 'message' => 'Something went wrong'];
@@ -57,13 +55,14 @@ class Teams
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function listTeamMembers(string $companyId, bool $inTeam = false): array
+    public function listTeamMembers(string $companyId, string | null $teamId): array
     {
-        $sql = $inTeam ? 'ut.teamId IS NOT NULL' : 'ut.teamId IS NULL';
-        $stmt = $this->pdo->prepare("SELECT u.id, u.name, u.email FROM user u LEFT JOIN team_members ut ON u.id = ut.userId WHERE u.companyId = :company_id AND $sql");
+        $where = empty($teamId) ? 'teamId IS NULL' : 'teamId = :team_id';
+        $sql = "SELECT id, name, email from user where companyId = :company_id AND $where";
+        $stmt = $this->pdo->prepare($sql);
         $stmt->bindParam(':company_id', $companyId);
+        !empty($teamId) ?? $stmt->bindParam(':team_id', $teamId);
         $stmt->execute();
-
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 

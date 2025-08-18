@@ -290,8 +290,8 @@ export async function getTeams(companyId: string) {
 	return response.json();
 }
 
-export async function getTeamMembers(companyId: string, inTeam: boolean) {
-	const url = `${import.meta.env.VITE_API_BASE_URL}/teams/listTeamMembers.php?companyId=${companyId}&inTeam=${inTeam}`;
+export async function getTeamMembers(companyId: string, teamId: string) {
+	const url = `${import.meta.env.VITE_API_BASE_URL}/teams/listTeamMembers.php?companyId=${companyId}&teamId=${teamId}`;
 	const response = await fetch(url, {
 		method: 'GET',
 		headers: {

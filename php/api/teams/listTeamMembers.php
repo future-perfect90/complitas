@@ -6,9 +6,9 @@ require_once __DIR__ . '/../../classes/Teams.php';
 $conn = (new Database())->connect();
 $teams = new Teams($conn);
 $companyId = $_GET['companyId'];
-$inTeam = $_GET['inTeam'] === 'true';
+$teamId = !empty($_GET['teamId']) ? $_GET['teamId'] : null;
 
-$teamMembers = $teams->listTeamMembers($companyId, $inTeam);
+$teamMembers = $teams->listTeamMembers($companyId, $teamId);
 
 http_response_code(200);
 echo json_encode($teamMembers);

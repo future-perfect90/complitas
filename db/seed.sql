@@ -58,11 +58,12 @@ CREATE TABLE `user` (
     `name` VARCHAR(255) NOT NULL,
     `email` VARCHAR(255),
     `companyId` VARCHAR(36) NOT NULL,
+    `teamId` VARCHAR(36) DEFAULT NULL,
     `createdAt` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `createdBy` VARCHAR(255) DEFAULT NULL,
-    CONSTRAINT fk_companies_user
-    FOREIGN KEY (companyId)
-    REFERENCES companies (id) ON DELETE CASCADE
+
+    CONSTRAINT fk_companies_user FOREIGN KEY (companyId) REFERENCES companies (id) ON DELETE CASCADE
+    CONSTRAINT fk_team_user FOREIGN KEY (teamId) REFERENCES teams (id) ON DELETE CASCADE
 )
 
 CREATE TABLE teams (

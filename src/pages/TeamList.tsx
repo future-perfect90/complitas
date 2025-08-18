@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
+import { Button } from '../components/Button';
 import TeamAssignmentModal from '../components/modals/TeamAssignmentModal';
 import TeamMembersModal from '../components/modals/TeamMembersModal';
 import TeamModal from '../components/modals/TeamModal';
@@ -23,8 +24,12 @@ const TeamList: React.FC = () => {
 	const [noTeamMembers, setNoTeamMembers] = useState<OptionType[]>([]);
 	const [teamMembers, setTeamMembers] = useState<Member[]>([]);
 
+	//UPDATE TYPE
+	// const [teamProperties, setTeamProperties] = useState<Member[]>([]);
+	// const [properties, setProperties] = useState<Member[]>([]);
+
 	const [modal, setModal] = useState<{
-		type: 'create' | 'assign' | 'view' | null;
+		type: 'create' | 'assign' | 'view' | 'viewAssignProperties' | null;
 		teamId?: string;
 		teamName?: string;
 	}>({ type: null });
@@ -42,7 +47,7 @@ const TeamList: React.FC = () => {
 	const fetchUsersWithNoTeam = useCallback(async () => {
 		if (!companyUuid) return;
 		try {
-			const users = await getTeamMembers(companyUuid, false);
+			const users = await getTeamMembers(companyUuid, '');
 			const options = users.map((u: Member) => ({
 				value: u.id,
 				label: `${u.name} (${u.email})`,
@@ -56,12 +61,33 @@ const TeamList: React.FC = () => {
 	const fetchTeamMembers = useCallback(async () => {
 		if (!companyUuid) return;
 		try {
-			const members = await getTeamMembers(companyUuid, true);
+			const members = await getTeamMembers(companyUuid, teamId);
 			setTeamMembers(members);
 		} catch {
 			console.error('Problem retrieving user list');
 		}
 	}, [companyUuid]);
+
+	// //TODO::update functionality
+	// const fetchProperties = useCallback(async () => {
+	// 	if (!companyUuid) return;
+	// 	try {
+	// 		const members = await getTeamMembers(companyUuid, true);
+	// 		setTeamMembers(members);
+	// 	} catch {
+	// 		console.error('Problem retrieving property list');
+	// 	}
+	// }, [companyUuid]);
+
+	// const fetchTeamProperties = useCallback(async () => {
+	// 	if (!companyUuid) return;
+	// 	try {
+	// 		const members = await getTeamMembers(companyUuid, true);
+	// 		setTeamMembers(members);
+	// 	} catch {
+	// 		console.error('Problem retrieving team property list');
+	// 	}
+	// }, [companyUuid]);
 
 	useEffect(() => {
 		if (!isLoading && companyUuid) {
@@ -77,6 +103,10 @@ const TeamList: React.FC = () => {
 
 	const handleViewMembersClick = (teamId: string, teamName: string) => {
 		setModal({ type: 'view', teamId, teamName });
+	};
+
+	const handleViewAssignProperty = (teamId: string, teamName: string) => {
+		setModal({ type: 'viewAssignProperties', teamId, teamName });
 	};
 
 	const closeModal = () => setModal({ type: null });
@@ -97,6 +127,9 @@ const TeamList: React.FC = () => {
 			</div>
 
 			<div className="bg-white shadow rounded overflow-hidden">
+				<h2>TODO::</h2>
+				<h3>TODO::</h3> Remove team complexity and have it where staffa re
+				assigned a single team and the property is managed by the company
 				<table className="min-w-full min-w-xl">
 					<thead className="bg-gray-100">
 						<tr>
@@ -110,18 +143,25 @@ const TeamList: React.FC = () => {
 								<tr key={t.id} className="border-t">
 									<td className="px-4 py-2 text-slate-800">{t.name}</td>
 									<td className="px-4 py-2 flex gap-2 justify-end">
-										<button
+										<Button
+											label="Assign Members"
 											onClick={() => t.id && handleAssignClick(t.id, t.name)}
-											className="px-2 py-1 bg-blue-500 text-white rounded">
-											Assign Members
-										</button>
-										<button
+											className="px-2 py-1 bg-blue-500 text-white rounded"
+										/>
+										<Button
+											label="View Members"
 											onClick={() =>
 												t.id && handleViewMembersClick(t.id, t.name)
 											}
-											className="px-2 py-1 bg-green-500 text-white rounded">
-											View Members
-										</button>
+											className="px-2 py-1 bg-green-500 text-white rounded"
+										/>
+										<Button
+											label="View properties"
+											onClick={() =>
+												t.id && handleViewAssignProperty(t.id, t.name)
+											}
+											className="px-2 py-1 bg-purple-500 text-white rounded"
+										/>
 									</td>
 								</tr>
 							))
@@ -170,6 +210,19 @@ const TeamList: React.FC = () => {
 				teamName={modal.teamName || ''}
 				teamMembers={teamMembers}
 			/>
+
+			{/* View/Assign Properties */}
+			{/* <TeamPropertiesModal
+				isOpen={modal.type === 'viewAssignProperties'}
+				onClose={closeModal}
+				onSuccess={async () => {
+					await fetchProperties();
+					await fetchTeamProperties();
+				}}
+				teamId={modal.teamId || ''}
+				teamName={modal.teamName || ''}
+				teamProperties={teamProperties}
+			/> */}
 		</div>
 	);
 };
