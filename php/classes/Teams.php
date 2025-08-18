@@ -61,14 +61,14 @@ class Teams
         $sql = "SELECT id, name, email from user where companyId = :company_id AND $where";
         $stmt = $this->pdo->prepare($sql);
         $stmt->bindParam(':company_id', $companyId);
-        !empty($teamId) ?? $stmt->bindParam(':team_id', $teamId);
+        !empty($teamId) ? $stmt->bindParam(':team_id', $teamId) : '';
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function removeTeamMembers(string $userId, string $teamId): bool
     {
-        $stmt = $this->pdo->prepare("DELETE FROM team_members WHERE userId = :user_id AND teamId = :team_id");
+        $stmt = $this->pdo->prepare("UPDATE user SET teamId = NULL WHERE id = :user_id AND teamId = :team_id");
         $stmt->bindParam(':user_id', $userId);
         $stmt->bindParam(':team_id', $teamId);
         return $stmt->execute();

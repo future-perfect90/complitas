@@ -58,15 +58,18 @@ const TeamList: React.FC = () => {
 		}
 	}, [companyUuid]);
 
-	const fetchTeamMembers = useCallback(async () => {
-		if (!companyUuid) return;
-		try {
-			const members = await getTeamMembers(companyUuid, teamId);
-			setTeamMembers(members);
-		} catch {
-			console.error('Problem retrieving user list');
-		}
-	}, [companyUuid]);
+	const fetchTeamMembers = useCallback(
+		async (teamId: string) => {
+			if (!companyUuid) return;
+			try {
+				const members = await getTeamMembers(companyUuid, teamId);
+				setTeamMembers(members);
+			} catch {
+				console.error('Problem retrieving user list');
+			}
+		},
+		[companyUuid]
+	);
 
 	// //TODO::update functionality
 	// const fetchProperties = useCallback(async () => {
@@ -92,17 +95,17 @@ const TeamList: React.FC = () => {
 	useEffect(() => {
 		if (!isLoading && companyUuid) {
 			fetchTeams();
-			fetchTeamMembers();
 		}
-	}, [companyUuid, isLoading, fetchTeams, fetchTeamMembers]);
+	}, [companyUuid, isLoading, fetchTeams]);
 
 	const handleAssignClick = async (teamId: string, teamName: string) => {
 		setModal({ type: 'assign', teamId, teamName });
 		await fetchUsersWithNoTeam();
 	};
 
-	const handleViewMembersClick = (teamId: string, teamName: string) => {
+	const handleViewMembersClick = async (teamId: string, teamName: string) => {
 		setModal({ type: 'view', teamId, teamName });
+		await fetchTeamMembers(teamId);
 	};
 
 	const handleViewAssignProperty = (teamId: string, teamName: string) => {
@@ -127,9 +130,6 @@ const TeamList: React.FC = () => {
 			</div>
 
 			<div className="bg-white shadow rounded overflow-hidden">
-				<h2>TODO::</h2>
-				<h3>TODO::</h3> Remove team complexity and have it where staffa re
-				assigned a single team and the property is managed by the company
 				<table className="min-w-full min-w-xl">
 					<thead className="bg-gray-100">
 						<tr>
@@ -191,7 +191,6 @@ const TeamList: React.FC = () => {
 				onSuccess={async () => {
 					await fetchTeams();
 					await fetchUsersWithNoTeam();
-					await fetchTeamMembers();
 				}}
 				teamId={modal.teamId || ''}
 				teamName={modal.teamName || ''}
@@ -204,7 +203,7 @@ const TeamList: React.FC = () => {
 				onClose={closeModal}
 				onSuccess={async () => {
 					await fetchTeams();
-					await fetchTeamMembers();
+					await fetchTeamMembers(modal.teamId || '');
 				}}
 				teamId={modal.teamId || ''}
 				teamName={modal.teamName || ''}

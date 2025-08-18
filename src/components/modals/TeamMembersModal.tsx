@@ -27,7 +27,6 @@ const TeamMembersModal: React.FC<Props> = ({
 	teamName,
 	teamMembers,
 }) => {
-
 	const handleRemove = async (userId: string) => {
 		try {
 			await removeFromTeam(userId, teamId);
