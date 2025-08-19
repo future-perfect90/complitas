@@ -6,7 +6,8 @@
         "guzzlehttp/guzzle": "^7.9",
         "guzzlehttp/psr7": "^2.7",
         "http-interop/http-factory-guzzle": "^1.2",
-        "ramsey/uuid": "^4.9"
+        "ramsey/uuid": "^4.9",
+        "mpdf/mpdf": "^8.2"
     },
     "config": {
         "allow-plugins": {
