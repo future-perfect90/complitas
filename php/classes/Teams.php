@@ -76,28 +76,38 @@ class Teams
 
     public function assignTeamToProperty(string $teamId, array $propertyIds): array
     {
-        $where = '';
-        $insertString = 'INSERT INTO team_properties (teamId, propertyId) VALUES ';
+        $ids = '';
         foreach ($propertyIds as $propertyId) {
             $id = $propertyId['value'];
-            $where .= "'$id',";
-            $insertString .= "('$teamId', '$id'),";
+            $ids .= "'$id',";
         }
-        $where = rtrim($where, ',');
+        $ids = rtrim($ids, ',');
+        $sql = "UPDATE properties SET teamId = :team_id where id IN ($ids)";
 
-        $lookup = "SELECT count(*) FROM team_properties WHERE teamId = :team_id AND propertyId IN ($where)";
+        $lookup = "SELECT count(*) FROM properties WHERE teamId = :team_id and id IN ($ids)";
         $stmt = $this->pdo->prepare($lookup);
         $stmt->bindParam(':team_id', $teamId);
         $stmt->execute();
         $rowCount = $stmt->fetchColumn();
         if ($rowCount > 0) {
-            return ['success' => false, 'message' => 'Team already manages property.'];
+            return ['success' => false, 'message' => 'Team already assigned to property'];
         }
 
-        $insertString = rtrim($insertString, ',');
-        $stmt = $this->pdo->prepare($insertString);
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindParam(':team_id', $teamId);
         $stmt->execute();
 
-        return $stmt->rowCount() > 0 ?  ['success' => true, 'message' => 'Team assigned to properties'] :  ['success' => false, 'message' => 'Something went wrong'];
+        return $stmt->rowCount() > 0 ?  ['success' => true, 'message' => 'Propety\'s assigned to team'] :  ['success' => false, 'message' => 'Something went wrong'];
+    }
+
+    public function listTeamProperties(string $companyId, string | null $teamId): array
+    {
+        $where = empty($teamId) ? 'teamId IS NULL' : 'teamId = :team_id';
+        $sql = "SELECT id, name, email from properties where companyId = :company_id AND $where";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindParam(':company_id', $companyId);
+        !empty($teamId) ? $stmt->bindParam(':team_id', $teamId) : '';
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }

@@ -4,10 +4,11 @@ import { Button } from '../components/Button';
 import TeamAssignmentModal from '../components/modals/TeamAssignmentModal';
 import TeamMembersModal from '../components/modals/TeamMembersModal';
 import TeamModal from '../components/modals/TeamModal';
+import TeamPropertiesModal from '../components/modals/TeamPropertiesModal';
 import { type OptionType } from '../components/MultiSelect';
 import { useAuthMeta } from '../context/AuthProvider';
-import type { Team } from '../types';
-import { getTeamMembers, getTeams } from '../utils/api';
+import type { Property, Team } from '../types';
+import { getTeamMembers, getTeamProperties, getTeams } from '../utils/api';
 
 interface Member {
 	id: string;
@@ -25,8 +26,10 @@ const TeamList: React.FC = () => {
 	const [teamMembers, setTeamMembers] = useState<Member[]>([]);
 
 	//UPDATE TYPE
-	// const [teamProperties, setTeamProperties] = useState<Member[]>([]);
-	// const [properties, setProperties] = useState<Member[]>([]);
+	const [assignedProperties, setAssignedProperties] = useState<Member[]>([]);
+	const [unassignedProperties, setUnassignedProperties] = useState<Member[]>(
+		[]
+	);
 
 	const [modal, setModal] = useState<{
 		type: 'create' | 'assign' | 'view' | 'viewAssignProperties' | null;
@@ -71,26 +74,35 @@ const TeamList: React.FC = () => {
 		[companyUuid]
 	);
 
-	// //TODO::update functionality
-	// const fetchProperties = useCallback(async () => {
-	// 	if (!companyUuid) return;
-	// 	try {
-	// 		const members = await getTeamMembers(companyUuid, true);
-	// 		setTeamMembers(members);
-	// 	} catch {
-	// 		console.error('Problem retrieving property list');
-	// 	}
-	// }, [companyUuid]);
+	const fetchProperties = useCallback(async () => {
+		if (!companyUuid) return;
+		try {
+			const unassignedProperties = await getTeamProperties(companyUuid, '');
+			const options =
+				unassignedProperties && unassignedProperties.length > 0 ?
+					unassignedProperties.map((u: Property) => ({
+						value: u.id,
+						label: `${u.name} (${u.email})`,
+					}))
+				:	[];
+			setUnassignedProperties(options);
+		} catch (e) {
+			console.error('Problem retrieving property list', e);
+		}
+	}, [companyUuid]);
 
-	// const fetchTeamProperties = useCallback(async () => {
-	// 	if (!companyUuid) return;
-	// 	try {
-	// 		const members = await getTeamMembers(companyUuid, true);
-	// 		setTeamMembers(members);
-	// 	} catch {
-	// 		console.error('Problem retrieving team property list');
-	// 	}
-	// }, [companyUuid]);
+	const fetchTeamProperties = useCallback(
+		async (teamId: string) => {
+			if (!companyUuid) return;
+			try {
+				const assignProperties = await getTeamProperties(companyUuid, teamId);
+				setAssignedProperties(assignProperties);
+			} catch {
+				console.error('Problem retrieving team property list');
+			}
+		},
+		[companyUuid]
+	);
 
 	useEffect(() => {
 		if (!isLoading && companyUuid) {
@@ -108,8 +120,10 @@ const TeamList: React.FC = () => {
 		await fetchTeamMembers(teamId);
 	};
 
-	const handleViewAssignProperty = (teamId: string, teamName: string) => {
+	const handleViewAssignProperty = async (teamId: string, teamName: string) => {
 		setModal({ type: 'viewAssignProperties', teamId, teamName });
+		await fetchProperties();
+		await fetchTeamProperties(teamId);
 	};
 
 	const closeModal = () => setModal({ type: null });
@@ -211,17 +225,18 @@ const TeamList: React.FC = () => {
 			/>
 
 			{/* View/Assign Properties */}
-			{/* <TeamPropertiesModal
+			<TeamPropertiesModal
 				isOpen={modal.type === 'viewAssignProperties'}
 				onClose={closeModal}
 				onSuccess={async () => {
 					await fetchProperties();
-					await fetchTeamProperties();
+					await fetchTeamProperties(modal.teamId || '');
 				}}
 				teamId={modal.teamId || ''}
 				teamName={modal.teamName || ''}
-				teamProperties={teamProperties}
-			/> */}
+				assignedProperties={assignedProperties}
+				unassignedProperties={unassignedProperties}
+			/>
 		</div>
 	);
 };

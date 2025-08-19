@@ -229,13 +229,13 @@ export async function createTeam(name: string, companyId: string) {
 	}
 	return response.json();
 }
-interface MemberOption {
+interface MultiValueOption {
 	value: string;
 	name: string;
 }
 
 export async function assignToTeam(
-	userId: MultiValue<MemberOption>,
+	userId: MultiValue<MultiValueOption>,
 	teamId: string
 ) {
 	const response = await fetch(
@@ -255,7 +255,10 @@ export async function assignToTeam(
 	return response.json();
 }
 
-export async function assignTeamToProperty(propertyId: string, teamId: string) {
+export async function assignTeamToProperty(
+	propertyId: MultiValue<MultiValueOption>,
+	teamId: string
+) {
 	const response = await fetch(
 		`${import.meta.env.VITE_API_BASE_URL}/teams/assignTeamToProperty.php`,
 		{
@@ -314,6 +317,23 @@ export async function removeFromTeam(userId: string, teamId: string) {
 			'Content-Type': 'application/json',
 		},
 	});
+	if (!response.ok) {
+		throw new Error(`Response status: ${response.status}`);
+	}
+	return response.json();
+}
+
+export async function getTeamProperties(companyId: string, teamId: string) {
+	const response = await fetch(
+		`${import.meta.env.VITE_API_BASE_URL}/teams/listProperties.php?companyId=${companyId}&teamId=${teamId}`,
+		{
+			method: 'GET',
+			headers: {
+				Authorization: `Bearer ${jwt}`,
+				'Content-Type': 'application/json',
+			},
+		}
+	);
 	if (!response.ok) {
 		throw new Error(`Response status: ${response.status}`);
 	}

@@ -40,11 +40,14 @@ CREATE TABLE `properties` (
     `telephone` VARCHAR(13),
     `managerName` VARCHAR(255),
     `companyId` VARCHAR(36) NOT NULL,
+    `teamId` VARCHAR(36) DEFAULT NULL,
     `createdAt` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `createdBy` VARCHAR(255) DEFAULT NULL,
     CONSTRAINT fk_companies
     FOREIGN KEY (companyId)
     REFERENCES company (id) ON DELETE CASCADE
+        CONSTRAINT fk_team_propety FOREIGN KEY (teamId) REFERENCES teams (id) ON DELETE CASCADE
+
 );
 
 INSERT INTO properties (name, address1, address2, city, county, postCode, country, managerName, email, telephone, companyId)

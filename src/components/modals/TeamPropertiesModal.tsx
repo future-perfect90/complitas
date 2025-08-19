@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { type MultiValue } from 'react-select';
 import { toast } from 'react-toastify';
+import { assignTeamToProperty } from '../../utils/api';
 import { Button } from '../Button';
 import Modal from '../Modal';
 import MultiSelect, { type OptionType } from '../MultiSelect';
@@ -11,7 +12,14 @@ interface Props {
 	onSuccess: () => void;
 	teamId: string;
 	teamName: string;
-	properties: OptionType[];
+	assignedProperties: Property[];
+	unassignedProperties: OptionType[];
+}
+
+interface Property {
+	id: string;
+	name: string;
+	email: string;
 }
 
 const TeamAssignmentModal: React.FC<Props> = ({
@@ -20,25 +28,26 @@ const TeamAssignmentModal: React.FC<Props> = ({
 	onSuccess,
 	teamId,
 	teamName,
-	properties,
+	assignedProperties,
+	unassignedProperties,
 }) => {
-	const [chosenMembers, setChosenMembers] = useState<MultiValue<OptionType>>(
-		[]
-	);
+	const [chosenProperties, setChosenProperties] = useState<
+		MultiValue<OptionType>
+	>([]);
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 
 		try {
-			// await assignToTeam(
-			// 	chosenMembers.map((member) => ({
-			// 		value: member.value,
-			// 		name: member.label,
-			// 	})),
-			// 	teamId
-			// );
-			// toast.success('Members added successfully!');
-			// setChosenMembers([]);
+			await assignTeamToProperty(
+				chosenProperties.map((property) => ({
+					value: property.value,
+					name: property.label,
+				})),
+				teamId
+			);
+			toast.success('Team added successfully!');
+			setChosenProperties([]);
 			onSuccess();
 			onClose();
 		} catch {
@@ -50,28 +59,50 @@ const TeamAssignmentModal: React.FC<Props> = ({
 		<Modal
 			isOpen={isOpen}
 			onClose={onClose}
-			title={`Add members to ${teamName}`}>
+			title={`Add properties to ${teamName}`}>
 			<form onSubmit={handleSubmit}>
-				{properties && properties.length > 0 ?
-					<div className="grid grid-cols-2 gap-4">
-						<MultiSelect
-							options={properties}
-							value={chosenMembers}
-							onChange={setChosenMembers}
-							closeMenuOnSelect={false}
-						/>
-					</div>
-				:	<div>
-						<p className={'text-slate-400'}>No users available to add.</p>
-					</div>
-				}
+				<div className="mb-4 grid grid-cols-1">
+					{unassignedProperties && unassignedProperties.length > 0 ?
+						<>
+							<label className="block text-sm font-medium text-slate-700">
+								Select properties to assign:
+							</label>
+							<div className="grid grid-cols-1 gap-4 mb-4">
+								<MultiSelect
+									options={unassignedProperties}
+									value={chosenProperties}
+									onChange={setChosenProperties}
+									closeMenuOnSelect={false}
+								/>
+							</div>
+						</>
+					:	<div>
+							<p className={'text-slate-400'}>
+								No properties available to add.
+							</p>
+						</div>
+					}
+					{assignedProperties && assignedProperties.length > 0 ?
+						<div className="mt-4 grid grid-cols-1">
+							<h3 className="text-lg font-semibold text-slate-800">
+								Assigned Properties
+							</h3>
+
+							{assignedProperties.map((property) => (
+								<p key={property.id} className="text-slate-800">
+									{property.name} ({property.email})
+								</p>
+							))}
+						</div>
+					:	null}
+				</div>
 				<div className="flex justify-end gap-2 mt-4">
 					<Button
 						label="Cancel"
 						onClick={onClose}
 						className="bg-red-400 py-2 px-5"
 					/>
-					{properties && properties.length > 0 && (
+					{unassignedProperties && unassignedProperties.length > 0 && (
 						<Button label="Add members" className="bg-green-400 py-2 px-5" />
 					)}
 				</div>
