@@ -45,7 +45,6 @@ class Company
         $stmt->bindParam(':telephone', $companyData['telephone']);
 
         $stmt->execute();
-
         return ($stmt->rowCount() > 0) ? ['success' => true, 'message' => 'Company created'] : ['success' => false, 'message' => 'Something went wrong'];
     }
 

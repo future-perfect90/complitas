@@ -1,6 +1,8 @@
 <?php
+require_once __DIR__ . '/../classes/Conf.php';
 
 use Ramsey\Uuid\Uuid;
+use Aws\S3\S3Client;
 
 class Document
 {
@@ -79,4 +81,52 @@ Maecenas suscipit consectetur ipsum, ac efficitur ipsum accumsan luctus. Pellent
 
         return $emailTemplate;
     }
+
+    private function createS3Client()
+    {
+        return new S3Client([
+            'region' => 'eu-west-2',
+            'version' => 'latest',
+            'credentials' => [
+                'key'    => $_ENV['AWS_ACCESS_KEY_ID'],
+                'secret' => $_ENV['AWS_SECRET_ACCESS_KEY'],
+            ]
+        ]);
+    }
+
+    public function presignedUrl(string $filePath, string $fileType): array
+    {
+        $s3 = $this->createS3Client();
+
+        $bucket = $_ENV["AWS_S3_BUCKET"];
+
+        $cmd = $s3->getCommand('PutObject', [
+            'Bucket' => $bucket,
+            'Key'    => $filePath,
+            'ContentType' => $fileType
+        ]);
+
+        $request = $s3->createPresignedRequest($cmd, '+15 minutes');
+        $presignedUrl = (string) $request->getUri();
+
+        return ['success' => true, 'message' => 'Presigned URL created', 'presignedUrl' => $presignedUrl];
+    }
+
+    // public function uploadDocument(string $filePath): array
+    // {
+    //     $s3 = $this->createS3Client();
+
+    //     $bucket = $_ENV["AWS_S3_BUCKET"];
+
+    //     $cmd = $s3->getCommand('PutObject', [
+    //         'Bucket' => $bucket,
+    //         'Key'    => $filePath,
+    //         'ContentType' => 'application/pdf'
+    //     ]);
+
+    //     $request = $s3->createPresignedRequest($cmd, '+15 minutes');
+    //     $presignedUrl = (string) $request->getUri();
+
+    //     return ["presignedUrl" => $presignedUrl];
+    // }
 }

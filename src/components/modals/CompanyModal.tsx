@@ -3,6 +3,7 @@ import { toast } from 'react-toastify';
 import type { Company } from '../../types';
 import { createCompany, updateCompany } from '../../utils/api';
 import { Button } from '../Button';
+import FileUpload from '../FileUpload';
 import Modal from '../Modal';
 import TextField from '../TextField';
 
@@ -124,6 +125,10 @@ const CompanyModal: React.FC<Props> = ({
 		onClose();
 	};
 
+	const handleUploadComplete = (url: string) => {
+		console.log('File uploaded to:', url);
+	};
+
 	return (
 		<Modal
 			isOpen={isOpen}
@@ -196,9 +201,18 @@ const CompanyModal: React.FC<Props> = ({
 						onChange={(e: any) => setEmail(e.target.value)}
 						required
 					/>
+					<FileUpload
+						uploadApiUrl={`${import.meta.env.VITE_API_BASE_URL}/document/listTeamMembers.php`}
+						accept="image/*"
+						onUploadComplete={handleUploadComplete}
+					/>
 				</div>
 				<div className="flex justify-end gap-2 mt-4">
-					<Button label="Cancel" onClick={onClose} className="bg-red-400 py-2 px-5" />
+					<Button
+						label="Cancel"
+						onClick={onClose}
+						className="bg-red-400 py-2 px-5"
+					/>
 					<Button
 						label={initialData ? 'Update' : 'Create'}
 						className="bg-green-400 py-2 px-5"

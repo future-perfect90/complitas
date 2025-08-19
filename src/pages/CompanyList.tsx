@@ -62,7 +62,6 @@ const CompanyList: React.FC = () => {
 				<table className="min-w-full min-w-xl">
 					<thead className="bg-gray-100">
 						<tr>
-							<th className="px-4 py-2 text-left text-slate-800">ID</th>
 							<th className="px-4 py-2 text-left text-slate-800">Name</th>
 							<th className="px-4 py-2 text-left text-slate-800">Address</th>
 							<th className="px-4 py-2 text-left text-slate-800">Telephone</th>
@@ -74,7 +73,6 @@ const CompanyList: React.FC = () => {
 						{companies && companies.length > 0 ?
 							companies.map((c) => (
 								<tr key={c.id} className="border-t">
-									<td className="px-4 py-2 text-slate-800">{c.id}</td>
 									<td className="px-4 py-2 text-slate-800">{c.name}</td>
 									<td className="px-4 py-2 text-slate-800">
 										{c.address1}

@@ -14,6 +14,7 @@ if ($data) {
     $companyId = $data['id'];
 
     $result = $company->update($companyId, $data['payload']);
+    
     if ($result['success']) {
         http_response_code(204);
         echo json_encode($result);

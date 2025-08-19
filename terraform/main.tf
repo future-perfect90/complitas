@@ -82,3 +82,15 @@ resource "aws_s3_bucket_policy" "deny_insecure_transport" {
   bucket = aws_s3_bucket.complitas_documents.id
   policy = data.aws_iam_policy_document.deny_insecure_transport.json
 }
+
+resource "aws_s3_bucket_cors_configuration" "this" {
+  bucket = aws_s3_bucket.complitas_documents.id
+
+  cors_rule {
+    allowed_methods = ["GET", "PUT"]
+    allowed_origins = ["http://localhost:5173"] # React dev server
+    allowed_headers = ["*"]
+    expose_headers  = ["ETag"]
+    max_age_seconds = 3000
+  }
+}

@@ -7,7 +7,8 @@
         "guzzlehttp/psr7": "^2.7",
         "http-interop/http-factory-guzzle": "^1.2",
         "ramsey/uuid": "^4.9",
-        "mpdf/mpdf": "^8.2"
+        "mpdf/mpdf": "^8.2",
+        "aws/aws-sdk-php": "^3.356"
     },
     "config": {
         "allow-plugins": {
