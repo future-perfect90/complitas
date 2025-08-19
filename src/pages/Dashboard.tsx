@@ -49,8 +49,10 @@ export default function Dashboard() {
 		<>
 			<h1>Dashboard</h1>
 			<h2>TODO::Lock down API's to use Auth0 token</h2>
-			<h2>TODO::PDF generator for html</h2>
-			<h2>TODO::Upload files endpoint to s3 bucket via presigned URL</h2>
+			<h2>
+				TODO::Add logo for company to the database on insert and update. This
+				should be pulled back and viewed.
+			</h2>
 			<h2>
 				TODO::Notification endpoint to accept email address to send email via
 				SES
