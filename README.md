@@ -69,7 +69,7 @@ export default tseslint.config([
 ```
 
 # Terraform
-### export your AWS CREDS
+### export your AWS crednetials and initialise terraform
 ```terraform
 export AWS_ACCESS_KEY_ID=
 export AWS_SECRET_ACCESS_KEY=
