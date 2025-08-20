@@ -201,11 +201,16 @@ const CompanyModal: React.FC<Props> = ({
 						onChange={(e: any) => setEmail(e.target.value)}
 						required
 					/>
-					<FileUpload
-						uploadApiUrl={`${import.meta.env.VITE_API_BASE_URL}/document/listTeamMembers.php`}
-						accept="image/*"
-						onUploadComplete={handleUploadComplete}
-					/>
+					<div>
+						<label className="block text-sm font-medium text-gray-700 mb-1">
+							Logo
+						</label>
+						<FileUpload
+							uploadApiUrl={`${import.meta.env.VITE_API_BASE_URL}/document/listTeamMembers.php`}
+							accept="image/*"
+							onUploadComplete={handleUploadComplete}
+						/>
+					</div>
 				</div>
 				<div className="flex justify-end gap-2 mt-4">
 					<Button
