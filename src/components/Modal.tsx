@@ -13,7 +13,7 @@ export default function Modal({ title, isOpen, onClose, children }: Props) {
 		<div className="fixed inset-0 z-50 flex items-center justify-center p-4">
 			<div className="absolute inset-0 bg-black/50" onClick={onClose} />
 
-			<div className="relative w-full max-w-3xl bg-white rounded-lg shadow-lg z-10">
+			<div className="relative w-full max-w-3xl bg-white rounded-lg shadow-lg z-10 max-h-full overflow-y-auto">
 				<div className="flex items-center justify-between px-6 py-4 border-b">
 					<h3 className="text-lg font-semibold text-slate-600">{title}</h3>
 					<button
