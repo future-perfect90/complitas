@@ -58,6 +58,7 @@ export default function Dashboard() {
 				SES
 			</h2>
 			<h2>TODO::Notification endpoint to enable SNS</h2>
+			<h2>TODO::View and Edit profile data</h2>
 			{isAuthenticated ?
 				<>
 					<h2 className="text-3xl">Welcome to your dashboard {user?.name}</h2>
