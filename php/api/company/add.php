@@ -22,7 +22,8 @@ if ($data) {
         'vatNo' => $data['vatNo'],
         'companyRegNo' => $data['companyRegNo'],
         'email' => $data['email'] ?? '',
-        'telephone' => $data['telephone'] ?? ''
+        'telephone' => $data['telephone'] ?? '',
+        'logo' => $data['logo'] ?? ''
     ];
 
     $result = $company->create($companyData);

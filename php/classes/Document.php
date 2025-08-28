@@ -94,16 +94,16 @@ Maecenas suscipit consectetur ipsum, ac efficitur ipsum accumsan luctus. Pellent
         ]);
     }
 
-    public function presignedUrl(string $filePath, string $fileType): array
+    public function presignedUrl(string $filePath, string|null $fileType, string $action = 'GetObject'): array
     {
         $s3 = $this->createS3Client();
 
         $bucket = $_ENV["AWS_S3_BUCKET"];
 
-        $cmd = $s3->getCommand('PutObject', [
+        $cmd = $s3->getCommand($action, [
             'Bucket' => $bucket,
             'Key'    => $filePath,
-            'ContentType' => $fileType
+            $fileType ?? 'ContentType' => $fileType
         ]);
 
         $request = $s3->createPresignedRequest($cmd, '+15 minutes');

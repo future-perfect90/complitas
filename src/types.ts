@@ -12,6 +12,7 @@ export interface Company {
 	companyRegNo: string;
 	telephone: string;
 	email: string;
+	logo: string;
 }
 
 export interface Property {

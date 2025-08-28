@@ -3,13 +3,15 @@ import React, { useState } from 'react';
 interface FileUploadProps {
 	uploadApiUrl: string;
 	accept?: string;
-	onUploadComplete?: (fileUrl: string) => void;
+	onUploadComplete?: (fileUrl: string, fileName: string) => void;
+	directory?: string;
 }
 
 export default function FileUpload({
 	uploadApiUrl,
 	accept = '*/*',
 	onUploadComplete,
+	directory = '',
 }: FileUploadProps) {
 	const [file, setFile] = useState<File | null>(null);
 	const [uploading, setUploading] = useState(false);
@@ -35,8 +37,9 @@ export default function FileUpload({
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify({
-					fileName: `test/${file.name}`,
+					fileName: `${directory}${file.name}`,
 					fileType: file.type,
+					action: 'PutObject',
 				}),
 			});
 
@@ -53,7 +56,7 @@ export default function FileUpload({
 			if (!upload.ok) throw new Error('Failed to upload to S3');
 
 			setMessage('✅ Upload successful!');
-			if (onUploadComplete) onUploadComplete(presignedUrl);
+			if (onUploadComplete) onUploadComplete(presignedUrl, file.name);
 		} catch (err: any) {
 			setMessage(`❌ Upload failed: ${err.message}`);
 		}

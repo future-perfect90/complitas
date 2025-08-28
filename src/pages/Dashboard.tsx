@@ -50,8 +50,8 @@ export default function Dashboard() {
 			<h1>Dashboard</h1>
 			<h2>TODO::Lock down API's to use Auth0 token</h2>
 			<h2>
-				TODO::Add logo for company to the database on insert and update. This
-				should be pulled back and viewed.
+				TODO::Look at authentication, currently it says i am logged in but i
+				have no claims and i am not logged in?
 			</h2>
 			<h2>
 				TODO::Notification endpoint to accept email address to send email via

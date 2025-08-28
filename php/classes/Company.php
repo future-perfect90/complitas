@@ -26,8 +26,8 @@ class Company
             return ['success' => false, 'message' => 'Company already exists'];
         }
 
-        $sql = "INSERT INTO companies (name, address1, address2, address3, city, county, postCode, country, vatNo, companyRegNo, email, telephone) 
-                VALUES (:company_name, :address_line_1, :address_line_2, :address_line_3, :city, :county, :post_code, :country, :vat_no, :company_reg_no, :email, :telephone)";
+        $sql = "INSERT INTO companies (name, address1, address2, address3, city, county, postCode, country, vatNo, companyRegNo, email, telephone, logo) 
+                VALUES (:company_name, :address_line_1, :address_line_2, :address_line_3, :city, :county, :post_code, :country, :vat_no, :company_reg_no, :email, :telephone, :logo)";
 
         $stmt = $this->pdo->prepare($sql);
 
@@ -43,6 +43,7 @@ class Company
         $stmt->bindParam(':company_reg_no', $companyData['companyRegNo']);
         $stmt->bindParam(':email', $companyData['email']);
         $stmt->bindParam(':telephone', $companyData['telephone']);
+        $stmt->bindParam(':logo', $companyData['logo']);
 
         $stmt->execute();
         return ($stmt->rowCount() > 0) ? ['success' => true, 'message' => 'Company created'] : ['success' => false, 'message' => 'Something went wrong'];
@@ -50,7 +51,7 @@ class Company
 
     public function getById(string $id): ?array
     {
-        $sql = "SELECT id, name, address1, address2, address3, city, county, postCode, country, vatNo, companyRegNo, email, telephone FROM companies WHERE id = :id";
+        $sql = "SELECT id, name, address1, address2, address3, city, county, postCode, country, vatNo, companyRegNo, email, telephone, logo FROM companies WHERE id = :id";
         $stmt = $this->pdo->prepare($sql);
         $stmt->bindParam(':id', $id);
         $stmt->execute();

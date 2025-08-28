@@ -5,6 +5,7 @@ import { createCompany, updateCompany } from '../../utils/api';
 import { Button } from '../Button';
 import FileUpload from '../FileUpload';
 import Modal from '../Modal';
+import PresignedImage from '../PresignedImage';
 import TextField from '../TextField';
 
 interface Props {
@@ -33,6 +34,8 @@ const CompanyModal: React.FC<Props> = ({
 	const [telephone, setTelephone] = useState('');
 	const [email, setEmail] = useState('');
 	const [id, setId] = useState('');
+	const [logo, setLogo] = useState('');
+	const [visible, setVisible] = useState(true);
 
 	useEffect(() => {
 		if (initialData) {
@@ -49,6 +52,8 @@ const CompanyModal: React.FC<Props> = ({
 			setCompanyRegNo(initialData.companyRegNo);
 			setTelephone(initialData.telephone);
 			setEmail(initialData.email);
+			setLogo(initialData.logo || '');
+			setVisible(false);
 		} else {
 			setId('');
 			setName('');
@@ -63,6 +68,8 @@ const CompanyModal: React.FC<Props> = ({
 			setCompanyRegNo('');
 			setTelephone('');
 			setEmail('');
+			setLogo('');
+			setVisible(true);
 		}
 	}, [initialData]);
 
@@ -100,6 +107,7 @@ const CompanyModal: React.FC<Props> = ({
 					companyRegNo,
 					telephone,
 					email,
+					logo,
 				},
 				id
 			);
@@ -118,6 +126,7 @@ const CompanyModal: React.FC<Props> = ({
 				companyRegNo,
 				telephone,
 				email,
+				logo,
 			});
 			toast.success('Company created successfully!');
 		}
@@ -125,7 +134,8 @@ const CompanyModal: React.FC<Props> = ({
 		onClose();
 	};
 
-	const handleUploadComplete = (url: string) => {
+	const handleUploadComplete = (url: string, fileName: string) => {
+		setLogo(fileName);
 		console.log('File uploaded to:', url);
 	};
 
@@ -201,14 +211,38 @@ const CompanyModal: React.FC<Props> = ({
 						onChange={(e: any) => setEmail(e.target.value)}
 						required
 					/>
-					<div>
+					{logo && (
+						<>
+							<div>
+								<label className="block text-sm font-medium text-gray-700 mb-1">
+									Current Logo
+								</label>
+								<PresignedImage
+									imageName={logo}
+									uploadApiUrl={`${import.meta.env.VITE_API_BASE_URL}/document/presignedUrl.php`}
+									accept="image/*"
+									directory="company/logos/"
+								/>
+							</div>
+							<div
+								className={`${!visible ? 'block' : 'hidden'} flex items-center`}>
+								<Button
+									label="Change Logo"
+									onClick={() => setVisible(true)}
+									className="bg-blue-400 py-2 px-5"
+								/>
+							</div>
+						</>
+					)}
+					<div className={`${visible ? 'block' : 'hidden'}`}>
 						<label className="block text-sm font-medium text-gray-700 mb-1">
 							Logo
 						</label>
 						<FileUpload
-							uploadApiUrl={`${import.meta.env.VITE_API_BASE_URL}/document/listTeamMembers.php`}
+							uploadApiUrl={`${import.meta.env.VITE_API_BASE_URL}/document/presignedUrl.php`}
 							accept="image/*"
 							onUploadComplete={handleUploadComplete}
+							directory="company/logos/"
 						/>
 					</div>
 				</div>
