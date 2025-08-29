@@ -150,4 +150,13 @@ class User
         $stmt->bindParam(':team_id', $teamId);
         return $stmt->execute();
     }
+
+    public function getUserProfile(string $userId): array
+    {
+        $stmt = $this->pdo->prepare("SELECT id, name, email FROM user WHERE id = :user_id");
+        $stmt->bindParam(':user_id', $userId);
+        $stmt->execute();
+
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
 }

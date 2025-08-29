@@ -93,4 +93,12 @@ class Properties
         $stmt->bindParam(':id', $id);
         return $stmt->execute();
     }
+
+    public function getPropertiesByTeamIds(array $teamIds): array
+    {
+        $teamsIds = implode(',', array_fill(0, count($teamIds), "?"));
+        $stmt = $this->pdo->prepare("SELECT id, name FROM properties WHERE teamId IN ($teamsIds)");
+        $stmt->execute($teamIds);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }

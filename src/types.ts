@@ -41,3 +41,19 @@ export interface Team {
 	name: string;
 	companyId: string;
 }
+
+export interface ProfileData {
+	profile: {
+		id?: string;
+		name?: string;
+		email?: string;
+	},
+	teams: {
+		id?: string;
+		name?: string;
+	}[],
+	properties: {
+		id?: string;
+		name?: string;
+	}[]
+}

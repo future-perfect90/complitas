@@ -110,4 +110,22 @@ class Teams
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    public function getTeam(string $teamId): array
+    {
+        $stmt = $this->pdo->prepare("SELECT id, name FROM teams where id = :team_id");
+        $stmt->bindParam(':team_id', $teamId);
+        $stmt->execute();
+
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public function getMyTeams(string $userId): array
+    {
+        $stmt = $this->pdo->prepare("SELECT t.id, t.name FROM teams t JOIN user u ON t.id = u.teamId WHERE u.id = :user_id");
+        $stmt->bindParam(':user_id', $userId);
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }

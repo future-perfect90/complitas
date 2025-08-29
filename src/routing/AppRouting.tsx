@@ -24,6 +24,7 @@ const AppRoutes = () => {
 				{ path: '/dashboard', element: <Dashboard /> },
 				{ path: '/companies', element: <CompanyList /> },
 				{ path: '/properties', element: <PropertyList /> },
+				{ path: '/properties/:id', element: <PropertyList /> },
 				{ path: '/users', element: <UserList /> },
 				{ path: '/teams', element: <TeamList /> },
 				{ path: '/profile', element: <Profile /> },

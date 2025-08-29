@@ -58,11 +58,11 @@ export default function Navigation() {
 						<div className="flex shrink-0 items-center">
 							<img
 								alt="Complitas Dark Logo"
-								src="complitas_logo_with_white_text.png"
+								src="/complitas_logo_with_white_text.png"
 								className=" w-auto hidden dark:block h-24"
 							/>
 							<img
-								src="complitas_logo_with_text.png"
+								src="/complitas_logo_with_text.png"
 								alt="Complitas Logo Light"
 								className="block dark:hidden h-24 w-auto"
 							/>
@@ -98,7 +98,7 @@ export default function Navigation() {
 									<span className="sr-only">Open user menu</span>
 									<img
 										alt=""
-										src="complitas_logo_without_text.png"
+										src="/complitas_logo_without_text.png"
 										className="size-8 rounded-full bg-gray-800 outline -outline-offset-1 outline-white/10"
 									/>
 								</MenuButton>
