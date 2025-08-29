@@ -49,7 +49,6 @@ export default function Dashboard() {
 		<>
 			<h1>Dashboard</h1>
 			<h2>TODO::Lock down API's to use Auth0 token</h2>
-			<h2>TODO::Property id page</h2>
 			<h2>
 				TODO::Look at authentication, currently it says i am logged in but i
 				have no claims and i am not logged in?

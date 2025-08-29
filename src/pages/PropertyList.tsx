@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { Button } from '../components/Button';
 import PropertyModal from '../components/modals/PropertyModal';
 import { useAuthMeta } from '../context/AuthProvider';
 import type { Property } from '../types';
@@ -12,6 +14,7 @@ const PropertyList: React.FC = () => {
 	const authMeta = useAuthMeta();
 	const companyUuid = authMeta?.companyUuid || '';
 	const isLoading = authMeta?.isLoading;
+	const navigate = useNavigate();
 
 	const fetchProperties = async (companyUuid: string) => {
 		try {
@@ -90,16 +93,21 @@ const PropertyList: React.FC = () => {
 									<td className="px-4 py-2 text-slate-800">{p.telephone}</td>
 									<td className="px-4 py-2 text-slate-800">{p.email}</td>
 									<td className="px-4 py-2 flex gap-2">
-										<button
+										<Button
+											label="View"
+											onClick={() => p.id && navigate(`/properties/${p.id}`)}
+											className="px-2 py-1 bg-green-500 text-white rounded"
+										/>
+										<Button
+											label="Edit"
 											onClick={() => p.id && handleEdit(p.id)}
-											className="px-2 py-1 bg-blue-500 text-white rounded">
-											Edit
-										</button>
-										<button
+											className="px-2 py-1 bg-blue-500 text-white rounded"
+										/>
+										<Button
+											label="Delete"
 											onClick={() => p.id && handleDelete(p.id)}
-											className="px-2 py-1 bg-red-500 text-white rounded">
-											Delete
-										</button>
+											className="px-2 py-1 bg-red-500 text-white rounded"
+										/>
 									</td>
 								</tr>
 							))
