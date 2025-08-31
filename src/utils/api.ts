@@ -1,3 +1,25 @@
+// Update a section of property data by key-value array
+export async function updatePropertySection(
+	id: string,
+	data: Record<string, any>
+) {
+	console.log(data);
+	const response = await fetch(
+		`${import.meta.env.VITE_API_BASE_URL}/properties/update.php`,
+		{
+			method: 'POST',
+			body: JSON.stringify({ id, data }),
+			headers: {
+				Authorization: `Bearer ${jwt}`,
+				'Content-Type': 'application/json',
+			},
+		}
+	);
+	if (!response.ok) {
+		throw new Error(`Response status: ${response.status}`);
+	}
+	return response.ok;
+}
 import type { MultiValue } from 'react-select';
 import type { Company, Property, User } from '../types';
 

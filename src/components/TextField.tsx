@@ -25,7 +25,7 @@ const TextField: React.FC<Props> = ({
 				value={value}
 				onChange={onChange}
 				required={required}
-				className="mt-1 block w-full px-2 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-gray-900 dark:text-gray-100"
+				className="mt-1 block w-full px-2 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-gray-900 dark:text-gray-900"
 			/>
 		</div>
 	);
