@@ -28,6 +28,47 @@ export interface Property {
 	managerName: string;
 	telephone: string;
 	email: string;
+	occupancyType?: string;
+	habitableHeight?: number;
+	buildingHeight?: number;
+	designDate?: string;
+	lifts?: boolean;
+	communalUtilityAssets?: boolean;
+	communalGasAppliances?: boolean;
+	meterBank?: boolean;
+	voidAssets?: boolean;
+	residentalFlats?: number;
+	uniqueSupplyPoints?: number;
+	commercialUnits?: number;
+	wellMaintained?: boolean;
+	mitigationPlan?: string;
+	refurbished?: boolean;
+	refurbishedCDM?: string;
+	managerEmail?: string;
+	managerTelephone?: string;
+	managerAddress?: string;
+	siteEmail?: string;
+	siteTelephone?: string;
+	emergencyName?: string;
+	emergencyEmail?: string;
+	emergencyTelephone?: string;
+	emergencyAddress?: string;
+	localFireName?: string;
+	localFireEmail?: string;
+	localFireTelephone?: string;
+	localFireAddress?: string;
+	localFireDetails?: string;
+	carpark?: boolean;
+	uniqueReferenceNumber?: string;
+	residentialAwareness?: string;
+	logBook?: boolean;
+	fireSafetyLogBook?: boolean;
+	electronicAuditCompleted?: boolean;
+	epc?: boolean;
+	energyCertificates?: boolean;
+	isolationValvesClear?: boolean;
+	accessControlled?: boolean;
+	'o&m'?: boolean;
 }
 export interface User {
 	id?: string;
@@ -47,13 +88,13 @@ export interface ProfileData {
 		id?: string;
 		name?: string;
 		email?: string;
-	},
+	};
 	teams: {
 		id?: string;
 		name?: string;
-	}[],
+	}[];
 	properties: {
 		id?: string;
 		name?: string;
-	}[]
+	}[];
 }
