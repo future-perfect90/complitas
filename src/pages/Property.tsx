@@ -71,8 +71,10 @@ export default function Property() {
 		onSave: (data: any) => void;
 	}) {
 		const [form, setForm] = useState<any>(initial);
-		// For file upload
-		const [fileUploaded, setFileUploaded] = useState<string | null>(null);
+		// For file uploads (wellMaintained and refurbished)
+		const [fileUploads, setFileUploads] = useState<{
+			[key: string]: string | null;
+		}>({});
 
 		// Field render helpers
 		const renderField = (key: string, label: string, type: string) => {
@@ -272,7 +274,7 @@ export default function Property() {
 					label: "Energy Certificates (DEC's)",
 					type: 'boolean',
 				},
-				{ key: 'o&m', label: "O&M's", type: 'boolean' },
+				{ key: 'oms', label: "O&M's", type: 'boolean' },
 				{
 					key: 'isolationValvesClear',
 					label: 'External Isolation Valve Chambers Located and Clear',
@@ -288,10 +290,11 @@ export default function Property() {
 			fields = [];
 		}
 
-		// Show FileUpload if wellMaintained or refurbished is true
-		const showFileUpload =
-			(form['wellMaintained'] === true || form['refurbished'] === true) &&
-			section === 'additional';
+		// Show FileUpload for each: wellMaintained and refurbished if true
+		const showWellMaintainedUpload =
+			form['wellMaintained'] === true && section === 'additional';
+		const showRefurbishedUpload =
+			form['refurbished'] === true && section === 'additional';
 
 		return (
 			<Modal isOpen={open} onClose={onClose}>
@@ -302,19 +305,49 @@ export default function Property() {
 					<form
 						onSubmit={(e) => {
 							e.preventDefault();
-							onSave(form);
+							// Add uploaded file URLs to form before saving
+							let updatedForm = { ...form };
+							if (showWellMaintainedUpload && fileUploads['wellMaintained']) {
+								updatedForm['mitigationPlan'] = fileUploads['wellMaintained'];
+							}
+							if (showRefurbishedUpload && fileUploads['refurbished']) {
+								updatedForm['refurbishedFile'] = fileUploads['refurbished'];
+							}
+							onSave(updatedForm);
 						}}>
 						{fields.map((f) => renderField(f.key, f.label, f.type))}
-						{showFileUpload && (
+						{showWellMaintainedUpload && (
 							<div className="mb-4">
 								<label className="block text-sm font-medium mb-1">
-									Upload Document
+									Upload Well Maintained Document
 								</label>
 								<FileUpload
-									uploadApiUrl="/api/upload" // TODO: Replace with actual API endpoint
-									onUploadComplete={(url, name) => setFileUploaded(url)}
+									uploadApiUrl={`${import.meta.env.VITE_API_BASE_URL}/document/presignedUrl.php`}
+									accept="*/*"
+									onUploadComplete={(url) =>
+										setFileUploads((prev) => ({ ...prev, wellMaintained: url }))
+									}
+									directory={`property/wellMaintained/`}
 								/>
-								{fileUploaded && (
+								{fileUploads['wellMaintained'] && (
+									<p className="text-green-600 text-xs mt-1">File uploaded!</p>
+								)}
+							</div>
+						)}
+						{showRefurbishedUpload && (
+							<div className="mb-4">
+								<label className="block text-sm font-medium mb-1">
+									Upload Refurbished Document
+								</label>
+								<FileUpload
+									uploadApiUrl={`${import.meta.env.VITE_API_BASE_URL}/document/presignedUrl.php`}
+									accept="*/*"
+									onUploadComplete={(url) =>
+										setFileUploads((prev) => ({ ...prev, refurbished: url }))
+									}
+									directory={`property/refurbished/`}
+								/>
+								{fileUploads['refurbished'] && (
 									<p className="text-green-600 text-xs mt-1">File uploaded!</p>
 								)}
 							</div>
@@ -376,13 +409,13 @@ export default function Property() {
 										<br />
 										{property.address2 && (
 											<>
-												<span>, {property.address2}</span>
+												<span>{property.address2}</span>
 												<br />
 											</>
 										)}
 										{property.address3 && (
 											<>
-												<span>, {property.address3}</span>
+												<span>{property.address3}</span>
 												<br />
 											</>
 										)}
@@ -606,13 +639,13 @@ export default function Property() {
 										<br />
 										{property.address2 && (
 											<>
-												<span>, {property.address2}</span>
+												<span>{property.address2}</span>
 												<br />
 											</>
 										)}
 										{property.address3 && (
 											<>
-												<span>, {property.address3}</span>
+												<span>{property.address3}</span>
 												<br />
 											</>
 										)}
@@ -727,9 +760,9 @@ export default function Property() {
 										O&M's
 									</p>
 									<p className="text-gray-900 dark:text-gray-100">
-										{property['o&m'] === true ?
+										{property.oms === true ?
 											'Yes'
-										: property['o&m'] === false ?
+										: property.oms === false ?
 											'No'
 										:	'Not set'}
 									</p>

@@ -68,7 +68,7 @@ export interface Property {
 	energyCertificates?: boolean;
 	isolationValvesClear?: boolean;
 	accessControlled?: boolean;
-	'o&m'?: boolean;
+	oms?: boolean;
 }
 export interface User {
 	id?: string;

@@ -58,7 +58,7 @@ CREATE TABLE `properties` (
     `mitigationPlan` VARCHAR(255) NULL,
     `refurbished` BOOLEAN NULL,
     `refurbishedCDM` VARCHAR(255) NULL,
-    `o&m` BOOLEAN NULL,
+    `oms` BOOLEAN NULL,
     `managerEmail` VARCHAR(255) NULL,
     `managerTelephone` VARCHAR(255) NULL,
     `managerAddress` VARCHAR(255) NULL,

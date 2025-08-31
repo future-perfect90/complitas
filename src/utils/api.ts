@@ -3,11 +3,11 @@ export async function updatePropertySection(
 	id: string,
 	data: Record<string, any>
 ) {
-	console.log(data);
+	
 	const response = await fetch(
 		`${import.meta.env.VITE_API_BASE_URL}/properties/update.php`,
 		{
-			method: 'POST',
+			method: 'PUT',
 			body: JSON.stringify({ id, data }),
 			headers: {
 				Authorization: `Bearer ${jwt}`,
@@ -164,12 +164,12 @@ export async function createProperty(payload: Property, companyId: string) {
 	return response.json();
 }
 
-export async function updateProperty(payload: Property, id: string) {
+export async function updateProperty(data: Property, id: string) {
 	const response = await fetch(
 		`${import.meta.env.VITE_API_BASE_URL}/properties/update.php`,
 		{
 			method: 'PUT',
-			body: JSON.stringify({ payload, id }),
+			body: JSON.stringify({ data, id }),
 			headers: {
 				Authorization: `Bearer ${jwt}`,
 				'Content-Type': 'application/json',

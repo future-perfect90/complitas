@@ -70,6 +70,9 @@ class Properties
         $setClauses = [];
         $bindings = [];
         foreach ($propertyData as $key => $value) {
+            if (is_bool($value)) {
+                $value = (int)$value;
+            }
             $setClauses[] = "$key = :$key";
             $bindings[":$key"] = $value;
         }

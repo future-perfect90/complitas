@@ -15,8 +15,9 @@ if ($data) {
 
     $propertyId = $data['id'];
 
-
-    $result = $property->update($propertyId, $data['payload']);
+    unset($data['data']['id']);
+    $dataToUpdate = $data['data'];
+    $result = $property->update($propertyId, $dataToUpdate);
 
     if ($result['success']) {
         http_response_code(204);
