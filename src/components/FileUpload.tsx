@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
+import Label from './Label';
 
 interface FileUploadProps {
 	uploadApiUrl: string;
 	accept?: string;
 	onUploadComplete?: (fileUrl: string, fileName: string) => void;
 	directory?: string;
+	label?: string;
 }
 
 export default function FileUpload({
@@ -12,6 +14,7 @@ export default function FileUpload({
 	accept = '*/*',
 	onUploadComplete,
 	directory = '',
+	label = 'Select File',
 }: FileUploadProps) {
 	const [file, setFile] = useState<File | null>(null);
 	const [uploading, setUploading] = useState(false);
@@ -65,7 +68,8 @@ export default function FileUpload({
 	};
 
 	return (
-		<div className="p-4 border rounded-xl shadow-md max-w-md border-slate-200">
+		<div className="p-4 border rounded-xl shadow-md border-slate-200">
+			<Label label={label} />
 			<input
 				type="file"
 				accept={accept}

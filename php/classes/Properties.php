@@ -55,7 +55,8 @@ class Properties
 
     public function getById(string $id): ?array
     {
-        $sql = "SELECT id, name, address1, address2, address3, city, county, postCode, country, managerName, email, telephone FROM properties WHERE id = :id";
+        $sql = "SELECT id,name,address1,address2,address3,city,county,postCode,country,managerName,email,telephone ,country,email,telephone,managerName,occupancyType,habitableHeight,buildingHeight,designDate,lifts,communalUtilityAssets,communalGasAppliances,meterBank,voidAssets,residentalFlats,uniqueSupplyPoints,commercialUnits,wellMaintained,mitigationPlan,refurbished,refurbishedCDM,oms,managerEmail,managerTelephone,managerAddress,siteEmail,siteTelephone,emergencyName,emergencyEmail,emergencyTelephone,emergencyAddress,localFireName,localFireEmail,localFireTelephone,localFireAddress,localFireDetails,carpark,uniqueReferenceNumber,residentialAwareness,logBook,fireSafetyLogBook,electronicAuditCompleted,epc,energyCertificates,isolationValvesClear,accessControlled FROM `properties` WHERE id = :id";
+
         $stmt = $this->pdo->prepare($sql);
         $stmt->bindParam(':id', $id);
         $stmt->execute();

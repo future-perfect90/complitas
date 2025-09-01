@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import { Button } from '../components/Button';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/Card';
 import FileUpload from '../components/FileUpload';
+import Label from '../components/Label';
 import Modal from '../components/Modal';
 import TextField from '../components/TextField';
 import type { Property } from '../types';
@@ -83,7 +84,7 @@ export default function Property() {
 					<div className="mb-4">
 						<TextField
 							label={label}
-							value={form[key] ?? ''}
+							value={form[key]}
 							onChange={(e) =>
 								setForm({
 									...form,
@@ -120,7 +121,7 @@ export default function Property() {
 							<label>
 								<input
 									type="radio"
-									checked={form[key] === true}
+									checked={form[key] === true || form[key] === 1}
 									onChange={() => setForm({ ...form, [key]: true })}
 								/>{' '}
 								<span className="text-gray-900">Yes</span>
@@ -128,7 +129,7 @@ export default function Property() {
 							<label>
 								<input
 									type="radio"
-									checked={form[key] === false}
+									checked={form[key] === false || form[key] === 0}
 									onChange={() => setForm({ ...form, [key]: false })}
 								/>{' '}
 								<span className="text-gray-900">No</span>
@@ -138,25 +139,35 @@ export default function Property() {
 				);
 			}
 			if (type === 'residentialAwareness') {
+				const residentialOptions = [
+					{ value: 'Two Man visits', label: 'Two Man visits' },
+					{ value: 'Vulnerable Persons', label: 'Vulnerable Persons' },
+					{ value: 'Priority Services', label: 'Priority Services' },
+					{ value: 'Medial/EOL care', label: 'Medial/EOL care' },
+				];
 				return (
 					<div className="mb-4">
-						<label className="block text-sm font-medium mb-1 text-gray-900">
-							Residential Awareness
-						</label>
+						<Label label="Residential Awareness" />
 						<select
 							value={form[key] ?? ''}
 							onChange={(e) => setForm({ ...form, [key]: e.target.value })}
 							className="w-full border rounded px-2 py-1 text-gray-900">
 							<option value="">Select Residential Awareness</option>
-							<option value="Two Man visits">Two Man visits</option>
-							<option value="Vulnerable Persons">Vulnerable Persons</option>
-							<option value="Priority Services">Priority Services</option>
-							<option value="Medial/EOL care">Medial/EOL care</option>
+							{residentialOptions.map((option) => (
+								<option key={option.value} value={option.value}>
+									{option.label}
+								</option>
+							))}
 						</select>
 					</div>
 				);
 			}
 			if (type === 'occupancyType') {
+				const occupancyOptions = [
+					{ value: 'Residential', label: 'Residential' },
+					{ value: 'Commercial', label: 'Commercial' },
+					{ value: 'Mixed Use', label: 'Mixed Use' },
+				];
 				return (
 					<div className="mb-4">
 						<label className="block text-sm font-medium mb-1 text-gray-900">
@@ -167,9 +178,11 @@ export default function Property() {
 							onChange={(e) => setForm({ ...form, [key]: e.target.value })}
 							className="w-full border rounded px-2 py-1 text-gray-900">
 							<option value="">Select Occupancy Type</option>
-							<option value="Residential">Residential</option>
-							<option value="Commercial">Commercial</option>
-							<option value="Mixed Use">Mixed Use</option>
+							{occupancyOptions.map((option) => (
+								<option key={option.value} value={option.value}>
+									{option.label}
+								</option>
+							))}
 						</select>
 					</div>
 				);
@@ -177,8 +190,7 @@ export default function Property() {
 			return null;
 		};
 
-		// Section field configs
-		let fields: Array<{ key: string; label: string; type: string }>; // type: text|number|date|boolean|residentialAwareness
+		let fields: Array<{ key: string; label: string; type: string }>;
 		if (section === 'basic') {
 			fields = [
 				{ key: 'name', label: 'Name', type: 'text' },
@@ -292,9 +304,11 @@ export default function Property() {
 
 		// Show FileUpload for each: wellMaintained and refurbished if true
 		const showWellMaintainedUpload =
-			form['wellMaintained'] === true && section === 'additional';
+			(form['wellMaintained'] === true || form['wellMaintained'] === 1) &&
+			section === 'additional';
 		const showRefurbishedUpload =
-			form['refurbished'] === true && section === 'additional';
+			(form['refurbished'] === true || form['refurbished'] === 1) &&
+			section === 'additional';
 
 		return (
 			<Modal isOpen={open} onClose={onClose}>
@@ -318,9 +332,6 @@ export default function Property() {
 						{fields.map((f) => renderField(f.key, f.label, f.type))}
 						{showWellMaintainedUpload && (
 							<div className="mb-4">
-								<label className="block text-sm font-medium mb-1">
-									Upload Well Maintained Document
-								</label>
 								<FileUpload
 									uploadApiUrl={`${import.meta.env.VITE_API_BASE_URL}/document/presignedUrl.php`}
 									accept="*/*"
@@ -328,6 +339,7 @@ export default function Property() {
 										setFileUploads((prev) => ({ ...prev, wellMaintained: url }))
 									}
 									directory={`property/wellMaintained/`}
+									label="Upload Well Maintained Document"
 								/>
 								{fileUploads['wellMaintained'] && (
 									<p className="text-green-600 text-xs mt-1">File uploaded!</p>
@@ -336,9 +348,6 @@ export default function Property() {
 						)}
 						{showRefurbishedUpload && (
 							<div className="mb-4">
-								<label className="block text-sm font-medium mb-1">
-									Upload Refurbished Document
-								</label>
 								<FileUpload
 									uploadApiUrl={`${import.meta.env.VITE_API_BASE_URL}/document/presignedUrl.php`}
 									accept="*/*"
@@ -346,6 +355,7 @@ export default function Property() {
 										setFileUploads((prev) => ({ ...prev, refurbished: url }))
 									}
 									directory={`property/refurbished/`}
+									label="Upload Refurbished Document"
 								/>
 								{fileUploads['refurbished'] && (
 									<p className="text-green-600 text-xs mt-1">File uploaded!</p>
@@ -527,9 +537,9 @@ export default function Property() {
 										Lifts
 									</p>
 									<p className="text-gray-900 dark:text-gray-100">
-										{property.lifts === true ?
+										{property.lifts === true || property.lifts === 1 ?
 											'Yes'
-										: property.lifts === false ?
+										: property.lifts === false || property.lifts === 0 ?
 											'No'
 										:	'Not set'}
 									</p>
@@ -538,9 +548,9 @@ export default function Property() {
 										Basement Car park
 									</p>
 									<p className="text-gray-900 dark:text-gray-100">
-										{property.carpark === true ?
+										{property.carpark === true || property.carpark === 1 ?
 											'Yes'
-										: property.carpark === false ?
+										: property.carpark === false || property.carpark === 0 ?
 											'No'
 										:	'Not set'}
 									</p>
@@ -549,9 +559,15 @@ export default function Property() {
 										Communal Utility Assets
 									</p>
 									<p className="text-gray-900 dark:text-gray-100">
-										{property.communalUtilityAssets === true ?
+										{(
+											property.communalUtilityAssets === true ||
+											property.communalUtilityAssets === 1
+										) ?
 											'Yes'
-										: property.communalUtilityAssets === false ?
+										: (
+											property.communalUtilityAssets === false ||
+											property.communalUtilityAssets === 0
+										) ?
 											'No'
 										:	'Not set'}
 									</p>
@@ -561,9 +577,15 @@ export default function Property() {
 										Communal Gas Appliances
 									</p>
 									<p className="text-gray-900 dark:text-gray-100">
-										{property.communalGasAppliances === true ?
+										{(
+											property.communalGasAppliances === true ||
+											property.communalGasAppliances === 1
+										) ?
 											'Yes'
-										: property.communalGasAppliances === false ?
+										: (
+											property.communalGasAppliances === false ||
+											property.communalGasAppliances === 0
+										) ?
 											'No'
 										:	'Not set'}
 									</p>
@@ -572,9 +594,9 @@ export default function Property() {
 										Meter bank
 									</p>
 									<p className="text-gray-900 dark:text-gray-100">
-										{property.meterBank === true ?
+										{property.meterBank === true || property.meterBank === 1 ?
 											'Yes'
-										: property.meterBank === false ?
+										: property.meterBank === false || property.meterBank === 0 ?
 											'No'
 										:	'Not set'}
 									</p>
@@ -583,9 +605,11 @@ export default function Property() {
 										Assets in voids or boxing?
 									</p>
 									<p className="text-gray-900 dark:text-gray-100">
-										{property.voidAssets === true ?
+										{property.voidAssets === true || property.voidAssets === 1 ?
 											'Yes'
-										: property.voidAssets === false ?
+										: (
+											property.voidAssets === false || property.voidAssets === 0
+										) ?
 											'No'
 										:	'Not set'}
 									</p>
@@ -595,9 +619,15 @@ export default function Property() {
 										Well maintained?
 									</p>
 									<p className="text-gray-900 dark:text-gray-100">
-										{property.wellMaintained === true ?
+										{(
+											property.wellMaintained === true ||
+											property.wellMaintained === 1
+										) ?
 											'Yes'
-										: property.wellMaintained === false ?
+										: (
+											property.wellMaintained === false ||
+											property.wellMaintained === 0
+										) ?
 											'No'
 										:	'Not set'}
 									</p>
@@ -606,9 +636,15 @@ export default function Property() {
 										Refurbished?
 									</p>
 									<p className="text-gray-900 dark:text-gray-100">
-										{property.refurbished === true ?
+										{(
+											property.refurbished === true ||
+											property.refurbished === 1
+										) ?
 											'Yes'
-										: property.refurbished === false ?
+										: (
+											property.refurbished === false ||
+											property.refurbished === 0
+										) ?
 											'No'
 										:	'Not set'}
 									</p>
@@ -704,9 +740,9 @@ export default function Property() {
 										Log Book/CDM Folder
 									</p>
 									<p className="text-gray-900 dark:text-gray-100">
-										{property.logBook === true ?
+										{property.logBook === true || property.logBook === 1 ?
 											'Yes'
-										: property.logBook === false ?
+										: property.logBook === false || property.logBook === 0 ?
 											'No'
 										:	'Not set'}
 									</p>
@@ -715,9 +751,15 @@ export default function Property() {
 										Fire Safety Log Book
 									</p>
 									<p className="text-gray-900 dark:text-gray-100">
-										{property.fireSafetyLogBook === true ?
+										{(
+											property.fireSafetyLogBook === true ||
+											property.fireSafetyLogBook === 1
+										) ?
 											'Yes'
-										: property.fireSafetyLogBook === false ?
+										: (
+											property.fireSafetyLogBook === false ||
+											property.fireSafetyLogBook === 0
+										) ?
 											'No'
 										:	'Not set'}
 									</p>
@@ -726,9 +768,15 @@ export default function Property() {
 										Waste Electrical and Electronic Equipment Audit
 									</p>
 									<p className="text-gray-900 dark:text-gray-100">
-										{property.electronicAuditCompleted === true ?
+										{(
+											property.electronicAuditCompleted === true ||
+											property.electronicAuditCompleted === 1
+										) ?
 											'Yes'
-										: property.electronicAuditCompleted === false ?
+										: (
+											property.electronicAuditCompleted === false ||
+											property.electronicAuditCompleted === 0
+										) ?
 											'No'
 										:	'Not set'}
 									</p>
@@ -738,9 +786,9 @@ export default function Property() {
 										EPC
 									</p>
 									<p className="text-gray-900 dark:text-gray-100">
-										{property.epc === true ?
+										{property.epc === true || property.epc === 1 ?
 											'Yes'
-										: property.epc === false ?
+										: property.epc === false || property.epc === 0 ?
 											'No'
 										:	'Not set'}
 									</p>
@@ -749,9 +797,15 @@ export default function Property() {
 										Energy Certificates (DEC's)
 									</p>
 									<p className="text-gray-900 dark:text-gray-100">
-										{property.energyCertificates === true ?
+										{(
+											property.energyCertificates === true ||
+											property.energyCertificates === 1
+										) ?
 											'Yes'
-										: property.energyCertificates === false ?
+										: (
+											property.energyCertificates === false ||
+											property.energyCertificates === 0
+										) ?
 											'No'
 										:	'Not set'}
 									</p>
@@ -760,9 +814,9 @@ export default function Property() {
 										O&M's
 									</p>
 									<p className="text-gray-900 dark:text-gray-100">
-										{property.oms === true ?
+										{property.oms === true || property.oms === 1 ?
 											'Yes'
-										: property.oms === false ?
+										: property.oms === false || property.oms === 0 ?
 											'No'
 										:	'Not set'}
 									</p>
@@ -772,9 +826,15 @@ export default function Property() {
 										External Isolation Valve Chambers Located and Clear
 									</p>
 									<p className="text-gray-900 dark:text-gray-100">
-										{property.isolationValvesClear === true ?
+										{(
+											property.isolationValvesClear === true ||
+											property.isolationValvesClear === 1
+										) ?
 											'Yes'
-										: property.isolationValvesClear === false ?
+										: (
+											property.isolationValvesClear === false ||
+											property.isolationValvesClear === 0
+										) ?
 											'No'
 										:	'Not set'}
 										<br />
@@ -784,9 +844,15 @@ export default function Property() {
 										Access Controlled Spaces
 									</p>
 									<p className="text-gray-900 dark:text-gray-100">
-										{property.accessControlled === true ?
+										{(
+											property.accessControlled === true ||
+											property.accessControlled === 1
+										) ?
 											'Yes'
-										: property.accessControlled === false ?
+										: (
+											property.accessControlled === false ||
+											property.accessControlled === 0
+										) ?
 											'No'
 										:	'Not set'}
 										<br />
