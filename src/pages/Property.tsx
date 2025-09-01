@@ -151,7 +151,7 @@ export default function Property() {
 						<select
 							value={form[key] ?? ''}
 							onChange={(e) => setForm({ ...form, [key]: e.target.value })}
-							className="w-full border rounded px-2 py-1 text-gray-900">
+							className="w-full border rounded px-2 py-2 text-gray-900">
 							<option value="">Select Residential Awareness</option>
 							{residentialOptions.map((option) => (
 								<option key={option.value} value={option.value}>
@@ -176,7 +176,7 @@ export default function Property() {
 						<select
 							value={form[key] ?? ''}
 							onChange={(e) => setForm({ ...form, [key]: e.target.value })}
-							className="w-full border rounded px-2 py-1 text-gray-900">
+							className="w-full border rounded px-2 py-2 text-gray-900">
 							<option value="">Select Occupancy Type</option>
 							{occupancyOptions.map((option) => (
 								<option key={option.value} value={option.value}>
@@ -215,8 +215,12 @@ export default function Property() {
 					label: 'Residential Awareness',
 					type: 'residentialAwareness',
 				},
-				{ key: 'habitableHeight', label: 'Habitable Height', type: 'number' },
-				{ key: 'buildingHeight', label: 'Building Height', type: 'number' },
+				{
+					key: 'habitableHeight',
+					label: 'Habitable Height (m)',
+					type: 'number',
+				},
+				{ key: 'buildingHeight', label: 'Building Height (m)', type: 'number' },
 				{
 					key: 'occupancyType',
 					label: 'Occupancy Type',
@@ -312,69 +316,67 @@ export default function Property() {
 
 		return (
 			<Modal isOpen={open} onClose={onClose}>
-				<div className="p-6 bg-white rounded-xl max-w-lg w-full">
-					<h2 className="text-xl font-bold mb-4 dark:text-gray-900">
-						Edit {section.charAt(0).toUpperCase() + section.slice(1)} Section
-					</h2>
-					<form
-						onSubmit={(e) => {
-							e.preventDefault();
-							// Add uploaded file URLs to form before saving
-							let updatedForm = { ...form };
-							if (showWellMaintainedUpload && fileUploads['wellMaintained']) {
-								updatedForm['mitigationPlan'] = fileUploads['wellMaintained'];
-							}
-							if (showRefurbishedUpload && fileUploads['refurbished']) {
-								updatedForm['refurbishedCDM'] = fileUploads['refurbished'];
-							}
-							onSave(updatedForm);
-						}}>
-						{fields.map((f) => renderField(f.key, f.label, f.type))}
-						{showWellMaintainedUpload && (
-							<div className="mb-4">
-								<FileUpload
-									uploadApiUrl={`${import.meta.env.VITE_API_BASE_URL}/document/presignedUrl.php`}
-									accept="*/*"
-									onUploadComplete={(url) =>
-										setFileUploads((prev) => ({ ...prev, wellMaintained: url }))
-									}
-									directory={`property/wellMaintained/`}
-									label="Upload Well Maintained Document"
-								/>
-								{fileUploads['wellMaintained'] && (
-									<p className="text-green-600 text-xs mt-1">File uploaded!</p>
-								)}
-							</div>
-						)}
-						{showRefurbishedUpload && (
-							<div className="mb-4">
-								<FileUpload
-									uploadApiUrl={`${import.meta.env.VITE_API_BASE_URL}/document/presignedUrl.php`}
-									accept="*/*"
-									onUploadComplete={(url) =>
-										setFileUploads((prev) => ({ ...prev, refurbished: url }))
-									}
-									directory={`property/refurbished/`}
-									label="Upload Refurbished Document"
-								/>
-								{fileUploads['refurbished'] && (
-									<p className="text-green-600 text-xs mt-1">File uploaded!</p>
-								)}
-							</div>
-						)}
-						<div className="flex gap-2 mt-6">
-							<Button
-								label="Cancel"
-								onClick={onClose}
-								className="bg-red-500 hover:bg-red-600 text-white font-semibold py-1 px-4 rounded"
+				<h2 className="text-xl font-bold mb-4 dark:text-gray-900">
+					Edit {section.charAt(0).toUpperCase() + section.slice(1)} Section
+				</h2>
+				<form
+					onSubmit={(e) => {
+						e.preventDefault();
+						// Add uploaded file URLs to form before saving
+						let updatedForm = { ...form };
+						if (showWellMaintainedUpload && fileUploads['wellMaintained']) {
+							updatedForm['mitigationPlan'] = fileUploads['wellMaintained'];
+						}
+						if (showRefurbishedUpload && fileUploads['refurbished']) {
+							updatedForm['refurbishedCDM'] = fileUploads['refurbished'];
+						}
+						onSave(updatedForm);
+					}}>
+					{fields.map((f) => renderField(f.key, f.label, f.type))}
+					{showWellMaintainedUpload && (
+						<div className="mb-4">
+							<FileUpload
+								uploadApiUrl={`${import.meta.env.VITE_API_BASE_URL}/document/presignedUrl.php`}
+								accept="*/*"
+								onUploadComplete={(url) =>
+									setFileUploads((prev) => ({ ...prev, wellMaintained: url }))
+								}
+								directory={`property/wellMaintained/`}
+								label="Upload Well Maintained Document"
 							/>
-							<Button
-								label="Save"
-								className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-4 rounded float-right"
-							/>
+							{fileUploads['wellMaintained'] && (
+								<p className="text-green-600 text-xs mt-1">File uploaded!</p>
+							)}
 						</div>
-					</form>
-				</div>
+					)}
+					{showRefurbishedUpload && (
+						<div className="mb-4">
+							<FileUpload
+								uploadApiUrl={`${import.meta.env.VITE_API_BASE_URL}/document/presignedUrl.php`}
+								accept="*/*"
+								onUploadComplete={(url) =>
+									setFileUploads((prev) => ({ ...prev, refurbished: url }))
+								}
+								directory={`property/refurbished/`}
+								label="Upload Refurbished Document"
+							/>
+							{fileUploads['refurbished'] && (
+								<p className="text-green-600 text-xs mt-1">File uploaded!</p>
+							)}
+						</div>
+					)}
+					<div className="flex gap-2 mt-6">
+						<Button
+							label="Cancel"
+							onClick={onClose}
+							className="bg-red-500 hover:bg-red-600 text-white font-semibold py-1 px-4 rounded"
+						/>
+						<Button
+							label="Save"
+							className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-4 rounded float-right"
+						/>
+					</div>
+				</form>
 			</Modal>
 		);
 	}
