@@ -19,7 +19,7 @@ export default function Modal({ title, isOpen, onClose, children }: Props) {
 					<button
 						onClick={onClose}
 						className="text-slate-600 hover:text-slate-900">
-						✕
+						x
 					</button>
 				</div>
 				<div className="p-6">{children}</div>

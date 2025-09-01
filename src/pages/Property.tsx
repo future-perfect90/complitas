@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '../components/Card';
 import FileUpload from '../components/FileUpload';
 import Label from '../components/Label';
 import Modal from '../components/Modal';
+import PresignedDocument from '../components/PresignedDocument';
 import TextField from '../components/TextField';
 import type { Property } from '../types';
 import { getProperty, updatePropertySection } from '../utils/api';
@@ -17,6 +18,8 @@ export default function Property() {
 	const [editingSection, setEditingSection] = useState<string | null>(null);
 	const [modalOpen, setModalOpen] = useState(false);
 	const [modalInitial, setModalInitial] = useState<any>({});
+	const [changeMitigationPlan, setChangeMitigationPlan] = useState(false);
+	const [changeRefurbishedCdm, setChangeRefurbishedCdm] = useState(false);
 
 	useEffect(() => {
 		const fetchProperty = async () => {
@@ -57,7 +60,6 @@ export default function Property() {
 		setEditingSection(null);
 	};
 
-	// Modal component
 	function EditPropertyModal({
 		open,
 		section,
@@ -99,9 +101,7 @@ export default function Property() {
 			if (type === 'date') {
 				return (
 					<div className="mb-4">
-						<label className="block text-sm font-medium mb-1 text-gray-900">
-							{label}
-						</label>
+						<Label label={label} />
 						<input
 							type="date"
 							value={form[key] ? String(form[key]).slice(0, 10) : ''}
@@ -267,9 +267,54 @@ export default function Property() {
 			];
 		} else if (section === 'contacts') {
 			fields = [
-				{ key: 'managerName', label: 'Property Manager', type: 'text' },
-				{ key: 'email', label: 'Email', type: 'text' },
-				{ key: 'telephone', label: 'Telephone', type: 'text' },
+				{ key: 'managerName', label: 'Property Manager Name', type: 'text' },
+				{
+					key: 'managerAddress',
+					label: 'Property Manager Address',
+					type: 'text',
+				},
+				{ key: 'managerEmail', label: 'Property Manager Email', type: 'text' },
+				{
+					key: 'managerTelephone',
+					label: 'Property Manager Telephone',
+					type: 'text',
+				},
+				{ key: 'emergencyName', label: 'Emergency Contact Name', type: 'text' },
+				{
+					key: 'emergencyAddress',
+					label: 'Emergency Contact Address',
+					type: 'text',
+				},
+				{
+					key: 'emergencyEmail',
+					label: 'Emergency Contact Email',
+					type: 'text',
+				},
+				{
+					key: 'emergencyTelephone',
+					label: 'Emergency Contact Telephone',
+					type: 'text',
+				},
+				{
+					key: 'localFireName',
+					label: 'Local Fire Authority Contact Name',
+					type: 'text',
+				},
+				{
+					key: 'localFireAddress',
+					label: 'Local Fire Authority Address',
+					type: 'text',
+				},
+				{
+					key: 'localFireEmail',
+					label: 'Local Fire Authority Email',
+					type: 'text',
+				},
+				{
+					key: 'localFireTelephone',
+					label: 'Local Fire Authority Telephone',
+					type: 'text',
+				},
 			];
 		} else if (section === 'audit') {
 			fields = [
@@ -315,15 +360,16 @@ export default function Property() {
 			section === 'additional';
 
 		return (
-			<Modal isOpen={open} onClose={onClose}>
-				<h2 className="text-xl font-bold mb-4 dark:text-gray-900">
-					Edit {section.charAt(0).toUpperCase() + section.slice(1)} Section
-				</h2>
+			<Modal
+				isOpen={open}
+				onClose={onClose}
+				title={`Edit ${section.charAt(0).toUpperCase() + section.slice(1)} Section`}>
 				<form
 					onSubmit={(e) => {
 						e.preventDefault();
 						// Add uploaded file URLs to form before saving
 						let updatedForm = { ...form };
+						console.log('File Uploads:', fileUploads);
 						if (showWellMaintainedUpload && fileUploads['wellMaintained']) {
 							updatedForm['mitigationPlan'] = fileUploads['wellMaintained'];
 						}
@@ -333,38 +379,98 @@ export default function Property() {
 						onSave(updatedForm);
 					}}>
 					{fields.map((f) => renderField(f.key, f.label, f.type))}
+
+					{/* --- START: Well Maintained Document Section --- */}
 					{showWellMaintainedUpload && (
-						<div className="mb-4">
-							<FileUpload
-								uploadApiUrl={`${import.meta.env.VITE_API_BASE_URL}/document/presignedUrl.php`}
-								accept="*/*"
-								onUploadComplete={(url) =>
-									setFileUploads((prev) => ({ ...prev, wellMaintained: url }))
-								}
-								directory={`property/wellMaintained/`}
-								label="Upload Well Maintained Document"
-							/>
-							{fileUploads['wellMaintained'] && (
-								<p className="text-green-600 text-xs mt-1">File uploaded!</p>
+						<div className="mb-4 border rounded-md">
+							{/* Conditionally render download link if a document exists */}
+							{initial.mitigationPlan && (
+								<div className="mb-3">
+									<label className="block text-sm font-medium text-gray-700 mb-1">
+										Current Mitigation Plan:
+										<PresignedDocument
+											fileName={initial.mitigationPlan}
+											uploadApiUrl={`${import.meta.env.VITE_API_BASE_URL}/document/presignedUrl.php`}
+											directory={`property/wellMaintained/`}
+											type="Mitigation"
+										/>
+										{!changeMitigationPlan && (
+											<Button
+												label="Change mitigation plan"
+												onClick={() => setChangeMitigationPlan(true)}
+												className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-4 rounded"
+											/>
+										)}
+									</label>
+								</div>
+							)}
+							{changeMitigationPlan && (
+								<FileUpload
+									uploadApiUrl={`${import.meta.env.VITE_API_BASE_URL}/document/presignedUrl.php`}
+									accept="*/*"
+									onUploadComplete={(url, fileName) =>
+										setFileUploads((prev) => ({
+											...prev,
+											wellMaintained: fileName,
+										}))
+									}
+									directory={`property/wellMaintained/`}
+									label={
+										initial.mitigationPlan ?
+											'Upload New Document'
+										:	'Upload Well Maintained Document'
+									}
+								/>
 							)}
 						</div>
 					)}
+					{/* --- END: Well Maintained Document Section --- */}
+
+					{/* --- START: Refurbished Document Section --- */}
 					{showRefurbishedUpload && (
-						<div className="mb-4">
-							<FileUpload
-								uploadApiUrl={`${import.meta.env.VITE_API_BASE_URL}/document/presignedUrl.php`}
-								accept="*/*"
-								onUploadComplete={(url) =>
-									setFileUploads((prev) => ({ ...prev, refurbished: url }))
-								}
-								directory={`property/refurbished/`}
-								label="Upload Refurbished Document"
-							/>
-							{fileUploads['refurbished'] && (
-								<p className="text-green-600 text-xs mt-1">File uploaded!</p>
+						<div className="mb-4 border rounded-md">
+							{/* Conditionally render download link if a document exists */}
+							{initial.refurbishedCDM && (
+								<div className="mb-3">
+									<label className="block text-sm font-medium text-gray-700 mb-1">
+										Current Refurbished Document:
+										<PresignedDocument
+											fileName={initial.refurbishedCDM}
+											uploadApiUrl={`${import.meta.env.VITE_API_BASE_URL}/document/presignedUrl.php`}
+											directory={`property/refurbished/`}
+											type="Refurbished"
+										/>
+										{!changeRefurbishedCdm && (
+											<Button
+												label="Change Refurbished CDM"
+												onClick={() => setChangeRefurbishedCdm(true)}
+												className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-4 rounded"
+											/>
+										)}
+									</label>
+								</div>
+							)}
+							{changeRefurbishedCdm && (
+								<FileUpload
+									uploadApiUrl={`${import.meta.env.VITE_API_BASE_URL}/document/presignedUrl.php`}
+									accept="*/*"
+									onUploadComplete={(url, fileName) =>
+										setFileUploads((prev) => ({
+											...prev,
+											refurbished: fileName,
+										}))
+									}
+									directory={`property/refurbished/`}
+									label={
+										initial.refurbishedCDM ?
+											'Upload New Document'
+										:	'Upload Refurbished Document'
+									}
+								/>
 							)}
 						</div>
 					)}
+
 					<div className="flex gap-2 mt-6">
 						<Button
 							label="Cancel"
@@ -673,27 +779,13 @@ export default function Property() {
 										Property Manager
 									</p>
 									<p className="text-gray-900 dark:text-gray-100">
-										{property.address1}
+										{property.managerName}
 										<br />
-										{property.address2 && (
-											<>
-												<span>{property.address2}</span>
-												<br />
-											</>
-										)}
-										{property.address3 && (
-											<>
-												<span>{property.address3}</span>
-												<br />
-											</>
-										)}
-										{property.city}
+										{property.managerAddress}
 										<br />
-										{property.postCode}
+										{property.managerEmail}
 										<br />
-										{property.county}
-										<br />
-										{property.country}
+										{property.managerTelephone}
 									</p>
 								</div>
 								<div className="justify-center items-center flex-1">
@@ -701,11 +793,13 @@ export default function Property() {
 										Emergency contact
 									</p>
 									<p className="text-gray-900 dark:text-gray-100">
-										{property.managerName}
+										{property.emergencyName}
 										<br />
-										{property.email}
+										{property.emergencyAddress}
 										<br />
-										{property.telephone}
+										{property.emergencyEmail}
+										<br />
+										{property.emergencyTelephone}
 									</p>
 								</div>
 								<div className="justify-center items-center flex-1">
@@ -713,11 +807,13 @@ export default function Property() {
 										Local Fire Service
 									</p>
 									<p className="text-gray-900 dark:text-gray-100">
-										{property.managerName}
+										{property.localFireName}
 										<br />
-										{property.email}
+										{property.localFireAddress}
 										<br />
-										{property.telephone}
+										{property.localFireEmail}
+										<br />
+										{property.localFireTelephone}
 									</p>
 								</div>
 							</CardContent>

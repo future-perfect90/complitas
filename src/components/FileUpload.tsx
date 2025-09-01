@@ -37,6 +37,7 @@ export default function FileUpload({
 		setMessage('');
 		try {
 			const uuid = crypto.randomUUID();
+			const savedFile = `${uuid}.${file.name.split('.').pop()}`
 			const res = await fetch(uploadApiUrl, {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
@@ -60,7 +61,7 @@ export default function FileUpload({
 			if (!upload.ok) throw new Error('Failed to upload to S3');
 
 			setMessage('✅ Upload successful!');
-			if (onUploadComplete) onUploadComplete(presignedUrl, file.name);
+			if (onUploadComplete) onUploadComplete(presignedUrl, savedFile);
 		} catch (err: any) {
 			setMessage(`❌ Upload failed: ${err.message}`);
 		}
