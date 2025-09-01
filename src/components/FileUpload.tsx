@@ -36,11 +36,12 @@ export default function FileUpload({
 		setUploading(true);
 		setMessage('');
 		try {
+			const uuid = crypto.randomUUID();
 			const res = await fetch(uploadApiUrl, {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify({
-					fileName: `${directory}${file.name}`,
+					fileName: `${directory}${uuid}.${file.name.split('.').pop()}`,
 					fileType: file.type,
 					action: 'PutObject',
 				}),

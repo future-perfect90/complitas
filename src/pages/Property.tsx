@@ -325,7 +325,7 @@ export default function Property() {
 								updatedForm['mitigationPlan'] = fileUploads['wellMaintained'];
 							}
 							if (showRefurbishedUpload && fileUploads['refurbished']) {
-								updatedForm['refurbishedFile'] = fileUploads['refurbished'];
+								updatedForm['refurbishedCDM'] = fileUploads['refurbished'];
 							}
 							onSave(updatedForm);
 						}}>
