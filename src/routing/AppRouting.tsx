@@ -1,6 +1,7 @@
 import { useRoutes, type RouteObject } from 'react-router-dom';
 import About from '../pages/AboutUs';
 import CompanyList from '../pages/CompanyList';
+import ComplianceReports from '../pages/ComplianceReports';
 import Dashboard from '../pages/Dashboard';
 import Home from '../pages/Home';
 import Profile from '../pages/Profile';
@@ -26,6 +27,10 @@ const AppRoutes = () => {
 				{ path: '/companies', element: <CompanyList /> },
 				{ path: '/properties', element: <PropertyList /> },
 				{ path: '/properties/:id', element: <Property /> },
+				{
+					path: '/properties/:id/compliance-reports',
+					element: <ComplianceReports />,
+				},
 				{ path: '/users', element: <UserList /> },
 				{ path: '/teams', element: <TeamList /> },
 				{ path: '/profile', element: <Profile /> },

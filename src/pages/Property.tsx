@@ -1,6 +1,6 @@
 import { useAuth0 } from '@auth0/auth0-react';
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Button } from '../components/Button';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/Card';
 import FileUpload from '../components/FileUpload';
@@ -20,6 +20,7 @@ export default function Property() {
 	const [modalInitial, setModalInitial] = useState<any>({});
 	const [changeMitigationPlan, setChangeMitigationPlan] = useState(false);
 	const [changeRefurbishedCdm, setChangeRefurbishedCdm] = useState(false);
+	const navigate = useNavigate();
 
 	useEffect(() => {
 		const fetchProperty = async () => {
@@ -535,14 +536,23 @@ export default function Property() {
 				{/* Property Details Section */}
 				{property ?
 					<>
-						<div className="flex items-center gap-6">
-							<div>
+						<div className="flex items-center justify-left">
+							<div className="flex-1 justify-left">
 								<h1 className="text-3xl font-bold text-gray-900 dark:text-white">
 									{property.name}
 								</h1>
 								<p className="text-gray-600">
 									Manage your property information.
 								</p>
+							</div>
+							<div className="items-center justify-right">
+								<Button
+									label="Compliance reports"
+									onClick={() =>
+										navigate(`/properties/${property.id}/compliance-reports`)
+									}
+									className="px-2 py-1 bg-purple-800 text-white rounded"
+								/>
 							</div>
 						</div>
 						{/* Basic Information Card */}

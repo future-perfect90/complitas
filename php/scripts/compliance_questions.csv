@@ -3,7 +3,7 @@ External,Presence of any external Decking?,Boolean,TRUE
 External,Presence of any external Balconies?,Boolean,TRUE
 Fire safety,Has Annual FRA (Fire Risk Assessment) been completed? (Date Required),Boolean,TRUE
 Utility Service Audit,Have Utility Service Audits been completed by Service Provider?,Boolean,TRUE
-Fire safty,Has DSEAR (Dangerous Substance & Explosive Atomosphere Risk Assessment) been completed?,Boolean,TRUE
+Fire safety,Has DSEAR (Dangerous Substance & Explosive Atomosphere Risk Assessment) been completed?,Boolean,TRUE
 Timber Framed,Is building Timber Framed?,Boolean,TRUE
 Concrete,Has RAAC survey been completed?,Boolean,TRUE
 Voids,Are there any inaccesible voids?,Boolean,TRUE
@@ -11,8 +11,8 @@ Voids,Are voids ventilated?,Boolean,TRUE
 Asbestos,Has an asbestos report been completed?,Boolean,TRUE
 Fire safety,Is the building on Fire Watch list?,Boolean,TRUE
 Electrical,Has EICR Report been Completed?,Boolean,TRUE
-Gas saftey,Has Communal Gas Appliances been serviced? (LGSR-CP15/CP12),Boolean,TRUE
-Gas saftey,Are residential instructed landlord Gas Safety Checks completed?,Boolean,TRUE
+Gas safety,Has Communal Gas Appliances been serviced? (LGSR-CP15/CP12),Boolean,TRUE
+Gas safety,Are residential instructed landlord Gas Safety Checks completed?,Boolean,TRUE
 Electrical Installation Condition Report,Are residential instructed landlord EICR Checks completed?,Boolean,TRUE
 Gas safety,Are plot to postals present on gas meters?,Boolean,TRUE
 Emergency,Are all Emergency Control Valves Accessible?,Boolean,TRUE
@@ -29,10 +29,10 @@ Functional,Has functional checks been completed on access panels/walls/ceilings?
 Windows,Is any glazing compromised?,Boolean,TRUE
 Windows,Have emergency windows (fire escape) had functional check?,Boolean,TRUE
 Access,Has functional check been completed on automatic door release mechanism's?,Boolean,TRUE
-Fire saftey,Has the Fire Alarm Sytem been checked?,Boolean,TRUE
+Fire safety,Has the Fire Alarm Sytem been checked?,Boolean,TRUE
 Emergency,Has Emergency Lighting been checked?,Boolean,TRUE
 Fire safety,Have Fire Blankets been checked?,Boolean,TRUE
-Fire saftey,Has Fire Exit Signage been checked?,Boolean,TRUE
+Fire safety,Has Fire Exit Signage been checked?,Boolean,TRUE
 Fire safety,Have Dry Riser/s had Functional Visual Inspection?,Boolean,TRUE
 Fire safety,Have Hose Reels been checked?,Boolean,TRUE
 Plant,Has Plant Room inspection been completed?,Boolean,TRUE
@@ -48,9 +48,9 @@ Protection,Is the impact protection fit for purpose?,Boolean,TRUE
 Car park,Is Car Park Entrance Door Functional?,Boolean,TRUE
 Protection,Is Impact Protection in Car Park Fit For Purpose?,Boolean,TRUE
 Water,Is Legionella inspection required?,Boolean,TRUE
-Eletrical,Has Air Conditioning Inspection been completed?,Boolean,TRUE
+Electrical,Has Air Conditioning Inspection been completed?,Boolean,TRUE
 Gas safety,Is FGAS Certificate required?,Boolean,TRUE
-Fire saftey,Are all pipe penetrations sleeved and sealed?,Boolean,FALSE
+Fire safety,Are all pipe penetrations sleeved and sealed?,Boolean,FALSE
 Water,Are there any water carrying assets leaking?,Boolean,TRUE
 Voids,Is there permanenet access and ventiliation for assets in cavities/voids?,Boolean,TRUE
 Assets,Are all assets labelled correctly?,Boolean,TRUE

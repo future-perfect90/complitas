@@ -3,7 +3,6 @@ export async function updatePropertySection(
 	id: string,
 	data: Record<string, any>
 ) {
-	
 	const response = await fetch(
 		`${import.meta.env.VITE_API_BASE_URL}/properties/update.php`,
 		{
@@ -394,5 +393,39 @@ export async function getProfile(userId: string) {
 		throw new Error(`Response status: ${response.status}`);
 	}
 
+	return response.json();
+}
+
+export async function getAreas() {
+	const response = await fetch(
+		`${import.meta.env.VITE_API_BASE_URL}/compliance/areas.php`,
+		{
+			method: 'GET',
+			headers: {
+				Authorization: `Bearer ${jwt}`,
+				'Content-Type': 'application/json',
+			},
+		}
+	);
+	if (!response.ok) {
+		throw new Error(`Response status: ${response.status}`);
+	}
+	return response.json();
+}
+
+export async function getQuestions(area: string) {
+	const response = await fetch(
+		`${import.meta.env.VITE_API_BASE_URL}/compliance/areaQuestions.php?area=${area}`,
+		{
+			method: 'GET',
+			headers: {
+				Authorization: `Bearer ${jwt}`,
+				'Content-Type': 'application/json',
+			},
+		}
+	);
+	if (!response.ok) {
+		throw new Error(`Response status: ${response.status}`);
+	}
 	return response.json();
 }

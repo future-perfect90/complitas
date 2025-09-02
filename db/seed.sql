@@ -83,6 +83,12 @@ CREATE TABLE `properties` (
     `energyCertificates` BOOLEAN NULL,
     `isolationValvesClear` BOOLEAN NULL,
     `accessControlled` BOOLEAN NULL,
+    `hrbUniqueReferenceNumber` VARCHAR(255) NULL,
+	`bsrRegistrationNumber`	VARCHAR(255) NULL,
+	`principleName`	VARCHAR(255) NULL,
+	`principleEmail`	VARCHAR(255) NULL,
+	`principleTelephone`	VARCHAR(255) NULL,
+	`principleAddress`	VARCHAR(255) NULL,
     `createdAt` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `createdBy` VARCHAR(255) DEFAULT NULL,
     CONSTRAINT fk_companies
