@@ -429,3 +429,22 @@ export async function getQuestions(area: string) {
 	}
 	return response.json();
 }
+
+export async function createCompliance(propertyId: string) {
+	console.log('Creating compliance for property:', propertyId);
+	const response = await fetch(
+		`${import.meta.env.VITE_API_BASE_URL}/compliance/create.php`,
+		{
+			method: 'POST',
+			headers: {
+				Authorization: `Bearer ${jwt}`,
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({ propertyId }),
+		}
+	);
+	if (!response.ok) {
+		throw new Error(`Response status: ${response.status}`);
+	}
+	return response.json();
+}
