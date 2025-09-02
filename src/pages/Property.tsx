@@ -170,9 +170,7 @@ export default function Property() {
 				];
 				return (
 					<div className="mb-4">
-						<label className="block text-sm font-medium mb-1 text-gray-900">
-							Occupancy Type
-						</label>
+						<Label label="Occupancy Type" />
 						<select
 							value={form[key] ?? ''}
 							onChange={(e) => setForm({ ...form, [key]: e.target.value })}
@@ -497,7 +495,7 @@ export default function Property() {
 								<h1 className="text-3xl font-bold text-gray-900 dark:text-white">
 									{property.name}
 								</h1>
-								<p className="text-gray-600 dark:text-gray-400">
+								<p className="text-gray-600">
 									Manage your property information.
 								</p>
 							</div>
