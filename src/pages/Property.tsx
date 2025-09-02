@@ -369,7 +369,6 @@ export default function Property() {
 						e.preventDefault();
 						// Add uploaded file URLs to form before saving
 						let updatedForm = { ...form };
-						console.log('File Uploads:', fileUploads);
 						if (showWellMaintainedUpload && fileUploads['wellMaintained']) {
 							updatedForm['mitigationPlan'] = fileUploads['wellMaintained'];
 						}
