@@ -59,10 +59,10 @@ export default function Dashboard() {
 			</h2>
 			<h2>TODO::Notification endpoint to enable SNS</h2>
 			<h2>TODO::Import script for questions from AJ</h2>
-			<h2>
-				TODO::Finish off the form upload. Styling, formatting. Upload files to
-				s3 bucket. View uploaded files on click on property page
-			</h2>
+			<h2>TODO::Upload Compliance questions to DB</h2>
+			<h2>TODO::API endpoint to get all compliance questions from DB</h2>
+			<h2>TODO::API endpoint to store all compliance questions</h2>
+			<h2>TODO::Build form to submit answer questions</h2>
 			{isAuthenticated ?
 				<>
 					<h2 className="text-3xl">Welcome to your dashboard {user?.name}</h2>

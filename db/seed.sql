@@ -129,3 +129,22 @@ CREATE TABLE team_properties (
     `propertyId` VARCHAR(36) NOT NULL REFERENCES properties(id) ON DELETE CASCADE,
     PRIMARY KEY (teamId, propertyId)
 );
+
+CREATE TABLE IF NOT EXISTS compliance_questions (
+    `id` VARCHAR(36) NOT NULL DEFAULT (UUID()) PRIMARY KEY,
+    `question` VARCHAR(255) NOT NULL,
+    `answerType` VARCHAR(255) NOT NULL,
+    `uploadRequired` TINYINT(1) NOT NULL,
+    `uploadedAt` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+)
+
+CREATE TABLE IF NOT EXISTS property_compliance (
+    `id` VARCHAR(36) NOT NULL DEFAULT (UUID()) PRIMARY KEY,
+    `propertyId` VARCHAR(36) NOT NULL,
+    `questionId` VARCHAR(36) NOT NULL,
+    `answer` VARCHAR(255) NOT NULL,
+    `fileName` VARCHAR(255),
+    `createdAt` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_property FOREIGN KEY (propertyId) REFERENCES properties(id) ON DELETE CASCADE,
+    CONSTRAINT fk_question FOREIGN KEY (questionId) REFERENCES compliance_questions(id) ON DELETE CASCADE
+);
