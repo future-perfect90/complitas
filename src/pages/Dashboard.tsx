@@ -58,11 +58,8 @@ export default function Dashboard() {
 				SES
 			</h2>
 			<h2>TODO::Notification endpoint to enable SNS</h2>
-			<h2>TODO::Import script for questions from AJ</h2>
-			<h2>TODO::Upload Compliance questions to DB</h2>
-			<h2>TODO::API endpoint to get all compliance questions from DB</h2>
-			<h2>TODO::API endpoint to store all compliance questions</h2>
 			<h2>TODO::Build form to submit answer questions</h2>
+			<h2>TODO::Display areas to add questions and answers to</h2>
 			{isAuthenticated ?
 				<>
 					<h2 className="text-3xl">Welcome to your dashboard {user?.name}</h2>
