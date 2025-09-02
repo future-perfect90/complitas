@@ -407,7 +407,7 @@ export default function Property() {
 								<FileUpload
 									uploadApiUrl={`${import.meta.env.VITE_API_BASE_URL}/document/presignedUrl.php`}
 									accept="*/*"
-									onUploadComplete={(url, fileName) =>
+									onUploadComplete={(fileName) =>
 										setFileUploads((prev) => ({
 											...prev,
 											wellMaintained: fileName,
@@ -453,7 +453,7 @@ export default function Property() {
 								<FileUpload
 									uploadApiUrl={`${import.meta.env.VITE_API_BASE_URL}/document/presignedUrl.php`}
 									accept="*/*"
-									onUploadComplete={(url, fileName) =>
+									onUploadComplete={(fileName) =>
 										setFileUploads((prev) => ({
 											...prev,
 											refurbished: fileName,
