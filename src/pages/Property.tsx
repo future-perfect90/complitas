@@ -94,6 +94,7 @@ export default function Property() {
 										type === 'number' ? Number(e.target.value) : e.target.value,
 								})
 							}
+							type={type}
 						/>
 					</div>
 				);
@@ -111,12 +112,22 @@ export default function Property() {
 					</div>
 				);
 			}
+			if (type === 'textarea') {
+				return (
+					<div className="mb-4">
+						<Label label={label} />
+						<textarea
+							value={form[key] ?? ''}
+							onChange={(e) => setForm({ ...form, [key]: e.target.value })}
+							className="w-full border rounded px-2 py-1 text-gray-900"
+						/>
+					</div>
+				);
+			}
 			if (type === 'boolean') {
 				return (
 					<div className="mb-4">
-						<label className="block text-sm font-medium mb-1 text-gray-900">
-							{label}
-						</label>
+						<Label label={label} />
 						<div className="flex gap-4">
 							<label>
 								<input
@@ -240,6 +251,40 @@ export default function Property() {
 					type: 'number',
 				},
 			];
+			if (form.buildingHeight >= 18) {
+				fields.push(
+					{
+						key: 'hrbUniqueReferenceNumber',
+						label: 'HRB Unique Reference Number',
+						type: 'text',
+					},
+					{
+						key: 'bsrRegistrationNumber',
+						label: 'BSR Registration Number',
+						type: 'text',
+					},
+					{
+						key: 'principleName',
+						label: 'Principle Name',
+						type: 'text',
+					},
+					{
+						key: 'principleEmail',
+						label: 'Principle Email',
+						type: 'text',
+					},
+					{
+						key: 'principleTelephone',
+						label: 'Principle Telephone',
+						type: 'text',
+					},
+					{
+						key: 'principleAddress',
+						label: 'Principle Address',
+						type: 'textarea',
+					}
+				);
+			}
 		} else if (section === 'additional') {
 			fields = [
 				{ key: 'lifts', label: 'Lifts', type: 'boolean' },
@@ -269,7 +314,7 @@ export default function Property() {
 				{
 					key: 'managerAddress',
 					label: 'Property Manager Address',
-					type: 'text',
+					type: 'textarea',
 				},
 				{ key: 'managerEmail', label: 'Property Manager Email', type: 'text' },
 				{
@@ -281,7 +326,7 @@ export default function Property() {
 				{
 					key: 'emergencyAddress',
 					label: 'Emergency Contact Address',
-					type: 'text',
+					type: 'textarea',
 				},
 				{
 					key: 'emergencyEmail',
@@ -301,7 +346,7 @@ export default function Property() {
 				{
 					key: 'localFireAddress',
 					label: 'Local Fire Authority Address',
-					type: 'text',
+					type: 'textarea',
 				},
 				{
 					key: 'localFireEmail',

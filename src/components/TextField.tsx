@@ -12,9 +12,10 @@ const TextField: React.FC<Props> = ({
 	label,
 	value,
 	onChange,
-	type = 'text',
+	type,
 	required,
 }) => {
+	console.log('Label:', label, type);
 	return (
 		<div className="mb-2">
 			<label className="block text-sm font-medium text-gray-700 mb-1">
