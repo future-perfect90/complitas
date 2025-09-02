@@ -6,7 +6,7 @@ use Auth0\SDK\Contract\API\ManagementInterface;
 use Ramsey\Uuid\Uuid;
 
 
-require_once(__DIR__ . '/Conf.php');
+require_once(__DIR__ . '/Config.php');
 class User
 {
 

@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . '/Conf.php';
+require_once __DIR__ . '/Config.php';
 class Teams
 {
 

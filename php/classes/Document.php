@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/../classes/Conf.php';
+require_once __DIR__ . '/../classes/Config.php';
 
 use Ramsey\Uuid\Uuid;
 use Aws\S3\S3Client;
