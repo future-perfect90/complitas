@@ -9,15 +9,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     http_response_code(200);
     exit();
 }
-$propertyId = $_GET['id'] ?? '';
 
-if (empty($propertyId)) {
-    http_response_code(400);
-    echo json_encode(['error' => 'Missing propertyId']);
-    exit;
-}
 $database = (new Database())->connect();
 $compliance = new Compliance($database);
-$questionnaires = $compliance->getComplianceQuestionnaires($propertyId);
+$questions = $compliance->getComplianceQuestions();
 
-echo json_encode($questionnaires);
+echo json_encode($questions);

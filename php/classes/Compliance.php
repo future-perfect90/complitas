@@ -27,10 +27,11 @@ class Compliance
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function questionResponse(string $propertyComplianceId, string $questionId, string $answer, string $fileName, string $validUntil, string $completedBy): bool
+    public function questionResponse(string $reportId, string $questionId, string $answer, string $fileName, string $validUntil, string $completedBy): bool
     {
-        $stmt = $this->pdo->prepare("INSERT INTO property_compliance_responses (propertyComplianceId, questionId, answer, fileName, validUntil, completedBy) VALUES (:propertyComplianceId, :questionId, :answer, :fileName, :validUntil, :completedBy)");
-        $stmt->bindParam(':propertyComplianceId', $propertyComplianceId);
+        $stmt = $this->pdo->prepare("INSERT INTO question_responses (reportId, questionId, answer, fileName, validUntil, completedBy) VALUES (:propertyComplianceId, :questionId, :answer, :fileName, :validUntil, :completedBy) 
+        ON DUPLICATE KEY UPDATE answer = VALUES(answer), fileName = VALUES(fileName), validUntil = VALUES(validUntil), completedBy = VALUES(completedBy)");
+        $stmt->bindParam(':propertyComplianceId', $reportId);
         $stmt->bindParam(':questionId', $questionId);
         $stmt->bindParam(':answer', $answer);
         $stmt->bindParam(':fileName', $fileName);
@@ -43,7 +44,7 @@ class Compliance
     {
         //insert the UUID due to not being able to retun last inserted ID
         $uuid = Uuid::uuid4()->toString();
-        $stmt = $this->pdo->prepare("INSERT INTO property_compliance (id, propertyId) VALUES (:id, :propertyId)");
+        $stmt = $this->pdo->prepare("INSERT INTO reports (id, propertyId) VALUES (:id, :propertyId)");
         $stmt->bindParam(':id', $uuid);
         $stmt->bindParam(':propertyId', $propertyId);
         $stmt->execute();
@@ -52,17 +53,24 @@ class Compliance
 
     public function getComplianceQuestionnaires(string $propertyId): array
     {
-        $stmt = $this->pdo->prepare("SELECT * FROM property_compliance WHERE propertyId=:propertyId");
+        $stmt = $this->pdo->prepare("SELECT * FROM reports WHERE propertyId=:propertyId");
         $stmt->bindParam(':propertyId', $propertyId);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function getComplianceQuestionnaire(string $id): array
+    public function getComplianceQuestions(): array
     {
-        $stmt = $this->pdo->prepare("SELECT * FROM property_compliance WHERE id=:id");
-        $stmt->bindParam(':id', $id);
+        $stmt = $this->pdo->prepare("SELECT * FROM compliance_questions");
         $stmt->execute();
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function getAnswers(string $propertyComplianceId): array
+    {
+        $stmt = $this->pdo->prepare("SELECT * FROM question_responses WHERE reportId=:propertyComplianceId");
+        $stmt->bindParam(':propertyComplianceId', $propertyComplianceId);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }

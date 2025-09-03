@@ -1,4 +1,12 @@
+export interface Answer {
+	questionId: string;
+	response: 'Yes' | 'No' | 'NA' | null;
+	fileUrl?: string;
+	fileName?: string;
+}
+
 // Update a section of property data by key-value array
+
 export async function updatePropertySection(
 	id: string,
 	data: Record<string, any>
@@ -466,9 +474,44 @@ export async function getComplianceQuestionnaires(propertyId: string) {
 	return response.json();
 }
 
-export async function getComplianceQuestionnaire(id: string) {
+export async function getComplianceQuestions(id: string) {
 	const response = await fetch(
-		`${import.meta.env.VITE_API_BASE_URL}/compliance/getQuestionnaire.php?id=${id}`,
+		`${import.meta.env.VITE_API_BASE_URL}/compliance/getComplianceQuestions.php?id=${id}`,
+		{
+			method: 'GET',
+			headers: {
+				Authorization: `Bearer ${jwt}`,
+				'Content-Type': 'application/json',
+			},
+		}
+	);
+	if (!response.ok) {
+		throw new Error(`Response status: ${response.status}`);
+	}
+	return response.json();
+}
+
+export async function saveAnswer(answer: Answer) {
+	const response = await fetch(
+		`${import.meta.env.VITE_API_BASE_URL}/compliance/saveAnswer.php`,
+		{
+			method: 'POST',
+			headers: {
+				Authorization: `Bearer ${jwt}`,
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(answer),
+		}
+	);
+	if (!response.ok) {
+		throw new Error(`Response status: ${response.status}`);
+	}
+	return response.json();
+}
+
+export async function getComplianceAnswers(propertyComplianceId: string) {
+	const response = await fetch(
+		`${import.meta.env.VITE_API_BASE_URL}/compliance/getAnswers.php?propertyComplianceId=${propertyComplianceId}`,
 		{
 			method: 'GET',
 			headers: {

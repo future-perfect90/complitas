@@ -1,7 +1,7 @@
 import { useRoutes, type RouteObject } from 'react-router-dom';
 import About from '../pages/AboutUs';
 import CompanyList from '../pages/CompanyList';
-import ComplianceQuestionnaire from '../pages/ComplianceQuestionnaire';
+import ComplianceOverview from '../pages/ComplianceOverview';
 import ComplianceReports from '../pages/ComplianceReports';
 import Dashboard from '../pages/Dashboard';
 import Home from '../pages/Home';
@@ -33,8 +33,8 @@ const AppRoutes = () => {
 					element: <ComplianceReports />,
 				},
 				{
-					path: '/properties/:id/compliance-reports/:complianceId',
-					element: <ComplianceQuestionnaire />,
+					path: '/properties/:id/compliance-reports/:reportId',
+					element: <ComplianceOverview />,
 				},
 				{ path: '/users', element: <UserList /> },
 				{ path: '/teams', element: <TeamList /> },

@@ -144,20 +144,21 @@ CREATE TABLE IF NOT EXISTS compliance_questions (
     `uploadRequired` TINYINT(1) NOT NULL,
 )
 
-CREATE TABLE IF NOT EXISTS property_compliance (
+CREATE TABLE IF NOT EXISTS reports (
     `id` VARCHAR(36) NOT NULL DEFAULT (UUID()) PRIMARY KEY,
     `propertyId` VARCHAR(36) NOT NULL,
     CONSTRAINT fk_property FOREIGN KEY (propertyId) REFERENCES properties(id) ON DELETE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS property_compliance_responses (
+CREATE TABLE IF NOT EXISTS question_responses (
     `id` VARCHAR(36) NOT NULL DEFAULT (UUID()) PRIMARY KEY,
-    `propertyComplianceId` VARCHAR(36) NOT NULL,
+    `reportId` VARCHAR(36) NOT NULL,
     `questionId` VARCHAR(36) NOT NULL,
     `answer` TINYINT(1) NOT NULL,
     `fileName` VARCHAR(255) NULL,
     `validUntil` DATETIME NULL,
-    `completedBy` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT fk_property_compliance FOREIGN KEY (propertyComplianceId) REFERENCES property_compliance(id) ON DELETE CASCADE,
-    CONSTRAINT fk_question FOREIGN KEY (questionId) REFERENCES compliance_questions(id) ON DELETE CASCADE
+    `completedBy` VARCHAR(255) NOT NULL,
+    CONSTRAINT fk_reports FOREIGN KEY (reportId) REFERENCES reports(id) ON DELETE CASCADE,
+    CONSTRAINT fk_question FOREIGN KEY (questionId) REFERENCES compliance_questions(id) ON DELETE CASCADE,
+    UNIQUE KEY `reportId` (`reportId`,`questionId`)
 );
