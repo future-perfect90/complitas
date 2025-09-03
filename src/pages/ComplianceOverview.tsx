@@ -22,11 +22,9 @@ export default function ComplianceOverview() {
 					getComplianceQuestions(reportId),
 					getComplianceAnswers(reportId),
 				]);
+
 				const groupedData = groupQuestionsByArea(questions, answers);
 				setGroupedAreas(groupedData);
-				// console.log(questions);
-				// console.log(answers);
-				// console.log(groupedData);
 			} catch (error) {
 				console.error('Error fetching compliance data:', error);
 			} finally {
@@ -39,7 +37,6 @@ export default function ComplianceOverview() {
 	const selectedArea = groupedAreas.find(
 		(area: any) => area.name === selectedAreaName
 	);
-
 	if (isLoading) return <div>Loading Compliance Report...</div>;
 
 	return (
