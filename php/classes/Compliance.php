@@ -49,4 +49,20 @@ class Compliance
         $stmt->execute();
         return $uuid;
     }
+
+    public function getComplianceQuestionnaires(string $propertyId): array
+    {
+        $stmt = $this->pdo->prepare("SELECT * FROM property_compliance WHERE propertyId=:propertyId");
+        $stmt->bindParam(':propertyId', $propertyId);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function getComplianceQuestionnaire(string $id): array
+    {
+        $stmt = $this->pdo->prepare("SELECT * FROM property_compliance WHERE id=:id");
+        $stmt->bindParam(':id', $id);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
 }

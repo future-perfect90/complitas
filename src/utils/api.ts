@@ -448,3 +448,37 @@ export async function createCompliance(propertyId: string) {
 	}
 	return response.json();
 }
+
+export async function getComplianceQuestionnaires(propertyId: string) {
+	const response = await fetch(
+		`${import.meta.env.VITE_API_BASE_URL}/compliance/listQuestionnaires.php?propertyId=${propertyId}`,
+		{
+			method: 'GET',
+			headers: {
+				Authorization: `Bearer ${jwt}`,
+				'Content-Type': 'application/json',
+			},
+		}
+	);
+	if (!response.ok) {
+		throw new Error(`Response status: ${response.status}`);
+	}
+	return response.json();
+}
+
+export async function getComplianceQuestionnaire(id: string) {
+	const response = await fetch(
+		`${import.meta.env.VITE_API_BASE_URL}/compliance/getQuestionnaire.php?id=${id}`,
+		{
+			method: 'GET',
+			headers: {
+				Authorization: `Bearer ${jwt}`,
+				'Content-Type': 'application/json',
+			},
+		}
+	);
+	if (!response.ok) {
+		throw new Error(`Response status: ${response.status}`);
+	}
+	return response.json();
+}
