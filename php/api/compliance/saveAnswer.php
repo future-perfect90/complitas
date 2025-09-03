@@ -11,7 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 
 $data = json_decode(file_get_contents('php://input'), true);
 
-if (!isset($data['questionId']) || !isset($data['response']) || !isset($data['reportId'])) {
+if (!isset($data['questionId']) || !isset($data['answer']) || !isset($data['reportId'])) {
     http_response_code(400);
     echo json_encode(['error' => 'Invalid input']);
     exit;
@@ -19,7 +19,7 @@ if (!isset($data['questionId']) || !isset($data['response']) || !isset($data['re
 
 $questionId = $data['questionId'];
 $reportId = $data['reportId'];
-switch ($data['response']) {
+switch ($data['answer']) {
     case 'Yes':
         $response = 1;
         break;

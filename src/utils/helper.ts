@@ -6,7 +6,7 @@ interface Question {
 
 interface Answer {
 	questionId: string;
-	response: 'Yes' | 'No' | 'NA' | null;
+	answer: 'Yes' | 'No' | 'NA' | null;
 }
 
 interface AreaGroup {

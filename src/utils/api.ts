@@ -1,6 +1,6 @@
 export interface Answer {
 	questionId: string;
-	response: 'Yes' | 'No' | 'NA' | null;
+	answer: 'Yes' | 'No' | 'NA' | null;
 	fileUrl?: string;
 	fileName?: string;
 }

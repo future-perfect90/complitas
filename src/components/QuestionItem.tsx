@@ -6,7 +6,7 @@ import FileUpload from './FileUpload';
 export interface Answer {
 	reportId: string;
 	questionId: string;
-	response: 'Yes' | 'No' | 'NA' | null;
+	answer: 'Yes' | 'No' | 'NA' | null;
 	fileUrl?: string;
 	fileName?: string;
 }
@@ -29,7 +29,7 @@ export default function QuestionItem({
 	const [currentAnswer, setCurrentAnswer] = useState<Answer>(
 		savedAnswer || {
 			questionId: questionObject.id,
-			response: null,
+			answer: null,
 			reportId: reportId,
 		}
 	);
@@ -51,14 +51,14 @@ export default function QuestionItem({
 	};
 
 	const handleResponseChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		const newResponse = e.target.value as Answer['response'];
+		const newAnswer = e.target.value as Answer['answer'];
 
-		setCurrentAnswer((prev) => ({ ...prev, response: newResponse }));
+		setCurrentAnswer((prev) => ({ ...prev, answer: newAnswer }));
 
-		if (newResponse !== 'Yes') {
+		if (newAnswer !== 'Yes') {
 			handleSave({
 				...currentAnswer,
-				response: newResponse,
+				answer: newAnswer,
 				fileUrl: undefined,
 				fileName: undefined,
 			});
@@ -66,12 +66,11 @@ export default function QuestionItem({
 	};
 
 	const handleUploadComplete = (fileUrl: string, fileName: string) => {
-		handleSave({ ...currentAnswer, response: 'Yes', fileUrl, fileName });
+		handleSave({ ...currentAnswer, answer: 'Yes', fileUrl, fileName });
 	};
 
 	const showFileUpload =
-		questionObject.uploadRequired && currentAnswer.response === 'Yes';
-
+		questionObject.uploadRequired && currentAnswer.answer === 'Yes';
 	return (
 		<div className="p-4 border-b border-gray-200 relative">
 			<div className="flex justify-between items-start">
@@ -89,7 +88,7 @@ export default function QuestionItem({
 							type="radio"
 							name={questionObject.id}
 							value={option}
-							checked={currentAnswer.response === option}
+							checked={currentAnswer.answer === option}
 							onChange={handleResponseChange}
 							disabled={isSaving}
 							className="form-radio h-4 w-4 text-purple-600"

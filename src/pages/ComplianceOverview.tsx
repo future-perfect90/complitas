@@ -32,7 +32,7 @@ export default function ComplianceOverview() {
 			}
 		};
 		fetchData();
-	}, [reportId]);
+	}, [reportId, selectedAreaName]);
 
 	const selectedArea = groupedAreas.find(
 		(area: any) => area.name === selectedAreaName
