@@ -58,6 +58,10 @@ export default function Dashboard() {
 				SES
 			</h2>
 			<h2>TODO::Notification endpoint to enable SNS</h2>
+			<h2>
+				TODO::Update logic to remove questions if property does not require
+			</h2>
+			<h2>Update property form to save on change like compliance form</h2>
 			{isAuthenticated ?
 				<>
 					<h2 className="text-3xl">Welcome to your dashboard {user?.name}</h2>

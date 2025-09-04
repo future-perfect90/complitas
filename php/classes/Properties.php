@@ -105,4 +105,18 @@ class Properties
         $stmt->execute($teamIds);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    public function getPropertyQuestionRequirements(string $propertyId): ?array
+    {
+        // $sql = "SELECT lifts, communalGasAppliances, meterBank, carpark FROM properties WHERE id = :id";
+        $sql = "SELECT lifts FROM properties WHERE id = :id";
+
+
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindParam(':id', $propertyId);
+        $stmt->execute();
+
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result !== false ? $result : null;
+    }
 }

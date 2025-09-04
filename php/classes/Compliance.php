@@ -59,9 +59,33 @@ class Compliance
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function getComplianceQuestions(): array
+    public function getComplianceQuestions(array $propertyMetadata): array
     {
-        $stmt = $this->pdo->prepare("SELECT * FROM compliance_questions");
+        // Columns in compliance_questions that correspond to boolean/tinyint fields in properties table.
+        // The key is the column in 'properties' and the value is the column in 'compliance_questions'.
+        $conditionalColumns = [
+            'lifts' => 'requires_lifts',
+            // 'communalGasAppliances' => 'requires_communal_gas',
+            // 'meterBank' => 'requires_meter_bank',
+            // 'carpark' => 'requires_carpark',
+        ];
+
+        $whereClauses = ['1']; // Start with a clause that is always true.
+
+        foreach ($conditionalColumns as $propertyColumn => $questionColumn) {
+            // Always include questions that are not conditional on this column.
+            $baseCondition = "$questionColumn = 0 OR $questionColumn IS NULL";
+
+            // If the property has the feature, also include questions that require it.
+            if (!empty($propertyMetadata[$propertyColumn])) {
+                $whereClauses[] = "($baseCondition OR $questionColumn = 1)";
+            } else {
+                $whereClauses[] = "($baseCondition)";
+            }
+        }
+
+        $sql = "SELECT * FROM compliance_questions WHERE " . implode(' AND ', $whereClauses);
+        $stmt = $this->pdo->prepare($sql);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }

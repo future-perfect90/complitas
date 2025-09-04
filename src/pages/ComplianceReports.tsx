@@ -3,15 +3,10 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Button } from '../components/Button';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/Card';
-import {
-	createCompliance,
-	getAreas,
-	getComplianceQuestionnaires,
-} from '../utils/api';
+import { createCompliance, getComplianceQuestionnaires } from '../utils/api';
 
 export default function ComplianceReports() {
 	const { isAuthenticated } = useAuth0();
-	const [areas, setAreas] = useState<Array<{ area: string }>>([]);
 	const [questionnaires, setQuestionnaires] = useState<
 		Array<{ id: string; propertyId: string }>
 	>([]);
@@ -19,15 +14,6 @@ export default function ComplianceReports() {
 	const { id } = useParams();
 
 	useEffect(() => {
-		const fetchAreas = async () => {
-			try {
-				const data = await getAreas();
-				setAreas(data);
-			} catch (error) {
-				console.error('Error fetching property:', error);
-			}
-		};
-
 		const fetchQuestionnaires = async () => {
 			try {
 				const data = await getComplianceQuestionnaires(id ?? '');
@@ -55,7 +41,7 @@ export default function ComplianceReports() {
 			<div className="flex items-center justify-left">
 				<div className="flex-1 justify-left">
 					<h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-						Compliance questionnaires
+						Compliance Reports
 					</h1>
 					<p className="text-gray-300">
 						Log compliance activities and responses.
@@ -82,8 +68,13 @@ export default function ComplianceReports() {
 							{questionnaires &&
 								questionnaires.map((questionnaire) => (
 									<div key={questionnaire.id}>
-										<h3 className="text-lg font-semibold">{questionnaire.id}</h3>
-										<a href={`/properties/${id}/compliance-reports/${questionnaire.id}`}>View Report</a>
+										<h3 className="text-lg font-semibold">
+											{questionnaire.id}
+										</h3>
+										<a
+											href={`/properties/${id}/compliance-reports/${questionnaire.id}`}>
+											View Report
+										</a>
 									</div>
 								))}
 							{/* Additional content can go here */}

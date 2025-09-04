@@ -7,11 +7,10 @@ import { getComplianceAnswers, getComplianceQuestions } from '../utils/api';
 import { groupQuestionsByArea } from '../utils/helper'; // Our new helper
 
 export default function ComplianceOverview() {
-	const { reportId } = useParams(); // Assuming you get a reportId from the URL
+	const { id, reportId } = useParams();
 	const [groupedAreas, setGroupedAreas] = useState<any>([]);
 	const [selectedAreaName, setSelectedAreaName] = useState<string | null>(null);
 	const [isLoading, setIsLoading] = useState(true);
-
 	useEffect(() => {
 		const fetchData = async () => {
 			if (!reportId) return;
@@ -19,7 +18,7 @@ export default function ComplianceOverview() {
 			try {
 				// Fetch both questions and existing answers in parallel
 				const [questions, answers] = await Promise.all([
-					getComplianceQuestions(reportId),
+					getComplianceQuestions(id ?? ''),
 					getComplianceAnswers(reportId),
 				]);
 

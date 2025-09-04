@@ -2,6 +2,7 @@
 
 require_once __DIR__ . '/../../classes/Compliance.php';
 require_once __DIR__ . '/../../classes/Database.php';
+require_once __DIR__ . '/../../classes/Properties.php';
 require_once __DIR__ . '/../../shared/headers.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
@@ -10,8 +11,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     exit();
 }
 
+$propertyId = $_GET['propertyId'] ?? '';
 $database = (new Database())->connect();
+$property = new Properties($database);
+
+$propertyMetadata = $property->getPropertyQuestionRequirements($propertyId);
 $compliance = new Compliance($database);
-$questions = $compliance->getComplianceQuestions();
+$questions = $compliance->getComplianceQuestions($propertyMetadata);
 
 echo json_encode($questions);

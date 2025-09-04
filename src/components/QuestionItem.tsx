@@ -1,5 +1,6 @@
 // src/components/QuestionItem.tsx
 import React, { useState } from 'react';
+import { toast } from 'react-toastify';
 import { saveAnswer } from '../utils/api';
 import FileUpload from './FileUpload';
 import PresignedDocument from './PresignedDocument';
@@ -39,6 +40,7 @@ export default function QuestionItem({
 	const [isSaving, setIsSaving] = useState(false);
 	const [error, setError] = useState('');
 	const [isReplacingFile, setIsReplacingFile] = useState(false);
+	const [newFile, setNewFile] = useState<string | null>(null);
 
 	const handleSave = async (answerPayload: Answer) => {
 		setIsSaving(true);
@@ -77,12 +79,11 @@ export default function QuestionItem({
 	};
 
 	const handleUploadComplete = (fileUrl: string, fileName: string) => {
+		setNewFile(fileName);
 		handleSave({ ...currentAnswer, answer: 'Yes', fileUrl, fileName });
+		toast.success('File uploaded successfully');
 		setIsReplacingFile(false);
 	};
-
-	const showFileUpload =
-		questionObject.uploadRequired && currentAnswer.answer === 'Yes';
 
 	const validUntilDate = currentAnswer.answer === 'Yes';
 	return (
@@ -137,7 +138,7 @@ export default function QuestionItem({
 					{currentAnswer.fileName && !isReplacingFile ?
 						<div className="flex items-center space-x-4">
 							<PresignedDocument
-								fileName={currentAnswer.fileName ?? ''}
+								fileName={newFile ?? currentAnswer.fileName}
 								uploadApiUrl={`${import.meta.env.VITE_API_BASE_URL}/document/presignedUrl.php`}
 								directory={`compliance/${reportId}/`}
 								linkTextPrefix="Evidence"

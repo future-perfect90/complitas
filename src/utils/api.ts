@@ -404,40 +404,6 @@ export async function getProfile(userId: string) {
 	return response.json();
 }
 
-export async function getAreas() {
-	const response = await fetch(
-		`${import.meta.env.VITE_API_BASE_URL}/compliance/areas.php`,
-		{
-			method: 'GET',
-			headers: {
-				Authorization: `Bearer ${jwt}`,
-				'Content-Type': 'application/json',
-			},
-		}
-	);
-	if (!response.ok) {
-		throw new Error(`Response status: ${response.status}`);
-	}
-	return response.json();
-}
-
-export async function getQuestions(area: string) {
-	const response = await fetch(
-		`${import.meta.env.VITE_API_BASE_URL}/compliance/areaQuestions.php?area=${area}`,
-		{
-			method: 'GET',
-			headers: {
-				Authorization: `Bearer ${jwt}`,
-				'Content-Type': 'application/json',
-			},
-		}
-	);
-	if (!response.ok) {
-		throw new Error(`Response status: ${response.status}`);
-	}
-	return response.json();
-}
-
 export async function createCompliance(propertyId: string) {
 	console.log('Creating compliance for property:', propertyId);
 	const response = await fetch(
@@ -474,9 +440,9 @@ export async function getComplianceQuestionnaires(propertyId: string) {
 	return response.json();
 }
 
-export async function getComplianceQuestions(id: string) {
+export async function getComplianceQuestions(propertyId: string) {
 	const response = await fetch(
-		`${import.meta.env.VITE_API_BASE_URL}/compliance/getComplianceQuestions.php?id=${id}`,
+		`${import.meta.env.VITE_API_BASE_URL}/compliance/getComplianceQuestions.php?propertyId=${propertyId}`,
 		{
 			method: 'GET',
 			headers: {
