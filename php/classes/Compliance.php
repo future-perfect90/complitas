@@ -53,7 +53,7 @@ class Compliance
 
     public function getComplianceQuestionnaires(string $propertyId): array
     {
-        $stmt = $this->pdo->prepare("SELECT * FROM reports WHERE propertyId=:propertyId");
+        $stmt = $this->pdo->prepare("SELECT id, propertyId FROM reports WHERE propertyId=:propertyId");
         $stmt->bindParam(':propertyId', $propertyId);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -61,22 +61,20 @@ class Compliance
 
     public function getComplianceQuestions(array $propertyMetadata): array
     {
-        // Columns in compliance_questions that correspond to boolean/tinyint fields in properties table.
-        // The key is the column in 'properties' and the value is the column in 'compliance_questions'.
         $conditionalColumns = [
-            'lifts' => 'requires_lifts',
-            // 'communalGasAppliances' => 'requires_communal_gas',
-            // 'meterBank' => 'requires_meter_bank',
-            // 'carpark' => 'requires_carpark',
+            'lifts' => 'hasLifts',
+            'communalUtilityAssets' => 'hasCommunalAssets',
+            'communalGasAppliances' => 'hasCommunalGas',
+            'carpark' => 'hasBasementCarpark',
+            'voidAssets' => 'hasVoids',
         ];
 
-        $whereClauses = ['1']; // Start with a clause that is always true.
+        $whereClauses = ['1'];
 
         foreach ($conditionalColumns as $propertyColumn => $questionColumn) {
-            // Always include questions that are not conditional on this column.
+
             $baseCondition = "$questionColumn = 0 OR $questionColumn IS NULL";
 
-            // If the property has the feature, also include questions that require it.
             if (!empty($propertyMetadata[$propertyColumn])) {
                 $whereClauses[] = "($baseCondition OR $questionColumn = 1)";
             } else {
@@ -84,7 +82,7 @@ class Compliance
             }
         }
 
-        $sql = "SELECT * FROM compliance_questions WHERE " . implode(' AND ', $whereClauses);
+        $sql = "SELECT id, area, question, answerType, uploadRequired FROM compliance_questions WHERE " . implode(' AND ', $whereClauses);
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);

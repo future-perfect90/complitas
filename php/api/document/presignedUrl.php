@@ -8,5 +8,8 @@ if ($data) {
     $response = (new Document())->presignedUrl($data['fileName'], $data['fileType'] ?? null, $data['action'] ?? 'GetObject');
     $responseCode = $response['success'] ? 200 : 500;
     http_response_code($responseCode);
+    echo json_encode($response);
+} else {
+    http_response_code(400);
+    echo json_encode(['error' => 'Invalid input']);
 }
-echo json_encode($response);
