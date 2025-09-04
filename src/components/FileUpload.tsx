@@ -7,6 +7,7 @@ interface FileUploadProps {
 	onUploadComplete?: (fileUrl: string, fileName: string) => void;
 	directory?: string;
 	label?: string;
+	onClose?: () => void;
 }
 
 export default function FileUpload({
@@ -15,6 +16,7 @@ export default function FileUpload({
 	onUploadComplete,
 	directory = '',
 	label = 'Select File',
+	onClose = () => {},
 }: FileUploadProps) {
 	const [file, setFile] = useState<File | null>(null);
 	const [uploading, setUploading] = useState(false);
@@ -27,6 +29,10 @@ export default function FileUpload({
 		}
 	};
 
+	const handleCancel = () => {
+		setUploading(false);
+	};
+
 	const handleUpload = async () => {
 		if (!file) {
 			setMessage('Please select a file first.');
@@ -37,7 +43,7 @@ export default function FileUpload({
 		setMessage('');
 		try {
 			const uuid = crypto.randomUUID();
-			const savedFile = `${uuid}.${file.name.split('.').pop()}`
+			const savedFile = `${uuid}.${file.name.split('.').pop()}`;
 			const res = await fetch(uploadApiUrl, {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
@@ -83,8 +89,12 @@ export default function FileUpload({
 				disabled={uploading}
 				className="px-4 py-2 bg-blue-600 text-white rounded-lg disabled:opacity-50">
 				{uploading ? 'Uploading...' : 'Upload'}
+			</button>{' '}
+			<button
+				onClick={onClose}
+				className="px-4 py-2 bg-red-600 text-white rounded-lg disabled:opacity-50">
+				{'Cancel'}
 			</button>
-
 			{message && <p className="mt-3 text-sm text-gray-700">{message}</p>}
 		</div>
 	);
