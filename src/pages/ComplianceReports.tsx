@@ -1,39 +1,52 @@
 import { useAuth0 } from '@auth0/auth0-react';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { Button } from '../components/Button';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/Card';
-import { createCompliance, getComplianceQuestionnaires } from '../utils/api';
+import ConfirmationModal from '../components/modals/ConfirmationModal';
+import { createCompliance, getComplianceReports } from '../utils/api';
+
+interface ComplianceReport {
+	id: string;
+	propertyId: string;
+	createdAt: string;
+}
 
 export default function ComplianceReports() {
 	const { isAuthenticated } = useAuth0();
-	const [questionnaires, setQuestionnaires] = useState<
-		Array<{ id: string; propertyId: string }>
-	>([]);
+	const [reports, setReports] = useState<Array<ComplianceReport>>([]);
+	const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
 	const navigate = useNavigate();
 	const { id } = useParams();
 
 	useEffect(() => {
 		const fetchQuestionnaires = async () => {
 			try {
-				const data = await getComplianceQuestionnaires(id ?? '');
-				setQuestionnaires(data);
+				const data = await getComplianceReports(id ?? '');
+				setReports(data);
 			} catch (error) {
 				console.error('Error fetching questionnaires:', error);
 			}
 		};
 
 		if (isAuthenticated) {
-			// fetchAreas();
 			fetchQuestionnaires();
 		}
 	}, [isAuthenticated]);
 
 	const handleCreation = async () => {
-		// Logic for creating a questionnaire
 		const complianceId = await createCompliance(id ?? '');
-		console.log(complianceId);
 		navigate(`/properties/${id}/compliance-reports/${complianceId}`);
+		toast.success('New compliance report created!');
+	};
+
+	const handleOpenConfirmation = () => {
+		setIsConfirmationModalOpen(true);
+	};
+
+	const handleCloseModal = () => {
+		setIsConfirmationModalOpen(false);
 	};
 
 	return (
@@ -51,7 +64,11 @@ export default function ComplianceReports() {
 					{/* Maybe put a stop here that once a new one is created it prevents the old one from being edited? */}
 					<Button
 						label="Create questionnaire"
-						onClick={handleCreation}
+						onClick={
+							reports && reports.length >= 1 ?
+								handleOpenConfirmation
+							:	handleCreation
+						}
 						className="px-2 py-1 bg-purple-800 text-white rounded"
 					/>
 				</div>
@@ -65,24 +82,33 @@ export default function ComplianceReports() {
 					<CardContent className="space-y-2 flex">
 						{/* ...existing code for displaying fields... */}
 						<div className="flex-1 justify-left">
-							{questionnaires &&
-								questionnaires.map((questionnaire) => (
-									<div key={questionnaire.id}>
+							{reports &&
+								reports.map((report) => (
+									<div key={report.id}>
 										<h3 className="text-lg font-semibold">
-											{questionnaire.id}
+											Report from -{' '}
+											{new Date(report.createdAt).toLocaleString()} -{' '}
+											<a
+												href={`/properties/${id}/compliance-reports/${report.id}`}>
+												View Report
+											</a>
 										</h3>
-										<a
-											href={`/properties/${id}/compliance-reports/${questionnaire.id}`}>
-											View Report
-										</a>
 									</div>
 								))}
-							{/* Additional content can go here */}
-							Lets put some compliance reports here
 						</div>
 					</CardContent>
 				</Card>
 			</div>
+
+			<ConfirmationModal
+				isOpen={isConfirmationModalOpen}
+				onClose={handleCloseModal}
+				onConfirm={handleCreation}
+				title="Create New Compliance Report?"
+				message="You already have a compliance report. Do you want to create a new report?"
+				confirmText="Yes, Create It"
+				confirmButtonClass="bg-blue-600 hover:bg-blue-700"
+			/>
 		</>
 	);
 }

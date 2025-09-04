@@ -423,9 +423,9 @@ export async function createCompliance(propertyId: string) {
 	return response.json();
 }
 
-export async function getComplianceQuestionnaires(propertyId: string) {
+export async function getComplianceReports(propertyId: string) {
 	const response = await fetch(
-		`${import.meta.env.VITE_API_BASE_URL}/compliance/listQuestionnaires.php?propertyId=${propertyId}`,
+		`${import.meta.env.VITE_API_BASE_URL}/compliance/listReports.php?propertyId=${propertyId}`,
 		{
 			method: 'GET',
 			headers: {

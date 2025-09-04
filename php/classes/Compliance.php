@@ -51,9 +51,9 @@ class Compliance
         return $uuid;
     }
 
-    public function getComplianceQuestionnaires(string $propertyId): array
+    public function getComplianceReports(string $propertyId): array
     {
-        $stmt = $this->pdo->prepare("SELECT id, propertyId FROM reports WHERE propertyId=:propertyId");
+        $stmt = $this->pdo->prepare("SELECT id, propertyId, createdAt FROM reports WHERE propertyId=:propertyId ORDER BY createdAt DESC");
         $stmt->bindParam(':propertyId', $propertyId);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
