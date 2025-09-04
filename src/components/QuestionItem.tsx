@@ -49,11 +49,10 @@ export default function QuestionItem({
 			answerPayload.validUntil = currentAnswer.validUntil;
 		}
 		try {
-			console.log('Valid until date:', currentAnswer.validUntil);
-
 			await saveAnswer(answerPayload);
 			setCurrentAnswer(answerPayload);
-			setIsReplacingFile(false); // Hide upload form after successful save
+			setIsReplacingFile(false);
+			toast.success('Answer saved successfully');
 		} catch (err) {
 			setError('Failed to save. Please try again.');
 			console.error('Save failed:', err);

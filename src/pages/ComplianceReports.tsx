@@ -76,25 +76,28 @@ export default function ComplianceReports() {
 			<div className="mt-5">
 				<Card className="rounded-2xl shadow-lg">
 					<CardHeader>
-						<CardTitle className="text-xl font-semibold">Overview</CardTitle>
+						<CardTitle className="text-xl font-semibold">Reports</CardTitle>
 					</CardHeader>
 					<br />
 					<CardContent className="space-y-2 flex">
-						{/* ...existing code for displaying fields... */}
 						<div className="flex-1 justify-left">
-							{reports &&
-								reports.map((report) => (
-									<div key={report.id}>
-										<h3 className="text-lg font-semibold">
-											Report from -{' '}
-											{new Date(report.createdAt).toLocaleString()} -{' '}
-											<a
-												href={`/properties/${id}/compliance-reports/${report.id}`}>
-												View Report
-											</a>
-										</h3>
-									</div>
-								))}
+							{!reports || reports.length === 0 ?
+								<p className="text-gray-500">No compliance reports found.</p>
+							:	<>
+									{reports.map((report) => (
+										<div key={report.id}>
+											<h3 className="text-lg font-semibold">
+												Report from -{' '}
+												{new Date(report.createdAt).toLocaleString()} -{' '}
+												<a
+													href={`/properties/${id}/compliance-reports/${report.id}`}>
+													View Report
+												</a>
+											</h3>
+										</div>
+									))}
+								</>
+							}
 						</div>
 					</CardContent>
 				</Card>
