@@ -435,7 +435,7 @@ export default function Property() {
 											fileName={initial.mitigationPlan}
 											uploadApiUrl={`${import.meta.env.VITE_API_BASE_URL}/document/presignedUrl.php`}
 											directory={`property/wellMaintained/`}
-											type="Mitigation"
+											linkTextPrefix="Mitigation"
 										/>
 										{!changeMitigationPlan && (
 											<Button
@@ -481,7 +481,7 @@ export default function Property() {
 											fileName={initial.refurbishedCDM}
 											uploadApiUrl={`${import.meta.env.VITE_API_BASE_URL}/document/presignedUrl.php`}
 											directory={`property/refurbished/`}
-											type="Refurbished"
+											linkTextPrefix="Refurbished"
 										/>
 										{!changeRefurbishedCdm && (
 											<Button

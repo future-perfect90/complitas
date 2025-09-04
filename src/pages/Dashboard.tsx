@@ -58,10 +58,6 @@ export default function Dashboard() {
 				SES
 			</h2>
 			<h2>TODO::Notification endpoint to enable SNS</h2>
-			<h2>
-				TODO::Change edit answer to provide download link to current document
-				and upload new if needed.
-			</h2>
 			{isAuthenticated ?
 				<>
 					<h2 className="text-3xl">Welcome to your dashboard {user?.name}</h2>
