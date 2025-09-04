@@ -2,6 +2,8 @@
 import React, { useState } from 'react';
 import { saveAnswer } from '../utils/api';
 import FileUpload from './FileUpload';
+import PresignedDocument from './PresignedDocument';
+import TextField from './TextField';
 
 export interface Answer {
 	reportId: string;
@@ -9,6 +11,7 @@ export interface Answer {
 	answer: 'Yes' | 'No' | 'NA' | null;
 	fileUrl?: string;
 	fileName?: string;
+	validUntil?: string;
 }
 
 interface QuestionItemProps {
@@ -35,13 +38,20 @@ export default function QuestionItem({
 	);
 	const [isSaving, setIsSaving] = useState(false);
 	const [error, setError] = useState('');
+	const [isReplacingFile, setIsReplacingFile] = useState(false);
 
 	const handleSave = async (answerPayload: Answer) => {
 		setIsSaving(true);
 		setError('');
+		if (validUntilDate) {
+			answerPayload.validUntil = currentAnswer.validUntil;
+		}
 		try {
+			console.log('Valid until date:', currentAnswer.validUntil);
+
 			await saveAnswer(answerPayload);
 			setCurrentAnswer(answerPayload);
+			setIsReplacingFile(false); // Hide upload form after successful save
 		} catch (err) {
 			setError('Failed to save. Please try again.');
 			console.error('Save failed:', err);
@@ -54,6 +64,7 @@ export default function QuestionItem({
 		const newAnswer = e.target.value as Answer['answer'];
 
 		setCurrentAnswer((prev) => ({ ...prev, answer: newAnswer }));
+		console.log(newAnswer);
 
 		if (newAnswer !== 'Yes') {
 			handleSave({
@@ -67,10 +78,13 @@ export default function QuestionItem({
 
 	const handleUploadComplete = (fileUrl: string, fileName: string) => {
 		handleSave({ ...currentAnswer, answer: 'Yes', fileUrl, fileName });
+		setIsReplacingFile(false);
 	};
 
 	const showFileUpload =
 		questionObject.uploadRequired && currentAnswer.answer === 'Yes';
+
+	const validUntilDate = currentAnswer.answer === 'Yes';
 	return (
 		<div className="p-4 border-b border-gray-200 relative">
 			<div className="flex justify-between items-start">
@@ -79,7 +93,7 @@ export default function QuestionItem({
 				</p>
 				{isSaving && <span className="text-sm text-gray-400">Saving...</span>}
 			</div>
-			<div className="flex items-center space-x-4 mt-2">
+			<div className="flex items-center justify-left space-x-4 mt-2">
 				{['Yes', 'No', 'NA'].map((option) => (
 					<label
 						key={option}
@@ -96,13 +110,48 @@ export default function QuestionItem({
 						<span>{option}</span>
 					</label>
 				))}
+				{validUntilDate && (
+					<div className="flex items-center space-x-2">
+						<TextField
+							label="Valid until: "
+							type="date"
+							layout="horizontal"
+							value={
+								currentAnswer.validUntil?.split('T')[0] ??
+								new Date().toISOString().split('T')[0] ??
+								''
+							}
+							onChange={(e) => {
+								setCurrentAnswer((prev) => ({
+									...prev,
+									validUntil: e.target.value,
+								}));
+							}}
+							onBlur={() => handleSave(currentAnswer)}
+						/>
+					</div>
+				)}
 			</div>
-			{showFileUpload && (
-				<div className="mt-4 pl-4 border-l-2 border-purple-200">
-					{currentAnswer.fileUrl ?
-						<p className="text-sm text-green-600 mb-2">
-							✅ File uploaded: {currentAnswer.fileName}
-						</p>
+			{questionObject.uploadRequired && currentAnswer.answer === 'Yes' && (
+				<div className="">
+					{currentAnswer.fileName && !isReplacingFile ?
+						<div className="flex items-center space-x-4">
+							<PresignedDocument
+								fileName={currentAnswer.fileName ?? ''}
+								uploadApiUrl={`${import.meta.env.VITE_API_BASE_URL}/document/presignedUrl.php`}
+								directory={`compliance/${reportId}/`}
+								linkTextPrefix="Evidence"
+							/>
+							<button
+								onClick={() => setIsReplacingFile(true)}
+								className="text-sm text-blue-600 hover:underline">
+								<img
+									src="/public/change.svg"
+									className="w-4 h-4"
+									alt="Change"
+								/>
+							</button>
+						</div>
 					:	<FileUpload
 							uploadApiUrl={`${import.meta.env.VITE_API_BASE_URL}/document/presignedUrl.php`}
 							directory={`compliance/${reportId}/`}
@@ -112,6 +161,7 @@ export default function QuestionItem({
 					}
 				</div>
 			)}
+
 			{error && <p className="text-sm text-red-500 mt-2">{error}</p>}
 		</div>
 	);

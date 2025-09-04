@@ -5,14 +5,14 @@ interface Props {
 	uploadApiUrl: string;
 	accept?: string;
 	directory?: string;
-	type: 'Mitigation' | 'Refurbished';
+	linkTextPrefix: string;
 }
 
 const PresignedDocument: React.FC<Props> = ({
 	fileName,
 	uploadApiUrl,
 	directory,
-	type,
+	linkTextPrefix,
 }) => {
 	const [url, setUrl] = useState<string>('');
 
@@ -35,14 +35,14 @@ const PresignedDocument: React.FC<Props> = ({
 	}, []);
 
 	return (
-		<div className="mb-4">
+		<div>
 			<a
 				href={url}
 				download
 				target="_blank"
 				rel="noopener noreferrer"
 				className="text-blue-600 hover:underline text-sm font-semibold">
-				Download {type} Document
+				Download {linkTextPrefix} Document
 			</a>
 		</div>
 	);
