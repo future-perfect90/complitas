@@ -1,10 +1,10 @@
 <?php
-require_once(__DIR__ . '/../../shared/headers.php');
+require_once __DIR__ . '/../../shared/headers.php';
 
 $data = json_decode(file_get_contents("php://input"), true);
 
 if ($data) {
-    require_once(__DIR__ . '/../../classes/Database.php');
+    require_once __DIR__ . '/../../classes/Database.php';
     require_once __DIR__ . '/../../classes/Teams.php';
 
     $conn = (new Database())->connect();

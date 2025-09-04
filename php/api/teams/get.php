@@ -1,10 +1,7 @@
 <?php
 require_once __DIR__ . '/../../shared/headers.php';
-
 require_once __DIR__ . '/../../classes/Teams.php';
 require_once __DIR__ . '/../../classes/Database.php';
-
-header('Content-Type: application/json');
 
 $database = new Database();
 $pdo = $database->connect();

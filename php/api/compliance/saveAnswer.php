@@ -3,11 +3,6 @@
 require_once __DIR__ . '/../../shared/headers.php';
 require_once __DIR__ . '/../../classes/Compliance.php';
 require_once __DIR__ . '/../../classes/Database.php';
-if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
-    // A preflight request doesn't need a body, just a 200 OK status
-    http_response_code(200);
-    exit();
-}
 
 $data = json_decode(file_get_contents('php://input'), true);
 

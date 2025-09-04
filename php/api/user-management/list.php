@@ -1,7 +1,7 @@
 <?php
-require_once(__DIR__ . '/../../shared/headers.php');
-require_once(__DIR__ . '/../../classes/Database.php');
-require_once(__DIR__ . '/../../classes/User.php');
+require_once __DIR__ . '/../../shared/headers.php';
+require_once __DIR__ . '/../../classes/Database.php';
+require_once __DIR__ . '/../../classes/User.php';
 
 $db = (new Database())->connect();
 $user = new User($db);

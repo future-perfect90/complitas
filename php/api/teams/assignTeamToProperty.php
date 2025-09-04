@@ -5,10 +5,10 @@ $data = json_decode(file_get_contents("php://input"), true);
 
 if ($data) {
     require_once __DIR__ . '/../../classes/Database.php';
-require_once __DIR__ . '/../../classes/Teams.php';
+    require_once __DIR__ . '/../../classes/Teams.php';
 
-$conn = (new Database())->connect();
-$teams = new Teams($conn);
+    $conn = (new Database())->connect();
+    $teams = new Teams($conn);
 
     $propertyId = $data['propertyId'];
     $teamId = $data['teamId'];
