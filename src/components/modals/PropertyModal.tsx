@@ -33,9 +33,7 @@ const PropertyModal: React.FC<Props> = ({
 	const [telephone, setTelephone] = useState('');
 	const [email, setEmail] = useState('');
 	const [id, setId] = useState('');
-	// const [companyId, setCompanyId] = useState('');
 
-	// setCompanyId(retrievedCompanyId);
 	useEffect(() => {
 		if (initialData) {
 			setId(initialData.id || '');

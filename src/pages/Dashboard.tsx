@@ -49,16 +49,15 @@ export default function Dashboard() {
 		<>
 			<h1>Dashboard</h1>
 			<h2>TODO::Lock down API's to use Auth0 token</h2>
-			<h2>
+			{/* <h2>
 				TODO::Look at authentication, currently it says i am logged in but i
 				have no claims and i am not logged in?
-			</h2>
+			</h2> */}
 			<h2>
 				TODO::Notification endpoint to accept email address to send email via
 				SES
 			</h2>
 			<h2>TODO::Notification endpoint to enable SNS</h2>
-			
 			{isAuthenticated ?
 				<>
 					<h2 className="text-3xl">Welcome to your dashboard {user?.name}</h2>
@@ -67,10 +66,6 @@ export default function Dashboard() {
 						This is your personal dashboard where you can manage your settings
 						and view your data.
 					</p>
-					<label className="block mt-2">Name</label>
-					<h2>{user?.name}</h2>
-					<label className="block mt-2">Email</label>
-					<p>{user?.email}</p>
 				</>
 			:	'Error: Getting user information failed. Please try again later.'}
 		</>
