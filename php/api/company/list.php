@@ -14,7 +14,7 @@ if (!empty($companies)) {
     http_response_code(200);
     echo json_encode($companies);
 } else {
-    http_response_code(404);
+    http_response_code(200);
     $companies = ['message' => 'No companies found'];
     echo json_encode($companies);
 }

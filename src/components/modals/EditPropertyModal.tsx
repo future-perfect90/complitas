@@ -48,7 +48,7 @@ export default function EditPropertyModal({
 		setForm(updatedForm);
 		await onSave({ [key]: value }, false); // `false` to not close modal
 		setIsSaving(false);
-		toast.success('Saved!');
+		toast.success(`Updated!`);
 	};
 
 	const handleUploadComplete = (
@@ -117,19 +117,9 @@ export default function EditPropertyModal({
 			);
 		}
 		if (type === 'boolean') {
-			const isWellMaintained = key === 'wellMaintained';
-			const isRefurbished = key === 'refurbished';
-			const showUpload =
-				(isWellMaintained &&
-					(form.wellMaintained === true || form.wellMaintained === 1)) ||
-				(isRefurbished &&
-					(form.refurbished === true || form.refurbished === 1));
-
 			return (
 				<div className="mb-4">
-					<div className="flex items-center">
-						<Label label={label} />
-					</div>
+					<Label label={label} />
 					<div className="flex gap-4">
 						<label>
 							<input
@@ -153,73 +143,6 @@ export default function EditPropertyModal({
 							/>{' '}
 							<span className="text-gray-900">No</span>
 						</label>
-					</div>
-					{isWellMaintained && form.mitigationPlan && !changeMitigationPlan && (
-						<div className="flex items-center space-x-4">
-							<PresignedDocument
-								fileName={form.mitigationPlan}
-								uploadApiUrl={`${import.meta.env.VITE_API_BASE_URL}/document/presignedUrl.php`}
-								directory={`property/wellMaintained/`}
-								linkTextPrefix="Mitigation Plan"
-							/>
-							<button
-								type="button"
-								onClick={() => setChangeMitigationPlan(true)}
-								className="text-sm text-blue-600 hover:underline">
-								<img
-									src="/public/change.svg"
-									className="w-4 h-4"
-									alt="Change"
-								/>
-							</button>
-						</div>
-					)}
-					{isRefurbished && form.refurbishedCDM && !changeRefurbishedCdm && (
-						<div className="flex items-center space-x-4">
-							<PresignedDocument
-								fileName={form.refurbishedCDM}
-								uploadApiUrl={`${import.meta.env.VITE_API_BASE_URL}/document/presignedUrl.php`}
-								directory={`property/refurbished/`}
-								linkTextPrefix="Refurbished"
-							/>
-							<button
-								type="button"
-								onClick={() => setChangeRefurbishedCdm(true)}
-								className="text-sm text-blue-600 hover:underline">
-								<img
-									src="/public/change.svg"
-									className="w-4 h-4"
-									alt="Change"
-								/>
-							</button>
-						</div>
-					)}
-					<div className="mt-2">
-						{isWellMaintained &&
-							showUpload &&
-							(!form.mitigationPlan || changeMitigationPlan) && (
-								<FileUpload
-									uploadApiUrl={`${import.meta.env.VITE_API_BASE_URL}/document/presignedUrl.php`}
-									onUploadComplete={(url, fileName) =>
-										handleUploadComplete('mitigationPlan', url, fileName)
-									}
-									directory={`property/wellMaintained/`}
-									label="Upload Mitigation Plan"
-									onClose={() => setChangeMitigationPlan(false)}
-								/>
-							)}
-						{isRefurbished &&
-							showUpload &&
-							(!form.refurbishedCDM || changeRefurbishedCdm) && (
-								<FileUpload
-									uploadApiUrl={`${import.meta.env.VITE_API_BASE_URL}/document/presignedUrl.php`}
-									onUploadComplete={(url, fileName) =>
-										handleUploadComplete('refurbishedCDM', url, fileName)
-									}
-									directory={`property/refurbished/`}
-									label="Upload Refurbished CDM"
-								/>
-							)}
 					</div>
 				</div>
 			);
@@ -473,6 +396,13 @@ export default function EditPropertyModal({
 		fields = [];
 	}
 
+	const showWellMaintainedUpload =
+		(form.wellMaintained === true || form.wellMaintained === 1) &&
+		section === 'additional';
+	const showRefurbishedUpload =
+		(form.refurbished === true || form.refurbished === 1) &&
+		section === 'additional';
+
 	return (
 		<Modal
 			isOpen={isOpen}
@@ -486,11 +416,81 @@ export default function EditPropertyModal({
 				)}
 				{fields.map((f) => renderField(f.key, f.label, f.type))}
 
+				{showWellMaintainedUpload && (
+					<div className="mb-4">
+						<Label label="Mitigation Plan" />
+						{form.mitigationPlan && !changeMitigationPlan ?
+							<div className="flex items-center space-x-4">
+								<PresignedDocument
+									fileName={form.mitigationPlan}
+									uploadApiUrl={`${import.meta.env.VITE_API_BASE_URL}/document/presignedUrl.php`}
+									directory={`property/wellMaintained/`}
+									linkTextPrefix="Evidence"
+								/>
+								<button
+									onClick={() => setChangeMitigationPlan(true)}
+									className="text-sm text-blue-600 hover:underline">
+									<img
+										src="/public/change.svg"
+										className="w-4 h-4"
+										alt="Change"
+									/>
+								</button>
+							</div>
+						:	<FileUpload
+								uploadApiUrl={`${import.meta.env.VITE_API_BASE_URL}/document/presignedUrl.php`}
+								onUploadComplete={(url, fileName) =>
+									handleUploadComplete('mitigationPlan', url, fileName)
+								}
+								directory={`property/wellMaintained/`}
+								label="Upload Mitigation Plan"
+							/>
+						}
+					</div>
+				)}
+
+				{showRefurbishedUpload && (
+					<div className="mb-4">
+						<Label label="Refurbished CDM" />
+						{form.refurbishedCDM && !changeRefurbishedCdm ?
+							<div className="flex items-center space-x-4">
+								<PresignedDocument
+									fileName={form.refurbishedCDM}
+									uploadApiUrl={`${import.meta.env.VITE_API_BASE_URL}/document/presignedUrl.php`}
+									directory={`property/refurbished/`}
+									linkTextPrefix="Evidence"
+								/>
+								<button
+									onClick={() => setChangeRefurbishedCdm(true)}
+									className="text-sm text-blue-600 hover:underline">
+									<img
+										src="/public/change.svg"
+										className="w-4 h-4"
+										alt="Change"
+									/>
+								</button>
+							</div>
+						:	<FileUpload
+								uploadApiUrl={`${import.meta.env.VITE_API_BASE_URL}/document/presignedUrl.php`}
+								onUploadComplete={(url, fileName) =>
+									handleUploadComplete('refurbishedCDM', url, fileName)
+								}
+								directory={`property/refurbished/`}
+								label="Upload Refurbished CDM"
+							/>
+						}
+					</div>
+				)}
+
 				<div className="flex justify-end gap-2 mt-6">
 					<Button
 						label="Close"
 						onClick={onClose}
 						className="bg-gray-300 hover:bg-gray-400 text-black font-semibold py-1 px-4 rounded"
+					/>
+					<Button
+						label="Save and Close"
+						className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-4 rounded"
 					/>
 				</div>
 			</form>
