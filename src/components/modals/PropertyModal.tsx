@@ -1,3 +1,4 @@
+import { useAuth0 } from '@auth0/auth0-react';
 import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import type { Property } from '../../types';
@@ -19,6 +20,7 @@ const PropertyModal: React.FC<Props> = ({
 	onSuccess,
 	initialData,
 }) => {
+	const { user } = useAuth0();
 	const [name, setName] = useState('');
 	const [address1, setAddress1] = useState('');
 	const [address2, setAddress2] = useState('');
@@ -31,7 +33,9 @@ const PropertyModal: React.FC<Props> = ({
 	const [telephone, setTelephone] = useState('');
 	const [email, setEmail] = useState('');
 	const [id, setId] = useState('');
+	// const [companyId, setCompanyId] = useState('');
 
+	// setCompanyId(retrievedCompanyId);
 	useEffect(() => {
 		if (initialData) {
 			setId(initialData.id || '');
@@ -81,8 +85,6 @@ const PropertyModal: React.FC<Props> = ({
 			return;
 		}
 
-		const companyIdFromToken = '156659f4-77b3-11f0-910a-6a02ccf97a78';
-
 		try {
 			if (initialData) {
 				await updateProperty(
@@ -103,6 +105,8 @@ const PropertyModal: React.FC<Props> = ({
 				);
 				toast.success('Property updated successfully!');
 			} else {
+				const companyId = user?.['https://complitas.dev/company_uuid'] || '';
+				console.log('Company ID from token:', companyId);
 				await createProperty(
 					{
 						name,
@@ -117,7 +121,7 @@ const PropertyModal: React.FC<Props> = ({
 						telephone,
 						managerName,
 					},
-					companyIdFromToken
+					companyId
 				);
 				toast.success('Property created successfully!');
 			}
@@ -197,7 +201,11 @@ const PropertyModal: React.FC<Props> = ({
 					/>
 				</div>
 				<div className="flex justify-end gap-2 mt-4">
-					<Button label="Cancel" onClick={onClose} className="bg-red-400 py-2 px-5" />
+					<Button
+						label="Cancel"
+						onClick={onClose}
+						className="bg-red-400 py-2 px-5"
+					/>
 					<Button
 						label={initialData ? 'Update' : 'Create'}
 						className="bg-green-400 py-2 px-5"
