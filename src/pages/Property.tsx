@@ -29,7 +29,7 @@ export default function Property() {
 	}, [isAuthenticated]);
 
 	// Modal open handler
-	const handleEdit = (section: string, initial: any) => {
+	const handleEdit = (section: string) => {
 		setEditingSection(section);
 		setModalOpen(true);
 	};
