@@ -6,6 +6,7 @@ interface AreaCardProps {
 	areaName: string;
 	answeredCount: number;
 	totalCount: number;
+	missingUploadsCount: number;
 	onSelect: (areaName: string) => void;
 }
 
@@ -13,6 +14,7 @@ export default function AreaCard({
 	areaName,
 	answeredCount,
 	totalCount,
+	missingUploadsCount,
 	onSelect,
 }: AreaCardProps) {
 	const progress = totalCount > 0 ? (answeredCount / totalCount) * 100 : 0;
@@ -39,6 +41,11 @@ export default function AreaCard({
 							style={{ width: `${progress}%` }}></div>
 					</div>
 				</div>
+				{missingUploadsCount > 0 && (
+					<div className="text-sm text-red-600 mb-4">
+						{missingUploadsCount} action(s) required
+					</div>
+				)}
 				<Button
 					label="Open Questions"
 					onClick={() => onSelect(areaName)}

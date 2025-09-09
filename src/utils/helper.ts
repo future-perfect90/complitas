@@ -7,12 +7,14 @@ interface Question {
 interface Answer {
 	questionId: string;
 	answer: 'Yes' | 'No' | 'NA' | null;
+	fileName?: string;
 }
 
 interface AreaGroup {
 	questions: any[];
 	answeredCount: number;
 	totalCount: number;
+	missingUploadsCount: number;
 }
 
 type GroupedData = Record<string, AreaGroup>;
@@ -29,6 +31,7 @@ export const groupQuestionsByArea = (
 				questions: [],
 				answeredCount: 0,
 				totalCount: 0,
+				missingUploadsCount: 0,
 			};
 		}
 
@@ -37,6 +40,14 @@ export const groupQuestionsByArea = (
 
 		if (savedAnswer) {
 			acc[question.area].answeredCount++;
+		}
+		if (
+			savedAnswer &&
+			savedAnswer.answer === 'Yes' &&
+			(question as any).uploadRequired &&
+			!savedAnswer.fileName
+		) {
+			acc[question.area].missingUploadsCount++;
 		}
 
 		return acc;

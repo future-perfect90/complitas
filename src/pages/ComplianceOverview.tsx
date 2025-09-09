@@ -52,6 +52,7 @@ export default function ComplianceOverview() {
 						areaName={area.name}
 						answeredCount={area.answeredCount}
 						totalCount={area.totalCount}
+						missingUploadsCount={area.missingUploadsCount}
 						onSelect={setSelectedAreaName}
 					/>
 				))}
