@@ -74,3 +74,22 @@ export default tseslint.config([
 export AWS_ACCESS_KEY_ID=
 export AWS_SECRET_ACCESS_KEY=
 terraform init
+terraform apply
+```
+
+# Project Set up
+## PHP
+Install mamp - this gives you mysql and php server on local machine
+
+Point your document root to the PHP directory inside of complitas
+Choose the latest version of PHP (8.3.14)
+
+## Database
+Copy the sql from /db/seed.sql and run via PHPMyAdmin on localhost:8888/phpMyAdmin - This will create all of the database tables that have been created so far and their references along with some basic seed data
+
+## Auth0
+We are using Auth0 to login. If you have no users in your system already then you will need to create a user on Auth0 or use one of the precreated users e.g. lukejohnson32@gmail.com // Tcpip123!
+- This will allow you to start using the system straight away and allow you to create new companies and users.
+
+## React frontend
+To run the local version of the system, simply go to your terminal inside of the root directory and run `npm run dev`. This will spin up the frontend and providing your ENV is all set up correctly then you will already be able to start communicating with the backend.
