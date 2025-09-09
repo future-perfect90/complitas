@@ -47,17 +47,20 @@ export default function Dashboard() {
 	if (isLoading) return <div>Loading ...</div>;
 	return (
 		<>
-			<h1>Dashboard</h1>
+			<h1>Todo List</h1>
 			<h2>TODO::Lock down API's to use Auth0 token</h2>
-			{/* <h2>
-				TODO::Look at authentication, currently it says i am logged in but i
-				have no claims and i am not logged in?
-			</h2> */}
 			<h2>
 				TODO::Notification endpoint to accept email address to send email via
 				SES
 			</h2>
 			<h2>TODO::Notification endpoint to enable SNS</h2>
+			<h2>TODO::Implement user roles and permissions</h2>
+			<h2>TODO::Lock down Companies page to Complitas admin only</h2>
+			<h2>TODO::Lock down Users company selection to Complitas admin only</h2>
+			<h2>
+				TODO::Complitas users should be able to see all users for all companies
+			</h2>
+
 			{isAuthenticated ?
 				<>
 					<h2 className="text-3xl">Welcome to your dashboard {user?.name}</h2>
