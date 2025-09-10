@@ -1,4 +1,5 @@
 import { useAuth0 } from '@auth0/auth0-react';
+import { useAuthMeta } from '../context/AuthProvider';
 import { useLocation } from 'react-router-dom';
 import { Button } from './Button';
 
@@ -20,19 +21,24 @@ function classNames(...classes: any) {
 export default function Navigation() {
 	const location = useLocation();
 	const { isAuthenticated, loginWithRedirect, logout } = useAuth0();
-	const navigation =
+	const authMeta = useAuthMeta();
+	const isSuperAdmin = authMeta?.roles?.includes('SuperAdmin');
+
+	let navigation =
 		!isAuthenticated ?
 			[
 				{ name: 'Home', href: '/', current: true },
 				{ name: 'About', href: '/about', current: false },
 			]
 		:	[
-				{ name: 'Dashboard', href: '/dashboard', current: true },
-				{ name: 'Companies', href: '/companies', current: false },
+				{ name: 'Dashboard', href: '/dashboard', current: false },
 				{ name: 'Properties', href: '/properties', current: false },
 				{ name: 'Users', href: '/users', current: false },
 				{ name: 'Teams', href: '/teams', current: false },
 			];
+	if (isAuthenticated && isSuperAdmin) {
+		navigation.splice(1, 0, { name: 'Companies', href: '/companies', current: false });
+	}
 	return (
 		<Disclosure
 			as="nav"

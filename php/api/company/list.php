@@ -1,13 +1,21 @@
 <?php
 
 require_once __DIR__ . '/../../shared/headers.php';
+require_once __DIR__ . '/../../shared/Auth.php';
 require_once __DIR__ . '/../../classes/Database.php';
 require_once __DIR__ . '/../../classes/Company.php';
 
+$auth = new Auth();
+$token = $auth->validateToken($_SERVER['HTTP_AUTHORIZATION']);
+
+if (!$auth->hasRole('SuperAdmin', $token)) {
+    http_response_code(403);
+    echo json_encode(['message' => 'Forbidden: You do not have access to this resource.']);
+    exit();
+}
+
 $db = (new Database())->connect();
 $company = new Company($db);
-$jwt = $_SERVER["HTTP_AUTHORIZATION"];
-// $variable = (new Conf())->authenticateToken(token: $jwt);
 $companies = $company->listAll();
 
 if (!empty($companies)) {

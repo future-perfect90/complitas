@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
+import { useAuthMeta } from '../../context/AuthProvider';
 import type { Company, User } from '../../types';
 import { createUser, getCompanies } from '../../utils/api';
 import { Button } from '../Button';
@@ -25,6 +26,9 @@ const UserModal: React.FC<Props> = ({
 	const [password, setPassword] = useState('');
 	const [companies, setCompanies] = useState<Company[]>([]);
 	const [selectedCompany, setSelectedCompany] = useState('');
+	const authMeta = useAuthMeta();
+	const companyUuid = authMeta?.companyUuid || '';
+	const isSuperAdmin = authMeta?.roles?.includes('SuperAdmin');
 
 	useEffect(() => {
 		if (initialData) {
@@ -39,18 +43,20 @@ const UserModal: React.FC<Props> = ({
 	}, [initialData, isOpen]);
 
 	useEffect(() => {
-		if (isOpen && !initialData) {
+		if (isOpen && isSuperAdmin && !initialData) {
 			const fetchCompanies = async () => {
 				try {
-					const data = await getCompanies();
-					setCompanies(data);
+					const companiesData = await getCompanies();
+					setCompanies(companiesData);
 				} catch (error) {
 					toast.error('Failed to load companies.');
 				}
 			};
 			fetchCompanies();
+		} else {
+			setSelectedCompany(companyUuid);
 		}
-	}, [isOpen, initialData]);
+	}, [isOpen, isSuperAdmin, initialData, companyUuid]);
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
@@ -62,7 +68,8 @@ const UserModal: React.FC<Props> = ({
 			return;
 		}
 
-		if (!initialData && !selectedCompany) {
+		const companyToAssign = isSuperAdmin ? selectedCompany : companyUuid;
+		if (!companyToAssign) {
 			toast.error('Please select a company.');
 			return;
 		}
@@ -77,7 +84,7 @@ const UserModal: React.FC<Props> = ({
 						email,
 						password,
 					},
-					selectedCompany
+					companyToAssign
 				);
 				toast.success('User created successfully!');
 			}
@@ -117,23 +124,25 @@ const UserModal: React.FC<Props> = ({
 								value={password}
 								required
 							/>
-							<div className="">
-								<Label label="Company" />
-								<select
-									value={selectedCompany}
-									onChange={(e) => setSelectedCompany(e.target.value)}
-									className="w-full border rounded px-2 py-2 text-gray-900"
-									required>
-									<option value="" disabled>
-										Select a company
-									</option>
-									{companies.map((company) => (
-										<option key={company.id} value={company.id}>
-											{company.name}
+							{isSuperAdmin && (
+								<div className="">
+									<Label label="Company" />
+									<select
+										value={selectedCompany}
+										onChange={(e) => setSelectedCompany(e.target.value)}
+										className="w-full border rounded px-2 py-2 text-gray-900"
+										required>
+										<option value="" disabled>
+											Select a company
 										</option>
-									))}
-								</select>
-							</div>
+										{companies.map((company) => (
+											<option key={company.id} value={company.id}>
+												{company.name}
+											</option>
+										))}
+									</select>
+								</div>
+							)}
 						</>
 					)}
 				</div>

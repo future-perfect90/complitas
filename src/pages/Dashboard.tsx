@@ -2,31 +2,9 @@ import { useAuth0 } from '@auth0/auth0-react';
 import { useEffect } from 'react';
 
 export default function Dashboard() {
-	const {
-		user,
-		isAuthenticated,
-		isLoading,
-		getAccessTokenWithPopup,
-		getIdTokenClaims,
-	} = useAuth0();
+	const { user, isAuthenticated, isLoading, getIdTokenClaims } = useAuth0();
 
 	useEffect(() => {
-		const fetchToken = async () => {
-			try {
-				// Opens a small popup and gets the token without redirect
-				const token = await getAccessTokenWithPopup({
-					authorizationParams: {
-						audience: import.meta.env.VITE_AUTH0_AUDIENCE,
-					},
-				});
-
-				// const user = await getCurrentUser();
-				localStorage.setItem('auth_token', token || '');
-			} catch (err) {
-				console.error('Token fetch error', err);
-			}
-		};
-
 		const fetchClaims = async () => {
 			const claims = await getIdTokenClaims();
 			const uuid =
@@ -39,10 +17,9 @@ export default function Dashboard() {
 		};
 
 		if (isAuthenticated) {
-			fetchToken();
 			fetchClaims();
 		}
-	}, [isAuthenticated, getAccessTokenWithPopup, getIdTokenClaims]);
+	}, [isAuthenticated, getIdTokenClaims]);
 
 	if (isLoading) return <div>Loading ...</div>;
 	return (

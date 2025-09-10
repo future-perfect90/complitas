@@ -8,20 +8,20 @@ import './styles/index.css';
 
 createRoot(document.getElementById('root')!).render(
 	<StrictMode>
-		<Auth0Provider
-			domain={import.meta.env.VITE_AUTH0_DOMAIN}
-			clientId={import.meta.env.VITE_AUTH0_CLIENT_ID}
-			authorizationParams={{
-				redirect_uri: `${window.location.origin}/dashboard`,
-				audience: `${import.meta.env.VITE_AUTH0_AUDIENCE}`,
-				scope: 'read:current_user_metadata',
-			}}
-			cacheLocation="localstorage"
-			useRefreshTokens={true}>
-			<BrowserRouter>
+		<BrowserRouter>
+			<Auth0Provider
+				domain={import.meta.env.VITE_AUTH0_DOMAIN}
+				clientId={import.meta.env.VITE_AUTH0_CLIENT_ID}
+				authorizationParams={{
+					redirect_uri: `${window.location.origin}/dashboard`,
+					audience: `${import.meta.env.VITE_AUTH0_AUDIENCE}`,
+					scope: 'read:current_user_metadata',
+				}}
+				cacheLocation="localstorage"
+				useRefreshTokens={true}>
 				<App />
-				<ToastContainer position="top-right" autoClose={2000} hideProgressBar />
-			</BrowserRouter>
-		</Auth0Provider>
+			</Auth0Provider>
+			<ToastContainer position="top-right" autoClose={2000} hideProgressBar />
+		</BrowserRouter>
 	</StrictMode>
 );

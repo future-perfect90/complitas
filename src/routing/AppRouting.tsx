@@ -12,6 +12,7 @@ import TeamList from '../pages/TeamList';
 import UserList from '../pages/UserManagementList';
 import PrivateRoute from './PrivateRoute';
 import PublicRoute from './PublicRoute';
+import RoleBasedRoute from './RoleBasedRoute';
 const AppRoutes = () => {
 	const appRoutes: RouteObject[] = [
 		{
@@ -25,7 +26,10 @@ const AppRoutes = () => {
 			element: <PrivateRoute />,
 			children: [
 				{ path: '/dashboard', element: <Dashboard /> },
-				{ path: '/companies', element: <CompanyList /> },
+				{
+					element: <RoleBasedRoute allowedRoles={['SuperAdmin']} />,
+					children: [{ path: '/companies', element: <CompanyList /> }],
+				},
 				{ path: '/properties', element: <PropertyList /> },
 				{ path: '/properties/:id', element: <Property /> },
 				{
