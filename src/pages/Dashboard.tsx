@@ -31,11 +31,8 @@ export default function Dashboard() {
 				SES
 			</h2>
 			<h2>TODO::Notification endpoint to enable SNS</h2>
-			<h2>TODO::Implement user roles and permissions</h2>
-			<h2>TODO::Lock down Companies page to Complitas admin only</h2>
-			<h2>TODO::Lock down Users company selection to Complitas admin only</h2>
 			<h2>
-				TODO::Complitas users should be able to see all users for all companies
+				TODO::Complitas users should be able to see all users for all companies with pagination
 			</h2>
 
 			{isAuthenticated ?

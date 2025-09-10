@@ -16,7 +16,6 @@ const RoleBasedRoute: React.FC<RoleBasedRouteProps> = ({ allowedRoles }) => {
 	const userRoles = authMeta?.roles || [];
 	const isAllowed = userRoles.some((role) => allowedRoles.includes(role));
 
-	console.log('Is user allowed:', isAllowed);
 	if (!isAllowed) {
 		return <Navigate to="/dashboard" replace />;
 	}
