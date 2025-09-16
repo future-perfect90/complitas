@@ -18,6 +18,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 		isAuthenticated,
 		getIdTokenClaims,
 		isLoading: isAuth0Loading,
+		getAccessTokenWithPopup,
+		getAccessTokenSilently,
 	} = useAuth0();
 	const [meta, setMeta] = useState<AuthMeta>({
 		isAuthenticated: false,
@@ -26,6 +28,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 	});
 
 	useEffect(() => {
+		//TODO::Change to get token silently
+		getAccessTokenSilently(); //get a token because i am working on localhost
+
 		// If the Auth0 SDK is still loading, our provider is also loading.
 		if (isAuth0Loading) {
 			setMeta((prev) => ({ ...prev, isLoading: true }));

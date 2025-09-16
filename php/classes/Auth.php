@@ -4,6 +4,7 @@ use Firebase\JWT\JWT;
 use Firebase\JWT\JWK;
 
 require_once __DIR__ . '/../../vendor/autoload.php';
+require_once __DIR__ . '/Config.php';
 
 class Auth
 {
@@ -29,7 +30,7 @@ class Auth
             $jwksContent = file_get_contents("https://" . $_ENV['VITE_AUTH0_DOMAIN'] . "/.well-known/jwks.json");
             $keys = JWK::parseKeySet(json_decode($jwksContent, true));
             $decodedToken = JWT::decode($token, $keys);
-            if ($decodedToken->iss !== "https://{$_ENV['VITE_AUTH0_DOMAIN']}/" || !in_array($_ENV['VITE_AUTH0_AUDIENCE'], $decodedToken->aud)) {
+            if ($decodedToken->iss !== "https://{$_ENV['VITE_AUTH0_DOMAIN']}/" || $decodedToken->exp < time() || !in_array($_ENV['VITE_AUTH0_AUDIENCE'], $decodedToken->aud)) {
                 return null;
             }
             return $decodedToken;

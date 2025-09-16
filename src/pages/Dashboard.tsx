@@ -15,7 +15,6 @@ export default function Dashboard() {
 			console.log('Company UUID from token:', companyId);
 			// Store uuid in Context or global state for API calls
 		};
-
 		if (isAuthenticated) {
 			fetchClaims();
 		}
@@ -24,15 +23,14 @@ export default function Dashboard() {
 	if (isLoading) return <div>Loading ...</div>;
 	return (
 		<>
-			<h1>Todo List</h1>
-			<h2>TODO::Lock down API's to use Auth0 token</h2>
-			<h2>
+			<h1>Todo List</h1>			<h2>
 				TODO::Notification endpoint to accept email address to send email via
 				SES
 			</h2>
 			<h2>TODO::Notification endpoint to enable SNS</h2>
 			<h2>
-				TODO::Complitas users should be able to see all users for all companies with pagination
+				TODO::Complitas users should be able to see all users for all companies
+				with pagination
 			</h2>
 
 			{isAuthenticated ?

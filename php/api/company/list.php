@@ -1,7 +1,7 @@
 <?php
 
 require_once __DIR__ . '/../../shared/headers.php';
-require_once __DIR__ . '/../../shared/Auth.php';
+require_once __DIR__ . '/../../classes/Auth.php';
 require_once __DIR__ . '/../../classes/Database.php';
 require_once __DIR__ . '/../../classes/Company.php';
 

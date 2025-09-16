@@ -6,6 +6,15 @@ require_once __DIR__ . '/../../classes/Teams.php';
 require_once __DIR__ . '/../../classes/User.php';
 require_once __DIR__ . '/../../classes/Properties.php';
 require_once __DIR__ . '/../../classes/Database.php';
+require_once __DIR__ . '/../../classes/Auth.php';
+
+$auth = new Auth();
+$token = $auth->validateToken($_SERVER['HTTP_AUTHORIZATION']);
+if (empty($token)) {
+    http_response_code(401);
+    echo json_encode(['message' => 'Unauthorized']);
+    exit();
+}
 
 $db = (new Database())->connect();
 
