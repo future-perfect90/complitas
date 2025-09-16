@@ -55,6 +55,7 @@ const defaultStyles = {
 			color: 'white',
 		},
 	}),
+	menuPortal: (provided: any) => ({ ...provided, zIndex: 9999 }),
 };
 
 const MultiSelect: React.FC<MultiSelectProps> = ({
