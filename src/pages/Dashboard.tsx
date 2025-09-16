@@ -1,38 +1,16 @@
 import { useAuth0 } from '@auth0/auth0-react';
-import { useEffect } from 'react';
 
 export default function Dashboard() {
-	const { user, isAuthenticated, isLoading, getIdTokenClaims } = useAuth0();
+	const { user, isAuthenticated } = useAuth0();
 
-	useEffect(() => {
-		const fetchClaims = async () => {
-			const claims = await getIdTokenClaims();
-			const uuid =
-				claims ? claims['https://complitas.dev/user_uuid'] : undefined;
-			const companyId =
-				claims ? claims['https://complitas.dev/company_uuid'] : undefined;
-			console.log('User UUID from token:', uuid);
-			console.log('Company UUID from token:', companyId);
-			// Store uuid in Context or global state for API calls
-		};
-		if (isAuthenticated) {
-			fetchClaims();
-		}
-	}, [isAuthenticated, getIdTokenClaims]);
-
-	if (isLoading) return <div>Loading ...</div>;
 	return (
 		<>
-			<h1>Todo List</h1>			<h2>
+			<h1>Todo List</h1>{' '}
+			<h2>
 				TODO::Notification endpoint to accept email address to send email via
 				SES
 			</h2>
 			<h2>TODO::Notification endpoint to enable SNS</h2>
-			<h2>
-				TODO::Complitas users should be able to see all users for all companies
-				with pagination
-			</h2>
-
 			{isAuthenticated ?
 				<>
 					<h2 className="text-3xl">Welcome to your dashboard {user?.name}</h2>

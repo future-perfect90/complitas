@@ -12,10 +12,12 @@ const UserList: React.FC = () => {
 	const [editData, setEditData] = useState<User | undefined>(undefined);
 	const authMeta = useAuthMeta();
 	const companyUuid = authMeta?.companyUuid || '';
+	const isSuperAdmin = authMeta?.roles?.includes('SuperAdmin');
 
 	const fetchUsers = async (companyUuid: string) => {
 		try {
 			const data = await getUsers(companyUuid);
+			console.log(data, companyUuid);
 			setUsers(data);
 		} catch {
 			toast.error('Failed to load users.');
@@ -23,10 +25,10 @@ const UserList: React.FC = () => {
 	};
 
 	useEffect(() => {
-		if (companyUuid) {
+		if (companyUuid || isSuperAdmin) {
 			fetchUsers(companyUuid);
 		}
-	}, [companyUuid]);
+	}, [companyUuid, isSuperAdmin]);
 
 	// const handleEdit = async (id: string) => {
 	// 	try {
@@ -69,7 +71,9 @@ const UserList: React.FC = () => {
 						<tr>
 							<th className="px-4 py-2 text-left text-slate-800">Name</th>
 							<th className="px-4 py-2 text-left text-slate-800">Email</th>
-							<th className="px-4 py-2 text-slate-800">Actions</th>
+							{isSuperAdmin && (
+								<th className="px-4 py-2 text-left text-slate-800">Company</th>
+							)}
 						</tr>
 					</thead>
 					<tbody>
@@ -78,6 +82,9 @@ const UserList: React.FC = () => {
 								<tr key={c.id} className="border-t">
 									<td className="px-4 py-2 text-slate-800">{c.name}</td>
 									<td className="px-4 py-2 text-slate-800">{c.email}</td>
+									{isSuperAdmin && (
+										<td className="px-4 py-2 text-slate-800">{c.company}</td>
+									)}
 									{/* <td className="px-4 py-2 flex gap-2">
 										<button
 											onClick={() => c.id && handleEdit(c.id)}

@@ -75,6 +75,7 @@ export interface User {
 	name: string;
 	email: string;
 	password: string;
+	company?: string;
 }
 
 export interface Team {

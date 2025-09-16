@@ -8,9 +8,9 @@ require_once __DIR__ . '/../../classes/Auth.php';
 
 $auth = new Auth();
 $token = $auth->validateToken($_SERVER['HTTP_AUTHORIZATION']);
-if (empty($token)) {
-    http_response_code(401);
-    echo json_encode(['message' => 'Unauthorized']);
+if (!$auth->hasRole('SuperAdmin', $token)) {
+    http_response_code(403);
+    echo json_encode(['message' => 'Forbidden: You do not have access to this resource.']);
     exit();
 }
 

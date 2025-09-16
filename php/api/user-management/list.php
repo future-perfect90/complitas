@@ -11,9 +11,20 @@ if (empty($token)) {
     echo json_encode(['message' => 'Unauthorized']);
     exit();
 }
+$companyId = '';
+$superAdmin = $auth->hasRole('SuperAdmin', $token);
+if (!$superAdmin) {
+    $companyId = $_GET['companyId'];
+    if (empty($companyId)) {
+        http_response_code(401);
+        echo json_encode(['message' => 'Company ID should be supplied']);
+        exit();
+    }
+}
+
 $db = (new Database())->connect();
 $user = new User($db);
-$companyId = $_GET['companyId'];
+
 
 $users = $user->listAll(companyId: $companyId);
 

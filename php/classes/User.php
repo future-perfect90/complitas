@@ -76,10 +76,20 @@ class User
         }
     }
 
-    public function listAll(string $companyId): array
+    public function listAll(?string $companyId = ''): array
     {
-        $stmt = $this->pdo->prepare("SELECT id, name, email FROM user where companyId = :company_id");
-        $stmt->bindParam(':company_id', $companyId);
+        $query = 'SELECT u.id, u.name, u.email, c.name AS company FROM user u JOIN companies c on u.companyId = c.id';
+        if (!empty($companyId)) {
+            $query .= ' where companyId = :company_id';
+        }
+        $query .= ' ORDER BY c.name ASC';
+
+        $stmt = $this->pdo->prepare($query);
+
+        if (!empty($companyId)) {
+            $stmt->bindParam(':company_id', $companyId);
+        }
+
         $stmt->execute();
 
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
