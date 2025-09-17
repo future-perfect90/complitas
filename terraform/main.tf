@@ -137,7 +137,7 @@ resource "aws_iam_policy" "notification_sender_policy" {
           "sns:Publish"
         ],
         Effect   = "Allow",
-        Resource = aws_sns_topic.user_notifications_sms.arn
+        Resource = "*" # Required to publish directly to phone numbers
       }
     ]
   })

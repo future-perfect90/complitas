@@ -33,4 +33,9 @@ class Conf
 
         ];
     }
+
+    public function awsConfig(): array
+    {
+        return [ 'region' => $_ENV['AWS_REGION'] ];
+    }
 }
