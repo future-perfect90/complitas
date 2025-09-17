@@ -120,6 +120,11 @@ resource "aws_ses_domain_identity" "notification_domain" {
   domain = "complitas.co.uk"
 }
 
+resource "aws_ses_domain_mail_from" "mail_from_domain" {
+  domain           = aws_ses_domain_identity.notification_domain.domain
+  mail_from_domain = "bounce.${aws_ses_domain_identity.notification_domain.domain}"
+}
+
 # -----------------------------------------------------------------------------
 # STEP 2: Set up DKIM (DomainKeys Identified Mail). This helps improve
 # email deliverability and proves your emails aren't forged.
