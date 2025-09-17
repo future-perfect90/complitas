@@ -95,12 +95,6 @@ resource "aws_s3_bucket_cors_configuration" "this" {
   }
 }
 
-# -----------------------------------------------------------------------------
-# AWS SNS (Simple Notification Service) FOR SMS MESSAGES
-# -----------------------------------------------------------------------------
-# This creates an SNS topic. Your application will publish messages to this
-# topic's ARN (Amazon Resource Name) to send notifications.
-# -----------------------------------------------------------------------------
 resource "aws_sns_topic" "user_notifications_sms" {
   name = "user-notifications-sms-topic"
 
@@ -110,12 +104,6 @@ resource "aws_sns_topic" "user_notifications_sms" {
   }
 }
 
-# -----------------------------------------------------------------------------
-# AWS SES (Simple Email Service) FOR EMAIL MESSAGES
-# -----------------------------------------------------------------------------
-# STEP 1: Verify a domain you own. This proves to AWS that you have the
-# right to send emails on behalf of this domain.
-# -----------------------------------------------------------------------------
 resource "aws_ses_domain_identity" "notification_domain" {
   domain = "complitas.co.uk"
 }
@@ -125,27 +113,10 @@ resource "aws_ses_domain_mail_from" "mail_from_domain" {
   mail_from_domain = "bounce.${aws_ses_domain_identity.notification_domain.domain}"
 }
 
-# -----------------------------------------------------------------------------
-# STEP 2: Set up DKIM (DomainKeys Identified Mail). This helps improve
-# email deliverability and proves your emails aren't forged.
-#
-# !! ACTION REQUIRED !!
-# After you run `terraform apply`, Terraform will output DKIM tokens.
-# You MUST add these as CNAME records in your domain's DNS settings
-# (e.g., in AWS Route 53, GoDaddy, Cloudflare, etc.).
-# Email sending will not be fully functional until this is complete.
-# -----------------------------------------------------------------------------
 resource "aws_ses_domain_dkim" "notification_domain_dkim" {
   domain = aws_ses_domain_identity.notification_domain.domain
 }
 
-# -----------------------------------------------------------------------------
-# IAM PERMISSIONS FOR YOUR APPLICATION
-# -----------------------------------------------------------------------------
-# Your application (e.g., a Lambda function, an EC2 instance) needs
-# permissions to use SES and SNS. This policy grants the necessary access.
-# You would attach this policy to the IAM role your application uses.
-# -----------------------------------------------------------------------------
 resource "aws_iam_policy" "notification_sender_policy" {
   name        = "NotificationSenderPolicy"
   description = "Allows sending notifications via SES and SNS"
@@ -172,11 +143,6 @@ resource "aws_iam_policy" "notification_sender_policy" {
   })
 }
 
-# -----------------------------------------------------------------------------
-# OUTPUTS
-# -----------------------------------------------------------------------------
-# These outputs provide the critical information you'll need after deployment.
-# -----------------------------------------------------------------------------
 output "sns_topic_arn" {
   description = "The ARN of the SNS topic for SMS notifications."
   value       = aws_sns_topic.user_notifications_sms.arn
@@ -190,4 +156,23 @@ output "ses_domain_identity_arn" {
 output "ses_dkim_dns_records" {
   description = "DKIM CNAME records to add to your DNS provider."
   value       = aws_ses_domain_dkim.notification_domain_dkim.dkim_tokens
+}
+
+output "ses_domain_verification_record" {
+  description = "The name and value for the TXT record to verify domain ownership with SES."
+  value = {
+    name  = "_amazonses.${aws_ses_domain_identity.notification_domain.id}"
+    value = aws_ses_domain_identity.notification_domain.verification_token
+    type  = "TXT"
+  }
+}
+
+output "ses_mail_from_mx_record" {
+  description = "The MX record for the custom MAIL FROM domain."
+  value       = "10 feedback-smtp.${local.region}.amazonses.com"
+}
+
+output "ses_mail_from_spf_record" {
+  description = "The TXT/SPF record for the custom MAIL FROM domain."
+  value       = "\"v=spf1 include:amazonses.com ~all\""
 }
