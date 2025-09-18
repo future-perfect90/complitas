@@ -5,9 +5,8 @@ export default function Dashboard() {
 
 	return (
 		<>
-			<h1>Todo List</h1> 
+			<h1>Todo List</h1>
 			<h2>TODO::Notification endpoint to enable SNS</h2>
-			<h2>TODO::Store all numbers as international format</h2>
 			{isAuthenticated ?
 				<>
 					<h2 className="text-3xl">Welcome to your dashboard {user?.name}</h2>
