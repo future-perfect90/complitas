@@ -5,6 +5,7 @@ import type { Property } from '../../types';
 import { createProperty, updateProperty } from '../../utils/api';
 import { Button } from '../Button';
 import Modal from '../Modal';
+import Telephone from '../Telephone';
 import TextField from '../TextField';
 
 interface Props {
@@ -184,10 +185,10 @@ const PropertyModal: React.FC<Props> = ({
 						value={managerName}
 						onChange={(e: any) => setManagerName(e.target.value)}
 					/>
-					<TextField
+					<Telephone
 						label="Telephone Number"
 						value={telephone}
-						onChange={(e: any) => setTelephone(e.target.value)}
+						onChange={(telephone) => setTelephone(telephone)}
 						required
 					/>
 					<TextField

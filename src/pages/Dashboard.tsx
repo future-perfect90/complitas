@@ -5,11 +5,7 @@ export default function Dashboard() {
 
 	return (
 		<>
-			<h1>Todo List</h1>{' '}
-			<h2>
-				TODO::Notification endpoint to accept email address to send email via
-				SES
-			</h2>
+			<h1>Todo List</h1> 
 			<h2>TODO::Notification endpoint to enable SNS</h2>
 			<h2>TODO::Store all numbers as international format</h2>
 			{isAuthenticated ?

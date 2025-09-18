@@ -7,6 +7,7 @@ import FileUpload from '../FileUpload';
 import Modal from '../Modal';
 import PresignedImage from '../PresignedImage';
 import TextField from '../TextField';
+import Telephone from '../Telephone';
 
 interface Props {
 	isOpen: boolean;
@@ -198,10 +199,10 @@ const CompanyModal: React.FC<Props> = ({
 						value={companyRegNo}
 						onChange={(e: any) => setCompanyRegNo(e.target.value)}
 					/>
-					<TextField
+					<Telephone
 						label="Telephone Number"
 						value={telephone}
-						onChange={(e: any) => setTelephone(e.target.value)}
+						onChange={(telephone) => setTelephone(telephone)}
 						required
 					/>
 					<TextField

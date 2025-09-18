@@ -6,6 +6,7 @@ import FileUpload from '../FileUpload';
 import Label from '../Label';
 import Modal from '../Modal';
 import PresignedDocument from '../PresignedDocument';
+import Telephone from '../Telephone';
 import TextField from '../TextField';
 
 interface EditPropertyModalProps {
@@ -81,6 +82,18 @@ export default function EditPropertyModal({
 						type={type}
 					/>
 				</div>
+			);
+		}
+		if (type === 'telephone') {
+			return (
+				<Telephone
+					label={label}
+					value={form[key as keyof Property] as string}
+					onChange={(telephone) =>
+						handleFieldChange(key as keyof Property, telephone)
+					}
+					required
+				/>
 			);
 		}
 		if (type === 'date') {
@@ -215,7 +228,7 @@ export default function EditPropertyModal({
 			{ key: 'designDate', label: 'Design Date', type: 'date' },
 			{ key: 'managerName', label: 'Site Contact Name', type: 'text' },
 			{ key: 'email', label: 'Site Contact Email', type: 'text' },
-			{ key: 'telephone', label: 'Site Contact Telephone', type: 'text' },
+			{ key: 'telephone', label: 'Site Contact Telephone', type: 'telephone' },
 			{
 				key: 'uniqueReferenceNumber',
 				label: 'Unique Reference Number',
@@ -278,7 +291,7 @@ export default function EditPropertyModal({
 				{
 					key: 'principleTelephone',
 					label: 'Principle Telephone',
-					type: 'text',
+					type: 'telephone',
 				},
 				{
 					key: 'principleAddress',
@@ -322,7 +335,7 @@ export default function EditPropertyModal({
 			{
 				key: 'managerTelephone',
 				label: 'Property Manager Telephone',
-				type: 'text',
+				type: 'telephone',
 			},
 			{ key: 'emergencyName', label: 'Emergency Contact Name', type: 'text' },
 			{
@@ -338,7 +351,7 @@ export default function EditPropertyModal({
 			{
 				key: 'emergencyTelephone',
 				label: 'Emergency Contact Telephone',
-				type: 'text',
+				type: 'telephone',
 			},
 			{
 				key: 'localFireName',
@@ -358,7 +371,7 @@ export default function EditPropertyModal({
 			{
 				key: 'localFireTelephone',
 				label: 'Local Fire Authority Telephone',
-				type: 'text',
+				type: 'telephone',
 			},
 		];
 	} else if (section === 'audit') {
@@ -488,10 +501,13 @@ export default function EditPropertyModal({
 						onClick={onClose}
 						className="bg-gray-300 hover:bg-gray-400 text-black font-semibold py-1 px-4 rounded"
 					/>
-					{/* <Button
-						label="Save and Close"
-						className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-4 rounded"
-					/> */}
+					{section === 'basic' ||
+						(section === 'contacts' && (
+							<Button
+								label="Save and Close"
+								className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-4 rounded"
+							/>
+						))}
 				</div>
 			</form>
 		</Modal>

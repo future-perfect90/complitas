@@ -168,21 +168,33 @@ export default function PropertyDetails({
 					<div className="flex-1 justify-left">
 						<p className="text-sm text-gray-500 dark:text-gray-400">Lifts</p>
 						<p className="text-gray-900 dark:text-gray-100">
-							{property.lifts ? 'Yes' : 'No'}
+							{property.lifts === null || '' ?
+								'Not set'
+							: property.lifts ?
+								'Yes'
+							:	'No'}
 						</p>
 						<br />
 						<p className="text-sm text-gray-500 dark:text-gray-400">
 							Basement Car park
 						</p>
 						<p className="text-gray-900 dark:text-gray-100">
-							{property.carpark ? 'Yes' : 'No'}
+							{property.carpark === null || '' ?
+								'Not set'
+							: property.carpark ?
+								'Yes'
+							:	'No'}
 						</p>
 						<br />
 						<p className="text-sm text-gray-500 dark:text-gray-400">
 							Communal Utility Assets
 						</p>
 						<p className="text-gray-900 dark:text-gray-100">
-							{property.communalUtilityAssets ? 'Yes' : 'No'}
+							{property.communalUtilityAssets === null || '' ?
+								'Not set'
+							: property.communalUtilityAssets ?
+								'Yes'
+							:	'No'}
 						</p>
 					</div>
 					<div className="justify-center items-center flex-1">
@@ -190,21 +202,33 @@ export default function PropertyDetails({
 							Communal Gas Appliances
 						</p>
 						<p className="text-gray-900 dark:text-gray-100">
-							{property.communalGasAppliances ? 'Yes' : 'No'}
+							{property.communalGasAppliances === null || '' ?
+								'Not set'
+							: property.communalGasAppliances ?
+								'Yes'
+							:	'No'}
 						</p>
 						<br />
 						<p className="text-sm text-gray-500 dark:text-gray-400">
 							Meter bank
 						</p>
 						<p className="text-gray-900 dark:text-gray-100">
-							{property.meterBank ? 'Yes' : 'No'}
+							{property.meterBank === null || '' ?
+								'Not set'
+							: property.meterBank ?
+								'Yes'
+							:	'No'}
 						</p>
 						<br />
 						<p className="text-sm text-gray-500 dark:text-gray-400">
 							Assets in voids or boxing?
 						</p>
 						<p className="text-gray-900 dark:text-gray-100">
-							{property.voidAssets ? 'Yes' : 'No'}
+							{property.voidAssets === null || '' ?
+								'Not set'
+							: property.voidAssets ?
+								'Yes'
+							:	'No'}
 						</p>
 					</div>
 					<div className="justify-center items-center flex-1">
@@ -212,14 +236,22 @@ export default function PropertyDetails({
 							Well maintained?
 						</p>
 						<p className="text-gray-900 dark:text-gray-100">
-							{property.wellMaintained ? 'Yes' : 'No'}
+							{property.wellMaintained === null || '' ?
+								'Not set'
+							: property.wellMaintained ?
+								'Yes'
+							:	'No'}
 						</p>
 						<br />
 						<p className="text-sm text-gray-500 dark:text-gray-400">
 							Refurbished?
 						</p>
 						<p className="text-gray-900 dark:text-gray-100">
-							{property.refurbished ? 'Yes' : 'No'}
+							{property.refurbished === null || '' ?
+								'Not set'
+							: property.refurbished ?
+								'Yes'
+							:	'No'}
 						</p>
 					</div>
 				</CardContent>
@@ -301,39 +333,63 @@ export default function PropertyDetails({
 							Log Book/CDM Folder
 						</p>
 						<p className="text-gray-900 dark:text-gray-100">
-							{property.logBook ? 'Yes' : 'No'}
+							{property.logBook === null || '' ?
+								'Not set'
+							: property.logBook ?
+								'Yes'
+							:	'No'}
 						</p>
 						<br />
 						<p className="text-sm text-gray-500 dark:text-gray-400">
 							Fire Safety Log Book
 						</p>
 						<p className="text-gray-900 dark:text-gray-100">
-							{property.fireSafetyLogBook ? 'Yes' : 'No'}
+							{property.fireSafetyLogBook === null || '' ?
+								'Not set'
+							: property.fireSafetyLogBook ?
+								'Yes'
+							:	'No'}
 						</p>
 						<br />
 						<p className="text-sm text-gray-500 dark:text-gray-400">
 							Waste Electrical and Electronic Equipment Audit
 						</p>
 						<p className="text-gray-900 dark:text-gray-100">
-							{property.electronicAuditCompleted ? 'Yes' : 'No'}
+							{property.electronicAuditCompleted === null || '' ?
+								'Not set'
+							: property.electronicAuditCompleted ?
+								'Yes'
+							:	'No'}
 						</p>
 					</div>
 					<div className="justify-center items-center flex-1">
 						<p className="text-sm text-gray-500 dark:text-gray-400">EPC</p>
 						<p className="text-gray-900 dark:text-gray-100">
-							{property.epc ? 'Yes' : 'No'}
+							{property.epc === null || '' ?
+								'Not set'
+							: property.epc ?
+								'Yes'
+							:	'No'}
 						</p>
 						<br />
 						<p className="text-sm text-gray-500 dark:text-gray-400">
 							Energy Certificates (DEC's)
 						</p>
 						<p className="text-gray-900 dark:text-gray-100">
-							{property.energyCertificates ? 'Yes' : 'No'}
+							{property.energyCertificates === null || '' ?
+								'Not set'
+							: property.energyCertificates ?
+								'Yes'
+							:	'No'}
 						</p>
 						<br />
 						<p className="text-sm text-gray-500 dark:text-gray-400">O&M's</p>
 						<p className="text-gray-900 dark:text-gray-100">
-							{property.oms ? 'Yes' : 'No'}
+							{property.oms === null || '' ?
+								'Not set'
+							: property.oms ?
+								'Yes'
+							:	'No'}
 						</p>
 					</div>
 					<div className="justify-center items-center flex-1">
@@ -341,7 +397,11 @@ export default function PropertyDetails({
 							External Isolation Valve Chambers Located and Clear
 						</p>
 						<p className="text-gray-900 dark:text-gray-100">
-							{property.isolationValvesClear ? 'Yes' : 'No'}
+							{property.isolationValvesClear === null || '' ?
+								'Not set'
+							: property.isolationValvesClear ?
+								'Yes'
+							:	'No'}
 							<br />
 						</p>
 						<br />
@@ -349,7 +409,11 @@ export default function PropertyDetails({
 							Access Controlled Spaces
 						</p>
 						<p className="text-gray-900 dark:text-gray-100">
-							{property.accessControlled ? 'Yes' : 'No'}
+							{property.accessControlled === null || '' ?
+								'Not set'
+							: property.accessControlled ?
+								'Yes'
+							:	'No'}
 							<br />
 						</p>
 					</div>
