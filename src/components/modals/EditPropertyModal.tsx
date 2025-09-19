@@ -62,10 +62,9 @@ export default function EditPropertyModal({
 
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
-		onSave(form, true); // `true` to close modal on final save
+		onSave(form, true);
 	};
 
-	// Field render helpers
 	const renderField = (key: string, label: string, type: string) => {
 		if (type === 'text' || type === 'number' || type === 'email') {
 			return (
