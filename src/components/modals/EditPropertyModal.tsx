@@ -67,7 +67,7 @@ export default function EditPropertyModal({
 
 	// Field render helpers
 	const renderField = (key: string, label: string, type: string) => {
-		if (type === 'text' || type === 'number') {
+		if (type === 'text' || type === 'number' || type === 'email') {
 			return (
 				<div className="mb-4">
 					<TextField
@@ -227,7 +227,7 @@ export default function EditPropertyModal({
 			{ key: 'country', label: 'Country', type: 'text' },
 			{ key: 'designDate', label: 'Design Date', type: 'date' },
 			{ key: 'managerName', label: 'Site Contact Name', type: 'text' },
-			{ key: 'email', label: 'Site Contact Email', type: 'text' },
+			{ key: 'email', label: 'Site Contact Email', type: 'email' },
 			{ key: 'telephone', label: 'Site Contact Telephone', type: 'telephone' },
 			{
 				key: 'uniqueReferenceNumber',
@@ -286,7 +286,7 @@ export default function EditPropertyModal({
 				{
 					key: 'principleEmail',
 					label: 'Principle Email',
-					type: 'text',
+					type: 'email',
 				},
 				{
 					key: 'principleTelephone',
@@ -331,7 +331,7 @@ export default function EditPropertyModal({
 				label: 'Property Manager Address',
 				type: 'textarea',
 			},
-			{ key: 'managerEmail', label: 'Property Manager Email', type: 'text' },
+			{ key: 'managerEmail', label: 'Property Manager Email', type: 'email' },
 			{
 				key: 'managerTelephone',
 				label: 'Property Manager Telephone',
@@ -346,7 +346,7 @@ export default function EditPropertyModal({
 			{
 				key: 'emergencyEmail',
 				label: 'Emergency Contact Email',
-				type: 'text',
+				type: 'email',
 			},
 			{
 				key: 'emergencyTelephone',
@@ -366,7 +366,7 @@ export default function EditPropertyModal({
 			{
 				key: 'localFireEmail',
 				label: 'Local Fire Authority Email',
-				type: 'text',
+				type: 'email',
 			},
 			{
 				key: 'localFireTelephone',
