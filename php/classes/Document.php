@@ -1,11 +1,13 @@
 <?php
 require_once __DIR__ . '/../classes/Config.php';
+require_once __DIR__ . '/../classes/Database.php';
 
 use Ramsey\Uuid\Uuid;
 use Aws\S3\S3Client;
 
 class Document
 {
+    private PDO $pdo;
 
     public function generatePDF()
     {
@@ -112,21 +114,90 @@ Maecenas suscipit consectetur ipsum, ac efficitur ipsum accumsan luctus. Pellent
         return ['success' => true, 'message' => 'Presigned URL created', 'presignedUrl' => $presignedUrl];
     }
 
-    // public function uploadDocument(string $filePath): array
-    // {
-    //     $s3 = $this->createS3Client();
+    public function __construct()
+    {
+        $this->pdo = (new Database())->connect();
+    }
 
-    //     $bucket = $_ENV["AWS_S3_BUCKET"];
+    public function createReport(string $reportId)
+    {
+        $sql = "SELECT 
+                    (SELECT p.name FROM reports r JOIN properties p ON p.id = r.propertyId WHERE r.id = :reportId) AS propertyName, 
+                    cq.area, 
+                    cq.question, 
+                    CASE qr.answer 
+                        WHEN 1 THEN 'Yes' 
+                        WHEN 2 THEN 'No'
+                        WHEN 3 THEN 'N/A' 
+                        ELSE NULL 
+                    END as answer, 
+                    qr.fileName, 
+                    qr.validUntil 
+                FROM compliance_questions cq 
+                LEFT JOIN question_responses qr ON cq.id = qr.questionId AND qr.reportId = :reportId1
+                ORDER BY cq.area, cq.question";
 
-    //     $cmd = $s3->getCommand('PutObject', [
-    //         'Bucket' => $bucket,
-    //         'Key'    => $filePath,
-    //         'ContentType' => 'application/pdf'
-    //     ]);
+        $stmt = $this->pdo->prepare(query: $sql);
+        $stmt->bindParam(':reportId', $reportId);
+        $stmt->bindParam(':reportId1', $reportId);
+        $stmt->execute();
+        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    //     $request = $s3->createPresignedRequest($cmd, '+15 minutes');
-    //     $presignedUrl = (string) $request->getUri();
+        if (empty($results)) {
+            // Handle no results found if necessary
+            return;
+        }
 
-    //     return ["presignedUrl" => $presignedUrl];
-    // }
+        $propertyName = $results[0]['propertyName'] ?? 'Compliance Report';
+        $reportFileName = str_replace(' ', '_', $propertyName) . '_' . date('Y-m-d') . '.pdf';
+
+        // Group data by area
+        $groupedData = [];
+        foreach ($results as $row) {
+            $groupedData[$row['area']][] = $row;
+        }
+
+        // Build HTML for PDF
+        $html = "<html><head><style>
+                    body { font-family: sans-serif; }
+                    h1 { color: #333; }
+                    h2 { color: #555; border-bottom: 1px solid #ccc; padding-bottom: 5px; margin-top: 20px;}
+                    .question-block { margin-bottom: 10px; }
+                    .question { font-weight: bold; }
+                    .answer { margin-left: 15px; }
+                    .details { font-size: 0.9em; color: #777; margin-left: 15px; }
+                </style></head><body>";
+        $html .= "<h1>Compliance Report for: " . htmlspecialchars($propertyName) . "</h1>";
+
+        foreach ($groupedData as $area => $questions) {
+            $html .= "<h2>" . htmlspecialchars($area) . "</h2>";
+            foreach ($questions as $item) {
+                $html .= "<div class='question-block'>";
+                $html .= "<div class='question'>" . htmlspecialchars($item['question']) . "</div>";
+                $answer = $item['answer'] ?? 'Not Answered';
+                $html .= "<div class='answer'>Answer: " . htmlspecialchars($answer) . "</div>";
+
+                if ($answer === 'Yes' && !empty($item['validUntil'])) {
+                    $validUntilDate = date('d-m-Y', strtotime($item['validUntil']));
+                    $html .= "<div class='details'>Valid Until: " . $validUntilDate . "</div>";
+                }
+
+                if (!empty($item['fileName'])) {
+                    $presignedUrlData = $this->presignedUrl("compliance/$reportId/" . $item['fileName'], null, 'GetObject');
+                    if ($presignedUrlData['success']) {
+                        $html .= "<div class='details'>Evidence: <a href='" . $presignedUrlData['presignedUrl'] . "'>View Document</a></div>";
+                    } else {
+                        $html .= "<div class='details'>Evidence: Could not generate link for " . htmlspecialchars($item['fileName']) . "</div>";
+                    }
+                }
+                $html .= "</div>";
+            }
+        }
+
+        $html .= "</body></html>";
+
+        $mpdf = new \Mpdf\Mpdf();
+        $mpdf->WriteHTML($html);
+        $mpdf->Output($reportFileName, 'D'); // 'D' for download
+    }
 }

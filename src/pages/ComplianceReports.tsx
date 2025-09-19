@@ -5,7 +5,11 @@ import { toast } from 'react-toastify';
 import { Button } from '../components/Button';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/Card';
 import ConfirmationModal from '../components/modals/ConfirmationModal';
-import { createCompliance, getComplianceReports } from '../utils/api';
+import {
+	createCompliance,
+	generateReport,
+	getComplianceReports,
+} from '../utils/api';
 
 interface ComplianceReport {
 	id: string;
@@ -39,6 +43,11 @@ export default function ComplianceReports() {
 		const complianceId = await createCompliance(id ?? '');
 		navigate(`/properties/${id}/compliance-reports/${complianceId}`);
 		toast.success('New compliance report created!');
+	};
+
+	const handleGenerateReport = (reportId: string) => async () => {
+		await generateReport(reportId);
+		toast.info('Generating report...');
 	};
 
 	const handleOpenConfirmation = () => {
@@ -92,6 +101,10 @@ export default function ComplianceReports() {
 												<a
 													href={`/properties/${id}/compliance-reports/${report.id}`}>
 													View Report
+												</a>{' '}
+												-{' '}
+												<a onClick={handleGenerateReport(report.id)}>
+													Download Report
 												</a>
 											</h3>
 										</div>

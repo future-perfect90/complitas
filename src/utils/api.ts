@@ -598,3 +598,34 @@ export async function getComplianceAnswers(propertyComplianceId: string) {
 	}
 	return response.json();
 }
+
+export async function generateReport(reportId: string) {
+	const jwt =
+		authService.getAccessTokenSilently ?
+			await authService.getAccessTokenSilently()
+		:	'';
+	const response = await fetch(
+		`${import.meta.env.VITE_API_BASE_URL}/document/generateReport.php?reportId=${reportId}`,
+		{
+			method: 'GET',
+			headers: {
+				Authorization: `Bearer ${jwt}`,
+				'Content-Type': 'application/json',
+			},
+		}
+	);
+	const blob = await response.blob();
+	const url = window.URL.createObjectURL(blob);
+	const a = document.createElement('a');
+	a.style.display = 'none';
+	a.href = url;
+	a.download = 'compliance-report.pdf';
+	document.body.appendChild(a);
+	a.click();
+	window.URL.revokeObjectURL(url);
+	a.remove();
+	if (!response.ok) {
+		throw new Error(`Response status: ${response.status}`);
+	}
+	return response.json();
+}
