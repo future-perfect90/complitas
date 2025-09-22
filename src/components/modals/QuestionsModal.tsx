@@ -7,17 +7,16 @@ interface QuestionsModalProps {
 	areaName: string;
 	questions: any[]; // The full question objects with savedAnswer included
 	onClose: () => void;
-    reportId: string;
+	reportId: string;
 }
 
 export default function QuestionsModal({
 	areaName,
 	questions,
 	onClose,
-    reportId
+	reportId,
 }: QuestionsModalProps) {
 	const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
-		// This is the key: check if the click target is the backdrop itself
 		if (e.target === e.currentTarget) {
 			onClose();
 		}

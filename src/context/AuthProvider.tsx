@@ -29,7 +29,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
 	useEffect(() => {
 		//TODO::Change to get token silently
-		getAccessTokenSilently(); //get a token because i am working on localhost
+		getAccessTokenWithPopup(); //get a token because i am working on localhost
 
 		// If the Auth0 SDK is still loading, our provider is also loading.
 		if (isAuth0Loading) {

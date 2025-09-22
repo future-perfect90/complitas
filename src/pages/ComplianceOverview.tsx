@@ -36,7 +36,6 @@ export default function ComplianceOverview() {
 	const selectedArea = groupedAreas.find(
 		(area: any) => area.name === selectedAreaName
 	);
-	if (isLoading) return <div>Loading Compliance Report...</div>;
 
 	return (
 		<>

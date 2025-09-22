@@ -113,11 +113,7 @@ export default function QuestionItem({
 							label="Valid until: "
 							type="date"
 							layout="horizontal"
-							value={
-								currentAnswer.validUntil?.split('T')[0] ??
-								new Date().toISOString().split('T')[0] ??
-								''
-							}
+							value={currentAnswer.validUntil?.split('T')[0] ?? ''}
 							onChange={(e) => {
 								setCurrentAnswer((prev) => ({
 									...prev,
