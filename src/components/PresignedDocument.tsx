@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import authService from '../utils/authService';
 
 interface Props {
 	fileName: string;
@@ -18,9 +19,16 @@ const PresignedDocument: React.FC<Props> = ({
 
 	useEffect(() => {
 		const fetchUrl = async () => {
+			const jwt =
+				authService.getAccessTokenSilently ?
+					await authService.getAccessTokenSilently()
+				:	'';
 			const res = await fetch(uploadApiUrl, {
 				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
+				headers: {
+					'Content-Type': 'application/json',
+					Authorization: `Bearer ${jwt}`,
+				},
 				body: JSON.stringify({
 					fileName: `${directory}${fileName}`,
 				}),

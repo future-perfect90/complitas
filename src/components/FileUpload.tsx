@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import authService from '../utils/authService';
 import Label from './Label';
 
 interface FileUploadProps {
@@ -44,15 +45,23 @@ export default function FileUpload({
 		try {
 			const uuid = crypto.randomUUID();
 			const savedFile = `${uuid}.${file.name.split('.').pop()}`;
+			const jwt =
+				authService.getAccessTokenSilently ?
+					await authService.getAccessTokenSilently()
+				:	'';
 			const res = await fetch(uploadApiUrl, {
 				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
+				headers: {
+					Authorization: `Bearer ${jwt}`,
+					'Content-Type': 'application/json',
+				},
 				body: JSON.stringify({
 					fileName: `${directory}${uuid}.${file.name.split('.').pop()}`,
 					fileType: file.type,
 					action: 'PutObject',
 				}),
 			});
+			console.log(res);
 
 			if (!res.ok) throw new Error('Failed to get presigned URL');
 
