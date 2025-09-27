@@ -221,7 +221,6 @@ async function convertPdfToImages(
 		const loadingTask = pdfjs.getDocument({ url: pdfUrl });
 		const pdf = await loadingTask.promise;
 
-		console.log('pdf', pdf);
 		// Use a temporary, invisible canvas to render the pages
 		const canvas = document.createElement('canvas');
 		const canvasContext = canvas.getContext('2d');
@@ -248,11 +247,9 @@ async function convertPdfToImages(
 			// This string can be inserted directly into an <img> src attribute.
 			const dataUrl = canvas.toDataURL('image/png');
 			imageDataUrls.push(dataUrl);
-			console.log('Generated image data URL for page', i, dataUrl);
 			// Clean up page object
 			page.cleanup();
 		}
-		console.log(imageDataUrls);
 		return imageDataUrls;
 	} catch (err) {
 		console.error('PDF conversion failed:', err);
@@ -318,7 +315,7 @@ export const ComplianceReportPDF = ({
 		};
 
 		fetchReportData();
-	}, [reportId]);
+	}, []);
 
 	if (loading) {
 		return <div>Loading report...</div>;
@@ -329,8 +326,8 @@ export const ComplianceReportPDF = ({
 	}
 
 	const propertyName = reportData[0]?.propertyName || 'Compliance_Report';
-	const reportFileName = `${propertyName.replace(/ /g, '_')}_${new Date().toISOString().split('T')[0]}.pdf`;
-
+	const reportFileName = `${propertyName.replace(/ /g, '_')}_${new Date().toISOString().split('T')}.pdf`;
+	console.log(reportFileName);
 	return (
 		<div>
 			<h2>Report Preview</h2>
