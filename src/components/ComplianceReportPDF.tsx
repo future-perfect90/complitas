@@ -9,12 +9,13 @@ import {
 	Text,
 	View,
 } from '@react-pdf/renderer';
+import workerUrl from 'pdfjs-dist/build/pdf.worker.mjs?url';
 import { useEffect, useState } from 'react';
 import { Document as PdfDocument, Page as PdfPage, pdfjs } from 'react-pdf';
 import { getReportData } from '../utils/api';
 
 // Configure pdfjs worker
-pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
+pdfjs.GlobalWorkerOptions.workerSrc = workerUrl;
 
 interface ReportDataItem {
 	propertyName: string;
@@ -30,6 +31,7 @@ interface Attachment {
 	type: 'image' | 'pdf';
 	name: string;
 	url: string;
+	images?: string[]; // For PDFs converted to images
 }
 
 // Register fonts for react-pdf
@@ -103,31 +105,48 @@ const answerMap = {
 	'3': 'N/A',
 };
 
-const PdfPageFromUrl = ({ url }: { url: string }) => {
-	const [numPages, setNumPages] = useState<number | null>(null);
-
-	function onDocumentLoadSuccess({ numPages }: { numPages: number }) {
-		setNumPages(numPages);
-	}
-
-	return (
-		<PdfDocument file={url} onLoadSuccess={onDocumentLoadSuccess}>
-			{Array.from(new Array(numPages), (el, index) => (
-				<PdfPage
-					key={`page_${index + 1}`}
-					pageNumber={index + 1}
-					renderTextLayer={false}
-					renderAnnotationLayer={false}
-					// The canvas can be converted to an image and used in @react-pdf/renderer
-					// This part is conceptual as direct rendering is not possible.
-					// In a real app, you'd render to canvas, get data URL, and pass to <Image>.
-				/>
-			))}
-		</PdfDocument>
-	);
-};
-
 const ReportDocument = ({ data }: { data: ReportDataItem[] }) => {
+	const [attachments, setAttachments] = useState<Attachment[]>([]);
+
+	useEffect(() => {
+		const processAttachments = async () => {
+			if (!data || data.length === 0) return;
+
+			const groupedData: { [key: string]: ReportDataItem[] } = {};
+			const newAttachments: Attachment[] = [];
+
+			for (const row of data) {
+				if (!groupedData[row.area]) {
+					groupedData[row.area] = [];
+				}
+				groupedData[row.area].push(row);
+
+				if (row.fileName && row.fileUrl) {
+					const ext = row.fileName.split('.').pop()?.toLowerCase();
+					if (ext === 'jpg' || ext === 'png' || ext === 'jpeg') {
+						newAttachments.push({
+							type: 'image',
+							name: row.fileName,
+							url: row.fileUrl,
+						});
+					} else if (ext === 'pdf') {
+						// Await the conversion of PDF to images
+						const images = await convertPdfToImages(row.fileUrl);
+						newAttachments.push({
+							type: 'pdf',
+							name: row.fileName,
+							url: row.fileUrl,
+							images,
+						});
+					}
+				}
+			}
+			setAttachments(newAttachments);
+		};
+
+		processAttachments();
+	}, [data]);
+
 	if (!data || data.length === 0) {
 		return (
 			<Document>
@@ -141,33 +160,12 @@ const ReportDocument = ({ data }: { data: ReportDataItem[] }) => {
 	const propertyName = data[0].propertyName || 'Compliance Report';
 
 	const groupedData: { [key: string]: ReportDataItem[] } = {};
-	const attachments: Attachment[] = [];
-
 	data.forEach((row) => {
 		if (!groupedData[row.area]) {
 			groupedData[row.area] = [];
 		}
 		groupedData[row.area].push(row);
-
-		if (row.fileName && row.fileUrl) {
-			const ext = row.fileName.split('.').pop()?.toLowerCase();
-			if (ext === 'jpg' || ext === 'png' || ext === 'jpeg') {
-				attachments.push({
-					type: 'image',
-					name: row.fileName,
-					url: row.fileUrl,
-				});
-			} else if (ext === 'pdf') {
-				// For react-pdf, we'd convert PDF pages to images.
-				// This is a placeholder to show the concept.
-				// A full implementation would fetch the PDF, render pages to canvas,
-				// get image data URLs, and then use those in the <Image> component.
-				// For simplicity, we'll just list it. A real implementation is more complex.
-				attachments.push({ type: 'pdf', name: row.fileName, url: row.fileUrl });
-			}
-		}
 	});
-
 	return (
 		<Document>
 			{/* Main Report Content */}
@@ -212,22 +210,24 @@ const ReportDocument = ({ data }: { data: ReportDataItem[] }) => {
 						</Page>
 					);
 				}
-				// PDF rendering is complex. This is a placeholder.
-				// In a real app, you would have a component that fetches the PDF,
-				// renders each page to a canvas, converts to a data URL, and then
-				// you'd use <Image src={dataUrl} /> for each page.
 				if (att.type === 'pdf') {
 					return (
-						<Page key={`att-${index}`} style={styles.page}>
-							<Text style={styles.attachmentHeader}>
-								Attachment: {att.name} (PDF content would be rendered as images
-								here)
-							</Text>
-							<Text>
-								PDF rendering requires client-side processing (e.g., with
-								pdf.js) to convert pages to images before embedding.
-							</Text>
-						</Page>
+						<>
+							{/* <PdfPageFromUrl url={att.url} /> */}
+							<Page key={`att-${index}`} style={styles.page}>
+								<Text style={styles.attachmentHeader}>
+									Attachment: {att.name}
+								</Text>
+								{att.images &&
+									att.images.map((img, idx) => (
+										<Image
+											key={`img-${idx}`}
+											style={styles.attachmentImage}
+											src={img}
+										/>
+									))}
+							</Page>
+						</>
 					);
 				}
 				return null;
@@ -235,6 +235,68 @@ const ReportDocument = ({ data }: { data: ReportDataItem[] }) => {
 		</Document>
 	);
 };
+
+async function convertPdfToImages(
+	pdfUrl: string,
+	scale: number = 1.5
+): Promise<string[]> {
+	if (!pdfUrl) {
+		throw new Error('PDF URL is required for conversion.');
+	}
+
+	// **CRITICAL CHECK**: Ensure the worker is initialized before proceeding
+	if (!pdfjs.GlobalWorkerOptions.workerSrc) {
+		throw new Error('PDF Worker not yet initialized. Please wait.');
+	}
+
+	const imageDataUrls: string[] = [];
+
+	try {
+		// 1. Load the PDF document
+		const loadingTask = pdfjs.getDocument({ url: pdfUrl });
+		const pdf = await loadingTask.promise;
+
+		console.log('pdf', pdf);
+		// Use a temporary, invisible canvas to render the pages
+		const canvas = document.createElement('canvas');
+		const canvasContext = canvas.getContext('2d');
+		if (!canvasContext) {
+			throw new Error('Could not get canvas context.');
+		}
+
+		// 2. Loop through all pages
+		for (let i = 1; i <= pdf.numPages; i++) {
+			const page = await pdf.getPage(i);
+			// 3. Define the viewport (size) and scale
+			const viewport = page.getViewport({ scale: scale });
+			canvas.height = viewport.height;
+			canvas.width = viewport.width;
+
+			// 4. Render the page onto the canvas
+			const renderContext = {
+				canvasContext,
+				viewport,
+			};
+			await page.render(renderContext).promise;
+
+			// 5. Convert the canvas content to a PNG Data URL (Base64 string)
+			// This string can be inserted directly into an <img> src attribute.
+			const dataUrl = canvas.toDataURL('image/png');
+			imageDataUrls.push(dataUrl);
+			console.log('Generated image data URL for page', i, dataUrl);
+			// Clean up page object
+			page.cleanup();
+		}
+		console.log(imageDataUrls);
+		return imageDataUrls;
+	} catch (err) {
+		console.error('PDF conversion failed:', err);
+		// Re-throw a clearer error for the calling component
+		throw new Error(
+			`Failed to load or process PDF. Error: ${err instanceof Error ? err.message : String(err)}`
+		);
+	}
+}
 
 export const ComplianceReportPDF = ({
 	reportId,
