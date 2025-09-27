@@ -105,48 +105,13 @@ const answerMap = {
 	'3': 'N/A',
 };
 
-const ReportDocument = ({ data }: { data: ReportDataItem[] }) => {
-	const [attachments, setAttachments] = useState<Attachment[]>([]);
-
-	useEffect(() => {
-		const processAttachments = async () => {
-			if (!data || data.length === 0) return;
-
-			const groupedData: { [key: string]: ReportDataItem[] } = {};
-			const newAttachments: Attachment[] = [];
-
-			for (const row of data) {
-				if (!groupedData[row.area]) {
-					groupedData[row.area] = [];
-				}
-				groupedData[row.area].push(row);
-
-				if (row.fileName && row.fileUrl) {
-					const ext = row.fileName.split('.').pop()?.toLowerCase();
-					if (ext === 'jpg' || ext === 'png' || ext === 'jpeg') {
-						newAttachments.push({
-							type: 'image',
-							name: row.fileName,
-							url: row.fileUrl,
-						});
-					} else if (ext === 'pdf') {
-						// Await the conversion of PDF to images
-						const images = await convertPdfToImages(row.fileUrl);
-						newAttachments.push({
-							type: 'pdf',
-							name: row.fileName,
-							url: row.fileUrl,
-							images,
-						});
-					}
-				}
-			}
-			setAttachments(newAttachments);
-		};
-
-		processAttachments();
-	}, [data]);
-
+const ReportDocument = ({
+	data,
+	attachments,
+}: {
+	data: ReportDataItem[];
+	attachments: Attachment[];
+}) => {
 	if (!data || data.length === 0) {
 		return (
 			<Document>
@@ -306,12 +271,45 @@ export const ComplianceReportPDF = ({
 }) => {
 	const [reportData, setReportData] = useState<ReportDataItem[] | null>(null);
 	const [loading, setLoading] = useState(true);
+	const [attachments, setAttachments] = useState<Attachment[]>([]);
 
 	useEffect(() => {
 		const fetchReportData = async () => {
 			try {
 				const data = await getReportData(reportId);
 				setReportData(data);
+				if (!data || data.length === 0) return;
+
+				const groupedData: { [key: string]: ReportDataItem[] } = {};
+				const newAttachments: Attachment[] = [];
+
+				for (const row of data) {
+					if (!groupedData[row.area]) {
+						groupedData[row.area] = [];
+					}
+					groupedData[row.area].push(row);
+
+					if (row.fileName && row.fileUrl) {
+						const ext = row.fileName.split('.').pop()?.toLowerCase();
+						if (ext === 'jpg' || ext === 'png' || ext === 'jpeg') {
+							newAttachments.push({
+								type: 'image',
+								name: row.fileName,
+								url: row.fileUrl,
+							});
+						} else if (ext === 'pdf') {
+							// Await the conversion of PDF to images
+							const images = await convertPdfToImages(row.fileUrl);
+							newAttachments.push({
+								type: 'pdf',
+								name: row.fileName,
+								url: row.fileUrl,
+								images,
+							});
+						}
+					}
+				}
+				setAttachments(newAttachments);
 			} catch (error) {
 				console.error(error);
 			} finally {
@@ -337,7 +335,9 @@ export const ComplianceReportPDF = ({
 		<div>
 			<h2>Report Preview</h2>
 			<PDFDownloadLink
-				document={<ReportDocument data={reportData} />}
+				document={
+					<ReportDocument data={reportData} attachments={attachments} />
+				}
 				fileName={reportFileName}>
 				{({ blob, url, loading, error }) =>
 					loading ? 'Loading document...' : 'Download Report'
@@ -345,7 +345,7 @@ export const ComplianceReportPDF = ({
 			</PDFDownloadLink>
 
 			<PDFViewer width="100%" height="800px">
-				<ReportDocument data={reportData} />
+				<ReportDocument data={reportData} attachments={attachments} />
 			</PDFViewer>
 		</div>
 	);
