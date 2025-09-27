@@ -50,6 +50,10 @@ export default function ComplianceReports() {
 		toast.info('Generating report...');
 	};
 
+	const handleViewReport = (reportId: string) => async () => {
+		navigate(`/properties/${id}/compliance-reports/${reportId}/pdf`);
+	};
+
 	const handleOpenConfirmation = () => {
 		setIsConfirmationModalOpen(true);
 	};
@@ -105,6 +109,9 @@ export default function ComplianceReports() {
 												-{' '}
 												<a onClick={handleGenerateReport(report.id)}>
 													Download Report
+												</a>
+												<a onClick={handleViewReport(report.id)}>
+													Woah! click me.
 												</a>
 											</h3>
 										</div>

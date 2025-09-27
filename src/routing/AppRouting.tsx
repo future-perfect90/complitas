@@ -5,6 +5,7 @@ import ComplianceOverview from '../pages/ComplianceOverview';
 import ComplianceReports from '../pages/ComplianceReports';
 import Dashboard from '../pages/Dashboard';
 import Home from '../pages/Home';
+import PDFReport from '../pages/PDFReport';
 import Profile from '../pages/Profile';
 import Property from '../pages/Property';
 import PropertyList from '../pages/PropertyList';
@@ -43,6 +44,10 @@ const AppRoutes = () => {
 				{ path: '/users', element: <UserList /> },
 				{ path: '/teams', element: <TeamList /> },
 				{ path: '/profile', element: <Profile /> },
+				{
+					path: '/properties/:id/compliance-reports/:reportId/pdf',
+					element: <PDFReport />,
+				},
 			],
 		},
 	];
