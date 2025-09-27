@@ -137,7 +137,6 @@ const CompanyModal: React.FC<Props> = ({
 
 	const handleUploadComplete = (url: string, fileName: string) => {
 		setLogo(fileName);
-		console.log('File uploaded to:', url);
 	};
 
 	return (

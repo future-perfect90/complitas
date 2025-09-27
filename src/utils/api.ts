@@ -492,7 +492,6 @@ export async function getProfile(userId: string) {
 }
 
 export async function createCompliance(propertyId: string) {
-	console.log('Creating compliance for property:', propertyId);
 	const jwt =
 		authService.getAccessTokenSilently ?
 			await authService.getAccessTokenSilently()

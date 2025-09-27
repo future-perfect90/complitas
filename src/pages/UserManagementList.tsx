@@ -17,7 +17,6 @@ const UserList: React.FC = () => {
 	const fetchUsers = async (companyUuid: string) => {
 		try {
 			const data = await getUsers(companyUuid);
-			console.log(data, companyUuid);
 			setUsers(data);
 		} catch {
 			toast.error('Failed to load users.');

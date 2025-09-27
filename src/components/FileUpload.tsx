@@ -61,7 +61,6 @@ export default function FileUpload({
 					action: 'PutObject',
 				}),
 			});
-			console.log(res);
 
 			if (!res.ok) throw new Error('Failed to get presigned URL');
 

@@ -18,8 +18,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 		isAuthenticated,
 		getIdTokenClaims,
 		isLoading: isAuth0Loading,
-		getAccessTokenWithPopup,
-		getAccessTokenSilently,
+		loginWithRedirect,
 	} = useAuth0();
 	const [meta, setMeta] = useState<AuthMeta>({
 		isAuthenticated: false,
@@ -28,9 +27,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 	});
 
 	useEffect(() => {
-		//TODO::Change to get token silently
-		getAccessTokenSilently(); //get a token because i am working on localhost
-
 		// If the Auth0 SDK is still loading, our provider is also loading.
 		if (isAuth0Loading) {
 			setMeta((prev) => ({ ...prev, isLoading: true }));
@@ -51,6 +47,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 				claims ? claims['https://complitas.dev/user_uuid'] : undefined;
 			const companyUuid =
 				claims ? claims['https://complitas.dev/company_uuid'] : undefined;
+			const tokenExpiry = claims ? claims.exp : undefined;
+			const now = Date.now() / 1000;
+
+			if (tokenExpiry && tokenExpiry < now) {
+				// Token is expired, redirect to login
+				await loginWithRedirect();
+				return;
+			}
+
 			setMeta({
 				userUuid,
 				companyUuid,
@@ -61,11 +66,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 		};
 
 		fetchClaims();
-	}, [isAuthenticated, getIdTokenClaims, isAuth0Loading]);
+	}, [isAuthenticated, getIdTokenClaims, isAuth0Loading, loginWithRedirect]);
 
 	return <AuthContext.Provider value={meta}>{children}</AuthContext.Provider>;
 };
 
 export function useAuthMeta() {
-	return useContext(AuthContext);
+	return useContext(AuthContext) as AuthMeta;
 }

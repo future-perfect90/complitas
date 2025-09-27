@@ -29,7 +29,6 @@ const PresignedImage: React.FC<Props> = ({
 			const { presignedUrl } = await res.json();
 			setUrl(presignedUrl);
 		};
-		console.log('Fetching presigned URL...');
 		fetchUrl();
 	}, []);
 

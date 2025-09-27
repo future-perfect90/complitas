@@ -105,7 +105,6 @@ const PropertyModal: React.FC<Props> = ({
 				toast.success('Property updated successfully!');
 			} else {
 				const companyId = user?.['https://complitas.dev/company_uuid'] || '';
-				console.log('Company ID from token:', companyId);
 				await createProperty(
 					{
 						name,
