@@ -11,7 +11,7 @@ import {
 } from '@react-pdf/renderer';
 import workerUrl from 'pdfjs-dist/build/pdf.worker.mjs?url';
 import { useEffect, useState } from 'react';
-import { Document as PdfDocument, Page as PdfPage, pdfjs } from 'react-pdf';
+import { pdfjs } from 'react-pdf';
 import { getReportData } from '../utils/api';
 
 // Configure pdfjs worker
