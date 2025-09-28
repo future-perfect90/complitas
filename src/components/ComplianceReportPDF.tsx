@@ -5,14 +5,15 @@ import {
 	Link,
 	PDFViewer,
 	Page,
-	StyleSheet,
 	Text,
 	View,
 } from '@react-pdf/renderer';
 import workerUrl from 'pdfjs-dist/build/pdf.worker.mjs?url';
 import { useEffect, useState } from 'react';
 import { pdfjs } from 'react-pdf';
+import { createTw } from 'react-pdf-tailwind';
 import { getReportData } from '../utils/api';
+import LoadingSpinner from './modals/Loading';
 
 // Configure pdfjs worker
 pdfjs.GlobalWorkerOptions.workerSrc = workerUrl;
@@ -35,6 +36,10 @@ interface Attachment {
 	images?: string[]; // For PDFs converted to images
 }
 
+const tw = createTw({
+	theme: {},
+});
+
 // Register fonts for react-pdf
 Font.register({
 	family: 'Roboto',
@@ -47,61 +52,6 @@ Font.register({
 			fontWeight: 'bold',
 		},
 	],
-});
-
-const styles = StyleSheet.create({
-	link: {
-		color: '#0000EE',
-		textDecoration: 'underline',
-	},
-	page: {
-		fontFamily: 'Roboto',
-		padding: 30,
-		fontSize: 11,
-		color: '#333',
-	},
-	header: {
-		fontSize: 24,
-		marginBottom: 20,
-		textAlign: 'center',
-		fontWeight: 'bold',
-	},
-	areaHeader: {
-		fontSize: 16,
-		fontWeight: 'bold',
-		marginTop: 20,
-		marginBottom: 10,
-		borderBottomWidth: 1,
-		borderBottomColor: '#ccc',
-		paddingBottom: 5,
-	},
-	questionBlock: {
-		marginBottom: 10,
-	},
-	question: {
-		fontWeight: 'bold',
-	},
-	answer: {
-		marginLeft: 15,
-	},
-	details: {
-		marginLeft: 15,
-		fontSize: 10,
-		color: '#777',
-	},
-	attachmentPage: {
-		justifyContent: 'center',
-		alignItems: 'center',
-	},
-	attachmentImage: {
-		maxWidth: '90%',
-		maxHeight: '90%',
-	},
-	attachmentHeader: {
-		position: 'absolute',
-		top: 20,
-		fontSize: 12,
-	},
 });
 
 const answerMap = {
@@ -121,7 +71,7 @@ const ReportDocument = ({
 	if (!data || data.length === 0) {
 		return (
 			<Document>
-				<Page style={styles.page}>
+				<Page style={tw('font-roboto p-[30px] text-[11px] text-gray-800')}>
 					<Text>No report data available.</Text>
 				</Page>
 			</Document>
@@ -141,27 +91,34 @@ const ReportDocument = ({
 	});
 	return (
 		<Document>
-			<Page style={styles.page}>
-				<Text style={styles.header}>Compliance Report for: {propertyName}</Text>
+			<Page style={tw('font-roboto p-[30px] text-[11px] text-gray-800')}>
+				<Text style={tw('text-2xl mb-5 text-center font-bold')}>
+					Compliance Report for: {propertyName}
+				</Text>
 				{Object.entries(groupedData).map(([area, questions]) => (
 					<View key={area}>
-						<Text style={styles.areaHeader}>{area}</Text>
+						<Text
+							style={tw(
+								'text-base font-bold mt-5 mb-2.5 border-b border-solid border-gray-300 pb-1'
+							)}>
+							{area}
+						</Text>
 						{questions.map((item, index) => (
-							<View key={index} style={styles.questionBlock} wrap={false}>
-								<Text style={styles.question}>{item.question}</Text>
-								<Text style={styles.answer}>
+							<View key={index} style={tw('mb-2.5')} wrap={false}>
+								<Text style={tw('font-bold')}>{item.question}</Text>
+								<Text style={tw('ml-4')}>
 									Answer:{' '}
 									{item.answer ? answerMap[item.answer] : 'Not Answered'}
 								</Text>
 								{item.answer === '1' && item.validUntil && (
-									<Text style={styles.details}>
+									<Text style={tw('ml-4 text-[10px] text-gray-500')}>
 										Valid Until:{' '}
 										{new Date(item.validUntil).toLocaleDateString()}
 									</Text>
 								)}
 								{item.fileName && (
 									<Link
-										style={[styles.details, styles.link]}
+										style={tw('ml-4 text-[10px] text-blue-600 underline')}
 										src={`#${item.attachmentId}`}>
 										Evidence Attached: {item.fileName}
 									</Link>
@@ -181,27 +138,29 @@ const ReportDocument = ({
 						<Page
 							key={`att-${index}`}
 							id={attachmentId}
-							style={styles.attachmentPage}>
-							<Text style={styles.attachmentHeader}>
+							style={tw('justify-center items-center')}>
+							<Text style={tw('absolute top-5 text-xs')}>
 								Attachment: {att.name}
 							</Text>
-							<Image style={styles.attachmentImage} src={att.url} />
+							<Image style={tw('h-[90%] w-screen')} src={att.url} />
 						</Page>
 					);
 				}
 				if (att.type === 'pdf') {
 					return (
 						<>
-							{/* <PdfPageFromUrl url={att.url} /> */}
-							<Page key={`att-${index}`} id={attachmentId} style={styles.page}>
-								<Text style={styles.attachmentHeader}>
+							<Page
+								key={`att-${index}`}
+								id={attachmentId}
+								style={tw('justify-center items-center')}>
+								<Text style={tw('absolute top-5 text-xs')}>
 									Attachment: {att.name}
 								</Text>
 								{att.images &&
 									att.images.map((img, idx) => (
 										<Image
 											key={`img-${idx}`}
-											style={styles.attachmentImage}
+											style={tw('h-[90%] w-screen')}
 											src={img}
 										/>
 									))}
@@ -217,13 +176,12 @@ const ReportDocument = ({
 
 async function convertPdfToImages(
 	pdfUrl: string,
-	scale: number = 1.5
+	scale: number = 1
 ): Promise<string[]> {
 	if (!pdfUrl) {
 		throw new Error('PDF URL is required for conversion.');
 	}
 
-	// **CRITICAL CHECK**: Ensure the worker is initialized before proceeding
 	if (!pdfjs.GlobalWorkerOptions.workerSrc) {
 		throw new Error('PDF Worker not yet initialized. Please wait.');
 	}
@@ -231,34 +189,28 @@ async function convertPdfToImages(
 	const imageDataUrls: string[] = [];
 
 	try {
-		// 1. Load the PDF document
 		const loadingTask = pdfjs.getDocument({ url: pdfUrl });
 		const pdf = await loadingTask.promise;
 
-		// Use a temporary, invisible canvas to render the pages
 		const canvas = document.createElement('canvas');
 		const canvasContext = canvas.getContext('2d');
 		if (!canvasContext) {
 			throw new Error('Could not get canvas context.');
 		}
 
-		// 2. Loop through all pages
 		for (let i = 1; i <= pdf.numPages; i++) {
 			const page = await pdf.getPage(i);
-			// 3. Define the viewport (size) and scale
+
 			const viewport = page.getViewport({ scale: scale });
 			canvas.height = viewport.height;
 			canvas.width = viewport.width;
 
-			// 4. Render the page onto the canvas
 			const renderContext = {
 				canvasContext,
 				viewport,
 			};
 			await page.render(renderContext).promise;
 
-			// 5. Convert the canvas content to a PNG Data URL (Base64 string)
-			// This string can be inserted directly into an <img> src attribute.
 			const dataUrl = canvas.toDataURL('image/png');
 			imageDataUrls.push(dataUrl);
 			// Clean up page object
@@ -280,8 +232,7 @@ export const ComplianceReportPDF = ({
 	reportId: string;
 	authToken?: string;
 }) => {
-	// No changes to the state variables are needed.
-	const [reportData, setReportData] = useState<ReportDataItem[] | null>(null);
+	const [reportData, setReportData] = useState<ReportDataItem[] | null>();
 	const [loading, setLoading] = useState(true);
 	const [attachments, setAttachments] = useState<Attachment[]>([]);
 
@@ -354,7 +305,7 @@ export const ComplianceReportPDF = ({
 	}, [reportId]);
 
 	if (loading) {
-		return <div>Loading and preparing your report...</div>;
+		return <LoadingSpinner message={'Loading report...'} />;
 	}
 
 	if (!reportData) {
@@ -362,11 +313,13 @@ export const ComplianceReportPDF = ({
 	}
 
 	return (
-		<div>
-			<h2>Report Preview</h2>
-			<PDFViewer width="100%" height="800px">
-				<ReportDocument data={reportData} attachments={attachments} />
-			</PDFViewer>
-		</div>
+		<>
+			{loading && <LoadingSpinner message={'Loading report...'} />}
+			<div>
+				<PDFViewer width="100%" height="800px">
+					<ReportDocument data={reportData} attachments={attachments} />
+				</PDFViewer>
+			</div>
+		</>
 	);
 };
