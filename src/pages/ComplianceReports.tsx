@@ -5,11 +5,7 @@ import { toast } from 'react-toastify';
 import { Button } from '../components/Button';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/Card';
 import ConfirmationModal from '../components/modals/ConfirmationModal';
-import {
-	createCompliance,
-	generateReport,
-	getComplianceReports,
-} from '../utils/api';
+import { createCompliance, getComplianceReports } from '../utils/api';
 
 interface ComplianceReport {
 	id: string;
@@ -45,10 +41,10 @@ export default function ComplianceReports() {
 		toast.success('New compliance report created!');
 	};
 
-	const handleGenerateReport = (reportId: string) => async () => {
-		await generateReport(reportId);
-		toast.info('Generating report...');
-	};
+	// const handleGenerateReport = (reportId: string) => async () => {
+	// 	await generateReport(reportId);
+	// 	toast.info('Generating report...');
+	// };
 
 	const handleViewReport = (reportId: string) => async () => {
 		navigate(`/properties/${id}/compliance-reports/${reportId}/pdf`);
@@ -104,14 +100,14 @@ export default function ComplianceReports() {
 												{new Date(report.createdAt).toLocaleString()} -{' '}
 												<a
 													href={`/properties/${id}/compliance-reports/${report.id}`}>
-													View Report
+													Update Report
 												</a>{' '}
 												-{' '}
-												<a onClick={handleGenerateReport(report.id)}>
+												{/* <a onClick={handleGenerateReport(report.id)}>
 													Download Report
-												</a>
+												</a> */}
 												<a onClick={handleViewReport(report.id)}>
-													Woah! click me.
+													Preview report
 												</a>
 											</h3>
 										</div>
