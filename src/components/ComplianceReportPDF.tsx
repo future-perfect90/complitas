@@ -1,6 +1,5 @@
 import {
 	Document,
-	Font,
 	Image,
 	Link,
 	PDFViewer,
@@ -40,20 +39,6 @@ const tw = createTw({
 	theme: {},
 });
 
-// Register fonts for react-pdf
-Font.register({
-	family: 'Roboto',
-	fonts: [
-		{
-			src: 'https://cdnjs.cloudflare.com/ajax/libs/ink/3.1.10/fonts/Roboto/roboto-regular-webfont.ttf',
-		},
-		{
-			src: 'https://cdnjs.cloudflare.com/ajax/libs/ink/3.1.10/fonts/Roboto/roboto-bold-webfont.ttf',
-			fontWeight: 'bold',
-		},
-	],
-});
-
 const answerMap = {
 	'1': 'Yes',
 	'2': 'No',
@@ -67,7 +52,6 @@ const ReportDocument = ({
 	data: ReportDataItem[];
 	attachments: Attachment[];
 }) => {
-	console.log('Rendering ReportDocument with data:', data);
 	if (!data || data.length === 0) {
 		return (
 			<Document>
@@ -90,7 +74,7 @@ const ReportDocument = ({
 	});
 	return (
 		<Document>
-			<Page style={tw('font-roboto p-[30px] text-[11px] text-gray-800')}>
+			<Page style={tw('p-[30px] text-[11px] text-gray-800')}>
 				<Text style={tw('text-2xl mb-5 text-center font-bold')}>
 					Compliance Report for: {propertyName}
 				</Text>
@@ -136,9 +120,8 @@ const ReportDocument = ({
 					return (
 						<Page
 							key={`att-${index}`}
-							id={attachmentId}
 							style={tw('justify-center items-center')}>
-							<Text style={tw('absolute top-5 text-xs')}>
+							<Text style={tw('absolute top-5 text-xs')} id={attachmentId}>
 								Attachment: {attachmentId}
 							</Text>
 							<Image style={tw('h-auto max-h-[90%] w-screen')} src={att.url} />
@@ -150,10 +133,9 @@ const ReportDocument = ({
 						<>
 							<Page
 								key={`att-${index}`}
-								id={attachmentId}
 								style={tw('justify-center items-center')}>
-								<Text style={tw('absolute top-5 text-xs')}>
-									Attachment: {att.name}
+								<Text style={tw('absolute top-5 text-xs')} id={attachmentId}>
+									Attachment: {attachmentId}
 								</Text>
 								{att.images &&
 									att.images.map((img, idx) => (
@@ -312,12 +294,9 @@ export const ComplianceReportPDF = ({
 
 	return (
 		<>
-			{loading && <LoadingSpinner message={'Loading report...'} />}
-			<div>
-				<PDFViewer width="100%" height="800px">
-					<ReportDocument data={reportData} attachments={attachments} />
-				</PDFViewer>
-			</div>
+			<PDFViewer width="100%" height="100%">
+				<ReportDocument data={reportData} attachments={attachments} />
+			</PDFViewer>
 		</>
 	);
 };
