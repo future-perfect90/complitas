@@ -77,8 +77,7 @@ const ReportDocument = ({
 			</Document>
 		);
 	}
-	const createAttachmentId = (name: any, index: any) =>
-		`attachment-${index}-${name.replace(/\W/g, '-')}`;
+	const createAttachmentId = (index: number) => `Appendix-${index + 1}`;
 
 	const propertyName = data[0].propertyName || 'Compliance Report';
 
@@ -120,7 +119,7 @@ const ReportDocument = ({
 									<Link
 										style={tw('ml-4 text-[10px] text-blue-600 underline')}
 										src={`#${item.attachmentId}`}>
-										Evidence Attached: {item.fileName}
+										Evidence Attached: {item.attachmentId}
 									</Link>
 								)}
 							</View>
@@ -131,7 +130,7 @@ const ReportDocument = ({
 
 			{/* Attachments */}
 			{attachments.map((att, index) => {
-				const attachmentId = createAttachmentId(att.name, index);
+				const attachmentId = createAttachmentId(index);
 
 				if (att.type === 'image') {
 					return (
@@ -140,9 +139,9 @@ const ReportDocument = ({
 							id={attachmentId}
 							style={tw('justify-center items-center')}>
 							<Text style={tw('absolute top-5 text-xs')}>
-								Attachment: {att.name}
+								Attachment: {attachmentId}
 							</Text>
-							<Image style={tw('h-[90%] w-screen')} src={att.url} />
+							<Image style={tw('h-auto max-h-[90%] w-screen')} src={att.url} />
 						</Page>
 					);
 				}
@@ -160,7 +159,7 @@ const ReportDocument = ({
 									att.images.map((img, idx) => (
 										<Image
 											key={`img-${idx}`}
-											style={tw('h-[90%] w-screen')}
+											style={tw('h-auto max-h-[90%] w-screen')}
 											src={img}
 										/>
 									))}
@@ -274,11 +273,10 @@ export const ComplianceReportPDF = ({
 				).filter(Boolean) as Attachment[]; // Filter out any nulls
 
 				const attachmentIdMap = new Map<string, string>();
-				const createAttachmentId = (name: any, index: any) =>
-					`attachment-${index}-${name.replace(/\W/g, '-')}`;
+				const createAttachmentId = (index: number) => `Appendix-${index + 1}`;
 
 				resolvedAttachments.forEach((att, index) => {
-					const id = createAttachmentId(att.name, index);
+					const id = createAttachmentId(index);
 					// Use a Map to handle potential duplicate filenames correctly
 					if (!attachmentIdMap.has(att.name)) {
 						attachmentIdMap.set(att.name, id);
