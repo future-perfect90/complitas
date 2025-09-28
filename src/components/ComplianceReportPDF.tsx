@@ -2,7 +2,7 @@ import {
 	Document,
 	Font,
 	Image,
-	PDFDownloadLink,
+	Link,
 	PDFViewer,
 	Page,
 	StyleSheet,
@@ -25,6 +25,7 @@ interface ReportDataItem {
 	fileName: string | null;
 	validUntil: string | null;
 	fileUrl?: string;
+	attachmentId?: string;
 }
 
 interface Attachment {
@@ -49,6 +50,10 @@ Font.register({
 });
 
 const styles = StyleSheet.create({
+	link: {
+		color: '#0000EE',
+		textDecoration: 'underline',
+	},
 	page: {
 		fontFamily: 'Roboto',
 		padding: 30,
@@ -112,6 +117,7 @@ const ReportDocument = ({
 	data: ReportDataItem[];
 	attachments: Attachment[];
 }) => {
+	console.log('Rendering ReportDocument with data:', data);
 	if (!data || data.length === 0) {
 		return (
 			<Document>
@@ -121,6 +127,8 @@ const ReportDocument = ({
 			</Document>
 		);
 	}
+	const createAttachmentId = (name: any, index: any) =>
+		`attachment-${index}-${name.replace(/\W/g, '-')}`;
 
 	const propertyName = data[0].propertyName || 'Compliance Report';
 
@@ -133,7 +141,6 @@ const ReportDocument = ({
 	});
 	return (
 		<Document>
-			{/* Main Report Content */}
 			<Page style={styles.page}>
 				<Text style={styles.header}>Compliance Report for: {propertyName}</Text>
 				{Object.entries(groupedData).map(([area, questions]) => (
@@ -153,9 +160,11 @@ const ReportDocument = ({
 									</Text>
 								)}
 								{item.fileName && (
-									<Text style={styles.details}>
+									<Link
+										style={[styles.details, styles.link]}
+										src={`#${item.attachmentId}`}>
 										Evidence Attached: {item.fileName}
-									</Text>
+									</Link>
 								)}
 							</View>
 						))}
@@ -165,9 +174,14 @@ const ReportDocument = ({
 
 			{/* Attachments */}
 			{attachments.map((att, index) => {
+				const attachmentId = createAttachmentId(att.name, index);
+
 				if (att.type === 'image') {
 					return (
-						<Page key={`att-${index}`} style={styles.attachmentPage}>
+						<Page
+							key={`att-${index}`}
+							id={attachmentId}
+							style={styles.attachmentPage}>
 							<Text style={styles.attachmentHeader}>
 								Attachment: {att.name}
 							</Text>
@@ -179,7 +193,7 @@ const ReportDocument = ({
 					return (
 						<>
 							{/* <PdfPageFromUrl url={att.url} /> */}
-							<Page key={`att-${index}`} style={styles.page}>
+							<Page key={`att-${index}`} id={attachmentId} style={styles.page}>
 								<Text style={styles.attachmentHeader}>
 									Attachment: {att.name}
 								</Text>
@@ -266,81 +280,90 @@ export const ComplianceReportPDF = ({
 	reportId: string;
 	authToken?: string;
 }) => {
+	// No changes to the state variables are needed.
 	const [reportData, setReportData] = useState<ReportDataItem[] | null>(null);
 	const [loading, setLoading] = useState(true);
 	const [attachments, setAttachments] = useState<Attachment[]>([]);
 
 	useEffect(() => {
-		const fetchReportData = async () => {
+		const fetchAndProcessReport = async () => {
+			setLoading(true);
 			try {
 				const data = await getReportData(reportId);
-				setReportData(data);
-				if (!data || data.length === 0) return;
 
-				const groupedData: { [key: string]: ReportDataItem[] } = {};
-				const newAttachments: Attachment[] = [];
-
-				for (const row of data) {
-					if (!groupedData[row.area]) {
-						groupedData[row.area] = [];
-					}
-					groupedData[row.area].push(row);
-
-					if (row.fileName && row.fileUrl) {
-						const ext = row.fileName.split('.').pop()?.toLowerCase();
-						if (ext === 'jpg' || ext === 'png' || ext === 'jpeg') {
-							newAttachments.push({
-								type: 'image',
-								name: row.fileName,
-								url: row.fileUrl,
-							});
-						} else if (ext === 'pdf') {
-							// Await the conversion of PDF to images
-							const images = await convertPdfToImages(row.fileUrl);
-							newAttachments.push({
-								type: 'pdf',
-								name: row.fileName,
-								url: row.fileUrl,
-								images,
-							});
-						}
-					}
+				if (!data || data.length === 0) {
+					setReportData([]); // Use empty array to avoid null errors
+					return;
 				}
-				setAttachments(newAttachments);
+
+				const attachmentPromises = data
+					.filter((row: any) => row.fileName && row.fileUrl) // Process only rows with files
+					.map(async (row: any) => {
+						const ext = row.fileName!.split('.').pop()?.toLowerCase();
+						if (ext === 'jpg' || ext === 'png' || ext === 'jpeg') {
+							return {
+								type: 'image',
+								name: row.fileName!,
+								url: row.fileUrl!,
+							};
+						} else if (ext === 'pdf') {
+							const images = await convertPdfToImages(row.fileUrl!);
+							return {
+								type: 'pdf',
+								name: row.fileName!,
+								url: row.fileUrl!,
+								images,
+							};
+						}
+						return null; // Handle unsupported file types if any
+					});
+
+				const resolvedAttachments = (
+					await Promise.all(attachmentPromises)
+				).filter(Boolean) as Attachment[]; // Filter out any nulls
+
+				const attachmentIdMap = new Map<string, string>();
+				const createAttachmentId = (name: any, index: any) =>
+					`attachment-${index}-${name.replace(/\W/g, '-')}`;
+
+				resolvedAttachments.forEach((att, index) => {
+					const id = createAttachmentId(att.name, index);
+					// Use a Map to handle potential duplicate filenames correctly
+					if (!attachmentIdMap.has(att.name)) {
+						attachmentIdMap.set(att.name, id);
+					}
+				});
+
+				const dataWithAttachmentIds = data.map((item: any) => ({
+					...item,
+					attachmentId:
+						item.fileName ? attachmentIdMap.get(item.fileName) : undefined,
+				}));
+
+				setReportData(dataWithAttachmentIds);
+				setAttachments(resolvedAttachments);
 			} catch (error) {
-				console.error(error);
+				console.error('Failed to fetch or process report data:', error);
+				setReportData(null);
 			} finally {
 				setLoading(false);
 			}
 		};
 
-		fetchReportData();
-	}, []);
+		fetchAndProcessReport();
+	}, [reportId]);
 
 	if (loading) {
-		return <div>Loading report...</div>;
+		return <div>Loading and preparing your report...</div>;
 	}
 
 	if (!reportData) {
 		return <div>Could not load report data.</div>;
 	}
 
-	const propertyName = reportData[0]?.propertyName || 'Compliance_Report';
-	const reportFileName = `${propertyName.replace(/ /g, '_')}_${new Date().toISOString().split('T')}.pdf`;
-	console.log(reportFileName);
 	return (
 		<div>
 			<h2>Report Preview</h2>
-			<PDFDownloadLink
-				document={
-					<ReportDocument data={reportData} attachments={attachments} />
-				}
-				fileName={reportFileName}>
-				{({ blob, url, loading, error }) =>
-					loading ? 'Loading document...' : 'Download Report'
-				}
-			</PDFDownloadLink>
-
 			<PDFViewer width="100%" height="800px">
 				<ReportDocument data={reportData} attachments={attachments} />
 			</PDFViewer>
