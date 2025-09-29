@@ -1,6 +1,6 @@
 import { useAuth0 } from '@auth0/auth0-react';
 import { useEffect } from 'react';
-import Navigation from './components/Navigation';
+import Sidebar from './components/Sidebar';
 import { AuthProvider } from './context/AuthProvider';
 import AppRoutes from './routing/AppRouting';
 import './styles/App.css';
@@ -18,10 +18,15 @@ function App() {
 	return (
 		<>
 			<AuthProvider>
-				<Navigation />
-				<main className="flex-1 flex flex-col p-8 w-full box-border">
-					<AppRoutes />
-				</main>
+				<div className="flex h-screen">
+					<Sidebar />
+					{/* <Navigation /> */}
+					<main className="flex-1 flex flex-col p-8 w-full box-border">
+						<div className="container mx-auto px-6 py-8">
+							<AppRoutes />
+						</div>
+					</main>
+				</div>
 			</AuthProvider>
 		</>
 	);
