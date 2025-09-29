@@ -20,8 +20,7 @@ function App() {
 			<AuthProvider>
 				<div className="flex h-screen">
 					<Sidebar />
-					{/* <Navigation /> */}
-					<main className="flex-1 flex flex-col p-8 w-full box-border">
+					<main className="flex-1 flex flex-col p-8 pt-16 md:pt-8 w-full box-border overflow-y-auto">
 						<div className="container mx-auto px-6 py-8">
 							<AppRoutes />
 						</div>
