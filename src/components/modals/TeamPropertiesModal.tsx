@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { type MultiValue } from 'react-select';
 import { toast } from 'react-toastify';
+import type { Property } from '../../types';
 import { assignTeamToProperty } from '../../utils/api';
 import { Button } from '../Button';
 import Modal from '../Modal';
@@ -14,12 +15,6 @@ interface Props {
 	teamName: string;
 	assignedProperties: Property[];
 	unassignedProperties: OptionType[];
-}
-
-interface Property {
-	id: string;
-	name: string;
-	email: string;
 }
 
 const TeamAssignmentModal: React.FC<Props> = ({

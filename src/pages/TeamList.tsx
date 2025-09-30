@@ -26,10 +26,10 @@ const TeamList: React.FC = () => {
 	const [teamMembers, setTeamMembers] = useState<Member[]>([]);
 
 	//UPDATE TYPE
-	const [assignedProperties, setAssignedProperties] = useState<Member[]>([]);
-	const [unassignedProperties, setUnassignedProperties] = useState<Member[]>(
-		[]
-	);
+	const [assignedProperties, setAssignedProperties] = useState<Property[]>([]);
+	const [unassignedProperties, setUnassignedProperties] = useState<
+		OptionType[]
+	>([]);
 
 	const [modal, setModal] = useState<{
 		type: 'create' | 'assign' | 'view' | 'viewAssignProperties' | null;
@@ -144,11 +144,11 @@ const TeamList: React.FC = () => {
 			</div>
 
 			<div className="bg-white shadow rounded overflow-hidden">
-				<table className="min-w-full min-w-xl">
+				<table className="min-w-full min-w-xl w-full">
 					<thead className="bg-gray-100">
 						<tr>
 							<th className="px-4 py-2 text-left text-slate-800">Name</th>
-							<th className="px-4 py-2 text-right text-slate-800">Actions</th>
+							<th className="px-4 py-2 text-slate-800">Actions</th>
 						</tr>
 					</thead>
 					<tbody>

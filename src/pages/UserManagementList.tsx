@@ -65,7 +65,7 @@ const UserList: React.FC = () => {
 				</button>
 			</div>
 			<div className="bg-white shadow rounded overflow-hidden">
-				<table className="min-w-full min-w-xl">
+				<table className="min-w-full min-w-xl w-full">
 					<thead className="bg-gray-100">
 						<tr>
 							<th className="px-4 py-2 text-left text-slate-800">Name</th>
