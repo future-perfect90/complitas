@@ -83,9 +83,9 @@ export default function QuestionItem({
 
 	const validUntilDate = currentAnswer.answer === 'Yes';
 	return (
-		<div className="p-4 border-b border-gray-200 relative">
+		<div className="p-4 relative">
 			<div className="flex justify-between items-start">
-				<p className="font-semibold text-gray-800 pr-4">
+				<p className="font-semibold text-gray-800 dark:text-slate-300 pr-4">
 					{questionObject.question}
 				</p>
 				{isSaving && <span className="text-sm text-gray-400">Saving...</span>}
@@ -94,7 +94,7 @@ export default function QuestionItem({
 				{['Yes', 'No', 'NA'].map((option) => (
 					<label
 						key={option}
-						className="flex items-center space-x-1 cursor-pointer text-slate-600">
+						className="flex items-center space-x-1 cursor-pointer text-slate-600 text-gray-900 dark:text-gray-200">
 						<input
 							type="radio"
 							name={questionObject.id}
@@ -102,7 +102,7 @@ export default function QuestionItem({
 							checked={currentAnswer.answer === option}
 							onChange={handleResponseChange}
 							disabled={isSaving}
-							className="form-radio h-4 w-4 text-purple-600"
+							className="form-radio h-4 w-4"
 						/>
 						<span>{option}</span>
 					</label>

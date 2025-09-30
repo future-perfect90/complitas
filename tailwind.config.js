@@ -5,6 +5,7 @@ module.exports = {
 	// Add 'class' to enable dark mode toggling via a class on the <html> tag
 	darkMode: 'class',
 	content: [
+		'./index.html',
 		'./pages/**/*.{js,ts,jsx,tsx}',
 		'./components/**/*.{js,ts,jsx,tsx}',
 		'./src/**/*.{js,ts,jsx,tsx}',
@@ -30,5 +31,5 @@ module.exports = {
 			},
 		},
 	},
-	plugins: [],
+	plugins: [require('@tailwindcss/forms')],
 };

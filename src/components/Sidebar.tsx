@@ -49,13 +49,13 @@ const Sidebar = () => {
 			{/* Sidebar */}
 			<div
 				className={clsx(
-					'fixed inset-y-0 left-0 z-30 w-64 bg-gray-800 text-gray-100 transform transition-transform duration-300 ease-in-out md:relative md:translate-x-0 md:flex md:flex-col',
+					'fixed inset-y-0 left-0 z-30 w-64 bg-gray-200 dark:bg-gray-700 transition-colors duration-300 ease-in-out md:relative md:translate-x-0 md:flex md:flex-col',
 					{
 						'translate-x-0': sidebarOpen,
 						'-translate-x-full': !sidebarOpen,
 					}
 				)}>
-				<div className="flex items-center justify-center h-16 bg-gray-900 flex-shrink-0">
+				<div className="flex items-center justify-center h-16 bg-gray-200 text-gray-900 dark:text-gray-200 dark:bg-gray-700 flex-shrink-0">
 					<img
 						className="h-8 w-8"
 						src="/complitas_logo_without_text.png"
@@ -75,7 +75,7 @@ const Sidebar = () => {
 									'flex items-center px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200',
 									isActive ?
 										'bg-gray-900 text-white'
-									:	'text-gray-300 hover:bg-gray-700 hover:text-white'
+									:	'text-gray-800 dark:text-gray-200 hover:bg-gray-700 hover:text-white'
 								)
 							}>
 							{item.name}

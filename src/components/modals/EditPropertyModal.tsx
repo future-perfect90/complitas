@@ -109,7 +109,7 @@ export default function EditPropertyModal({
 						onChange={(e) =>
 							handleFieldChange(key as keyof Property, e.target.value)
 						}
-						className="w-full border rounded px-2 py-1 text-gray-900"
+						className="w-full border rounded px-2 py-1 text-gray-900 dark:text-gray-200 dark:bg-gray-600 dark:border-gray-500"
 					/>
 				</div>
 			);
@@ -123,7 +123,7 @@ export default function EditPropertyModal({
 						onChange={(e) =>
 							handleFieldChange(key as keyof Property, e.target.value)
 						}
-						className="w-full border rounded px-2 py-1 text-gray-900"
+						className="w-full border rounded px-2 py-1 text-gray-900 dark:text-gray-200 dark:bg-gray-600 dark:border-gray-500"
 					/>
 				</div>
 			);
@@ -141,8 +141,9 @@ export default function EditPropertyModal({
 									form[key as keyof Property] === 1
 								}
 								onChange={() => handleAutoSave(key as keyof Property, true)}
+								className="checked:bg-orange-600"
 							/>{' '}
-							<span className="text-gray-900">Yes</span>
+							<span className="text-gray-900 dark:text-gray-200">Yes</span>
 						</label>
 						<label>
 							<input
@@ -153,7 +154,7 @@ export default function EditPropertyModal({
 								}
 								onChange={() => handleAutoSave(key as keyof Property, false)}
 							/>{' '}
-							<span className="text-gray-900">No</span>
+							<span className="text-gray-900 dark:text-gray-200">No</span>
 						</label>
 					</div>
 				</div>
@@ -174,7 +175,7 @@ export default function EditPropertyModal({
 						onChange={(e) =>
 							handleFieldChange(key as keyof Property, e.target.value)
 						}
-						className="w-full border rounded px-2 py-2 text-gray-900">
+						className="w-full border rounded px-2 py-2 text-gray-900 dark:text-gray-200 dark:bg-gray-600 dark:border-gray-500">
 						<option value="">Select Residential Awareness</option>
 						{residentialOptions.map((option) => (
 							<option key={option.value} value={option.value}>
@@ -199,7 +200,7 @@ export default function EditPropertyModal({
 						onChange={(e) =>
 							handleFieldChange(key as keyof Property, e.target.value)
 						}
-						className="w-full border rounded px-2 py-2 text-gray-900">
+						className="w-full border rounded px-2 py-2 text-gray-900 dark:text-gray-200 dark:bg-gray-600 dark:border-gray-500">
 						<option value="">Select Occupancy Type</option>
 						{occupancyOptions.map((option) => (
 							<option key={option.value} value={option.value}>

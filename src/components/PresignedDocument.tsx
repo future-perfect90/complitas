@@ -49,7 +49,7 @@ const PresignedDocument: React.FC<Props> = ({
 				download
 				target="_blank"
 				rel="noopener noreferrer"
-				className="text-blue-600 hover:underline text-sm font-semibold">
+				className="text-blue-600 dark:text-blue-300 hover:underline text-sm font-semibold">
 				Download {linkTextPrefix} Document
 			</a>
 		</div>

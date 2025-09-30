@@ -25,9 +25,9 @@ export default function QuestionsModal({
 		<div
 			className="fixed inset-0 bg-black/50 bg-opacity-50 z-50 flex justify-center items-center"
 			onClick={handleBackdropClick}>
-			<div className="bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] flex flex-col">
-				<div className="p-4 border-b flex items-center justify-between">
-					<h2 className="text-2xl font-bold text-slate-600">
+			<div className="bg-white dark:bg-gray-700 rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] flex flex-col">
+				<div className="p-4 flex items-center justify-between">
+					<h2 className="text-2xl font-bold text-slate-600 dark:text-slate-300">
 						Compliance: {areaName}
 					</h2>
 					<button
@@ -58,7 +58,7 @@ export default function QuestionsModal({
 						/>
 					))}
 				</div>
-				<div className="p-4 border-t flex justify-end">
+				<div className="p-4 flex justify-end">
 					{/* No save button needed, just a close button */}
 					<Button
 						label="Close"
