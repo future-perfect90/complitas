@@ -275,7 +275,6 @@ export const ComplianceReportPDF = ({
 				setAttachments(resolvedAttachments);
 			} catch (error) {
 				console.error('Failed to fetch or process report data:', error);
-				setReportData(null);
 			} finally {
 				setLoading(false);
 			}
@@ -284,12 +283,8 @@ export const ComplianceReportPDF = ({
 		fetchAndProcessReport();
 	}, [reportId]);
 
-	if (loading) {
+	if (loading || !reportData) {
 		return <LoadingSpinner message={'Loading report...'} />;
-	}
-
-	if (!reportData) {
-		return <div>Could not load report data.</div>;
 	}
 
 	return (
