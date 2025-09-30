@@ -1,0 +1,41 @@
+@import "tailwindcss";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --color-bg-primary: 255 255 255; /* #FFFFFF */
+    --color-bg-secondary: 248 250 252; /* #F8FAFC */
+    --color-border: 229 250 252; /* #F8FAFC */
+    --color-text-primary: 15 23 42; /* #0F172A */
+    --color-text-secondary: 71 85 105; /* #475569 */
+    --color-primary: 59 105 145;   /* #3B6991 */
+    --color-primary-hover: 46 82 113; /* #2E5271 */
+
+    --color-success: 22 163 74; /* #16A34A */
+    --color-warning: 217 119 6; /* #D97706 */
+    --color-danger: 220 38 38; /* #DC2626 */
+    color-scheme: light dark;
+
+  }
+
+  .dark {
+    --color-bg-primary: 15 23 42; /* #0F172A */
+    --color-bg-secondary: 30 41 59; /* #1E293B */
+    --color-border: 51 65 85; /* #334155 */
+    --color-text-primary: 248 250 252; /* #F8FAFC */
+    --color-text-secondary: 148 163 184; /* #94A3B8 */
+    --color-primary: 95 147 195;   /* #5F93C3 */
+    --color-primary-hover: 59 105 145; /* #3B6991 */
+
+    --color-success: 34 197 94; /* #22C55E */
+    --color-warning: 245 158 11; /* #F59E0B */
+    --color-danger: 239 68 68; /* #EF4444 */
+  }
+}
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
+}

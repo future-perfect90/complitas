@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import Sidebar from './components/Sidebar';
 import { AuthProvider } from './context/AuthProvider';
 import AppRoutes from './routing/AppRouting';
-import './styles/App.css';
+import './styles/globals.css';
 import { setAuthService } from './utils/authService';
 
 function App() {
