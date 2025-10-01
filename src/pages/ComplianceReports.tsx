@@ -98,17 +98,24 @@ export default function ComplianceReports() {
 											<h3 className="text-lg font-semibold">
 												Report from -{' '}
 												{new Date(report.createdAt).toLocaleString()} -{' '}
-												<a
-													href={`/properties/${id}/compliance-reports/${report.id}`}>
-													Update Report
-												</a>{' '}
-												-{' '}
-												{/* <a onClick={handleGenerateReport(report.id)}>
-													Download Report
-												</a> */}
-												<a onClick={handleViewReport(report.id)}>
-													Preview report
-												</a>
+												<Button
+													label="Update Report"
+													onClick={() =>
+														navigate(
+															`/properties/${id}/compliance-reports/${report.id}`
+														)
+													}
+													className="px-2 py-1 bg-green-800 text-white rounded"
+												/>{' '}
+												<Button
+													label="View Report"
+													onClick={() =>
+														navigate(
+															`/properties/${id}/compliance-reports/${report.id}/pdf`
+														)
+													}
+													className="px-2 py-1 bg-blue-800 text-white rounded"
+												/>
 											</h3>
 										</div>
 									))}
