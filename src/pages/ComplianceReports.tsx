@@ -41,15 +41,6 @@ export default function ComplianceReports() {
 		toast.success('New compliance report created!');
 	};
 
-	// const handleGenerateReport = (reportId: string) => async () => {
-	// 	await generateReport(reportId);
-	// 	toast.info('Generating report...');
-	// };
-
-	const handleViewReport = (reportId: string) => async () => {
-		navigate(`/properties/${id}/compliance-reports/${reportId}/pdf`);
-	};
-
 	const handleOpenConfirmation = () => {
 		setIsConfirmationModalOpen(true);
 	};
