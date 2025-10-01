@@ -60,7 +60,6 @@ const TeamAssignmentModal: React.FC<Props> = ({
 							value={chosenMembers}
 							onChange={setChosenMembers}
 							closeMenuOnSelect={false}
-							menuPortalTarget={document.body}
 						/>
 					</div>
 				:	<div>

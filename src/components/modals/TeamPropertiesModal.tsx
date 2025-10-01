@@ -79,12 +79,14 @@ const TeamAssignmentModal: React.FC<Props> = ({
 					}
 					{assignedProperties && assignedProperties.length > 0 ?
 						<div className="mt-4 grid grid-cols-1">
-							<h3 className="text-lg font-semibold text-slate-800">
+							<h3 className="text-lg font-semibold text-slate-800 dark:text-slate-300 mb-2">
 								Assigned Properties
 							</h3>
 
 							{assignedProperties.map((property) => (
-								<p key={property.id} className="text-slate-800">
+								<p
+									key={property.id}
+									className="text-slate-800 dark:text-slate-300">
 									{property.name} ({property.email})
 								</p>
 							))}

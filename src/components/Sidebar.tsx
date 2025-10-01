@@ -49,7 +49,7 @@ const Sidebar = () => {
 			{/* Sidebar */}
 			<div
 				className={clsx(
-					'fixed inset-y-0 left-0 z-30 w-64 bg-gray-200 dark:bg-gray-700 transition-colors duration-300 ease-in-out md:relative md:translate-x-0 md:flex md:flex-col',
+					'fixed inset-y-0 left-0 z-30 w-48 bg-gray-200 dark:bg-gray-700 transition-colors duration-300 ease-in-out md:relative md:translate-x-0 md:flex md:flex-col',
 					{
 						'translate-x-0': sidebarOpen,
 						'-translate-x-full': !sidebarOpen,

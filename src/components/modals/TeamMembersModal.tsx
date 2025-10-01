@@ -40,9 +40,9 @@ const TeamMembersModal: React.FC<Props> = ({
 	return (
 		<Modal isOpen={isOpen} onClose={onClose} title={`View ${teamName} members`}>
 			{teamMembers && teamMembers.length > 0 ?
-				<div className="grid grid-cols-2 gap-4">
-					<table className="min-w-full min-w-xl">
-						<thead className="bg-gray-100">
+				<div className="bg-white shadow rounded-lg overflow-hidden">
+					<table className="min-w-full min-w-xl w-full">
+						<thead className="bg-gray-400">
 							<tr>
 								<th className="px-4 py-2 text-left text-slate-800">Name</th>
 								<th className="px-4 py-2 text-left text-slate-800">Email</th>
@@ -51,9 +51,9 @@ const TeamMembersModal: React.FC<Props> = ({
 						</thead>
 						<tbody>
 							{teamMembers.map((members: Member) => (
-								<tr className="border-t" key={members.id}>
-									<td className="px-4 py-2 text-slate-400">{members.name}</td>
-									<td className="px-4 py-2 text-slate-400">{members.email}</td>
+								<tr className="border-t hover:bg-gray-50" key={members.id}>
+									<td className="px-4 py-2 text-slate-800">{members.name}</td>
+									<td className="px-4 py-2 text-slate-800">{members.email}</td>
 									<td>
 										<Button
 											label="Remove"

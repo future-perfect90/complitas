@@ -58,7 +58,7 @@ const CompanyList: React.FC = () => {
 					Add Company
 				</button>
 			</div>
-			<div className="bg-white shadow rounded overflow-hidden">
+			<div className="bg-white shadow rounded-lg overflow-hidden">
 				<table className="min-w-full min-w-xl">
 					<thead className="bg-gray-100">
 						<tr>

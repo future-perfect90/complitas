@@ -70,8 +70,8 @@ const PropertyList: React.FC = () => {
 					Add Property
 				</button>
 			</div>
-			<div className="bg-white shadow rounded overflow-hidden">
-				<table className="min-w-full min-w-xl border dark: border-none">
+			<div className="bg-white shadow rounded-lg overflow-x-auto">
+				<table className="min-w-full min-w-xl w-full border dark:border-none">
 					<thead className="bg-gray-400">
 						<tr>
 							<th className="px-4 py-2 text-left text-slate-800">Name</th>
