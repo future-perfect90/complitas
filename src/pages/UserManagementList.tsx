@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { toast } from 'react-toastify';
 import UserModal from '../components/modals/UserModal';
 import { useAuthMeta } from '../context/AuthProvider';
 
+import SearchInput from '../components/SearchInput';
+import { useSearch } from '../hooks/useSearch';
 import type { User } from '../types';
 import { getUsers } from '../utils/api';
 
@@ -10,6 +12,8 @@ const UserList: React.FC = () => {
 	const [users, setUsers] = useState<User[]>([]);
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [editData, setEditData] = useState<User | undefined>(undefined);
+	const [searchTerm, setSearchTerm] = useState('');
+
 	const authMeta = useAuthMeta();
 	const companyUuid = authMeta?.companyUuid || '';
 	const isSuperAdmin = authMeta?.roles?.includes('SuperAdmin');
@@ -28,6 +32,13 @@ const UserList: React.FC = () => {
 			fetchUsers(companyUuid);
 		}
 	}, [companyUuid, isSuperAdmin]);
+
+	const userSearchKeys = useMemo(() => ['name', 'email'], []);
+	const filteredUsers = useSearch(
+		users,
+		searchTerm,
+		userSearchKeys as (keyof User)[]
+	);
 
 	// const handleEdit = async (id: string) => {
 	// 	try {
@@ -54,7 +65,11 @@ const UserList: React.FC = () => {
 		<div className="max-w-4xl mx-auto p-4">
 			<div className="flex justify-between items-center mb-4">
 				<h1 className="text-2xl font-bold">User List</h1>
-
+				<SearchInput
+					value={searchTerm}
+					onChange={setSearchTerm}
+					placeholder="Search users..."
+				/>
 				<button
 					onClick={() => {
 						setEditData(undefined);
@@ -64,6 +79,7 @@ const UserList: React.FC = () => {
 					Add User
 				</button>
 			</div>
+
 			<div className="bg-white shadow rounded-lg overflow-hidden">
 				<table className="min-w-full min-w-xl w-full border dark:border-none">
 					<thead className="bg-gray-400">
@@ -76,8 +92,8 @@ const UserList: React.FC = () => {
 						</tr>
 					</thead>
 					<tbody>
-						{users && users.length > 0 ?
-							users.map((c) => (
+						{filteredUsers && filteredUsers.length > 0 ?
+							filteredUsers.map((c) => (
 								<tr key={c.id} className="border-t">
 									<td className="px-4 py-2 text-slate-800">{c.name}</td>
 									<td className="px-4 py-2 text-slate-800">{c.email}</td>

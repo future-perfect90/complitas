@@ -1,35 +1,48 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Button } from '../components/Button';
+import SearchInput from '../components/SearchInput';
 import PropertyModal from '../components/modals/PropertyModal';
 import { useAuthMeta } from '../context/AuthProvider';
+import { useSearch } from '../hooks/useSearch';
 import type { Property } from '../types';
 import { deleteProperty, getProperties, getProperty } from '../utils/api';
 
 const PropertyList: React.FC = () => {
 	const [properties, setProperties] = useState<Property[]>([]);
 	const [isModalOpen, setIsModalOpen] = useState(false);
+	const [searchTerm, setSearchTerm] = useState('');
 	const [editData, setEditData] = useState<Property | undefined>(undefined);
 	const authMeta = useAuthMeta();
 	const companyUuid = authMeta?.companyUuid || '';
 	const isLoading = authMeta?.isLoading;
 	const navigate = useNavigate();
 
-	const fetchProperties = async (companyUuid: string) => {
+	const fetchProperties = useCallback(async (companyUuid: string) => {
 		try {
 			const data = await getProperties(companyUuid);
 			setProperties(data);
 		} catch {
-			console.log('Failed to load properties.');
+			toast.error('Failed to load properties.');
 		}
-	};
+	}, []);
 
 	useEffect(() => {
 		if (!isLoading && companyUuid) {
 			fetchProperties(companyUuid);
 		}
-	}, [companyUuid, isLoading]);
+	}, [companyUuid, isLoading, fetchProperties]);
+
+	const propertySearchKeys = useMemo(
+		() => ['name', 'address1', 'address2', 'telephone', 'email'],
+		[]
+	);
+	const filteredProperties = useSearch(
+		properties,
+		searchTerm,
+		propertySearchKeys as (keyof Property)[]
+	);
 
 	const handleEdit = async (id: string) => {
 		try {
@@ -47,7 +60,7 @@ const PropertyList: React.FC = () => {
 		try {
 			await deleteProperty(id);
 			toast.success('Property deleted successfully!');
-			fetchProperties(companyUuid);
+			await fetchProperties(companyUuid);
 		} catch {
 			toast.error('Error deleting property.');
 		}
@@ -58,17 +71,25 @@ const PropertyList: React.FC = () => {
 	}
 	return (
 		<div className="max-w-4xl mx-auto p-4">
-			<div className="flex justify-between items-center mb-4">
-				<h1 className="text-2xl font-bold">Property List</h1>
-
-				<button
-					onClick={() => {
-						setEditData(undefined);
-						setIsModalOpen(true);
-					}}
-					className="px-4 py-2 bg-green-600 text-white rounded">
-					Add Property
-				</button>
+			<div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-4">
+				<div>
+					<h1 className="text-2xl font-bold">Property List</h1>
+				</div>
+				<div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 w-full sm:w-auto">
+					<SearchInput
+						value={searchTerm}
+						onChange={setSearchTerm}
+						placeholder="Search properties..."
+					/>
+					<button
+						onClick={() => {
+							setEditData(undefined);
+							setIsModalOpen(true);
+						}}
+						className="px-4 py-2 bg-green-600 text-white rounded w-full sm:w-auto">
+						Add Property
+					</button>
+				</div>
 			</div>
 			<div className="bg-white shadow rounded-lg overflow-x-auto">
 				<table className="min-w-full min-w-xl w-full border dark:border-none">
@@ -82,8 +103,8 @@ const PropertyList: React.FC = () => {
 						</tr>
 					</thead>
 					<tbody>
-						{properties && properties.length > 0 ?
-							properties.map((p) => (
+						{filteredProperties.length > 0 ?
+							filteredProperties.map((p) => (
 								<tr key={p.id} className="border-t">
 									<td className="px-4 py-2 text-slate-800">{p.name}</td>
 									<td className="px-4 py-2 text-slate-800">
@@ -125,7 +146,7 @@ const PropertyList: React.FC = () => {
 			<PropertyModal
 				isOpen={isModalOpen}
 				onClose={() => setIsModalOpen(false)}
-				onSuccess={() => companyUuid && fetchProperties(companyUuid)}
+				onSuccess={() => fetchProperties(companyUuid)}
 				initialData={editData}
 			/>
 		</div>
