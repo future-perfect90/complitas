@@ -110,4 +110,5 @@ export interface MaintenanceTask {
 	completedAt?: string;
 	completedBy?: string;
 	propertyId: string;
+	createdAt?: string;
 }

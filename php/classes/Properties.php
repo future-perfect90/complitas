@@ -122,7 +122,7 @@ class Properties
 
     public function getMaintenanceTasks(string $propertyId): array
     {
-        $sql = "SELECT id, title, description, typeOfWork, evidence, completedAt, completedBy, propertyId FROM maintenance_tasks WHERE propertyId = :property_id";
+        $sql = "SELECT id, title, description, typeOfWork, evidence, completedAt, completedBy, propertyId, createdAt FROM maintenance_tasks WHERE propertyId = :property_id";
         $stmt = $this->pdo->prepare($sql);
         $stmt->bindParam(':property_id', $propertyId);
         $stmt->execute();

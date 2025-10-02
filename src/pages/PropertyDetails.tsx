@@ -462,45 +462,50 @@ export default function PropertyDetails({
 				</CardHeader>
 				<br />
 				<CardContent className="space-y-2 flex">
-					<div className="w-full">
+					<div className="w-full overflow-x-auto">
 						{property.maintenanceTasks && property.maintenanceTasks.length > 0 ?
-							<table className="min-w-full min-w-xl w-full border dark:border-none">
+							<table className="min-w-full w-full text-left">
+								<thead className="border-b dark:border-gray-700">
+									<tr>
+										<th className="px-3 py-2 text-sm font-semibold text-gray-800 dark:text-gray-200">
+											Title
+										</th>
+										<th className="px-3 py-2 text-sm font-semibold text-gray-800 dark:text-gray-200">
+											Type of Work
+										</th>
+										<th className="px-3 py-2 text-sm font-semibold text-gray-800 dark:text-gray-200">
+											Created at
+										</th>
+										<th className="px-3 py-2 text-sm font-semibold text-gray-800 dark:text-gray-200">
+											Completed On
+										</th>
+										<th className="px-3 py-2 text-sm font-semibold text-gray-800 dark:text-gray-200">
+											Completed By
+										</th>
+										<th className="px-3 py-2 text-sm font-semibold text-gray-800 dark:text-gray-200 text-right">
+											Actions
+										</th>
+									</tr>
+								</thead>
 								<tbody>
-									<thead>
-										<tr>
-											<th className="px-3 py-2 text-gray-800 dark:text-gray-200">
-												Title
-											</th>
-											<th className="px-3 py-2 text-gray-800 dark:text-gray-200">
-												Type of Work
-											</th>
-											<th className="px-3 py-2 text-gray-800 dark:text-gray-200">
-												Completed At
-											</th>
-											<th className="px-3 py-2 text-gray-800 dark:text-gray-200">
-												Completed By
-											</th>
-										</tr>
-									</thead>
 									{property.maintenanceTasks.map((task) => (
-										<tr key={task.id}>
-											<td className="px-3 py-2 text-gray-800 dark:text-gray-200">
+										<tr key={task.id} className="border-b dark:border-gray-700">
+											<td className="px-3 py-3 text-sm text-gray-800 dark:text-gray-200">
 												{task.title}
 											</td>
-											<td className="px-3 py-2 text-gray-800 dark:text-gray-200">
+											<td className="px-3 py-3 text-sm text-gray-800 dark:text-gray-200">
 												{task.typeOfWork}
 											</td>
-											{task.completedAt ?? (
-												<td className="px-3 py-2 text-gray-800 dark:text-gray-200">
-													{task.completedAt}
-												</td>
-											)}
-											{task.completedBy ?? (
-												<td className="px-3 py-2 text-gray-800 dark:text-gray-200">
-													{task.completedBy}
-												</td>
-											)}
-											<td className="px-3 py-2 text-right">
+											<td className="px-3 py-3 text-sm text-gray-800 dark:text-gray-200">
+												{task.createdAt || '-'}
+											</td>
+											<td className="px-3 py-3 text-sm text-gray-800 dark:text-gray-200">
+												{task.completedAt || '-'}
+											</td>
+											<td className="px-3 py-3 text-sm text-gray-800 dark:text-gray-200">
+												{task.completedBy || '-'}
+											</td>
+											<td className="px-3 py-3 text-right">
 												{!task.completedAt && (
 													<Button
 														label="Complete Task"
