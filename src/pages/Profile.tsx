@@ -1,19 +1,24 @@
 import { useAuth0 } from '@auth0/auth0-react';
 import { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
+import { Button } from '../components/Button';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/Card';
+import ChangePasswordModal from '../components/modals/ChangePasswordModal';
 import type { ProfileData } from '../types';
 import { getProfile } from '../utils/api';
 
 export default function Profile() {
 	const { user, isAuthenticated } = useAuth0();
 	const [profile, setProfile] = useState<ProfileData>();
+	const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
 
+	const userUuid = user?.['https://complitas.dev/user_uuid'];
+	const auth0Id = user?.sub;
 	useEffect(() => {
 		const fetchClaimsAndData = async () => {
-			const uuid = user?.['https://complitas.dev/user_uuid'];
-			if (uuid) {
+			if (userUuid) {
 				try {
-					const { data } = await getProfile(uuid);
+					const { data } = await getProfile(userUuid);
 					setProfile(data);
 				} catch (error) {
 					console.error('Error fetching teams:', error);
@@ -24,7 +29,12 @@ export default function Profile() {
 		if (isAuthenticated) {
 			fetchClaimsAndData();
 		}
-	}, [isAuthenticated]);
+	}, [isAuthenticated, userUuid]);
+
+	const handlePasswordSuccess = () => {
+		setIsPasswordModalOpen(false);
+		toast.success('Password updated successfully!');
+	};
 
 	return (
 		<div className="min-h-screen p-8">
@@ -40,6 +50,39 @@ export default function Profile() {
 						</p>
 					</div>
 				</div>
+				{profile && profile.profile ?
+					<Card className="rounded-2xl shadow-lg">
+						<CardHeader className="flex justify-between items-center">
+							<CardTitle className="text-xl font-semibold">
+								Personal Details
+							</CardTitle>
+						</CardHeader>
+						<br />
+						<CardContent className="space-y-4 flex flex-col sm:flex-row sm:justify-between">
+							<div>
+								<p className="text-sm text-gray-500 dark:text-gray-400">Name</p>
+								<p className="text-gray-900 dark:text-gray-100">
+									{profile?.profile.name}
+								</p>
+							</div>
+							<div>
+								<p className="text-sm text-gray-500 dark:text-gray-400">
+									Email
+								</p>
+								<p className="text-gray-900 dark:text-gray-100">
+									{profile?.profile.email}
+								</p>
+							</div>
+							<div>
+								<Button
+									label="Change Password"
+									onClick={() => setIsPasswordModalOpen(true)}
+									className="px-4 py-2 bg-blue-600 text-white hover:bg-blue-700 float-right"
+								/>
+							</div>
+						</CardContent>
+					</Card>
+				:	<p className="text-gray-500 dark:text-gray-400">No profile data.</p>}
 
 				{/* Teams Section */}
 				{profile && profile.teams && profile.teams.length > 0 ?
@@ -86,34 +129,14 @@ export default function Profile() {
 						No properties assigned.
 					</p>
 				}
-
-				{/* Personal Details Section */}
-				{profile && profile.profile ?
-					<Card className="rounded-2xl shadow-lg">
-						<CardHeader className="flex justify-between items-center">
-							<CardTitle className="text-xl font-semibold">
-								Personal Details
-							</CardTitle>
-						</CardHeader>
-						<br />
-						<CardContent className="space-y-4">
-							<div>
-								<p className="text-sm text-gray-500 dark:text-gray-400">Name</p>
-								<p className="text-gray-900 dark:text-gray-100">
-									{profile?.profile.name}
-								</p>
-							</div>
-							<div>
-								<p className="text-sm text-gray-500 dark:text-gray-400">
-									Email
-								</p>
-								<p className="text-gray-900 dark:text-gray-100">
-									{profile?.profile.email}
-								</p>
-							</div>
-						</CardContent>
-					</Card>
-				:	<p className="text-gray-500 dark:text-gray-400">No profile data.</p>}
+				{auth0Id && (
+					<ChangePasswordModal
+						isOpen={isPasswordModalOpen}
+						onClose={() => setIsPasswordModalOpen(false)}
+						onSuccess={handlePasswordSuccess}
+						userUuid={auth0Id}
+					/>
+				)}
 			</div>
 		</div>
 	);

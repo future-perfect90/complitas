@@ -650,3 +650,28 @@ export async function getReportData(reportId: string) {
 
 	return response.json();
 }
+
+export async function changePassword(userId: string, password: string) {
+	const jwt =
+		authService.getAccessTokenSilently ?
+			await authService.getAccessTokenSilently()
+		:	'';
+	const url = `${import.meta.env.VITE_API_BASE_URL}/user-management/changePassword.php`;
+	return fetch(url, {
+		method: 'POST',
+		headers: {
+			Authorization: `Bearer ${jwt}`,
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify({ userId, password }),
+	})
+		.then((response) => {
+			if (!response.ok) {
+				throw new Error(`Response status: ${response.status}`);
+			}
+			return response.json();
+		})
+		.catch((error) => {
+			throw error;
+		});
+}

@@ -17,6 +17,7 @@ const Sidebar = () => {
 				{ name: 'About', href: '/about', current: false },
 			]
 		:	[
+				{ name: 'My Profile', href: '/profile', current: false },
 				{ name: 'Dashboard', href: '/dashboard', current: false },
 				{ name: 'Properties', href: '/properties', current: false },
 				{ name: 'Users', href: '/users', current: false },
