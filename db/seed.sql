@@ -163,6 +163,15 @@ CREATE TABLE IF NOT EXISTS question_responses (
     UNIQUE KEY `reportId` (`reportId`,`questionId`)
 );
 
+CREATE TABLE IF NOT EXISTS `maintenance_companies` (
+    `id` VARCHAR(36) NOT NULL DEFAULT (UUID()),
+    `name` VARCHAR(255) NOT NULL,
+    `contactName` VARCHAR(255),
+    `contactAddress` VARCHAR(255),
+    `contactNumber` VARCHAR(255),
+PRIMARY KEY (`id`)
+);
+
 CREATE TABLE IF NOT EXISTS `maintenance_tasks` (
     `id` VARCHAR(36) NOT NULL DEFAULT (UUID()),
     `title` VARCHAR(255) NOT NULL,
@@ -176,5 +185,6 @@ CREATE TABLE IF NOT EXISTS `maintenance_tasks` (
     `createdBy` VARCHAR(255),
     `propertyId` VARCHAR(36),
     CONSTRAINT fk_property_maintenance FOREIGN KEY (propertyId) REFERENCES properties(id) ON DELETE CASCADE,
+    CONSTRAINT fk_maintenance_company FOREIGN KEY (completedBy) REFERENCES maintenance_companies(id) ON DELETE CASCADE,
 PRIMARY KEY (`id`)
 );
