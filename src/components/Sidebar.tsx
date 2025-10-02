@@ -81,6 +81,28 @@ const Sidebar = () => {
 							{item.name}
 						</NavLink>
 					))}
+					{isAuthenticated ?
+						<NavLink
+							to="#"
+							onClick={() =>
+								logout({
+									logoutParams: { returnTo: window.location.origin },
+								})
+							}
+							className={
+								'flex items-center px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200 text-gray-800 dark:text-gray-200 hover:bg-gray-700 hover:text-white'
+							}>
+							Log out
+						</NavLink>
+					:	<NavLink
+							to="#"
+							onClick={() => loginWithRedirect()}
+							className={
+								'flex items-center px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200 text-gray-800 dark:text-gray-200 hover:bg-gray-700 hover:text-white'
+							}>
+							Log in
+						</NavLink>
+					}
 				</nav>
 			</div>
 
