@@ -9,11 +9,13 @@ import type { MaintenanceTask, Property } from '../types';
 interface PropertyDetailsProps {
 	property: Property;
 	onEdit: (section: string, data: Property) => void;
+	onDataUpdate: () => void;
 }
 
 export default function PropertyDetails({
 	property,
 	onEdit,
+	onDataUpdate,
 }: PropertyDetailsProps) {
 	const [maintenanceTaskModalOpen, setIsMaintenanceTaskModalOpen] =
 		useState(false);
@@ -31,7 +33,8 @@ export default function PropertyDetails({
 		} else {
 			toast.success('Maintenance task added successfully!');
 		}
-	}, [isCompletingTask]);
+		onDataUpdate();
+	}, [isCompletingTask, onDataUpdate]);
 
 	const handleOpenCompleteTask = (task: MaintenanceTask) => {
 		setSelectedTask(task);

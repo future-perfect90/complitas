@@ -1,5 +1,5 @@
 import { useAuth0 } from '@auth0/auth0-react';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import EditPropertyModal from '../components/modals/EditPropertyModal';
@@ -14,19 +14,22 @@ export default function Property() {
 	const [editingSection, setEditingSection] = useState<string | null>(null);
 	const [modalOpen, setModalOpen] = useState(false);
 
+	const fetchProperty = useCallback(async () => {
+		if (!id) return;
+		try {
+			const data = await getProperty(id);
+			setProperty(data);
+		} catch (error) {
+			console.error('Error fetching property:', error);
+			toast.error('Failed to load property data.');
+		}
+	}, [id]);
+
 	useEffect(() => {
-		const fetchProperty = async () => {
-			try {
-				const data = await getProperty(id ?? '');
-				setProperty(data);
-			} catch (error) {
-				console.error('Error fetching property:', error);
-			}
-		};
 		if (isAuthenticated) {
 			fetchProperty();
 		}
-	}, [isAuthenticated]);
+	}, [isAuthenticated, fetchProperty]);
 
 	// Modal open handler
 	const handleEdit = (section: string) => {
@@ -62,7 +65,11 @@ export default function Property() {
 				{/* Property Details Section */}
 				{property ?
 					<>
-						<PropertyDetails property={property} onEdit={handleEdit} />
+						<PropertyDetails
+							property={property}
+							onEdit={handleEdit}
+							onDataUpdate={fetchProperty}
+						/>
 						{/* Edit Modal */}
 						{modalOpen && (
 							<EditPropertyModal
