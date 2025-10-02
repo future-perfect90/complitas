@@ -69,6 +69,7 @@ export interface Property {
 	isolationValvesClear?: boolean | 1 | 0;
 	accessControlled?: boolean | 1 | 0;
 	oms?: boolean | 1 | 0;
+	maintenanceTasks?: MaintenanceTask[];
 }
 export interface User {
 	id?: string;
@@ -98,4 +99,15 @@ export interface ProfileData {
 		id?: string;
 		name?: string;
 	}[];
+}
+
+export interface MaintenanceTask {
+	id?: string;
+	title: string;
+	description: string;
+	typeOfWork: string;
+	evidence?: string;
+	completedAt?: string;
+	completedBy?: string;
+	propertyId: string;
 }

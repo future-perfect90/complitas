@@ -1,9 +1,9 @@
 <?php
+require_once __DIR__ . '/../../shared/headers.php';
+
 
 require_once __DIR__ . '/../../classes/Database.php';
 require_once __DIR__ . '/../../classes/Properties.php';
-require_once __DIR__ . '/../../shared/headers.php';
-
 require_once __DIR__ . '/../../classes/Auth.php';
 
 $auth = new Auth();
@@ -13,16 +13,14 @@ if (empty($token)) {
     echo json_encode(['message' => 'Unauthorized']);
     exit();
 }
-$conn = (new Database())->connect();
-$property = new Properties($conn);
 
+$db = (new Database())->connect();
+$property = new Properties($db);
 
-$propertyId = $_GET['id'] ?? null;
+$propertyId = $_GET['propertyId'] ?? null;
 
 if ($propertyId) {
-    $result = $property->getById($propertyId);
-    $maintenanceTasks = $property->getMaintenanceTasks($propertyId);
-    $result['maintenanceTasks'] = $maintenanceTasks;
+    $result = $property->getMaintenanceTasks($propertyId);
     if ($result) {
         http_response_code(200);
         echo json_encode($result);

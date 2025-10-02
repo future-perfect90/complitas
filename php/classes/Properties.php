@@ -119,4 +119,47 @@ class Properties
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         return $result !== false ? $result : null;
     }
+
+    public function getMaintenanceTasks(string $propertyId): array
+    {
+        $sql = "SELECT id, title, description, typeOfWork, evidence, completedAt, completedBy, propertyId FROM maintenance_tasks WHERE propertyId = :property_id";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindParam(':property_id', $propertyId);
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function addMaintenanceTask(array $taskData): array
+    {
+        $sql = "INSERT INTO maintenance_tasks (title, description, typeOfWork, propertyId) 
+                VALUES (:title, :description, :typeOfWork, :propertyId)";
+
+        $stmt = $this->pdo->prepare($sql);
+
+        $stmt->bindParam(':title', $taskData['title']);
+        $stmt->bindParam(':description', $taskData['description']);
+        $stmt->bindParam(':typeOfWork', $taskData['typeOfWork']);
+        $stmt->bindParam(':propertyId', $taskData['propertyId']);
+
+        $stmt->execute();
+
+        return ($stmt->rowCount() > 0) ? ['success' => true, 'message' => 'Maintenance task created'] : ['success' => false, 'message' => 'Something went wrong'];
+    }
+
+    public function completeMaintenanceTask(string $id, array $completionData): array
+    {
+        $sql = "UPDATE maintenance_tasks SET completedAt = :completedAt, completedBy = :completedBy, evidence = :evidence WHERE id = :id";
+
+        $stmt = $this->pdo->prepare($sql);
+
+        $stmt->bindParam(':completedAt', $completionData['completedAt']);
+        $stmt->bindParam(':completedBy', $completionData['completedBy']);
+        $stmt->bindParam(':evidence', $completionData['evidence']);
+        $stmt->bindParam(':id', $id);
+
+        $stmt->execute();
+
+        return ($stmt->rowCount() > 0) ? ['success' => true, 'message' => 'Maintenance task completed'] : ['success' => false, 'message' => 'Something went wrong'];
+    }
 }

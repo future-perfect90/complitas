@@ -675,3 +675,68 @@ export async function changePassword(userId: string, password: string) {
 			throw error;
 		});
 }
+
+export async function getMaintenanceTasks(propertyId: string) {
+	const jwt =
+		authService.getAccessTokenSilently ?
+			await authService.getAccessTokenSilently()
+		:	'';
+	const response = await fetch(
+		`${import.meta.env.VITE_API_BASE_URL}/maintenance/list.php?propertyId=${propertyId}`,
+		{
+			method: 'GET',
+			headers: {
+				Authorization: `Bearer ${jwt}`,
+				'Content-Type': 'application/json',
+			},
+		}
+	);
+	if (!response.ok) {
+		throw new Error(`Response status: ${response.status}`);
+	}
+	return response.json();
+}
+
+export async function createMaintenanceTask(payload: any) {
+	const jwt =
+		authService.getAccessTokenSilently ?
+			await authService.getAccessTokenSilently()
+		:	'';
+	const response = await fetch(
+		`${import.meta.env.VITE_API_BASE_URL}/maintenance/create.php`,
+		{
+			method: 'POST',
+			body: JSON.stringify(payload),
+			headers: {
+				Authorization: `Bearer ${jwt}`,
+				'Content-Type': 'application/json',
+			},
+		}
+	);
+	if (!response.ok) {
+		throw new Error(`Response status: ${response.status}`);
+	}
+	return response.json();
+}
+
+export async function completeMaintenanceTask(payload: any, id: string) {
+	const jwt =
+		authService.getAccessTokenSilently ?
+			await authService.getAccessTokenSilently()
+		:	'';
+	const response = await fetch(
+		`${import.meta.env.VITE_API_BASE_URL}/maintenance/complete.php`,
+		{
+			method: 'PUT',
+			body: JSON.stringify({ payload, id }),
+			headers: {
+				Authorization: `Bearer ${jwt}`,
+				'Content-Type': 'application/json',
+			},
+		}
+	);
+	if (!response.ok) {
+		throw new Error(`Response status: ${response.status}`);
+	}
+	return response.json();
+}

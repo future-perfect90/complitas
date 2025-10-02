@@ -1,6 +1,9 @@
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { Button } from '../components/Button';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/Card';
+import MaintenanceTaskModal from '../components/modals/MaintenanceTaskModal';
 import type { Property } from '../types';
 
 interface PropertyDetailsProps {
@@ -12,7 +15,13 @@ export default function PropertyDetails({
 	property,
 	onEdit,
 }: PropertyDetailsProps) {
+	const [maintenanceTaskModalOpen, setIsMaintenanceTaskModalOpen] =
+		useState(false);
 	const navigate = useNavigate();
+	const handleMaintenanceTask = () => {
+		setIsMaintenanceTaskModalOpen(false);
+		toast.success('Maintenance task added successfully!');
+	};
 	return (
 		<>
 			<div className="flex items-center justify-left">
@@ -29,6 +38,11 @@ export default function PropertyDetails({
 							navigate(`/properties/${property.id}/compliance-reports`)
 						}
 						className="px-2 py-1 bg-purple-800 text-white rounded"
+					/>
+					<Button
+						label="Add Maintenance Task"
+						onClick={() => setIsMaintenanceTaskModalOpen(true)}
+						className="px-2 py-1 ml-2 bg-purple-800 text-white rounded"
 					/>
 				</div>
 			</div>
@@ -419,6 +433,34 @@ export default function PropertyDetails({
 					</div>
 				</CardContent>
 			</Card>
+			<Card className="rounded-2xl shadow-lg">
+				<CardHeader>
+					<CardTitle className="text-xl font-semibold">Maintenance</CardTitle>
+				</CardHeader>
+				<br />
+				<CardContent className="space-y-2 flex">
+					{property.maintenanceTasks && property.maintenanceTasks.length > 0 ?
+						property.maintenanceTasks.map((task) => (
+							<>
+								<div
+									key={task.id}
+									className="p-3 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200">
+									{task.title} - {task.typeOfWork}
+								</div>
+								<div className="p-3 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200">
+									<Button label="Complete Task" onClick={() => handleCompleteTask(task.id)} />
+								</div>
+							</>
+						))
+					:	'No maintenance tasks found.'}
+				</CardContent>
+			</Card>
+			<MaintenanceTaskModal
+				isOpen={maintenanceTaskModalOpen}
+				onClose={() => setIsMaintenanceTaskModalOpen(false)}
+				onSuccess={handleMaintenanceTask}
+				propertyId={property.id}
+			/>
 		</>
 	);
 }

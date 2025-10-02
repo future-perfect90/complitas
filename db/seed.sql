@@ -162,3 +162,19 @@ CREATE TABLE IF NOT EXISTS question_responses (
     CONSTRAINT fk_question FOREIGN KEY (questionId) REFERENCES compliance_questions(id) ON DELETE CASCADE,
     UNIQUE KEY `reportId` (`reportId`,`questionId`)
 );
+
+CREATE TABLE IF NOT EXISTS `maintenance_tasks` (
+    `id` VARCHAR(36) NOT NULL DEFAULT (UUID()),
+    `title` VARCHAR(255) NOT NULL,
+    `description` VARCHAR(255),
+    `typeOfWork` VARCHAR(255),
+    `address3` VARCHAR(255),
+    `evidence` VARCHAR(255),
+    `completedAt` VARCHAR(255),
+    `completedBy` VARCHAR(255),
+    `createdAt` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `createdBy` VARCHAR(255),
+    `propertyId` VARCHAR(36),
+    CONSTRAINT fk_property_maintenance FOREIGN KEY (propertyId) REFERENCES properties(id) ON DELETE CASCADE,
+PRIMARY KEY (`id`)
+);
