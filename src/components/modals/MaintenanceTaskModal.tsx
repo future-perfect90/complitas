@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { toast } from 'react-toastify';
 import type { MaintenanceTask } from '../../types';
 import {
 	completeMaintenanceTask,
@@ -64,7 +63,6 @@ const MaintenanceTaskModal: React.FC<Props> = ({
 				},
 				id
 			);
-			toast.success('Maintenance task completed successfully!');
 		} else {
 			await createMaintenanceTask({
 				title,
@@ -72,7 +70,6 @@ const MaintenanceTaskModal: React.FC<Props> = ({
 				typeOfWork,
 				propertyId,
 			});
-			toast.success('Maintenance task created successfully!');
 		}
 		onSuccess();
 		onClose();
