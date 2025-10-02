@@ -159,7 +159,6 @@ class Properties
         $stmt->bindParam(':id', $id);
 
         $stmt->execute();
-
         return ($stmt->rowCount() > 0) ? ['success' => true, 'message' => 'Maintenance task completed'] : ['success' => false, 'message' => 'Something went wrong'];
     }
 }

@@ -42,11 +42,19 @@ const MaintenanceTaskModal: React.FC<Props> = ({
 			setTitle(initialData.title);
 			setDescription(initialData.description);
 			setTypeOfWork(initialData.typeOfWork);
+		} else {
+			setId('');
+			setTitle('');
+			setDescription('');
+			setTypeOfWork('');
 		}
-	}, [initialData]);
+		setEvidence('');
+		setCompletedAt('');
+		setCompletedBy('');
+	}, [initialData, isOpen]);
 
 	const handleSubmit = async () => {
-		if (initialData) {
+		if (completed) {
 			await completeMaintenanceTask(
 				{
 					evidence,
@@ -56,7 +64,7 @@ const MaintenanceTaskModal: React.FC<Props> = ({
 				},
 				id
 			);
-			toast.success('Maintenance task updated successfully!');
+			toast.success('Maintenance task completed successfully!');
 		} else {
 			await createMaintenanceTask({
 				title,
@@ -70,7 +78,7 @@ const MaintenanceTaskModal: React.FC<Props> = ({
 		onClose();
 	};
 
-	const handleUploadComplete = (fileName: string) => {
+	const handleUploadComplete = (url: string, fileName: string) => {
 		setEvidence(fileName);
 	};
 
@@ -78,7 +86,7 @@ const MaintenanceTaskModal: React.FC<Props> = ({
 		<Modal
 			isOpen={isOpen}
 			onClose={onClose}
-			title={initialData ? 'Edit Maintenance Task' : 'Add Maintenance Task'}>
+			title={completed ? 'Complete Maintenance Task' : 'Add Maintenance Task'}>
 			<form onSubmit={handleSubmit}>
 				<div className="grid grid-cols-2 gap-4">
 					<TextField
@@ -134,7 +142,7 @@ const MaintenanceTaskModal: React.FC<Props> = ({
 						className="bg-red-400 py-2 px-5"
 					/>
 					<Button
-						label={initialData ? 'Complete task' : 'Create task'}
+						label={completed ? 'Complete task' : 'Create task'}
 						className="bg-green-400 py-2 px-5"
 						onClick={() => handleSubmit()}
 					/>

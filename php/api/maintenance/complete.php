@@ -21,7 +21,13 @@ if ($data) {
 
     $maintenanceId = $data['id'] ?? null;
 
-    $result = $property->completeMaintenanceTask($maintenanceId, $data);
+    $maintenanceData = [
+        'completedAt' => date('Y-m-d H:i:s'),
+        'completedBy' => $data['payload']['completedBy'] ?? null,
+        'evidence' => $data['payload']['evidence'] ?? null,
+        'propertyId' => $data['payload']['propertyId'] ?? null,
+    ];
+    $result = $property->completeMaintenanceTask($maintenanceId, $maintenanceData);
     if ($result['success']) {
         http_response_code(200);
         echo json_encode($result);

@@ -1,10 +1,10 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Button } from '../components/Button';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/Card';
 import MaintenanceTaskModal from '../components/modals/MaintenanceTaskModal';
-import type { Property } from '../types';
+import type { MaintenanceTask, Property } from '../types';
 
 interface PropertyDetailsProps {
 	property: Property;
@@ -17,11 +17,34 @@ export default function PropertyDetails({
 }: PropertyDetailsProps) {
 	const [maintenanceTaskModalOpen, setIsMaintenanceTaskModalOpen] =
 		useState(false);
+	const [selectedTask, setSelectedTask] = useState<MaintenanceTask | undefined>(
+		undefined
+	);
+	const [isCompletingTask, setIsCompletingTask] = useState(false);
+
 	const navigate = useNavigate();
-	const handleMaintenanceTask = () => {
+
+	const handleModalSuccess = useCallback(() => {
 		setIsMaintenanceTaskModalOpen(false);
-		toast.success('Maintenance task added successfully!');
+		if (isCompletingTask) {
+			toast.success('Maintenance task completed successfully!');
+		} else {
+			toast.success('Maintenance task added successfully!');
+		}
+	}, [isCompletingTask]);
+
+	const handleOpenCompleteTask = (task: MaintenanceTask) => {
+		setSelectedTask(task);
+		setIsCompletingTask(true);
+		setIsMaintenanceTaskModalOpen(true);
 	};
+
+	const handleOpenAddTask = () => {
+		setSelectedTask(undefined);
+		setIsCompletingTask(false);
+		setIsMaintenanceTaskModalOpen(true);
+	};
+
 	return (
 		<>
 			<div className="flex items-center justify-left">
@@ -41,7 +64,7 @@ export default function PropertyDetails({
 					/>
 					<Button
 						label="Add Maintenance Task"
-						onClick={() => setIsMaintenanceTaskModalOpen(true)}
+						onClick={handleOpenAddTask}
 						className="px-2 py-1 ml-2 bg-purple-800 text-white rounded"
 					/>
 				</div>
@@ -439,27 +462,68 @@ export default function PropertyDetails({
 				</CardHeader>
 				<br />
 				<CardContent className="space-y-2 flex">
-					{property.maintenanceTasks && property.maintenanceTasks.length > 0 ?
-						property.maintenanceTasks.map((task) => (
-							<>
-								<div
-									key={task.id}
-									className="p-3 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200">
-									{task.title} - {task.typeOfWork}
-								</div>
-								<div className="p-3 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200">
-									<Button label="Complete Task" onClick={() => handleCompleteTask(task.id)} />
-								</div>
-							</>
-						))
-					:	'No maintenance tasks found.'}
+					<div className="w-full">
+						{property.maintenanceTasks && property.maintenanceTasks.length > 0 ?
+							<table className="min-w-full min-w-xl w-full border dark:border-none">
+								<tbody>
+									<thead>
+										<tr>
+											<th className="px-3 py-2 text-gray-800 dark:text-gray-200">
+												Title
+											</th>
+											<th className="px-3 py-2 text-gray-800 dark:text-gray-200">
+												Type of Work
+											</th>
+											<th className="px-3 py-2 text-gray-800 dark:text-gray-200">
+												Completed At
+											</th>
+											<th className="px-3 py-2 text-gray-800 dark:text-gray-200">
+												Completed By
+											</th>
+										</tr>
+									</thead>
+									{property.maintenanceTasks.map((task) => (
+										<tr key={task.id}>
+											<td className="px-3 py-2 text-gray-800 dark:text-gray-200">
+												{task.title}
+											</td>
+											<td className="px-3 py-2 text-gray-800 dark:text-gray-200">
+												{task.typeOfWork}
+											</td>
+											{task.completedAt ?? (
+												<td className="px-3 py-2 text-gray-800 dark:text-gray-200">
+													{task.completedAt}
+												</td>
+											)}
+											{task.completedBy ?? (
+												<td className="px-3 py-2 text-gray-800 dark:text-gray-200">
+													{task.completedBy}
+												</td>
+											)}
+											<td className="px-3 py-2 text-right">
+												{!task.completedAt && (
+													<Button
+														label="Complete Task"
+														onClick={() => handleOpenCompleteTask(task)}
+														className="bg-green-500 text-white px-3 py-1 rounded"
+													/>
+												)}
+											</td>
+										</tr>
+									))}
+								</tbody>
+							</table>
+						:	<p className="text-gray-500">No maintenance tasks found.</p>}
+					</div>
 				</CardContent>
 			</Card>
 			<MaintenanceTaskModal
 				isOpen={maintenanceTaskModalOpen}
 				onClose={() => setIsMaintenanceTaskModalOpen(false)}
-				onSuccess={handleMaintenanceTask}
+				onSuccess={handleModalSuccess}
 				propertyId={property.id}
+				initialData={selectedTask}
+				completed={isCompletingTask}
 			/>
 		</>
 	);
