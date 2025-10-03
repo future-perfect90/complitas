@@ -427,8 +427,19 @@ export default function EditPropertyModal({
 						Saving...
 					</span>
 				)}
-				{fields.map((f) => renderField(f.key, f.label, f.type))}
-
+				{fields.map((field, index) => {
+					if (index % 2 === 0) {
+						const nextField = fields[index + 1];
+						return (
+							<div key={field.key} className="grid grid-cols-2 gap-4">
+								{renderField(field.key, field.label, field.type)}
+								{nextField &&
+									renderField(nextField.key, nextField.label, nextField.type)}
+							</div>
+						);
+					}
+					return null;
+				})}
 				{showWellMaintainedUpload && (
 					<div className="mb-4">
 						<Label label="Mitigation Plan" />
