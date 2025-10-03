@@ -1,5 +1,8 @@
 <?php
 
+use Ramsey\Uuid\Uuid;
+
+
 class Properties
 {
     private PDO $pdo;
@@ -122,7 +125,11 @@ class Properties
 
     public function getMaintenanceTasks(string $propertyId): array
     {
-        $sql = "SELECT id, title, description, typeOfWork, evidence, completedAt, completedBy, propertyId, createdAt FROM maintenance_tasks WHERE propertyId = :property_id";
+        $sql = "SELECT mt.id, mt.title, mt.description, mt.typeOfWork, mt.evidence, mt.completedAt, mt.propertyId, mt.createdAt, mc.name, mc.contactName, mc.contactAddress, mc.contactNumber 
+        FROM maintenance_tasks mt 
+        LEFT JOIN maintenance_companies mc ON mt.completedBy = mc.id 
+        WHERE propertyId = :property_id";
+
         $stmt = $this->pdo->prepare($sql);
         $stmt->bindParam(':property_id', $propertyId);
         $stmt->execute();
@@ -147,14 +154,29 @@ class Properties
         return ($stmt->rowCount() > 0) ? ['success' => true, 'message' => 'Maintenance task created'] : ['success' => false, 'message' => 'Something went wrong'];
     }
 
-    public function completeMaintenanceTask(string $id, array $completionData): array
+    public function completeMaintenanceTask(string $id, array $completedByData, array $completionData): array
     {
+
+        $uuid = Uuid::uuid4()->toString();
+
+        $sql = "INSERT INTO maintenance_companies (id, name, contactName, contactAddress, contactNumber) 
+                VALUES (:id, :name, :contactName, :contactAddress, :contactNumber)";
+
+        $stmt = $this->pdo->prepare($sql);
+
+        $stmt->bindParam(':id', $uuid);
+        $stmt->bindParam(':name', $completedByData['name']);
+        $stmt->bindParam(':contactName', $completedByData['contactName']);
+        $stmt->bindParam(':contactAddress', $completedByData['contactAddress']);
+        $stmt->bindParam(':contactNumber', $completedByData['contactNumber']);
+        $stmt->execute();
+
         $sql = "UPDATE maintenance_tasks SET completedAt = :completedAt, completedBy = :completedBy, evidence = :evidence WHERE id = :id";
 
         $stmt = $this->pdo->prepare($sql);
 
         $stmt->bindParam(':completedAt', $completionData['completedAt']);
-        $stmt->bindParam(':completedBy', $completionData['completedBy']);
+        $stmt->bindParam(':completedBy', $uuid);
         $stmt->bindParam(':evidence', $completionData['evidence']);
         $stmt->bindParam(':id', $id);
 

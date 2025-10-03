@@ -506,7 +506,7 @@ export default function PropertyDetails({
 												{task.completedAt || '-'}
 											</td>
 											<td className="px-3 py-3 text-sm text-gray-800 dark:text-gray-200">
-												{task.completedBy || '-'}
+												{task.contactName || '-'}
 											</td>
 											<td className="px-3 py-3 text-right">
 												{!task.completedAt && (

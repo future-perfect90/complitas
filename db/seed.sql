@@ -180,7 +180,7 @@ CREATE TABLE IF NOT EXISTS `maintenance_tasks` (
     `address3` VARCHAR(255),
     `evidence` VARCHAR(255),
     `completedAt` VARCHAR(255),
-    `completedBy` VARCHAR(255),
+    `completedBy` VARCHAR(36),
     `createdAt` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `createdBy` VARCHAR(255),
     `propertyId` VARCHAR(36),

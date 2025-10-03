@@ -8,6 +8,7 @@ import { Button } from '../Button';
 import FileUpload from '../FileUpload';
 import Label from '../Label';
 import Modal from '../Modal';
+import Telephone from '../Telephone';
 import TextField from '../TextField';
 
 interface Props {
@@ -33,7 +34,10 @@ const MaintenanceTaskModal: React.FC<Props> = ({
 	const [typeOfWork, setTypeOfWork] = useState('');
 	const [evidence, setEvidence] = useState('');
 	const [completedAt, setCompletedAt] = useState('');
-	const [completedBy, setCompletedBy] = useState('');
+	const [name, setName] = useState('');
+	const [contactName, setContactName] = useState('');
+	const [contactAddress, setContactAddress] = useState('');
+	const [contactNumber, setContactNumber] = useState('');
 
 	useEffect(() => {
 		if (initialData) {
@@ -49,7 +53,6 @@ const MaintenanceTaskModal: React.FC<Props> = ({
 		}
 		setEvidence('');
 		setCompletedAt('');
-		setCompletedBy('');
 	}, [initialData, isOpen]);
 
 	const handleSubmit = async () => {
@@ -58,8 +61,11 @@ const MaintenanceTaskModal: React.FC<Props> = ({
 				{
 					evidence,
 					completedAt,
-					completedBy,
 					propertyId,
+					name,
+					contactName,
+					contactAddress,
+					contactNumber,
 				},
 				id
 			);
@@ -115,20 +121,42 @@ const MaintenanceTaskModal: React.FC<Props> = ({
 							uploadApiUrl={`${import.meta.env.VITE_API_BASE_URL}/document/presignedUrl.php`}
 							accept="image/*"
 							onUploadComplete={handleUploadComplete}
-							directory="company/logos/"
+							directory="maintenance/"
 						/>
-						<TextField
-							label="Completed By"
-							value={completedBy}
-							onChange={(e: any) => setCompletedBy(e.target.value)}
-						/>
-						<Label label="Completed at" />
-						<input
-							type="date"
-							value={completedAt}
-							onChange={(e) => setCompletedAt(e.target.value)}
-							className="w-full border rounded px-2 py-1 text-gray-900 dark:text-gray-200 dark:bg-gray-600 dark:border-gray-500"
-						/>
+						<div className="grid grid-cols-2 gap-4">
+							<TextField
+								label="Company Name"
+								value={name}
+								onChange={(e: any) => setName(e.target.value)}
+							/>
+							<TextField
+								label="Company Contact Name"
+								value={contactName}
+								onChange={(e: any) => setContactName(e.target.value)}
+							/>
+						</div>
+						<div>
+							<Label label="Company Address" />
+							<textarea
+								value={contactAddress}
+								onChange={(e) => setContactAddress(e.target.value)}
+								className="w-full border rounded px-2 py-1 text-gray-900 dark:text-gray-200 dark:bg-gray-600 dark:border-gray-500"
+							/>
+						</div>
+						<div className="grid grid-cols-2 gap-4">
+							<Telephone
+								label="Contact Number"
+								value={contactNumber}
+								onChange={(contactNumber) => setContactNumber(contactNumber)}
+								required
+							/>
+							<TextField
+								label="Completed At"
+								value={completedAt}
+								onChange={(e: any) => setCompletedAt(e.target.value)}
+								type="date"
+							/>
+						</div>
 					</div>
 				)}
 
@@ -141,7 +169,7 @@ const MaintenanceTaskModal: React.FC<Props> = ({
 					<Button
 						label={completed ? 'Complete task' : 'Create task'}
 						className="bg-green-400 py-2 px-5"
-						onClick={() => handleSubmit()}
+						onClick={handleSubmit}
 					/>
 				</div>
 			</form>
