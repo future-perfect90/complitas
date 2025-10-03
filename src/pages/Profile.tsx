@@ -84,7 +84,7 @@ export default function Profile() {
 					</Card>
 				:	<p className="text-gray-500 dark:text-gray-400">No profile data.</p>}
 
-				{/* Teams Section */}
+				{/* Teams Section
 				{profile && profile.teams && profile.teams.length > 0 ?
 					<Card className="rounded-2xl shadow-lg">
 						<CardHeader>
@@ -100,9 +100,9 @@ export default function Profile() {
 							))}
 						</CardContent>
 					</Card>
-				:	<p className="text-gray-500 dark:text-gray-400">No teams assigned.</p>}
+				:	<p className="text-gray-500 dark:text-gray-400">No teams assigned.</p>} */}
 
-				{/* Properties Section */}
+				{/* Properties Section
 				{profile && profile.properties && profile.properties.length > 0 ?
 					<Card className="rounded-2xl shadow-lg">
 						<CardHeader>
@@ -128,7 +128,7 @@ export default function Profile() {
 				:	<p className="text-gray-500 dark:text-gray-400">
 						No properties assigned.
 					</p>
-				}
+				} */}
 				{auth0Id && (
 					<ChangePasswordModal
 						isOpen={isPasswordModalOpen}
