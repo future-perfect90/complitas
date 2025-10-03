@@ -9,6 +9,11 @@ class Document
 {
     private PDO $pdo;
 
+    public function __construct(PDO $pdo)
+    {
+        $this->pdo = $pdo;
+    }
+
     public function generatePDF()
     {
         $file_name = Uuid::uuid4()->toString() . '.pdf';
@@ -114,11 +119,6 @@ Maecenas suscipit consectetur ipsum, ac efficitur ipsum accumsan luctus. Pellent
         return ['success' => true, 'message' => 'Presigned URL created', 'presignedUrl' => $presignedUrl];
     }
 
-    public function __construct()
-    {
-        $this->pdo = (new Database())->connect();
-    }
-
     public function createReport(string $reportId)
     {
         $sql = "SELECT 
@@ -199,5 +199,57 @@ Maecenas suscipit consectetur ipsum, ac efficitur ipsum accumsan luctus. Pellent
         $mpdf = new \Mpdf\Mpdf();
         $mpdf->WriteHTML($html);
         $mpdf->Output($reportFileName, 'D'); // 'D' for download
+    }
+
+
+    public function getReportData(string $reportId): array
+    {
+        $sql = "SELECT 
+            (SELECT p.name FROM reports r JOIN properties p ON p.id = r.propertyId WHERE r.id = :reportId) AS propertyName, 
+            cq.area, 
+            cq.question, 
+            qr.answer, 
+            qr.fileName, 
+            qr.validUntil
+        FROM compliance_questions cq 
+        LEFT JOIN question_responses qr ON cq.id = qr.questionId AND qr.reportId = :reportId1
+        ORDER BY cq.area, cq.question";
+
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindParam(':reportId', $reportId);
+        $stmt->bindParam(':reportId1', $reportId);
+        $stmt->execute();
+        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        foreach ($results as &$row) {
+            if (!empty($row['fileName'])) {
+                $presignedUrlData = $this->presignedUrl("compliance/$reportId/" . $row['fileName'], null, 'GetObject');
+                $row['fileUrl'] = $presignedUrlData['success'] ? $presignedUrlData['presignedUrl'] : null;
+            }
+        }
+        return $results;
+    }
+
+    public function getMaintenanceTasksReportData(string $propertyId): array
+    {
+        $sql = "SELECT mt.id, mt.title, mt.description, mt.typeOfWork, mt.evidence, mt.completedAt, mt.propertyId, mt.createdAt, mc.name, mc.contactName, mc.contactAddress, mc.contactNumber 
+        FROM maintenance_tasks mt 
+        LEFT JOIN maintenance_companies mc ON mt.completedBy = mc.id 
+        WHERE propertyId = :property_id
+        ORDER BY createdAt DESC";
+
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindParam(':property_id', $propertyId);
+        $stmt->execute();
+
+        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        foreach ($results as &$row) {
+            if (!empty($row['evidence'])) {
+                $presignedUrlData = $this->presignedUrl("maintenance/" . $row['evidence'], null, 'GetObject');
+                $row['fileUrl'] = $presignedUrlData['success'] ? $presignedUrlData['presignedUrl'] : null;
+            }
+        }
+        return $results;
     }
 }

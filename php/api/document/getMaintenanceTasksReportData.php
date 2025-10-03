@@ -12,11 +12,11 @@ if (empty($token)) {
     exit();
 }
 
-$reportId = $_GET['reportId'] ?? null;
+$propertyId = $_GET['propertyId'] ?? null;
 
-if (!$reportId) {
+if (!$propertyId) {
     http_response_code(400);
-    echo json_encode(['success' => false, 'message' => 'Invalid input. Please provide a reportId.']);
+    echo json_encode(['success' => false, 'message' => 'Invalid input. Please provide a propertyId.']);
     exit();
 }
 
@@ -24,5 +24,5 @@ if (!$reportId) {
 $pdo = (new Database())->connect();
 $document = new Document($pdo);
 
-$results = $document->getReportData($reportId);
+$results = $document->getMaintenanceTasksReportData($propertyId);
 echo json_encode($results);

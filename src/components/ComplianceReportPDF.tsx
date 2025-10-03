@@ -11,7 +11,7 @@ import workerUrl from 'pdfjs-dist/build/pdf.worker.mjs?url';
 import { useEffect, useState } from 'react';
 import { pdfjs } from 'react-pdf';
 import { createTw } from 'react-pdf-tailwind';
-import { getReportData } from '../utils/api';
+import { getMaintenanceTasksReportData, getReportData } from '../utils/api';
 import LoadingSpinner from './modals/Loading';
 
 // Configure pdfjs worker
@@ -209,8 +209,10 @@ async function convertPdfToImages(
 
 export const ComplianceReportPDF = ({
 	reportId,
+	propertyId,
 }: {
 	reportId: string;
+	propertyId: string;
 	authToken?: string;
 }) => {
 	const [reportData, setReportData] = useState<ReportDataItem[] | null>();
@@ -222,8 +224,9 @@ export const ComplianceReportPDF = ({
 			setLoading(true);
 			try {
 				const data = await getReportData(reportId);
+				const maintenanceData = await getMaintenanceTasksReportData(propertyId);
 
-				if (!data || data.length === 0) {
+				if (!data || data.length === 0 || !maintenanceData || maintenanceData.length === 0) {
 					setReportData([]); // Use empty array to avoid null errors
 					return;
 				}

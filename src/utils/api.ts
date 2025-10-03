@@ -651,6 +651,28 @@ export async function getReportData(reportId: string) {
 	return response.json();
 }
 
+export async function getMaintenanceTasksReportData(propertyId: string) {
+	const jwt =
+		authService.getAccessTokenSilently ?
+			await authService.getAccessTokenSilently()
+		:	'';
+	const response = await fetch(
+		`${import.meta.env.VITE_API_BASE_URL}/document/getMaintenanceTasksReportData.php?propertyId=${propertyId}`,
+		{
+			method: 'GET',
+			headers: {
+				Authorization: `Bearer ${jwt}`,
+				'Content-Type': 'application/json',
+			},
+		}
+	);
+	if (!response.ok) {
+		throw new Error(`Response status: ${response.status}`);
+	}
+
+	return response.json();
+}
+
 export async function changePassword(userId: string, password: string) {
 	const jwt =
 		authService.getAccessTokenSilently ?
