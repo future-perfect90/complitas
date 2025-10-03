@@ -50,6 +50,7 @@ const TextField: React.FC<Props> = ({
 					onChange={onChange}
 					onBlur={onBlur}
 					required={required}
+					disabled={disabled}
 					className="mt-1 block w-full px-2 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-blue-200 text-gray-900 dark:text-gray-200 dark:bg-gray-600 dark:border-gray-500"
 				/>
 			</div>

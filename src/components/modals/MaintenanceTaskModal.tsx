@@ -41,6 +41,7 @@ const MaintenanceTaskModal: React.FC<Props> = ({
 	const [contactAddress, setContactAddress] = useState('');
 	const [contactNumber, setContactNumber] = useState('');
 	const [changeEvidence, setChangeEvidence] = useState(false);
+	const [submitted, setSubmitted] = useState(false);
 
 	useEffect(() => {
 		if (initialData) {
@@ -56,7 +57,7 @@ const MaintenanceTaskModal: React.FC<Props> = ({
 		}
 		setEvidence('');
 		setCompletedAt('');
-	}, [initialData, isOpen]);
+	}, [initialData, isOpen, submitted]);
 
 	const handleSubmit = async () => {
 		if (completed) {
@@ -72,7 +73,7 @@ const MaintenanceTaskModal: React.FC<Props> = ({
 				return;
 			}
 		} else {
-			if (!title || !typeOfWork) {
+			if (!title || !typeOfWork || !description) {
 				toast.error('Please fill in all required fields to create a task.');
 				return;
 			}
@@ -91,6 +92,7 @@ const MaintenanceTaskModal: React.FC<Props> = ({
 				},
 				id
 			);
+			setSubmitted(true);
 		} else {
 			await createMaintenanceTask({
 				title,
@@ -98,6 +100,7 @@ const MaintenanceTaskModal: React.FC<Props> = ({
 				typeOfWork,
 				propertyId,
 			});
+			setSubmitted(true);
 		}
 		onSuccess();
 		onClose();
