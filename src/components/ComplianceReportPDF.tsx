@@ -28,6 +28,23 @@ interface ReportDataItem {
 	attachmentId?: string;
 }
 
+interface MaintenanceDataItem {
+	attachmentId: string;
+	completedAt: string;
+	contactAddress: string;
+	contactName: string;
+	contactNumber: string;
+	createdAt: string;
+	description: string;
+	fileName: string;
+	fileUrl: string;
+	id: string;
+	name: string;
+	propertyId: string;
+	title: string;
+	typeOfWork: string;
+}
+
 interface Attachment {
 	type: 'image' | 'pdf';
 	name: string;
@@ -47,9 +64,11 @@ const answerMap = {
 
 const ReportDocument = ({
 	data,
+	maintenanceData,
 	attachments,
 }: {
 	data: ReportDataItem[];
+	maintenanceData: MaintenanceDataItem[];
 	attachments: Attachment[];
 }) => {
 	if (!data || data.length === 0) {
@@ -71,6 +90,13 @@ const ReportDocument = ({
 			groupedData[row.area] = [];
 		}
 		groupedData[row.area].push(row);
+	});
+	const groupedMaintenanceData: { [key: string]: MaintenanceDataItem[] } = {};
+	maintenanceData.forEach((row) => {
+		if (!groupedMaintenanceData[row.title]) {
+			groupedMaintenanceData[row.title] = [];
+		}
+		groupedMaintenanceData[row.title].push(row);
 	});
 	return (
 		<Document>
@@ -99,6 +125,43 @@ const ReportDocument = ({
 										{new Date(item.validUntil).toLocaleDateString()}
 									</Text>
 								)}
+								{item.fileName && (
+									<Link
+										style={tw('ml-4 text-[10px] text-blue-600 underline')}
+										src={`#${item.attachmentId}`}>
+										Evidence Attached: {item.attachmentId}
+									</Link>
+								)}
+							</View>
+						))}
+					</View>
+				))}
+			</Page>
+			<Page style={tw('p-[30px] text-[11px] text-gray-800')}>
+				<Text style={tw('text-2xl mb-5 text-center font-bold')}>
+					Maintenance Report for: {propertyName}
+				</Text>
+				{Object.entries(groupedMaintenanceData).map(([title, details]) => (
+					<View key={title}>
+						<Text
+							style={tw(
+								'text-base font-bold mt-5 mb-2.5 border-b border-solid border-gray-300 pb-1'
+							)}>
+							{title}
+						</Text>
+						{details.map((item, index) => (
+							<View key={index} style={tw('mb-2.5')} wrap={false}>
+								<Text style={tw('ml-4')}>Description:</Text>
+								<Text style={tw('ml-4')}>{item.description}</Text>
+								<Text style={tw('ml-4')}>
+									Date Completed: {item.completedAt}
+								</Text>
+								<Text style={tw('ml-4')}>Completed by: {item.name}</Text>
+								<Text style={tw('ml-4')}>Contact Name: {item.contactName}</Text>
+								<Text style={tw('ml-4')}>Address: {item.contactAddress}</Text>
+								<Text style={tw('ml-4')}>
+									Contact Number: {item.contactNumber}
+								</Text>
 								{item.fileName && (
 									<Link
 										style={tw('ml-4 text-[10px] text-blue-600 underline')}
@@ -216,6 +279,9 @@ export const ComplianceReportPDF = ({
 	authToken?: string;
 }) => {
 	const [reportData, setReportData] = useState<ReportDataItem[] | null>();
+	const [maintenanceReportData, setMaintenanceReportData] = useState<
+		MaintenanceDataItem[] | null
+	>();
 	const [loading, setLoading] = useState(true);
 	const [attachments, setAttachments] = useState<Attachment[]>([]);
 
@@ -223,15 +289,21 @@ export const ComplianceReportPDF = ({
 		const fetchAndProcessReport = async () => {
 			setLoading(true);
 			try {
-				const data = await getReportData(reportId);
-				const maintenanceData = await getMaintenanceTasksReportData(propertyId);
+				const [data, maintenanceData] = await Promise.all([
+					getReportData(reportId),
+					getMaintenanceTasksReportData(propertyId),
+				]);
 
-				if (!data || data.length === 0 || !maintenanceData || maintenanceData.length === 0) {
-					setReportData([]); // Use empty array to avoid null errors
+				if (
+					(!data || !data.length) &&
+					(!maintenanceData || !maintenanceData.length)
+				) {
+					setReportData([]);
 					return;
 				}
 
-				const attachmentPromises = data
+				const allItemsWithFiles = [...(data || []), ...(maintenanceData || [])];
+				const attachmentPromises = allItemsWithFiles
 					.filter((row: any) => row.fileName && row.fileUrl) // Process only rows with files
 					.map(async (row: any) => {
 						const ext = row.fileName!.split('.').pop()?.toLowerCase();
@@ -268,13 +340,21 @@ export const ComplianceReportPDF = ({
 					}
 				});
 
-				const dataWithAttachmentIds = data.map((item: any) => ({
+				const dataWithAttachmentIds = (data || []).map((item: any) => ({
 					...item,
 					attachmentId:
 						item.fileName ? attachmentIdMap.get(item.fileName) : undefined,
 				}));
 
+				const maintenanceDataWithAttachmentIds = (maintenanceData || []).map(
+					(item: any) => ({
+						...item,
+						attachmentId:
+							item.fileName ? attachmentIdMap.get(item.fileName) : undefined,
+					})
+				);
 				setReportData(dataWithAttachmentIds);
+				setMaintenanceReportData(maintenanceDataWithAttachmentIds);
 				setAttachments(resolvedAttachments);
 			} catch (error) {
 				console.error('Failed to fetch or process report data:', error);
@@ -284,16 +364,19 @@ export const ComplianceReportPDF = ({
 		};
 
 		fetchAndProcessReport();
-	}, [reportId]);
+	}, [reportId, propertyId]);
 
-	if (loading || !reportData) {
+	if (loading || !reportData || !maintenanceReportData) {
 		return <LoadingSpinner message={'Loading report...'} />;
 	}
-
 	return (
 		<>
 			<PDFViewer style={{ width: '100%', height: '100vh' }}>
-				<ReportDocument data={reportData} attachments={attachments} />
+				<ReportDocument
+					data={reportData}
+					maintenanceData={maintenanceReportData}
+					attachments={attachments}
+				/>
 			</PDFViewer>
 		</>
 	);

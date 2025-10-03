@@ -232,7 +232,7 @@ Maecenas suscipit consectetur ipsum, ac efficitur ipsum accumsan luctus. Pellent
 
     public function getMaintenanceTasksReportData(string $propertyId): array
     {
-        $sql = "SELECT mt.id, mt.title, mt.description, mt.typeOfWork, mt.evidence, mt.completedAt, mt.propertyId, mt.createdAt, mc.name, mc.contactName, mc.contactAddress, mc.contactNumber 
+        $sql = "SELECT mt.id, mt.title, mt.description, mt.typeOfWork, mt.evidence as fileName, mt.completedAt, mt.propertyId, mt.createdAt, mc.name, mc.contactName, mc.contactAddress, mc.contactNumber 
         FROM maintenance_tasks mt 
         LEFT JOIN maintenance_companies mc ON mt.completedBy = mc.id 
         WHERE propertyId = :property_id
@@ -245,8 +245,8 @@ Maecenas suscipit consectetur ipsum, ac efficitur ipsum accumsan luctus. Pellent
         $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         foreach ($results as &$row) {
-            if (!empty($row['evidence'])) {
-                $presignedUrlData = $this->presignedUrl("maintenance/" . $row['evidence'], null, 'GetObject');
+            if (!empty($row['fileName'])) {
+                $presignedUrlData = $this->presignedUrl("maintenance/" . $row['fileName'], null, 'GetObject');
                 $row['fileUrl'] = $presignedUrlData['success'] ? $presignedUrlData['presignedUrl'] : null;
             }
         }
