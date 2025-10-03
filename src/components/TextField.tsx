@@ -7,6 +7,7 @@ interface Props {
 	onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
 	type?: string;
 	required?: boolean;
+	disabled?: boolean;
 	layout?: 'horizontal' | 'vertical';
 }
 
@@ -17,6 +18,7 @@ const TextField: React.FC<Props> = ({
 	onBlur,
 	type,
 	required,
+	disabled = false,
 	layout = 'vertical',
 }) => {
 	if (layout === 'horizontal') {
@@ -31,6 +33,7 @@ const TextField: React.FC<Props> = ({
 					onChange={onChange}
 					onBlur={onBlur}
 					required={required}
+					disabled={disabled}
 					className="px-2 py-1 border rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-gray-900 dark:text-slate-300"
 				/>
 			</div>

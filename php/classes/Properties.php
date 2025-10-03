@@ -128,7 +128,8 @@ class Properties
         $sql = "SELECT mt.id, mt.title, mt.description, mt.typeOfWork, mt.evidence, mt.completedAt, mt.propertyId, mt.createdAt, mc.name, mc.contactName, mc.contactAddress, mc.contactNumber 
         FROM maintenance_tasks mt 
         LEFT JOIN maintenance_companies mc ON mt.completedBy = mc.id 
-        WHERE propertyId = :property_id";
+        WHERE propertyId = :property_id
+        ORDER BY createdAt DESC";
 
         $stmt = $this->pdo->prepare($sql);
         $stmt->bindParam(':property_id', $propertyId);

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 import type { MaintenanceTask } from '../../types';
 import {
 	completeMaintenanceTask,
@@ -8,6 +9,7 @@ import { Button } from '../Button';
 import FileUpload from '../FileUpload';
 import Label from '../Label';
 import Modal from '../Modal';
+import PresignedDocument from '../PresignedDocument';
 import Telephone from '../Telephone';
 import TextField from '../TextField';
 
@@ -38,6 +40,7 @@ const MaintenanceTaskModal: React.FC<Props> = ({
 	const [contactName, setContactName] = useState('');
 	const [contactAddress, setContactAddress] = useState('');
 	const [contactNumber, setContactNumber] = useState('');
+	const [changeEvidence, setChangeEvidence] = useState(false);
 
 	useEffect(() => {
 		if (initialData) {
@@ -56,6 +59,25 @@ const MaintenanceTaskModal: React.FC<Props> = ({
 	}, [initialData, isOpen]);
 
 	const handleSubmit = async () => {
+		if (completed) {
+			if (
+				!evidence ||
+				!completedAt ||
+				!name ||
+				!contactName ||
+				!contactAddress ||
+				!contactNumber
+			) {
+				toast.error('Please fill in all required fields to complete the task.');
+				return;
+			}
+		} else {
+			if (!title || !typeOfWork) {
+				toast.error('Please fill in all required fields to create a task.');
+				return;
+			}
+		}
+
 		if (completed) {
 			await completeMaintenanceTask(
 				{
@@ -83,6 +105,7 @@ const MaintenanceTaskModal: React.FC<Props> = ({
 
 	const handleUploadComplete = (url: string, fileName: string) => {
 		setEvidence(fileName);
+		setChangeEvidence(false);
 	};
 
 	return (
@@ -91,70 +114,96 @@ const MaintenanceTaskModal: React.FC<Props> = ({
 			onClose={onClose}
 			title={completed ? 'Complete Maintenance Task' : 'Add Maintenance Task'}>
 			<form onSubmit={handleSubmit}>
-				<div className="grid grid-cols-2 gap-4">
+				<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 					<TextField
-						label="Title"
+						label="Title *"
 						value={title}
 						onChange={(e: any) => setTitle(e.target.value)}
+						disabled={completed}
+						required={!completed}
 					/>
 					<TextField
-						label="Type of Work"
+						label="Type of Work *"
 						value={typeOfWork}
 						onChange={(e: any) => setTypeOfWork(e.target.value)}
+						disabled={completed}
+						required={!completed}
 					/>
 				</div>
-				<div className="grid">
-					<Label label="Description" />
+				<div className="grid mb-4">
+					<Label label="Description *" />
 					<textarea
 						value={description}
 						onChange={(e) => setDescription(e.target.value)}
 						className="w-full border rounded px-2 py-1 text-gray-900 dark:text-gray-200 dark:bg-gray-600 dark:border-gray-500"
+						disabled={completed}
 					/>
 				</div>
 
 				{completed && (
 					<div className="grid gap-4">
-						<label className="block text-sm font-medium text-gray-700 mb-1">
-							Evidence
-						</label>
-						<FileUpload
-							uploadApiUrl={`${import.meta.env.VITE_API_BASE_URL}/document/presignedUrl.php`}
-							accept="image/*"
-							onUploadComplete={handleUploadComplete}
-							directory="maintenance/"
-						/>
-						<div className="grid grid-cols-2 gap-4">
+						<Label label="Evidence *" />
+						{evidence && !changeEvidence ?
+							<div className="flex items-center space-x-4">
+								<PresignedDocument
+									fileName={evidence}
+									uploadApiUrl={`${import.meta.env.VITE_API_BASE_URL}/document/presignedUrl.php`}
+									directory={`maintenance/`}
+									linkTextPrefix="Evidence"
+								/>
+								<button
+									onClick={() => setChangeEvidence(true)}
+									className="text-sm text-blue-600 hover:underline">
+									<img
+										src="/public/change.svg"
+										className="w-4 h-4"
+										alt="Change"
+									/>
+								</button>
+							</div>
+						:	<FileUpload
+								uploadApiUrl={`${import.meta.env.VITE_API_BASE_URL}/document/presignedUrl.php`}
+								onUploadComplete={handleUploadComplete}
+								directory={`maintenance/`}
+								label="Upload Evidence"
+							/>
+						}
+						<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 							<TextField
-								label="Company Name"
+								label="Company Name *"
 								value={name}
 								onChange={(e: any) => setName(e.target.value)}
+								required
 							/>
 							<TextField
-								label="Company Contact Name"
+								label="Company Contact Name *"
 								value={contactName}
 								onChange={(e: any) => setContactName(e.target.value)}
+								required
 							/>
 						</div>
 						<div>
-							<Label label="Company Address" />
+							<Label label="Company Address *" />
 							<textarea
 								value={contactAddress}
 								onChange={(e) => setContactAddress(e.target.value)}
 								className="w-full border rounded px-2 py-1 text-gray-900 dark:text-gray-200 dark:bg-gray-600 dark:border-gray-500"
+								required
 							/>
 						</div>
-						<div className="grid grid-cols-2 gap-4">
+						<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 							<Telephone
-								label="Contact Number"
+								label="Contact Number *"
 								value={contactNumber}
 								onChange={(contactNumber) => setContactNumber(contactNumber)}
 								required
 							/>
 							<TextField
-								label="Completed At"
+								label="Completed At *"
 								value={completedAt}
 								onChange={(e: any) => setCompletedAt(e.target.value)}
 								type="date"
+								required
 							/>
 						</div>
 					</div>
