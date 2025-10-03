@@ -111,6 +111,7 @@ export interface MaintenanceTask {
 	completedBy?: string;
 	propertyId: string;
 	createdAt?: string;
+	name?: string;
 	contactName?: string;
 	contactAddress?: string;
 	contactNumber?: string;

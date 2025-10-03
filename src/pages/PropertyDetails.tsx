@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Button } from '../components/Button';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/Card';
+import Tooltip from '../components/Tooltip';
 import MaintenanceTaskModal from '../components/modals/MaintenanceTaskModal';
 import type { MaintenanceTask, Property } from '../types';
 
@@ -506,7 +507,25 @@ export default function PropertyDetails({
 												{task.completedAt || '-'}
 											</td>
 											<td className="px-3 py-3 text-sm text-gray-800 dark:text-gray-200">
-												{task.contactName || '-'}
+												{task.name ?
+													<Tooltip
+														content={
+															<div className="space-y-1">
+																<p>
+																	<strong>Contact:</strong> {task.contactName}
+																</p>
+																<p>
+																	<strong>Address:</strong>{' '}
+																	{task.contactAddress}
+																</p>
+																<p>
+																	<strong>Phone:</strong> {task.contactNumber}
+																</p>
+															</div>
+														}>
+														<span className="cursor-pointer">{task.name}</span>
+													</Tooltip>
+												:	'-'}
 											</td>
 											<td className="px-3 py-3 text-right">
 												{!task.completedAt && (
