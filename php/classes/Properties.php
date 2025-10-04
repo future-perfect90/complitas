@@ -21,7 +21,7 @@ class Properties
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function create(array $propertyData): array
+    public function create(array $propertyData, string $createdBy): array
     {
         $lookup = "SELECT count(id) FROM properties WHERE name = :property_name and companyId = :company_id";
         $stmt = $this->pdo->prepare($lookup);
@@ -33,8 +33,8 @@ class Properties
             return ['success' => false, 'message' => 'Property already exists'];
         }
 
-        $sql = "INSERT INTO properties (name, address1, address2, address3, city, county, postCode, country, email, telephone, managerName, companyId) 
-                VALUES (:property_name, :address_line_1, :address_line_2, :address_line_3, :city, :county, :post_code, :country, :email, :telephone, :manager_name, :company_id)";
+        $sql = "INSERT INTO properties (name, address1, address2, address3, city, county, postCode, country, email, telephone, managerName, companyId, createdBy) 
+                VALUES (:property_name, :address_line_1, :address_line_2, :address_line_3, :city, :county, :post_code, :country, :email, :telephone, :manager_name, :company_id, :created_by)";
 
         $stmt = $this->pdo->prepare($sql);
 
@@ -50,6 +50,8 @@ class Properties
         $stmt->bindParam(':email', $propertyData['email']);
         $stmt->bindParam(':telephone', $propertyData['telephone']);
         $stmt->bindParam(':company_id', $propertyData['companyId']);
+        $stmt->bindParam(':created_by', $createdBy);
+
 
         $stmt->execute();
 
@@ -138,10 +140,10 @@ class Properties
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function addMaintenanceTask(array $taskData): array
+    public function addMaintenanceTask(array $taskData, string $createdBy): array
     {
-        $sql = "INSERT INTO maintenance_tasks (title, description, typeOfWork, propertyId) 
-                VALUES (:title, :description, :typeOfWork, :propertyId)";
+        $sql = "INSERT INTO maintenance_tasks (title, description, typeOfWork, propertyId, createdBy) 
+                VALUES (:title, :description, :typeOfWork, :propertyId, :created_by)";
 
         $stmt = $this->pdo->prepare($sql);
 
@@ -149,6 +151,8 @@ class Properties
         $stmt->bindParam(':description', $taskData['description']);
         $stmt->bindParam(':typeOfWork', $taskData['typeOfWork']);
         $stmt->bindParam(':propertyId', $taskData['propertyId']);
+        $stmt->bindParam(':created_by', $createdBy);
+
 
         $stmt->execute();
 

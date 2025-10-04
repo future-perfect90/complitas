@@ -65,8 +65,7 @@ const PropertyModal: React.FC<Props> = ({
 		}
 	}, [initialData]);
 
-	const handleSubmit = async (e: React.FormEvent) => {
-		e.preventDefault();
+	const handleSubmit = async () => {
 		// Validation
 		const phoneRegex = /^[0-9\-\+\s\(\)]+$/;
 		const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -135,81 +134,80 @@ const PropertyModal: React.FC<Props> = ({
 			isOpen={isOpen}
 			onClose={onClose}
 			title={initialData ? 'Edit Property' : 'Add Property'}>
-			<form onSubmit={handleSubmit}>
-				<div className="grid grid-cols-2 gap-4">
-					<TextField
-						label="Property Name"
-						value={name}
-						onChange={(e: any) => setName(e.target.value)}
-						required
-					/>
-					<TextField
-						label="Address Line 1"
-						value={address1}
-						onChange={(e: any) => setAddress1(e.target.value)}
-						required
-					/>
-					<TextField
-						label="Address Line 2"
-						value={address2}
-						onChange={(e: any) => setAddress2(e.target.value)}
-					/>
-					<TextField
-						label="Address Line 3"
-						value={address3}
-						onChange={(e: any) => setAddress3(e.target.value)}
-					/>
-					<TextField
-						label="City"
-						value={city}
-						onChange={(e: any) => setCity(e.target.value)}
-					/>
-					<TextField
-						label="County"
-						value={county}
-						onChange={(e: any) => setCounty(e.target.value)}
-					/>
-					<TextField
-						label="Post Code"
-						value={postCode}
-						onChange={(e: any) => setPostCode(e.target.value)}
-					/>
-					<TextField
-						label="Country"
-						value={country}
-						onChange={(e: any) => setCountry(e.target.value)}
-					/>
-					<TextField
-						label="Manager Name"
-						value={managerName}
-						onChange={(e: any) => setManagerName(e.target.value)}
-					/>
-					<Telephone
-						label="Telephone Number"
-						value={telephone}
-						onChange={(telephone) => setTelephone(telephone)}
-						required
-					/>
-					<TextField
-						label="Email Address"
-						type="email"
-						value={email}
-						onChange={(e: any) => setEmail(e.target.value)}
-						required
-					/>
-				</div>
-				<div className="flex justify-end gap-2 mt-4">
-					<Button
-						label="Cancel"
-						onClick={onClose}
-						className="bg-red-400 py-2 px-5"
-					/>
-					<Button
-						label={initialData ? 'Update' : 'Create'}
-						className="bg-green-400 py-2 px-5"
-					/>
-				</div>
-			</form>
+			<div className="grid grid-cols-2 gap-4">
+				<TextField
+					label="Property Name"
+					value={name}
+					onChange={(e: any) => setName(e.target.value)}
+					required
+				/>
+				<TextField
+					label="Address Line 1"
+					value={address1}
+					onChange={(e: any) => setAddress1(e.target.value)}
+					required
+				/>
+				<TextField
+					label="Address Line 2"
+					value={address2}
+					onChange={(e: any) => setAddress2(e.target.value)}
+				/>
+				<TextField
+					label="Address Line 3"
+					value={address3}
+					onChange={(e: any) => setAddress3(e.target.value)}
+				/>
+				<TextField
+					label="City"
+					value={city}
+					onChange={(e: any) => setCity(e.target.value)}
+				/>
+				<TextField
+					label="County"
+					value={county}
+					onChange={(e: any) => setCounty(e.target.value)}
+				/>
+				<TextField
+					label="Post Code"
+					value={postCode}
+					onChange={(e: any) => setPostCode(e.target.value)}
+				/>
+				<TextField
+					label="Country"
+					value={country}
+					onChange={(e: any) => setCountry(e.target.value)}
+				/>
+				<TextField
+					label="Manager Name"
+					value={managerName}
+					onChange={(e: any) => setManagerName(e.target.value)}
+				/>
+				<Telephone
+					label="Telephone Number"
+					value={telephone}
+					onChange={(telephone) => setTelephone(telephone)}
+					required
+				/>
+				<TextField
+					label="Email Address"
+					type="email"
+					value={email}
+					onChange={(e: any) => setEmail(e.target.value)}
+					required
+				/>
+			</div>
+			<div className="flex justify-end gap-2 mt-4">
+				<Button
+					label="Cancel"
+					onClick={onClose}
+					className="bg-red-400 py-2 px-5"
+				/>
+				<Button
+					label={initialData ? 'Update' : 'Create'}
+					onClick={handleSubmit}
+					className="bg-green-400 py-2 px-5"
+				/>
+			</div>
 		</Modal>
 	);
 };

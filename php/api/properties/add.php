@@ -19,6 +19,7 @@ if ($data) {
     $db = (new Database())->connect();
     $property = new Properties($db);
 
+    $createdBy = $token->{'https://complitas.dev/user_uuid'};
     $propertyData = [
         'name' => $data['payload']['name'],
         'address1' => $data['payload']['address1'] ?? '',
@@ -34,7 +35,7 @@ if ($data) {
         'companyId' => $data['companyId']
     ];
 
-    $result = $property->create($propertyData);
+    $result = $property->create($propertyData, $createdBy);
 
     if (!$result['success']) {
         if ($result['message'] === 'Property already exists') {

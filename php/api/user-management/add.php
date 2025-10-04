@@ -23,8 +23,9 @@ if ($data) {
     $email = $data['payload']['email'];
     $companyId = $data['companyId'];
     $password = $data['payload']['password'];
+    $createdBy = $token->{'https://complitas.dev/user_uuid'};
 
-    $result = $user->create($name, $email, $password, $companyId);
+    $result = $user->create($name, $email, $password, $companyId, $createdBy);
 
     if (!$result['success']) {
         if ($result['message'] === 'User already exists') {

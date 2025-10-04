@@ -33,7 +33,7 @@ class User
         return $auth0->management();
     }
 
-    public function create(string $name, string $email, string $password, string $companyId): array
+    public function create(string $name, string $email, string $password, string $companyId, string $createdBy): array
     {
         $lookup = "SELECT count(id) FROM user WHERE email = :email";
         $stmt = $this->pdo->prepare($lookup);
@@ -44,8 +44,8 @@ class User
             return ['success' => false, 'message' => 'User already exists'];
         }
 
-        $sql = "INSERT INTO user (id, name, email, companyId) 
-                VALUES (:uuid, :name, :email, :company_id)";
+        $sql = "INSERT INTO user (id, name, email, companyId, createdBy) 
+                VALUES (:uuid, :name, :email, :company_id, :created_by)";
         $stmt = $this->pdo->prepare($sql);
 
         $uuid = Uuid::uuid4()->toString();
@@ -53,6 +53,7 @@ class User
         $stmt->bindParam(':name', $name);
         $stmt->bindParam(':email', $email);
         $stmt->bindParam(':company_id', $companyId);
+        $stmt->bindParam(':created_by', $createdBy);
         $stmt->execute();
         //Add user to auth0
         if ($stmt->rowCount() > 0) {
