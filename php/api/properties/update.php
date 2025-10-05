@@ -16,6 +16,7 @@ if ($data) {
 
     unset($data['data']['id']);
     $dataToUpdate = $data['data'];
+    var_dump($dataToUpdate);
     $result = $property->update($propertyId, $dataToUpdate);
 
     if ($result['success']) {

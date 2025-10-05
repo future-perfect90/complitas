@@ -6,13 +6,18 @@ import { Card, CardContent, CardHeader, CardTitle } from '../components/Card';
 import Tooltip from '../components/Tooltip';
 import MaintenanceTaskModal from '../components/modals/MaintenanceTaskModal';
 import NotificationPreferencesModal from '../components/modals/NotificationPreferencesModal';
-import type { MaintenanceTask, Property } from '../types';
+import type {
+	MaintenanceTask,
+	NotificationPreferences,
+	Property,
+} from '../types';
 
 interface PropertyDetailsProps {
 	property: Property;
 	onEdit: (section: string, data: Property) => void;
 	onDataUpdate: () => void;
-	preferences: any;
+	preferences: NotificationPreferences[];
+	maintenanceTasks: MaintenanceTask[];
 }
 
 export default function PropertyDetails({
@@ -20,6 +25,7 @@ export default function PropertyDetails({
 	onEdit,
 	onDataUpdate,
 	preferences,
+	maintenanceTasks,
 }: PropertyDetailsProps) {
 	const [maintenanceTaskModalOpen, setIsMaintenanceTaskModalOpen] =
 		useState(false);
@@ -476,7 +482,7 @@ export default function PropertyDetails({
 				<br />
 				<CardContent className="space-y-2 flex">
 					<div className="w-full overflow-x-auto">
-						{property.maintenanceTasks && property.maintenanceTasks.length > 0 ?
+						{maintenanceTasks && maintenanceTasks.length > 0 ?
 							<table className="min-w-full w-full text-left">
 								<thead className="border-b dark:border-gray-700">
 									<tr>
@@ -501,7 +507,7 @@ export default function PropertyDetails({
 									</tr>
 								</thead>
 								<tbody>
-									{property.maintenanceTasks.map((task) => (
+									{maintenanceTasks.map((task) => (
 										<tr key={task.id} className="border-b dark:border-gray-700">
 											<td className="px-3 py-3 text-sm text-gray-800 dark:text-gray-200">
 												{task.title}
@@ -580,7 +586,7 @@ export default function PropertyDetails({
 									</tr>
 								</thead>
 								<tbody>
-									{preferences.map((preference: any) => (
+									{preferences.map((preference: NotificationPreferences) => (
 										<tr
 											key={preference.id}
 											className="border-b dark:border-gray-700">
@@ -607,6 +613,7 @@ export default function PropertyDetails({
 				initialData={selectedTask}
 				completed={isCompletingTask}
 			/>
+			{console.log(preferences)}
 			<NotificationPreferencesModal
 				isOpen={isNotificationModalOpen}
 				onClose={() => setIsNotificationModalOpen(false)}

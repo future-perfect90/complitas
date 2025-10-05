@@ -3,8 +3,17 @@ import { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import EditPropertyModal from '../components/modals/EditPropertyModal';
-import type { Property } from '../types';
-import { getPreferences, getProperty, updatePropertySection } from '../utils/api';
+import type {
+	MaintenanceTask,
+	NotificationPreferences,
+	Property,
+} from '../types';
+import {
+	getMaintenanceTasks,
+	getPreferences,
+	getProperty,
+	updatePropertySection,
+} from '../utils/api';
 import PropertyDetails from './PropertyDetails';
 
 export default function Property() {
@@ -13,15 +22,20 @@ export default function Property() {
 	const { id } = useParams();
 	const [editingSection, setEditingSection] = useState<string | null>(null);
 	const [modalOpen, setModalOpen] = useState(false);
-	const [preferences, setPreferences] = useState();
+	const [preferences, setPreferences] = useState<NotificationPreferences[]>([]);
+	const [maintenanceTasks, setMaintenanceTasks] = useState<MaintenanceTask[]>(
+		[]
+	);
 
 	const fetchProperty = useCallback(async () => {
 		if (!id) return;
 		try {
 			const data = await getProperty(id);
+			const maintenaceData = await getMaintenanceTasks(id);
 			const preferences = await getPreferences(id);
 			setPreferences(preferences);
 			setProperty(data);
+			setMaintenanceTasks(maintenaceData);
 		} catch (error) {
 			console.error('Error fetching property:', error);
 			toast.error('Failed to load property data.');
@@ -73,6 +87,7 @@ export default function Property() {
 							onEdit={handleEdit}
 							onDataUpdate={fetchProperty}
 							preferences={preferences}
+							maintenanceTasks={maintenanceTasks}
 						/>
 						{/* Edit Modal */}
 						{modalOpen && (

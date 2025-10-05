@@ -15,8 +15,6 @@ $propertyId = $_GET['id'] ?? null;
 
 if ($propertyId) {
     $result = $property->getById($propertyId);
-    $maintenanceTasks = $property->getMaintenanceTasks($propertyId);
-    $result['maintenanceTasks'] = $maintenanceTasks;
     if ($result) {
         http_response_code(200);
         echo json_encode($result);

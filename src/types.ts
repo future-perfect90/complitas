@@ -69,7 +69,6 @@ export interface Property {
 	isolationValvesClear?: boolean | 1 | 0;
 	accessControlled?: boolean | 1 | 0;
 	oms?: boolean | 1 | 0;
-	maintenanceTasks?: MaintenanceTask[];
 }
 export interface User {
 	id?: string;
@@ -115,4 +114,10 @@ export interface MaintenanceTask {
 	contactName?: string;
 	contactAddress?: string;
 	contactNumber?: string;
+}
+
+export interface NotificationPreferences {
+	id?: string;
+	daysBeforeExpiry: number;
+	isActive: 1 | 0;
 }
