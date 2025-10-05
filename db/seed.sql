@@ -188,3 +188,13 @@ CREATE TABLE IF NOT EXISTS `maintenance_tasks` (
     CONSTRAINT fk_maintenance_company FOREIGN KEY (completedBy) REFERENCES maintenance_companies(id) ON DELETE CASCADE,
 PRIMARY KEY (`id`)
 );
+
+CREATE TABLE notification_preferences (
+    id VARCHAR(36) NOT NULL DEFAULT (UUID()),
+    propertyId VARCHAR(36) NOT NULL,
+    daysBeforeExpiry SMALLINT UNSIGNED NOT NULL,
+    isActive TINYINT(1) DEFAULT 1,
+    INDEX idx_property_id (propertyId),     
+    CONSTRAINT fk_property_notification_preferences FOREIGN KEY (propertyId) REFERENCES properties(id) ON DELETE CASCADE,
+PRIMARY KEY (`id`)
+);

@@ -33,11 +33,12 @@ class Properties
             return ['success' => false, 'message' => 'Property already exists'];
         }
 
-        $sql = "INSERT INTO properties (name, address1, address2, address3, city, county, postCode, country, email, telephone, managerName, companyId, createdBy) 
-                VALUES (:property_name, :address_line_1, :address_line_2, :address_line_3, :city, :county, :post_code, :country, :email, :telephone, :manager_name, :company_id, :created_by)";
+        $sql = "INSERT INTO properties (id, name, address1, address2, address3, city, county, postCode, country, email, telephone, managerName, companyId, createdBy) 
+                VALUES (:id, :property_name, :address_line_1, :address_line_2, :address_line_3, :city, :county, :post_code, :country, :email, :telephone, :manager_name, :company_id, :created_by)";
 
         $stmt = $this->pdo->prepare($sql);
 
+        $stmt->bindParam(':id', $propertyData['id']);
         $stmt->bindParam(':property_name', $propertyData['name']);
         $stmt->bindParam(':address_line_1', $propertyData['address1']);
         $stmt->bindParam(':address_line_2', $propertyData['address2']);
@@ -187,5 +188,28 @@ class Properties
 
         $stmt->execute();
         return ($stmt->rowCount() > 0) ? ['success' => true, 'message' => 'Maintenance task completed'] : ['success' => false, 'message' => 'Something went wrong'];
+    }
+
+    public function createInitialNotificaitonPreference(string $propertyId): array
+    {
+
+        $days = 30;
+        $sql = "INSERT INTO notification_preferences (propertyId, daysBeforeExpiry, isActive) 
+                VALUES (:property_id, :days_before_expiry, 1)";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindParam(':property_id', $propertyId);
+        $stmt->bindParam(':days_before_expiry', $days);
+
+        $stmt->execute();
+        return ($stmt->rowCount() > 0) ? ['success' => true, 'message' => 'Inital notification preference created'] : ['success' => false, 'message' => 'Something went wrong'];
+    }
+
+    public function listNotificationPreferences(string $propertyId): array
+    {
+        $sql = "SELECT daysBeforeExpiry, isActive FROM notification_preferences WHERE propertyId = :property_id";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindParam(':property_id', $propertyId);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }

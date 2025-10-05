@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import EditPropertyModal from '../components/modals/EditPropertyModal';
 import type { Property } from '../types';
-import { getProperty, updatePropertySection } from '../utils/api';
+import { getPreferences, getProperty, updatePropertySection } from '../utils/api';
 import PropertyDetails from './PropertyDetails';
 
 export default function Property() {
@@ -13,11 +13,14 @@ export default function Property() {
 	const { id } = useParams();
 	const [editingSection, setEditingSection] = useState<string | null>(null);
 	const [modalOpen, setModalOpen] = useState(false);
+	const [preferences, setPreferences] = useState();
 
 	const fetchProperty = useCallback(async () => {
 		if (!id) return;
 		try {
 			const data = await getProperty(id);
+			const preferences = await getPreferences(id);
+			setPreferences(preferences);
 			setProperty(data);
 		} catch (error) {
 			console.error('Error fetching property:', error);
@@ -69,6 +72,7 @@ export default function Property() {
 							property={property}
 							onEdit={handleEdit}
 							onDataUpdate={fetchProperty}
+							preferences={preferences}
 						/>
 						{/* Edit Modal */}
 						{modalOpen && (

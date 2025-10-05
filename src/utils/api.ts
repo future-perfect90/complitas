@@ -762,3 +762,24 @@ export async function completeMaintenanceTask(payload: any, id: string) {
 	}
 	return response.json();
 }
+
+export async function getPreferences(propertyId: string) {
+	const jwt =
+		authService.getAccessTokenSilently ?
+			await authService.getAccessTokenSilently()
+		:	'';
+	const response = await fetch(
+		`${import.meta.env.VITE_API_BASE_URL}/notificationPreferences/list.php?propertyId=${propertyId}`,
+		{
+			method: 'GET',
+			headers: {
+				Authorization: `Bearer ${jwt}`,
+				'Content-Type': 'application/json',
+			},
+		}
+	);
+	if (!response.ok) {
+		throw new Error(`Response status: ${response.status}`);
+	}
+	return response.json();
+}

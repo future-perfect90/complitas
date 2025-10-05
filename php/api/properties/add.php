@@ -1,4 +1,7 @@
 <?php
+
+use Ramsey\Uuid\Uuid;
+
 require_once __DIR__ . '/../../shared/headers.php';
 
 require_once __DIR__ . '/../../classes/Auth.php';
@@ -10,6 +13,7 @@ if (empty($token)) {
     echo json_encode(['message' => 'Unauthorized']);
     exit();
 }
+$createdBy = $token->{'https://complitas.dev/user_uuid'};
 $data = json_decode(file_get_contents("php://input"), true);
 
 if ($data) {
@@ -19,8 +23,9 @@ if ($data) {
     $db = (new Database())->connect();
     $property = new Properties($db);
 
-    $createdBy = $token->{'https://complitas.dev/user_uuid'};
+    $uuid = $uuid = Uuid::uuid4()->toString();
     $propertyData = [
+        'id' => $uuid,
         'name' => $data['payload']['name'],
         'address1' => $data['payload']['address1'] ?? '',
         'address2' => $data['payload']['address2'] ?? '',
@@ -36,6 +41,10 @@ if ($data) {
     ];
 
     $result = $property->create($propertyData, $createdBy);
+
+    if ($result['success']) {
+        $result2 = $property->createInitialNotificaitonPreference($uuid);
+    }
 
     if (!$result['success']) {
         if ($result['message'] === 'Property already exists') {

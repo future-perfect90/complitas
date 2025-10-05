@@ -11,12 +11,14 @@ interface PropertyDetailsProps {
 	property: Property;
 	onEdit: (section: string, data: Property) => void;
 	onDataUpdate: () => void;
+	preferences: any;
 }
 
 export default function PropertyDetails({
 	property,
 	onEdit,
 	onDataUpdate,
+	preferences,
 }: PropertyDetailsProps) {
 	const [maintenanceTaskModalOpen, setIsMaintenanceTaskModalOpen] =
 		useState(false);
@@ -541,6 +543,47 @@ export default function PropertyDetails({
 								</tbody>
 							</table>
 						:	<p className="text-gray-500">No maintenance tasks found.</p>}
+					</div>
+				</CardContent>
+			</Card>
+			<Card className="rounded-2xl shadow-lg">
+				<CardHeader>
+					<CardTitle className="text-xl font-semibold">
+						Notification Preferences
+					</CardTitle>
+				</CardHeader>
+				<br />
+				<CardContent className="space-y-2 flex">
+					<div className="w-full overflow-x-auto">
+						{preferences && preferences.length > 0 ?
+							<table className="min-w-full w-full text-left">
+								<thead className="border-b dark:border-gray-700">
+									<tr>
+										<th className="px-3 py-2 text-sm font-semibold text-gray-800 dark:text-gray-200">
+											Days from expiry
+										</th>
+										<th className="px-3 py-2 text-sm font-semibold text-gray-800 dark:text-gray-200">
+											Active?
+										</th>
+									</tr>
+								</thead>
+								<tbody>
+									{preferences.map((preference: any) => (
+										<tr
+											key={preference.id}
+											className="border-b dark:border-gray-700">
+											<td className="px-3 py-3 text-sm text-gray-800 dark:text-gray-200">
+												{preference.daysBeforeExpiry}
+											</td>
+											<td className="px-3 py-3 text-sm text-gray-800 dark:text-gray-200">
+												{preference.isActive ? 'Yes' : 'No'}
+											</td>
+										</tr>
+									))}
+								</tbody>
+							</table>
+						:	<p className="text-gray-500">No notificaiton preferences found.</p>
+						}
 					</div>
 				</CardContent>
 			</Card>
