@@ -206,10 +206,36 @@ class Properties
 
     public function listNotificationPreferences(string $propertyId): array
     {
-        $sql = "SELECT daysBeforeExpiry, isActive FROM notification_preferences WHERE propertyId = :property_id";
+        $sql = "SELECT daysBeforeExpiry, isActive FROM notification_preferences WHERE propertyId = :property_id ORDER BY daysBeforeExpiry ASC";
         $stmt = $this->pdo->prepare($sql);
         $stmt->bindParam(':property_id', $propertyId);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function updateNotificationPreferences(string $propertyId, array $notificationPreferences): array
+    {
+        $this->pdo->beginTransaction();
+        try {
+            $stmt = $this->pdo->prepare("DELETE FROM notification_preferences WHERE propertyId = :property_id");
+            $stmt->bindParam(':property_id', $propertyId);
+            $stmt->execute();
+
+            if (!empty($notificationPreferences)) {
+                $stmt = $this->pdo->prepare("INSERT INTO notification_preferences (propertyId, daysBeforeExpiry, isActive) VALUES (:property_id, :days, 1)");
+                foreach ($notificationPreferences as $day) {
+                    $stmt->bindParam(':property_id', $propertyId);
+                    $stmt->bindParam(':days', $day);
+                    $stmt->execute();
+                }
+            }
+
+            $this->pdo->commit();
+            return ['success' => true, 'message' => 'Notification preferences updated successfully.'];
+        } catch (Exception $e) {
+            $this->pdo->rollback();
+            http_response_code(500);
+            return ['success' => false, 'message' => 'Failed to update notification preferences.', 'error' => $e->getMessage()];
+        }
     }
 }

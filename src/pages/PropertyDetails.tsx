@@ -5,6 +5,7 @@ import { Button } from '../components/Button';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/Card';
 import Tooltip from '../components/Tooltip';
 import MaintenanceTaskModal from '../components/modals/MaintenanceTaskModal';
+import NotificationPreferencesModal from '../components/modals/NotificationPreferencesModal';
 import type { MaintenanceTask, Property } from '../types';
 
 interface PropertyDetailsProps {
@@ -26,6 +27,7 @@ export default function PropertyDetails({
 		undefined
 	);
 	const [isCompletingTask, setIsCompletingTask] = useState(false);
+	const [isNotificationModalOpen, setIsNotificationModalOpen] = useState(false);
 
 	const navigate = useNavigate();
 
@@ -49,6 +51,11 @@ export default function PropertyDetails({
 		setSelectedTask(undefined);
 		setIsCompletingTask(false);
 		setIsMaintenanceTaskModalOpen(true);
+	};
+
+	const handleNotificationSuccess = () => {
+		setIsNotificationModalOpen(false);
+		onDataUpdate();
 	};
 
 	return (
@@ -550,6 +557,11 @@ export default function PropertyDetails({
 				<CardHeader>
 					<CardTitle className="text-xl font-semibold">
 						Notification Preferences
+						<Button
+							label="Edit"
+							onClick={() => setIsNotificationModalOpen(true)}
+							className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-4 rounded float-right"
+						/>
 					</CardTitle>
 				</CardHeader>
 				<br />
@@ -594,6 +606,13 @@ export default function PropertyDetails({
 				propertyId={property.id}
 				initialData={selectedTask}
 				completed={isCompletingTask}
+			/>
+			<NotificationPreferencesModal
+				isOpen={isNotificationModalOpen}
+				onClose={() => setIsNotificationModalOpen(false)}
+				onSuccess={handleNotificationSuccess}
+				propertyId={property.id || ''}
+				currentPreferences={preferences}
 			/>
 		</>
 	);
