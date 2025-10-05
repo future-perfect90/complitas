@@ -21,7 +21,7 @@ class Auth
         return in_array($role, $roles);
     }
 
-    function validateToken(string $authHeader): ?object
+    public function validateToken(string $authHeader): ?object
     {
         $parts = explode(' ', $authHeader);
         if (count($parts) !== 2 || strtolower($parts[0]) !== 'bearer') {
@@ -69,5 +69,17 @@ class Auth
             ]
         );
         return $response->getStatusCode() === 200 ? ['success' => true, 'message' => 'Password changed'] : ['success' => false, 'message' => 'Something went wrong - ' . $response->getStatusCode()];
+    }
+
+    public static function requireAuth(): ?object
+    {
+        $auth = new self();
+        $token = $auth->validateToken($_SERVER['HTTP_AUTHORIZATION']);
+        if (empty($token)) {
+            http_response_code(401);
+            echo json_encode(['message' => 'Unauthorized']);
+            exit();
+        }
+        return $token;
     }
 }

@@ -4,13 +4,8 @@ require_once __DIR__ . '/../../classes/Database.php';
 require_once __DIR__ . '/../../classes/User.php';
 require_once __DIR__ . '/../../classes/Auth.php';
 
+$token = Auth::requireAuth();
 $auth = new Auth();
-$token = $auth->validateToken($_SERVER['HTTP_AUTHORIZATION']);
-if (empty($token)) {
-    http_response_code(401);
-    echo json_encode(['message' => 'Unauthorized']);
-    exit();
-}
 $companyId = '';
 $superAdmin = $auth->hasRole('SuperAdmin', $token);
 if (!$superAdmin) {

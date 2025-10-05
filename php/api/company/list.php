@@ -6,7 +6,7 @@ require_once __DIR__ . '/../../classes/Database.php';
 require_once __DIR__ . '/../../classes/Company.php';
 
 $auth = new Auth();
-$token = $auth->validateToken($_SERVER['HTTP_AUTHORIZATION']);
+$token = Auth::requireAuth();
 
 if (!$auth->hasRole('SuperAdmin', $token)) {
     http_response_code(403);

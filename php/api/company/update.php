@@ -3,7 +3,7 @@ require_once __DIR__ . '/../../shared/headers.php';
 require_once __DIR__ . '/../../classes/Auth.php';
 
 $auth = new Auth();
-$token = $auth->validateToken($_SERVER['HTTP_AUTHORIZATION']);
+$token = Auth::requireAuth();
 if (!$auth->hasRole('SuperAdmin', $token)) {
     http_response_code(403);
     echo json_encode(['message' => 'Forbidden: You do not have access to this resource.']);

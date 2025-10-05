@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import type { Property } from '../../types';
 import { Button } from '../Button';
@@ -60,8 +60,7 @@ export default function EditPropertyModal({
 		handleAutoSave(field, fileName);
 	};
 
-	const handleSubmit = (e: React.FormEvent) => {
-		e.preventDefault();
+	const handleSubmit = () => {
 		onSave(form, true);
 	};
 
@@ -421,7 +420,7 @@ export default function EditPropertyModal({
 			isOpen={isOpen}
 			onClose={onClose}
 			title={`Edit ${section.charAt(0).toUpperCase() + section.slice(1)} Section`}>
-			<form onSubmit={handleSubmit}>
+			<form>
 				{isSaving && (
 					<span className="text-sm text-gray-400 absolute top-4 right-24">
 						Saving...
@@ -512,13 +511,13 @@ export default function EditPropertyModal({
 						onClick={onClose}
 						className="bg-gray-300 hover:bg-gray-400 text-black font-semibold py-1 px-4 rounded"
 					/>
-					{section === 'basic' ||
-						(section === 'contacts' && (
-							<Button
-								label="Save and Close"
-								className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-4 rounded"
-							/>
-						))}
+					{(section === 'basic' || section === 'contacts') && (
+						<Button
+							label="Save"
+							className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-4 rounded"
+							onClick={handleSubmit}
+						/>
+					)}
 				</div>
 			</form>
 		</Modal>

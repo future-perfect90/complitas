@@ -3,8 +3,8 @@ require_once __DIR__ . '/../../shared/headers.php';
 
 require_once __DIR__ . '/../../classes/Auth.php';
 
+$token = Auth::requireAuth();
 $auth = new Auth();
-$token = $auth->validateToken($_SERVER['HTTP_AUTHORIZATION']);
 
 if (!$auth->hasRole('SuperAdmin', $token)) {
     http_response_code(403);

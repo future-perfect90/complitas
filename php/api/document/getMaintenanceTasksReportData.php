@@ -4,13 +4,7 @@ require_once __DIR__ . '/../../classes/Document.php';
 require_once __DIR__ . '/../../classes/Auth.php';
 require_once __DIR__ . '/../../../vendor/autoload.php';
 
-$auth = new Auth();
-$token = $auth->validateToken($_SERVER['HTTP_AUTHORIZATION'] ?? '');
-if (empty($token)) {
-    http_response_code(401);
-    echo json_encode(['message' => 'Unauthorized']);
-    exit();
-}
+$token = Auth::requireAuth();
 
 $propertyId = $_GET['propertyId'] ?? null;
 
