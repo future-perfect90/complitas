@@ -37,12 +37,14 @@ foreach ($expiringData as $expiring) {
 
     $groupedProperties[$propertyId]['expiring'][] = "<li>{$expiring['area']} - {$expiring['question']} - {$expiring['validUntil']}</li>";
 }
-
+$count = 0;
 foreach ($groupedProperties as $propertyId => $property) {
-    $certs = implode('\n', $groupedProperties[$propertyId]['expiring']);
-    echo "sending email to {$property['email']}";
+    $certs = implode('', $groupedProperties[$propertyId]['expiring']);
+    echo "sending email to {$property['email']}\n";
     $body = str_replace('{{user_name}}', $property['name'], $template);
     $body = str_replace('{{certifications}}', $certs, $body);
 
     $communication->sendEmail([$property['email']], 'Expiring certs', $body);
+    $count++;
 }
+echo "Email sent to {$count} properties.";
