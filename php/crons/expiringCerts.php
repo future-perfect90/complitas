@@ -25,6 +25,7 @@ foreach ($expiringData as $expiring) {
         $groupedProperties[$propertyId] = [
             'name'       => $expiring['name'],
             'email'      => $expiring['email'],
+            'managerName'=> $expiring['managerName'],
             'questions'  => []
         ];
     }
@@ -41,7 +42,7 @@ $count = 0;
 foreach ($groupedProperties as $propertyId => $property) {
     $certs = implode('', $groupedProperties[$propertyId]['expiring']);
     echo "sending email to {$property['email']}\n";
-    $body = str_replace('{{user_name}}', $property['name'], $template);
+    $body = str_replace('{{user_name}}', $property['managerName'], $template);
     $body = str_replace('{{certifications}}', $certs, $body);
     $body = str_replace('{{days}}', $days, $body);
 

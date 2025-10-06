@@ -108,7 +108,7 @@ class Communication
     public function getExpiringCerts(string $days): array
     {
 
-        $sql = "SELECT p.id as propertyId, p.name, qr.id as questionResponseId, p.email, p.name, qr.validUntil, cq.question, cq.area 
+        $sql = "SELECT p.id as propertyId, p.name, qr.id as questionResponseId, p.email, p.name, qr.validUntil, cq.question, cq.area, p.managerName
         FROM properties p join reports r on r.propertyId=p.id 
         JOIN question_responses qr on qr.reportId = r.id 
         JOIN compliance_questions cq on qr.questionId=cq.id 
