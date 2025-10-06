@@ -33,6 +33,11 @@ class Properties
             return ['success' => false, 'message' => 'Property already exists'];
         }
 
+        //for audit logging
+        $stmt = $this->pdo->prepare("SET @current_user_id = :current_user_id");
+        $stmt->bindParam(":current_user_id", $createdBy);
+        $stmt->execute();
+
         $sql = "INSERT INTO properties (id, name, address1, address2, address3, city, county, postCode, country, email, telephone, managerName, companyId, createdBy) 
                 VALUES (:id, :property_name, :address_line_1, :address_line_2, :address_line_3, :city, :county, :post_code, :country, :email, :telephone, :manager_name, :company_id, :created_by)";
 
@@ -71,8 +76,13 @@ class Properties
         return $result !== false ? $result : null;
     }
 
-    public function update(string $id, array $propertyData): array
+    public function update(string $id, array $propertyData, string $updatedBy): array
     {
+        //for audit logging
+        $stmt = $this->pdo->prepare("SET @current_user_id = :current_user_id");
+        $stmt->bindParam(":current_user_id", $updatedBy);
+        $stmt->execute();
+
         // Dynamically build the SET clause for the update statement.
         $setClauses = [];
         $bindings = [];

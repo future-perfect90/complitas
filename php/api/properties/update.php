@@ -3,7 +3,7 @@ require_once __DIR__ . '/../../shared/headers.php';
 require_once __DIR__ . '/../../classes/Auth.php';
 
 $token = Auth::requireAuth();
-
+$updatedBy = $token->{'https://complitas.dev/user_uuid'};
 $data = json_decode(file_get_contents("php://input"), true);
 
 if ($data) {
@@ -16,8 +16,7 @@ if ($data) {
 
     unset($data['data']['id']);
     $dataToUpdate = $data['data'];
-    var_dump($dataToUpdate);
-    $result = $property->update($propertyId, $dataToUpdate);
+    $result = $property->update($propertyId, $dataToUpdate, $updatedBy);
 
     if ($result['success']) {
         http_response_code(204);

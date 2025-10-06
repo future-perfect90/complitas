@@ -44,6 +44,11 @@ class User
             return ['success' => false, 'message' => 'User already exists'];
         }
 
+        //for audit logging
+        $stmt = $this->pdo->prepare("SET @current_user_id = :current_user_id");
+        $stmt->bindParam(":current_user_id", $createdBy);
+        $stmt->execute();
+
         $sql = "INSERT INTO user (id, name, email, companyId, createdBy) 
                 VALUES (:uuid, :name, :email, :company_id, :created_by)";
         $stmt = $this->pdo->prepare($sql);
