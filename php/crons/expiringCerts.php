@@ -43,8 +43,9 @@ foreach ($groupedProperties as $propertyId => $property) {
     echo "sending email to {$property['email']}\n";
     $body = str_replace('{{user_name}}', $property['name'], $template);
     $body = str_replace('{{certifications}}', $certs, $body);
+    $body = str_replace('{{days}}', $days, $body);
 
-    $communication->sendEmail([$property['email']], 'Expiring certs', $body);
+    $communication->sendEmail([$property['email']], "Certification Expiration in $days Days", $body);
     $count++;
 }
 echo "Email sent to {$count} properties.";
