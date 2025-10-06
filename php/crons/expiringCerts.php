@@ -25,7 +25,7 @@ foreach ($expiringData as $expiring) {
         $groupedProperties[$propertyId] = [
             'name'       => $expiring['name'],
             'email'      => $expiring['email'],
-            'managerName'=> $expiring['managerName'],
+            'managerName' => $expiring['managerName'],
             'questions'  => []
         ];
     }
@@ -36,7 +36,7 @@ foreach ($expiringData as $expiring) {
         'validUntil'    => $expiring['validUntil']
     ];
 
-    $groupedProperties[$propertyId]['expiring'][] = "<li>{$expiring['area']} - {$expiring['question']} - {$expiring['validUntil']}</li>";
+    $groupedProperties[$propertyId]['expiring'][] = "<li><strong>{$expiring['area']}</strong>: {$expiring['question']} - {$expiring['validUntil']}</li>";
 }
 $count = 0;
 foreach ($groupedProperties as $propertyId => $property) {
