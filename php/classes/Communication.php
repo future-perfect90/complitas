@@ -2,6 +2,7 @@
 
 require_once __DIR__ . '/../../vendor/autoload.php';
 require_once __DIR__ . '../../classes/Config.php';
+require_once __DIR__ . '../../classes/Database.php';
 
 use Aws\Ses\SesClient;
 use Aws\Sns\SnsClient;
@@ -13,10 +14,13 @@ class Communication
     private $sesClient;
     private $snsClient;
 
-    public function __construct()
+    private $pdo;
+
+    public function __construct(?PDO $pdo = null)
     {
         $this->sesClient = $this->getEmailClient();
         $this->snsClient = $this->getMessageClient();
+        $this->pdo = $pdo ?? (new Database())->connect();
     }
 
     private function getEmailClient()
@@ -101,4 +105,47 @@ class Communication
         }
     }
 
+    public function getExpiringCerts(string $days): array
+    {
+
+        $sql = "SELECT p.id as propertyId, p.name, qr.id as questionResponseId, p.email, p.name, qr.validUntil, cq.question, cq.area 
+        FROM properties p join reports r on r.propertyId=p.id 
+        JOIN question_responses qr on qr.reportId = r.id 
+        JOIN compliance_questions cq on qr.questionId=cq.id 
+        WHERE qr.answer = 1 and qr.validUntil = DATE(date_add(now(), interval $days day))
+        ORDER BY p.id";
+
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    // public function getExpiringCertsNew(string $days): array
+    // {
+
+    //     $sql = "SELECT p.id as propertyId, p.name, qr.id as questionResponseId, p.email, p.name, qr.validUntil, cq.question, cq.area,
+    //     JSON_ARRAYAGG(
+    //         JSON_OBJECT(
+    //                 'questionResponseId', qr.id,
+    //                 'validUntil', qr.validUntil,
+    //                 'question', cq.question,
+    //                 'area', cq.area
+    //             )
+    //     ) AS expiring_items
+    //     FROM properties p
+    //     JOIN reports r on r.propertyId=p.id 
+    //     JOIN question_responses qr on qr.reportId = r.id 
+    //     JOIN compliance_questions cq on qr.questionId=cq.id 
+    //     WHERE qr.answer = 1 and qr.validUntil = DATE(date_add(now(), interval $days day))
+    //     GROUP BY
+    //         propertyId,
+    //         p.name,
+    //         p.email,
+    //         qr.validUntil,
+    //         qr.id";
+
+    //     $stmt = $this->pdo->prepare($sql);
+    //     $stmt->execute();
+    //     return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    // }
 }

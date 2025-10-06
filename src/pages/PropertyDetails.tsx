@@ -559,7 +559,7 @@ export default function PropertyDetails({
 					</div>
 				</CardContent>
 			</Card>
-			<Card className="rounded-2xl shadow-lg">
+			{/* <Card className="rounded-2xl shadow-lg">
 				<CardHeader>
 					<CardTitle className="text-xl font-semibold">
 						Notification Preferences
@@ -604,7 +604,7 @@ export default function PropertyDetails({
 						}
 					</div>
 				</CardContent>
-			</Card>
+			</Card> */}
 			<MaintenanceTaskModal
 				isOpen={maintenanceTaskModalOpen}
 				onClose={() => setIsMaintenanceTaskModalOpen(false)}
