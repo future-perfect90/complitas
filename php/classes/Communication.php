@@ -113,9 +113,7 @@ class Communication
         JOIN question_responses qr on qr.reportId = r.id 
         JOIN compliance_questions cq on qr.questionId=cq.id 
         WHERE qr.answer = 1 and qr.validUntil = DATE(date_add(now(), interval $days day))
-        GROUP BY cq.area, p.id, qr.id
-        ORDER BY p.id
-        ";
+        ORDER BY p.id, cq.area";
 
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute();
