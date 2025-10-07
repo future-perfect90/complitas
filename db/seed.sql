@@ -210,5 +210,6 @@ CREATE TABLE audit_log (
     field_name VARCHAR(255),
     old_value TEXT,
     new_value TEXT,
-    FOREIGN KEY (performing_user_id) REFERENCES user(id)
+    FOREIGN KEY (performing_user_id) REFERENCES user(id),
+    PRIMARY KEY (`id`)
 );

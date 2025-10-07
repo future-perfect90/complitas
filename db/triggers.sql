@@ -1,50 +1,15 @@
 DELIMITER $$
-CREATE TRIGGER IF NOT EXISTS user_after_insert
-AFTER UPDATE ON user
-FOR EACH ROW
-BEGIN
-
-    DECLARE changer_id VARCHAR(36);
-    SET changer_id = @current_user_id;
-
-        INSERT INTO audit_log (performing_user_id, action_type, table_name, record_id, field_name, old_value, new_value)
-        VALUES (changer_id, 'INSERT', 'user', NEW.id, 'name', '', NEW.name);
-    
-END
-$$
-DELIMITER ;
-
-DELIMITER $$
-CREATE TRIGGER IF NOT EXISTS user_after_update
-AFTER UPDATE ON user
-FOR EACH ROW
-BEGIN
-    DECLARE changer_id VARCHAR(36);
-    SET changer_id = @current_user_id;
-
-    IF OLD.email <> NEW.email THEN
-        INSERT INTO audit_log (performing_user_id, action_type, table_name, record_id, field_name, old_value, new_value)
-        VALUES (changer_id, 'UPDATE', 'user', OLD.id, 'email', OLD.email, NEW.email);
-    END IF;
-
-    IF OLD.name <> NEW.name THEN
-        INSERT INTO audit_log (performing_user_id, action_type, table_name, record_id, field_name, old_value, new_value)
-        VALUES (changer_id, 'UPDATE', 'user', OLD.id, 'name', OLD.name, NEW.name);
-    END IF; 
-END
-$$
-DELIMITER ;
-
-DELIMITER $$
 CREATE TRIGGER IF NOT EXISTS properties_after_insert
 AFTER INSERT ON properties
 FOR EACH ROW
 BEGIN
-    DECLARE changer_id INT;
+    DECLARE changer_id VARCHAR(36);
     SET changer_id = @current_user_id;
 
     INSERT INTO audit_log (performing_user_id, action_type, table_name, record_id, field_name, old_value, new_value)
-    VALUES (changer_id, 'INSERT', 'properties', NEW.id, NULL, NULL, CONCAT('Property created with name: ', NEW.name));
+    VALUES (changer_id, 'INSERT', 'properties', NEW.id, NULL, NULL, CONCAT('Property created with name: ', NEW.name)),
+    (changer_id, 'INSERT', 'properties', NEW.id, NULL, NULL, CONCAT('Property created with initial address: ', NEW.address1, NEW.address2, NEW.address3, NEW.city, NEW.county, NEW.postCode, NEW.country)),
+    (changer_id, 'INSERT', 'properties', NEW.id, NULL, NULL, CONCAT('Property created with manager: ', NEW.managerName, NEW.email, NEW.telephone));
 END
 $$
 DELIMITER ;
@@ -54,7 +19,7 @@ CREATE TRIGGER IF NOT EXISTS properties_after_update
 AFTER UPDATE ON properties
 FOR EACH ROW
 BEGIN
-    DECLARE changer_id INT;
+    DECLARE changer_id VARCHAR(36);
     SET changer_id = @current_user_id;
 
     IF NOT (OLD.name <=> NEW.name) THEN
@@ -310,23 +275,59 @@ $$
 DELIMITER ;
 
 DELIMITER $$
-
-CREATE TRIGGER properties_before_delete
+CREATE TRIGGER IF NOT EXISTS properties_before_delete
 BEFORE DELETE ON properties
 FOR EACH ROW
 BEGIN
-    DECLARE changer_id INT;
+    DECLARE changer_id VARCHAR(36);
     SET changer_id = @current_user_id;
 
-    INSERT INTO audit_log (performing_user_id, action_type, table_name, record_id, old_value, new_value)
+    INSERT INTO audit_log (performing_user_id, action_type, table_name, record_id, field_name, old_value, new_value)
     VALUES (
         changer_id,
         'DELETE',
         'properties',
         OLD.id,
+        NULL,
         CONCAT('id: ', OLD.id, 'name: ', OLD.name),
         ''
     );
+END
+$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE TRIGGER IF NOT EXISTS question_answered_insert
+AFTER INSERT ON question_responses
+FOR EACH ROW
+BEGIN
+    DECLARE changer_id VARCHAR(36);
+    SET changer_id = @current_user_id;
+
+    INSERT INTO audit_log (performing_user_id, action_type, table_name, record_id, field_name, old_value, new_value)
+    VALUES (changer_id, 'INSERT', 'question_responses', NEW.id, 'answer', NULL, NEW.answer);
+
+END
+$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE TRIGGER IF NOT EXISTS question_answered_update
+AFTER UPDATE ON question_responses
+FOR EACH ROW
+BEGIN
+    DECLARE changer_id VARCHAR(36);
+    SET changer_id = @current_user_id;
+
+    IF NOT (OLD.answer <=> NEW.answer) THEN
+        INSERT INTO audit_log (performing_user_id, action_type, table_name, record_id, field_name, old_value, new_value)
+        VALUES (changer_id, 'UPDATE', 'question_responses', NEW.id, 'answer', OLD.answer, NEW.answer);
+    END IF;
+
+    IF NOT (OLD.validUntil <=> NEW.validUntil) THEN
+        INSERT INTO audit_log (performing_user_id, action_type, table_name, record_id, field_name, old_value, new_value)
+        VALUES (changer_id, 'UPDATE', 'question_responses', NEW.id, 'validUntil', OLD.validUntil, NEW.validUntil);
+    END IF;
 END$$
 
 DELIMITER ;

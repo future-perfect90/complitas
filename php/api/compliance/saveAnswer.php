@@ -30,7 +30,7 @@ switch ($data['answer']) {
         $response = null;
 }
 $fileName = $data['fileName'] ?? '';
-$validUntil = $data['validUntil'] ?? '2025-09-03';
+$validUntil = $data['validUntil'] ?? NULL;
 $completedBy = $token->{'https://complitas.dev/user_uuid'} ?? 'system';
 $database = (new Database())->connect();
 $compliance = new Compliance($database);
