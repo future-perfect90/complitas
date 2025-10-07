@@ -27,17 +27,23 @@ class Compliance
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function questionResponse(string $reportId, string $questionId, string $answer, string $fileName, ?string $validUntil, string $completedBy): bool
+    public function questionResponse(string $reportId, string $propertyId, string $questionId, string $answer, string $fileName, string|null $validUntil, string $completedBy): bool
     {
 
         //for audit logging
         $stmt = $this->pdo->prepare("SET @current_user_id = :current_user_id");
         $stmt->bindParam(":current_user_id", $completedBy);
         $stmt->execute();
-
-        $stmt = $this->pdo->prepare("INSERT INTO question_responses (reportId, questionId, answer, fileName, validUntil, completedBy) VALUES (:propertyComplianceId, :questionId, :answer, :fileName, :validUntil, :completedBy) 
-        ON DUPLICATE KEY UPDATE answer = VALUES(answer), fileName = VALUES(fileName), validUntil = VALUES(validUntil), completedBy = VALUES(completedBy)");
-        $stmt->bindParam(':propertyComplianceId', $reportId);
+        $sql = "INSERT INTO question_responses (reportId, propertyId, questionId, answer, fileName, validUntil, completedBy) 
+        VALUES (:reportId, :propertyId, :questionId, :answer, :fileName, :validUntil, :completedBy)
+        ON DUPLICATE KEY UPDATE 
+        answer = VALUES(answer), 
+        fileName = VALUES(fileName), 
+        validUntil = VALUES(validUntil), 
+        completedBy = VALUES(completedBy)";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindParam(':reportId', $reportId);
+        $stmt->bindParam(':propertyId', $propertyId);
         $stmt->bindParam(':questionId', $questionId);
         $stmt->bindParam(':answer', $answer);
         $stmt->bindParam(':fileName', $fileName);

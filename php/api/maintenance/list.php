@@ -13,13 +13,8 @@ $propertyId = $_GET['propertyId'] ?? null;
 
 if ($propertyId) {
     $result = $property->getMaintenanceTasks($propertyId);
-    if ($result) {
-        http_response_code(200);
-        echo json_encode($result);
-    } else {
-        http_response_code(404);
-        echo json_encode(['message' => 'Properties not found']);
-    }
+    http_response_code(200);
+    echo json_encode($result);
 } else {
     http_response_code(400);
     echo json_encode(['message' => 'Invalid request, property ID is required']);

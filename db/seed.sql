@@ -153,13 +153,16 @@ CREATE TABLE IF NOT EXISTS reports (
 CREATE TABLE IF NOT EXISTS question_responses (
     `id` VARCHAR(36) NOT NULL DEFAULT (UUID()) PRIMARY KEY,
     `reportId` VARCHAR(36) NOT NULL,
+    `propertyId` VARCHAR(36) NULL,
     `questionId` VARCHAR(36) NOT NULL,
     `answer` TINYINT(1) NOT NULL,
     `fileName` VARCHAR(255) NULL,
     `validUntil` DATETIME NULL,
     `completedBy` VARCHAR(255) NOT NULL,
-    CONSTRAINT fk_reports FOREIGN KEY (reportId) REFERENCES reports(id) ON DELETE CASCADE,
-    CONSTRAINT fk_question FOREIGN KEY (questionId) REFERENCES compliance_questions(id) ON DELETE CASCADE,
+    CONSTRAINT fk_reports FOREIGN KEY (reportId) REFERENCES reports(id),
+    CONSTRAINT fk_question FOREIGN KEY (questionId) REFERENCES compliance_questions(id),
+    CONSTRAINT fk_response_property FOREIGN KEY (propertyId) REFERENCES properties(id),
+    CONSTRAINT fk_user FOREIGN KEY (completedBy) REFERENCES user(id),
     UNIQUE KEY `reportId` (`reportId`,`questionId`)
 );
 

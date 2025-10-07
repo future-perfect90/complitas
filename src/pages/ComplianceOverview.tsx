@@ -16,7 +16,6 @@ export default function ComplianceOverview() {
 			if (!reportId) return;
 			setIsLoading(true);
 			try {
-				// Fetch both questions and existing answers in parallel
 				const [questions, answers] = await Promise.all([
 					getComplianceQuestions(id ?? ''),
 					getComplianceAnswers(reportId),
@@ -61,6 +60,7 @@ export default function ComplianceOverview() {
 				<QuestionsModal
 					areaName={selectedArea.name}
 					questions={selectedArea.questions}
+					propertyId={id ?? ''}
 					onClose={() => setSelectedAreaName(null)}
 					reportId={reportId ?? ''}
 				/>

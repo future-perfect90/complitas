@@ -8,13 +8,14 @@ require_once __DIR__ . '/../../classes/Auth.php';
 $token = Auth::requireAuth();
 $data = json_decode(file_get_contents('php://input'), true);
 
-if (!isset($data['questionId']) || !isset($data['answer']) || !isset($data['reportId'])) {
+if (!isset($data['questionId']) || !isset($data['answer']) || !isset($data['reportId']) || !isset($data['propertyId'])) {
     http_response_code(400);
     echo json_encode(['error' => 'Invalid input']);
     exit;
 }
 
 $questionId = $data['questionId'];
+$propertyId = $data['propertyId'];
 $reportId = $data['reportId'];
 switch ($data['answer']) {
     case 'Yes':
@@ -35,7 +36,7 @@ $completedBy = $token->{'https://complitas.dev/user_uuid'} ?? 'system';
 $database = (new Database())->connect();
 $compliance = new Compliance($database);
 
-$result = $compliance->questionResponse($reportId, $questionId, $response, $fileName, $validUntil, $completedBy);
+$result = $compliance->questionResponse($reportId, $propertyId, $questionId, $response, $fileName, $validUntil, $completedBy);
 
 if ($result) {
     http_response_code(201);

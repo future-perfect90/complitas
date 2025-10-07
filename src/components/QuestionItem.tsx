@@ -8,6 +8,7 @@ import TextField from './TextField';
 
 export interface Answer {
 	reportId: string;
+	propertyId: string;
 	questionId: string;
 	answer: 'Yes' | 'No' | 'NA' | null;
 	fileUrl?: string;
@@ -22,12 +23,14 @@ interface QuestionItemProps {
 		uploadRequired: boolean | 0 | 1;
 	};
 	reportId: string;
+	propertyId: string;
 	savedAnswer?: Answer;
 }
 
 export default function QuestionItem({
 	questionObject,
 	savedAnswer,
+	propertyId,
 	reportId,
 }: QuestionItemProps) {
 	const [currentAnswer, setCurrentAnswer] = useState<Answer>(
@@ -35,6 +38,7 @@ export default function QuestionItem({
 			questionId: questionObject.id,
 			answer: null,
 			reportId: reportId,
+			propertyId: propertyId,
 		}
 	);
 	const [isSaving, setIsSaving] = useState(false);
@@ -69,6 +73,7 @@ export default function QuestionItem({
 		handleSave({
 			...currentAnswer,
 			answer: newAnswer,
+			propertyId: propertyId,
 			fileUrl: undefined,
 			fileName: undefined,
 		});
@@ -76,7 +81,7 @@ export default function QuestionItem({
 
 	const handleUploadComplete = (fileUrl: string, fileName: string) => {
 		setNewFile(fileName);
-		handleSave({ ...currentAnswer, answer: 'Yes', fileUrl, fileName });
+		handleSave({ ...currentAnswer, answer: 'Yes', fileUrl, fileName, propertyId });
 		toast.success('File uploaded successfully');
 		setIsReplacingFile(false);
 	};
@@ -120,7 +125,7 @@ export default function QuestionItem({
 									validUntil: e.target.value,
 								}));
 							}}
-							onBlur={() => handleSave(currentAnswer)}
+							onBlur={() => handleSave({ ...currentAnswer, propertyId })}
 						/>
 					</div>
 				)}

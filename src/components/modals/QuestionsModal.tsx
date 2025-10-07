@@ -2,12 +2,12 @@
 import { Button } from '../Button';
 import QuestionItem from '../QuestionItem';
 
-// Modal now receives the already-filtered questions for the selected area
 interface QuestionsModalProps {
 	areaName: string;
-	questions: any[]; // The full question objects with savedAnswer included
+	questions: any[];
 	onClose: () => void;
 	reportId: string;
+	propertyId: string;
 }
 
 export default function QuestionsModal({
@@ -15,6 +15,7 @@ export default function QuestionsModal({
 	questions,
 	onClose,
 	reportId,
+	propertyId,
 }: QuestionsModalProps) {
 	const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
 		if (e.target === e.currentTarget) {
@@ -54,6 +55,7 @@ export default function QuestionsModal({
 							key={q.id}
 							questionObject={q}
 							savedAnswer={q.savedAnswer}
+							propertyId={propertyId}
 							reportId={reportId}
 						/>
 					))}
