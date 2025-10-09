@@ -8,6 +8,7 @@ import { useAuthMeta } from '../context/AuthProvider';
 import { useSearch } from '../hooks/useSearch';
 import type { Property } from '../types';
 import { deleteProperty, getProperties, getProperty } from '../utils/api';
+import LoadingSpinner from '../components/modals/Loading';
 
 const PropertyList: React.FC = () => {
 	const [properties, setProperties] = useState<Property[]>([]);
@@ -67,7 +68,7 @@ const PropertyList: React.FC = () => {
 	};
 
 	if (isLoading) {
-		return <div className="max-w-4xl mx-auto p-4">Loading...</div>;
+		return <LoadingSpinner message={'Loading properties...'} />;
 	}
 	return (
 		<div className="max-w-4xl mx-auto p-4">

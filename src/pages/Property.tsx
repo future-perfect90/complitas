@@ -38,7 +38,6 @@ export default function Property() {
 			setMaintenanceTasks(maintenaceData);
 		} catch (error) {
 			console.error('Error fetching property:', error);
-			toast.error('Failed to load property data.');
 		}
 	}, [id]);
 

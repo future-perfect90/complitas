@@ -9,6 +9,7 @@ import { type OptionType } from '../components/MultiSelect';
 import { useAuthMeta } from '../context/AuthProvider';
 import type { Property, Team } from '../types';
 import { getTeamMembers, getTeamProperties, getTeams } from '../utils/api';
+import LoadingSpinner from '../components/modals/Loading';
 
 interface Member {
 	id: string;
@@ -129,7 +130,7 @@ const TeamList: React.FC = () => {
 	const closeModal = () => setModal({ type: null });
 
 	if (isLoading) {
-		return <div className="max-w-4xl mx-auto p-4">Loading...</div>;
+		return <LoadingSpinner message={'Loading teams...'} />;
 	}
 
 	return (
