@@ -781,3 +781,25 @@ export async function updateNotificationPreferences(
 	console.log(response);
 	return response.ok;
 }
+
+export async function getAuditData(propertyId: string) {
+	const jwt =
+		authService.getAccessTokenSilently ?
+			await authService.getAccessTokenSilently()
+		:	'';
+	const response = await fetch(
+		`${import.meta.env.VITE_API_BASE_URL}/audit/auditLog.php?propertyId=${propertyId}`,
+		{
+			method: 'GET',
+			headers: {
+				Authorization: `Bearer ${jwt}`,
+				'Content-Type': 'application/json',
+			},
+		}
+	);
+	if (!response.ok) {
+		throw new Error(`Response status: ${response.status}`);
+	}
+	console.log(response);
+	return response.json();
+}

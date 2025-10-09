@@ -11,7 +11,12 @@ import workerUrl from 'pdfjs-dist/build/pdf.worker.mjs?url';
 import { useEffect, useState } from 'react';
 import { pdfjs } from 'react-pdf';
 import { createTw } from 'react-pdf-tailwind';
-import { getMaintenanceTasksReportData, getReportData } from '../utils/api';
+import {
+	getAuditData,
+	getMaintenanceTasksReportData,
+	getReportData,
+} from '../utils/api';
+import { formatFieldName, formatTimestamp } from '../utils/helper';
 import LoadingSpinner from './modals/Loading';
 
 // Configure pdfjs worker
@@ -45,6 +50,33 @@ interface MaintenanceDataItem {
 	typeOfWork: string;
 }
 
+interface responseData {
+	timestamp: string;
+	propertyId: string;
+	actionType: string;
+	oldValue: string;
+	newValue: string;
+	actionedBy: string;
+	question: string;
+	area: string;
+	fieldName: string;
+}
+
+interface propertyLog {
+	propertyId: string;
+	timestamp: string;
+	actionType: string;
+	oldValue: string;
+	newValue: string;
+	actionedBy: string;
+	fieldName: string;
+}
+
+interface AuditData {
+	responseLog: responseData[];
+	propertyLog: propertyLog[];
+}
+
 interface Attachment {
 	type: 'image' | 'pdf';
 	name: string;
@@ -66,10 +98,12 @@ const ReportDocument = ({
 	data,
 	maintenanceData,
 	attachments,
+	auditData,
 }: {
 	data: ReportDataItem[];
 	maintenanceData: MaintenanceDataItem[];
 	attachments: Attachment[];
+	auditData: AuditData;
 }) => {
 	if (!data || data.length === 0) {
 		return (
@@ -141,38 +175,133 @@ const ReportDocument = ({
 				<Text style={tw('text-2xl mb-5 text-center font-bold')}>
 					Maintenance Report for: {propertyName}
 				</Text>
-				{Object.entries(groupedMaintenanceData).map(([title, details]) => (
-					<View key={title}>
-						<Text
-							style={tw(
-								'text-base font-bold mt-5 mb-2.5 border-b border-solid border-gray-300 pb-1'
-							)}>
-							{title}
+				{(
+					groupedMaintenanceData &&
+					Object.keys(groupedMaintenanceData).length > 0
+				) ?
+					Object.entries(groupedMaintenanceData).map(([title, details]) => (
+						<View key={title}>
+							<Text
+								style={tw(
+									'text-base font-bold mt-5 mb-2.5 border-b border-solid border-gray-300 pb-1'
+								)}>
+								{title}
+							</Text>
+							{details.map((item, index) => (
+								<View key={index} style={tw('mb-2.5')} wrap={false}>
+									<Text style={tw('ml-4')}>Description:</Text>
+									<Text style={tw('ml-4')}>{item.description}</Text>
+									<Text style={tw('ml-4')}>
+										Date Completed: {item.completedAt}
+									</Text>
+									<Text style={tw('ml-4')}>Completed by: {item.name}</Text>
+									<Text style={tw('ml-4')}>
+										Contact Name: {item.contactName}
+									</Text>
+									<Text style={tw('ml-4')}>Address: {item.contactAddress}</Text>
+									<Text style={tw('ml-4')}>
+										Contact Number: {item.contactNumber}
+									</Text>
+									{item.fileName && (
+										<Link
+											style={tw('ml-4 text-[10px] text-blue-600 underline')}
+											src={`#${item.attachmentId}`}>
+											Evidence Attached: {item.attachmentId}
+										</Link>
+									)}
+								</View>
+							))}
+						</View>
+					))
+				:	<Text style={tw('text-center')}>No maintenance carried out.</Text>}
+			</Page>
+			<Page style={tw('p-[30px] text-[11px] text-gray-800')}>
+				<Text style={tw('text-2xl mb-5 text-center font-bold')}>
+					Property Audit Log
+				</Text>
+				{auditData.propertyLog.map((item, index) => (
+					<View key={index}>
+						<Text style={tw('p-3 mb-2 text-sm text-gray-800')}>
+							<Text style={tw('font-bold')}>
+								{formatFieldName(item.fieldName)}
+							</Text>{' '}
+							was updated from{' '}
+							{item.oldValue ?
+								<Text style={tw('font-semibold text-red-600')}>
+									'{item.oldValue}'
+								</Text>
+							:	<Text style={tw('italic text-gray-500')}>'blank'</Text>}{' '}
+							to{' '}
+							<Text style={tw('font-semibold text-green-600')}>
+								'{item.newValue}'
+							</Text>{' '}
+							by <Text style={tw('font-semibold')}>{item.actionedBy}</Text> at{' '}
+							{formatTimestamp(item.timestamp)}
 						</Text>
-						{details.map((item, index) => (
-							<View key={index} style={tw('mb-2.5')} wrap={false}>
-								<Text style={tw('ml-4')}>Description:</Text>
-								<Text style={tw('ml-4')}>{item.description}</Text>
-								<Text style={tw('ml-4')}>
-									Date Completed: {item.completedAt}
-								</Text>
-								<Text style={tw('ml-4')}>Completed by: {item.name}</Text>
-								<Text style={tw('ml-4')}>Contact Name: {item.contactName}</Text>
-								<Text style={tw('ml-4')}>Address: {item.contactAddress}</Text>
-								<Text style={tw('ml-4')}>
-									Contact Number: {item.contactNumber}
-								</Text>
-								{item.fileName && (
-									<Link
-										style={tw('ml-4 text-[10px] text-blue-600 underline')}
-										src={`#${item.attachmentId}`}>
-										Evidence Attached: {item.attachmentId}
-									</Link>
-								)}
-							</View>
-						))}
 					</View>
 				))}
+			</Page>
+
+			<Page style={tw('p-[30px] text-[11px] text-gray-800')}>
+				<Text style={tw('text-2xl mb-5 text-center font-bold')}>
+					Compliance Audit Log
+				</Text>
+				{auditData.responseLog.map((item, index) => {
+					const showAreaHeader =
+						index === 0 || item.area !== auditData.responseLog[index - 1].area;
+
+					return (
+						<View key={item.question || index}>
+							{showAreaHeader && (
+								<Text
+									style={tw(
+										'text-xl font-bold mt-6 mb-3 border-b border-solid border-gray-400 pb-2'
+									)}>
+									{item.area}
+								</Text>
+							)}
+							<Text style={tw('p-2 mb-2 text-base text-gray-800 leading-6')}>
+								{item.fieldName === 'validUntil' ?
+									<Text
+										style={tw('p-2 mb-2 text-base text-gray-800 leading-6')}>
+										The expiry date for question{' '}
+										<Text style={tw('font-bold')}>'{item.question}'</Text> was
+										changed from{' '}
+										{item.oldValue ?
+											<Text style={tw('font-semibold text-red-600')}>
+												'{formatTimestamp(item.oldValue)}'
+											</Text>
+										:	<Text style={tw('italic text-gray-500')}>blank</Text>}{' '}
+										to{' '}
+										<Text style={tw('font-semibold text-green-600')}>
+											'{formatTimestamp(item.newValue)}'
+										</Text>{' '}
+										by{' '}
+										<Text style={tw('font-semibold')}>{item.actionedBy}</Text>{' '}
+										on {formatTimestamp(item.timestamp)}.
+									</Text>
+								:	<Text style={tw('p-2 mb-2 text-base text-gray-800 leading-6')}>
+										The answer for question{' '}
+										<Text style={tw('font-bold')}>'{item.question}'</Text> was
+										updated from{' '}
+										{item.oldValue ?
+											<Text style={tw('font-semibold text-red-600')}>
+												'{item.oldValue}'
+											</Text>
+										:	<Text style={tw('italic text-gray-500')}>blank</Text>}{' '}
+										to{' '}
+										<Text style={tw('font-semibold text-green-600')}>
+											'{item.newValue}'
+										</Text>{' '}
+										by{' '}
+										<Text style={tw('font-semibold')}>{item.actionedBy}</Text>{' '}
+										on {formatTimestamp(item.timestamp)}.
+									</Text>
+								}
+							</Text>
+						</View>
+					);
+				})}
 			</Page>
 
 			{/* Attachments */}
@@ -282,6 +411,10 @@ export const ComplianceReportPDF = ({
 	const [maintenanceReportData, setMaintenanceReportData] = useState<
 		MaintenanceDataItem[] | null
 	>();
+	const [auditReportData, setAuditReportData] = useState<AuditData>({
+		responseLog: [],
+		propertyLog: [],
+	});
 	const [loading, setLoading] = useState(true);
 	const [attachments, setAttachments] = useState<Attachment[]>([]);
 
@@ -289,9 +422,10 @@ export const ComplianceReportPDF = ({
 		const fetchAndProcessReport = async () => {
 			setLoading(true);
 			try {
-				const [data, maintenanceData] = await Promise.all([
+				const [data, maintenanceData, auditData] = await Promise.all([
 					getReportData(reportId),
 					getMaintenanceTasksReportData(propertyId),
+					getAuditData(propertyId),
 				]);
 
 				if (
@@ -356,6 +490,7 @@ export const ComplianceReportPDF = ({
 				setReportData(dataWithAttachmentIds);
 				setMaintenanceReportData(maintenanceDataWithAttachmentIds);
 				setAttachments(resolvedAttachments);
+				setAuditReportData(auditData);
 			} catch (error) {
 				console.error('Failed to fetch or process report data:', error);
 			} finally {
@@ -366,9 +501,10 @@ export const ComplianceReportPDF = ({
 		fetchAndProcessReport();
 	}, [reportId, propertyId]);
 
-	if (loading || !reportData || !maintenanceReportData) {
+	if (loading || !reportData || !maintenanceReportData || !auditReportData) {
 		return <LoadingSpinner message={'Loading report...'} />;
 	}
+	console.log(auditReportData);
 	return (
 		<>
 			<PDFViewer style={{ width: '100%', height: '100vh' }}>
@@ -376,6 +512,7 @@ export const ComplianceReportPDF = ({
 					data={reportData}
 					maintenanceData={maintenanceReportData}
 					attachments={attachments}
+					auditData={auditReportData}
 				/>
 			</PDFViewer>
 		</>
