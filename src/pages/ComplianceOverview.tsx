@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import AreaCard from '../components/AreaCard';
+import LoadingSpinner from '../components/modals/Loading';
 import QuestionsModal from '../components/modals/QuestionsModal';
 import { getComplianceAnswers, getComplianceQuestions } from '../utils/api';
 import { groupQuestionsByArea } from '../utils/helper'; // Our new helper
@@ -35,6 +36,10 @@ export default function ComplianceOverview() {
 	const selectedArea = groupedAreas.find(
 		(area: any) => area.name === selectedAreaName
 	);
+
+	if (isLoading) {
+		return <LoadingSpinner message={'Loading overview...'} />;
+	}
 
 	return (
 		<>
