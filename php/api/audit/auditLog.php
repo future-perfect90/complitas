@@ -4,7 +4,6 @@ require_once __DIR__ . '/../../classes/Audit.php';
 require_once __DIR__ . '/../../classes/Database.php';
 require_once __DIR__ . '/../../classes/Auth.php';
 require_once __DIR__ . '/../../../vendor/autoload.php';
-var_dump($_SERVER);
 $token = Auth::requireAuth();
 
 $propertyId = $_GET['propertyId'] ?? null;
