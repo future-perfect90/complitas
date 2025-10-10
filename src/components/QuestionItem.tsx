@@ -79,9 +79,15 @@ export default function QuestionItem({
 		});
 	};
 
-	const handleUploadComplete = (fileUrl: string, fileName: string) => {
+	const handleUploadComplete = (fileName: string, fileUrl: string) => {
 		setNewFile(fileName);
-		handleSave({ ...currentAnswer, answer: 'Yes', fileUrl, fileName, propertyId });
+		handleSave({
+			...currentAnswer,
+			answer: 'Yes',
+			fileUrl,
+			fileName,
+			propertyId,
+		});
 		toast.success('File uploaded successfully');
 		setIsReplacingFile(false);
 	};

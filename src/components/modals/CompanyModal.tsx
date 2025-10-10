@@ -6,8 +6,8 @@ import { Button } from '../Button';
 import FileUpload from '../FileUpload';
 import Modal from '../Modal';
 import PresignedImage from '../PresignedImage';
-import TextField from '../TextField';
 import Telephone from '../Telephone';
+import TextField from '../TextField';
 
 interface Props {
 	isOpen: boolean;
@@ -135,7 +135,7 @@ const CompanyModal: React.FC<Props> = ({
 		onClose();
 	};
 
-	const handleUploadComplete = (url: string, fileName: string) => {
+	const handleUploadComplete = (fileName: string) => {
 		setLogo(fileName);
 	};
 

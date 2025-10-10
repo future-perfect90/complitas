@@ -30,10 +30,6 @@ export default function FileUpload({
 		}
 	};
 
-	const handleCancel = () => {
-		setUploading(false);
-	};
-
 	const handleUpload = async () => {
 		if (!file) {
 			setMessage('Please select a file first.');
@@ -75,7 +71,7 @@ export default function FileUpload({
 			if (!upload.ok) throw new Error('Failed to upload to S3');
 
 			setMessage('✅ Upload successful!');
-			if (onUploadComplete) onUploadComplete(presignedUrl, savedFile);
+			if (onUploadComplete) onUploadComplete(savedFile, presignedUrl);
 		} catch (err: any) {
 			setMessage(`❌ Upload failed: ${err.message}`);
 		}

@@ -106,7 +106,7 @@ const MaintenanceTaskModal: React.FC<Props> = ({
 		onClose();
 	};
 
-	const handleUploadComplete = (url: string, fileName: string) => {
+	const handleUploadComplete = (fileName: string) => {
 		setEvidence(fileName);
 		setChangeEvidence(false);
 	};
