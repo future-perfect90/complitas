@@ -54,7 +54,7 @@ const CompanyModal: React.FC<Props> = ({
 			setTelephone(initialData.telephone);
 			setEmail(initialData.email);
 			setLogo(initialData.logo || '');
-			setVisible(false);
+			initialData.logo ? setVisible(false) : setVisible(true);
 		} else {
 			setId('');
 			setName('');
@@ -135,6 +135,7 @@ const CompanyModal: React.FC<Props> = ({
 
 	const handleUploadComplete = (fileName: string) => {
 		setLogo(fileName);
+		setVisible(false);
 	};
 
 	return (
@@ -209,7 +210,7 @@ const CompanyModal: React.FC<Props> = ({
 						onChange={(e: any) => setEmail(e.target.value)}
 						required
 					/>
-					{logo && (
+					{logo && logo.length > 0 && (
 						<>
 							<div>
 								<label className="block text-sm font-medium text-gray-700 mb-1">

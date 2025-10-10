@@ -803,3 +803,29 @@ export async function getAuditData(propertyId: string) {
 	console.log(response);
 	return response.json();
 }
+
+export async function fetchUrl(
+	url: string,
+	directory: string,
+	imageName: string
+) {
+	const jwt =
+		authService.getAccessTokenSilently ?
+			await authService.getAccessTokenSilently()
+		:	'';
+
+	const response = await fetch(url, {
+		method: 'POST',
+		headers: {
+			Authorization: `Bearer ${jwt}`,
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify({
+			fileName: `${directory}${imageName}`,
+		}),
+	});
+
+	if (!response.ok) throw new Error('Failed to get presigned URL');
+	const { presignedUrl } = await response.json();
+	return presignedUrl;
+}

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { fetchUrl } from '../utils/api';
 
 interface Props {
 	imageName: string;
@@ -10,26 +11,16 @@ interface Props {
 const PresignedImage: React.FC<Props> = ({
 	imageName,
 	uploadApiUrl,
-	directory,
+	directory = '',
 }) => {
 	const [url, setUrl] = useState<string>('');
 
 	useEffect(() => {
-		const fetchUrl = async () => {
-			const res = await fetch(uploadApiUrl, {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({
-					fileName: `${directory}${imageName}`,
-				}),
-			});
-
-			if (!res.ok) throw new Error('Failed to get presigned URL');
-
-			const { presignedUrl } = await res.json();
+		const getPresignedUrl = async () => {
+			const presignedUrl = await fetchUrl(uploadApiUrl, directory, imageName);
 			setUrl(presignedUrl);
 		};
-		fetchUrl();
+		getPresignedUrl();
 	}, []);
 
 	return (
