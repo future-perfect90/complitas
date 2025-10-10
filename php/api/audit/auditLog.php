@@ -7,6 +7,7 @@ require_once __DIR__ . '/../../../vendor/autoload.php';
 
 // $token = Auth::requireAuth();
 
+echo ' hello world! ';
 $propertyId = $_GET['propertyId'] ?? null;
 
 $pdo = (new Database())->connect();
