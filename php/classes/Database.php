@@ -18,7 +18,6 @@ class Database
         $host = $dbCredentials['host'];
         $port = $dbCredentials['port'];
 
-        var_dump($dbCredentials);
         try {
             $conn = new PDO(
                 'mysql:host=' . $host . ';port=' . $port . ';dbname=' . $dbname . ';charset=utf8mb4',
