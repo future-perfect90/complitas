@@ -5,9 +5,8 @@ require_once __DIR__ . '/../../classes/Database.php';
 require_once __DIR__ . '/../../classes/Auth.php';
 require_once __DIR__ . '/../../../vendor/autoload.php';
 
-// $token = Auth::requireAuth();
+$token = Auth::requireAuth();
 
-echo ' hello world! ';
 $propertyId = $_GET['propertyId'] ?? null;
 
 $pdo = (new Database())->connect();
