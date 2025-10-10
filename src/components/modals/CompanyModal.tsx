@@ -74,9 +74,7 @@ const CompanyModal: React.FC<Props> = ({
 		}
 	}, [initialData]);
 
-	const handleSubmit = async (e: React.FormEvent) => {
-		e.preventDefault();
-		// Validation
+	const handleSubmit = async () => {
 		const phoneRegex = /^[0-9\-\+\s\(\)]+$/;
 		const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -255,6 +253,7 @@ const CompanyModal: React.FC<Props> = ({
 					<Button
 						label={initialData ? 'Update' : 'Create'}
 						className="bg-green-400 py-2 px-5"
+						onClick={handleSubmit}
 					/>
 				</div>
 			</form>

@@ -88,7 +88,7 @@ resource "aws_s3_bucket_cors_configuration" "this" {
 
   cors_rule {
     allowed_methods = ["GET", "PUT"]
-    allowed_origins = ["http://localhost:5173"] # React dev server
+    allowed_origins = ["http://localhost:5173", "https://dev.complitas.co.uk"]
     allowed_headers = ["*"]
     expose_headers  = ["ETag"]
     max_age_seconds = 3000
