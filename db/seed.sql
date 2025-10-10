@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS `companies` (
     `email` VARCHAR(255),
     `telephone` VARCHAR(13),
     `logo` VARCHAR(255),
-    `createdAt` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+    `createdAt` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 PRIMARY KEY (`id`)
 );
 
