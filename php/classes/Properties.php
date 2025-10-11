@@ -14,7 +14,7 @@ class Properties
 
     public function listAll(string $companyId): array
     {
-        $stmt = $this->pdo->prepare("SELECT id, name, address1, address2, address3, city, county, postCode, country, email, telephone, managerName FROM properties where companyId = :company_id");
+        $stmt = $this->pdo->prepare("SELECT id, name, address1, address2, address3, city, county, postCode, country, managerEmail, telephone, managerName FROM properties where companyId = :company_id");
         $stmt->bindParam(':company_id', $companyId);
         $stmt->execute();
 
@@ -38,7 +38,7 @@ class Properties
         $stmt->bindParam(":current_user_id", $createdBy);
         $stmt->execute();
 
-        $sql = "INSERT INTO properties (id, name, address1, address2, address3, city, county, postCode, country, email, telephone, managerName, companyId, createdBy) 
+        $sql = "INSERT INTO properties (id, name, address1, address2, address3, city, county, postCode, country, managerEmail, telephone, managerName, companyId, createdBy) 
                 VALUES (:id, :property_name, :address_line_1, :address_line_2, :address_line_3, :city, :county, :post_code, :country, :email, :telephone, :manager_name, :company_id, :created_by)";
 
         $stmt = $this->pdo->prepare($sql);
@@ -66,7 +66,13 @@ class Properties
 
     public function getById(string $id): ?array
     {
-        $sql = "SELECT id,name,address1,address2,address3,city,county,postCode,country,managerName,email,telephone ,country,email,telephone,managerName,occupancyType,habitableHeight,buildingHeight,designDate,lifts,communalUtilityAssets,communalGasAppliances,meterBank,voidAssets,residentalFlats,uniqueSupplyPoints,commercialUnits,wellMaintained,mitigationPlan,refurbished,refurbishedCDM,oms,managerEmail,managerTelephone,managerAddress,siteEmail,siteTelephone,emergencyName,emergencyEmail,emergencyTelephone,emergencyAddress,localFireName,localFireEmail,localFireTelephone,localFireAddress,localFireDetails,carpark,uniqueReferenceNumber,residentialAwareness,logBook,fireSafetyLogBook,electronicAuditCompleted,epc,energyCertificates,isolationValvesClear,accessControlled,hrbUniqueReferenceNumber,bsrRegistrationNumber,principleName,principleEmail,principleTelephone,principleAddress FROM `properties` WHERE id = :id";
+        $sql = "SELECT id, name, address1, address2, address3, city, county, postCode, country, managerName, managerEmail, telephone, managerName, 
+        occupancyType, habitableHeight, buildingHeight, designDate, lifts, communalUtilityAssets, communalGasAppliances,
+        meterBank, voidAssets, residentalFlats, uniqueSupplyPoints, commercialUnits, wellMaintained, mitigationPlan, refurbished, 
+        refurbishedCDM, oms, managerTelephone, managerAddress, siteEmail, siteTelephone, emergencyName, emergencyEmail, emergencyTelephone, emergencyAddress, 
+        localFireName, localFireEmail, localFireTelephone, localFireAddress, localFireDetails, carpark, uniqueReferenceNumber, residentialAwareness, logBook, 
+        fireSafetyLogBook, electronicAuditCompleted, epc, energyCertificates, isolationValvesClear, accessControlled, hrbUniqueReferenceNumber, bsrRegistrationNumber,
+        principleName, principleEmail, principleTelephone, principleAddress FROM `properties` WHERE id = :id";
 
         $stmt = $this->pdo->prepare($sql);
         $stmt->bindParam(':id', $id);
