@@ -273,6 +273,7 @@ BEGIN
     INSERT INTO audit_log (performingUserId, propertyId, actionType, tableName, recordId, fieldName, oldValue, newValue)
     VALUES (
         changerId,
+        OLD.id,
         'DELETE',
         'properties',
         OLD.id,
