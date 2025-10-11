@@ -54,8 +54,8 @@ export default function EditPropertyModal({
 
 	const handleUploadComplete = (
 		field: keyof Property,
-		_url: string,
-		fileName: string
+		fileName: string,
+		_url: string
 	) => {
 		handleAutoSave(field, fileName);
 	};
