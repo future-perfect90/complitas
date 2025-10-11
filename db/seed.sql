@@ -1,6 +1,3 @@
-CREATE DATABASE IF NOT EXISTS `complitas`;
-USE `complitas`;
-
 CREATE TABLE IF NOT EXISTS `companies` (
     `id` VARCHAR(36) NOT NULL DEFAULT (UUID()),
     `name` VARCHAR(255) NOT NULL,
@@ -20,14 +17,7 @@ CREATE TABLE IF NOT EXISTS `companies` (
 PRIMARY KEY (`id`)
 );
 
-INSERT INTO companies (name, address1, address2, address3, city, county, postCode, country, vatNo, companyRegNo, email, telephone)
-VALUES ('Firstport', 'Fifth Floor', 'The Lantern Building', '75 Hampstead Road', 'London', 'Greater London', 'NW1 2PL', 'United Kingdom', 'GB108238135', '04352396', 'info@firstport.org.uk', '01315640331', 'Complitas_logo_without_text.png')
-
-INSERT INTO companies (name, address1, address2, address3, city, county, postCode, country, vatNo, companyRegNo, email, telephone)
-VALUES ('Metropolitan housing association', 'The Grange', '100 High Street', '', 'London', 'Greater London', 'NW1 2PL', 'United Kingdom', 'GB123456789', '01234567', 'info@metropolitan.org.uk', '02071234567', 'Complitas_logo_without_text.png');
-
-
-CREATE TABLE `properties` (
+CREATE TABLE IF NOT EXISTS `properties` (
     `id` VARCHAR(36) NOT NULL DEFAULT (UUID()) PRIMARY KEY,
     `name` VARCHAR(255) NOT NULL,
     `address1` VARCHAR(255),
@@ -89,14 +79,8 @@ CREATE TABLE `properties` (
 	`principleAddress`	VARCHAR(255) NULL,
     `createdAt` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `createdBy` VARCHAR(255) DEFAULT NULL,
-    CONSTRAINT fk_companies FOREIGN KEY (companyId) REFERENCES company (id) ON DELETE CASCADE
+    CONSTRAINT fk_companies FOREIGN KEY (companyId) REFERENCES companies(id) ON DELETE CASCADE
 );
-
-INSERT INTO properties (name, address1, address2, city, county, postCode, country, managerName, email, telephone, companyId)
-VALUES ('Forge Court', 'Melton Road', 'Syston', 'Leicester', 'Leicestershire', 'LE7 2DX', 'United Kingdom', 'Susan Holmes','susan@firstport.org.uk', '01162697290', '156659f4-77b3-11f0-910a-6a02ccf97a78')
-
-INSERT INTO properties (name, address1, address2, city, county, postCode, country, managerName, email, telephone, companyId)
-VALUES ('Checkland Road', 'Checkland Road', '', 'Leicester', 'Leicestershire', 'LE4 8FE', 'United Kingdom', 'Steve Charles','steve@metropolitan.org.uk', '01162697290', 'e81e211c-77bb-11f0-910a-6a02ccf97a78')
 
 CREATE TABLE `user` (
     `id` VARCHAR(36) NOT NULL DEFAULT (UUID()) PRIMARY KEY,
@@ -107,15 +91,15 @@ CREATE TABLE `user` (
     `createdBy` VARCHAR(255) DEFAULT NULL,
 
     CONSTRAINT fk_companies_user FOREIGN KEY (companyId) REFERENCES companies (id) ON DELETE CASCADE
-)
+);
 
 CREATE TABLE IF NOT EXISTS compliance_questions (
     `id` VARCHAR(36) NOT NULL DEFAULT (UUID()) PRIMARY KEY,
     `area` VARCHAR(255) NOT NULL,
     `question` VARCHAR(255) NOT NULL,
     `answerType` VARCHAR(255) NOT NULL,
-    `uploadRequired` TINYINT(1) NOT NULL,
-)
+    `uploadRequired` TINYINT(1) NOT NULL
+);
 
 CREATE TABLE IF NOT EXISTS reports (
     `id` VARCHAR(36) NOT NULL DEFAULT (UUID()) PRIMARY KEY,
