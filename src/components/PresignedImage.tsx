@@ -17,11 +17,12 @@ const PresignedImage: React.FC<Props> = ({
 
 	useEffect(() => {
 		const getPresignedUrl = async () => {
+			if (!imageName) return;
 			const presignedUrl = await fetchUrl(uploadApiUrl, directory, imageName);
 			setUrl(presignedUrl);
 		};
 		getPresignedUrl();
-	}, []);
+	}, [imageName, uploadApiUrl, directory]);
 
 	return (
 		<div className="mb-4">

@@ -7,12 +7,6 @@ export default function Dashboard() {
 		<>
 			<h1>Todo List</h1>
 			<h2>TODO::Notification endpoint to enable SNS</h2>
-			<h2>
-				TODO::Add a script that when ran, pulls out all of the users expiring
-				certifications against the notification preferences for the property and
-				emails then with all of the expiring certs. This should bundle up
-				multiple but send out to the correct person
-			</h2>
 			{isAuthenticated ?
 				<>
 					<h2 className="text-3xl">Welcome to your dashboard {user?.name}</h2>

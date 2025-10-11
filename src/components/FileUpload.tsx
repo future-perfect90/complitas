@@ -99,7 +99,7 @@ export default function FileUpload({
 				className="px-4 py-2 bg-red-600 text-white rounded-lg disabled:opacity-50">
 				{'Cancel'}
 			</button>
-			{message && <p className="mt-3 text-sm text-gray-700">{message}</p>}
+			{message && <p className="mt-3 text-sm text-white">{message}</p>}
 		</div>
 	);
 }
