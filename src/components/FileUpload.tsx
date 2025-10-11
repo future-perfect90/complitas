@@ -67,7 +67,10 @@ export default function FileUpload({
 
 			const upload = await fetch(presignedUrl, {
 				method: 'PUT',
-				headers: { 'Content-Type': file.type },
+				headers: {
+					'Content-Type': file.type,
+					'Access-Control-Allow-Origin': '*',
+				},
 				body: file,
 			});
 
