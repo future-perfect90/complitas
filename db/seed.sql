@@ -40,8 +40,6 @@ CREATE TABLE `properties` (
     `telephone` VARCHAR(13),
     `managerName` VARCHAR(255),
     `companyId` VARCHAR(36) NOT NULL,
-    `teamId` VARCHAR(36) DEFAULT NULL,
-    `occupancyType` VARCHAR(255) DEFAULT NULL,
     `occupancyType` VARCHAR(255) NULL,
     `habitableHeight` DECIMAL(5,2) NULL,
     `buildingHeight` DECIMAL(5,2) NULL,
@@ -91,11 +89,7 @@ CREATE TABLE `properties` (
 	`principleAddress`	VARCHAR(255) NULL,
     `createdAt` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `createdBy` VARCHAR(255) DEFAULT NULL,
-    CONSTRAINT fk_companies
-    FOREIGN KEY (companyId)
-    REFERENCES company (id) ON DELETE CASCADE
-        CONSTRAINT fk_team_propety FOREIGN KEY (teamId) REFERENCES teams (id) ON DELETE CASCADE
-
+    CONSTRAINT fk_companies FOREIGN KEY (companyId) REFERENCES company (id) ON DELETE CASCADE
 );
 
 INSERT INTO properties (name, address1, address2, city, county, postCode, country, managerName, email, telephone, companyId)
@@ -109,32 +103,11 @@ CREATE TABLE `user` (
     `name` VARCHAR(255) NOT NULL,
     `email` VARCHAR(255),
     `companyId` VARCHAR(36) NOT NULL,
-    `teamId` VARCHAR(36) DEFAULT NULL,
     `createdAt` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `createdBy` VARCHAR(255) DEFAULT NULL,
 
     CONSTRAINT fk_companies_user FOREIGN KEY (companyId) REFERENCES companies (id) ON DELETE CASCADE
-    CONSTRAINT fk_team_user FOREIGN KEY (teamId) REFERENCES teams (id) ON DELETE CASCADE
 )
-
-CREATE TABLE teams (
-    `id` VARCHAR(36) NOT NULL DEFAULT (UUID()) PRIMARY KEY,
-    `companyId` VARCHAR(36) NOT NULL REFERENCES companies(id) ON DELETE CASCADE,
-    `name` VARCHAR(255) NOT NULL,
-    `createdAt` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
-CREATE TABLE team_members (
-    `teamId` VARCHAR(36) NOT NULL REFERENCES teams(id) ON DELETE CASCADE,
-    `userId` VARCHAR(36) NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-    PRIMARY KEY (teamId, userId)
-);
-
-CREATE TABLE team_properties (
-    `teamId` VARCHAR(36) NOT NULL REFERENCES teams(id) ON DELETE CASCADE,
-    `propertyId` VARCHAR(36) NOT NULL REFERENCES properties(id) ON DELETE CASCADE,
-    PRIMARY KEY (teamId, propertyId)
-);
 
 CREATE TABLE IF NOT EXISTS compliance_questions (
     `id` VARCHAR(36) NOT NULL DEFAULT (UUID()) PRIMARY KEY,
