@@ -613,7 +613,6 @@ export default function PropertyDetails({
 				initialData={selectedTask}
 				completed={isCompletingTask}
 			/>
-			{console.log(preferences)}
 			<NotificationPreferencesModal
 				isOpen={isNotificationModalOpen}
 				onClose={() => setIsNotificationModalOpen(false)}

@@ -778,7 +778,6 @@ export async function updateNotificationPreferences(
 	if (!response.ok) {
 		throw new Error(`Response status: ${response.status}`);
 	}
-	console.log(response);
 	return response.ok;
 }
 
@@ -800,7 +799,6 @@ export async function getAuditData(propertyId: string) {
 	if (!response.ok) {
 		throw new Error(`Response status: ${response.status}`);
 	}
-	console.log(response);
 	return response.json();
 }
 

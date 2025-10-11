@@ -75,6 +75,7 @@ class Auth
     {
         $auth = new self();
         $token = $auth->validateToken($_SERVER['HTTP_AUTHORIZATION']);
+        var_dump($token);
         if (empty($token)) {
             http_response_code(401);
             echo json_encode(['message' => 'Unauthorized']);

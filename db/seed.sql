@@ -98,7 +98,12 @@ CREATE TABLE IF NOT EXISTS compliance_questions (
     `area` VARCHAR(255) NOT NULL,
     `question` VARCHAR(255) NOT NULL,
     `answerType` VARCHAR(255) NOT NULL,
-    `uploadRequired` TINYINT(1) NOT NULL
+    `uploadRequired` TINYINT(1) NOT NULL,
+    `hasLifts` TINYINT(1) NOT NULL DEFAULT 0,
+    `hasCommunalAssets` TINYINT(1) NOT NULL DEFAULT 0,
+    `hasCommunalGas` TINYINT(1) NOT NULL DEFAULT 0,
+    `hasBasementCarpark` TINYINT(1) NOT NULL DEFAULT 0,
+    `hasVoids` TINYINT(1) NOT NULL DEFAULT 0,
 );
 
 CREATE TABLE IF NOT EXISTS reports (

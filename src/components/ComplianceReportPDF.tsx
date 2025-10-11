@@ -504,7 +504,6 @@ export const ComplianceReportPDF = ({
 	if (loading || !reportData || !maintenanceReportData || !auditReportData) {
 		return <LoadingSpinner message={'Loading report...'} />;
 	}
-	console.log(auditReportData);
 	return (
 		<>
 			<PDFViewer style={{ width: '100%', height: '100vh' }}>
