@@ -179,13 +179,13 @@ PRIMARY KEY (`id`)
 CREATE TABLE audit_log (
     id VARCHAR(36) NOT NULL DEFAULT (UUID()),
     timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
-    performing_user_id VARCHAR(36),
-    action_type ENUM('INSERT', 'UPDATE', 'DELETE', 'ANSWER') NOT NULL,
-    table_name VARCHAR(255) NOT NULL,
-    record_id VARCHAR(36) NOT NULL,
-    field_name VARCHAR(255),
-    old_value TEXT,
-    new_value TEXT,
-    FOREIGN KEY (performing_user_id) REFERENCES user(id),
+    performingUserId VARCHAR(36),
+    actionType ENUM('INSERT', 'UPDATE', 'DELETE', 'ANSWER') NOT NULL,
+    tableName VARCHAR(255) NOT NULL,
+    recordId VARCHAR(36) NOT NULL,
+    fieldName VARCHAR(255),
+    oldValue TEXT,
+    newValue TEXT,
+    FOREIGN KEY (performingUserId) REFERENCES user(id),
     PRIMARY KEY (`id`)
 );
