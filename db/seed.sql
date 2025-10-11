@@ -29,7 +29,7 @@ VALUES ('Metropolitan housing association', 'The Grange', '100 High Street', '',
 
 CREATE TABLE `properties` (
     `id` VARCHAR(36) NOT NULL DEFAULT (UUID()) PRIMARY KEY,
-    `siteName` VARCHAR(255) NOT NULL,
+    `name` VARCHAR(255) NOT NULL,
     `address1` VARCHAR(255),
     `address2` VARCHAR(255),
     `address3` VARCHAR(255),

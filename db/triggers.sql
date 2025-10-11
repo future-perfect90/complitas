@@ -9,7 +9,7 @@ BEGIN
     INSERT INTO audit_log (performingUserId, propertyId, actionType, tableName, recordId, fieldName, oldValue, newValue)
     VALUES (changerId, NEW.id, 'INSERT', 'properties', NEW.id, NULL, NULL, CONCAT('Property created with name: ', NEW.name)),
     (changerId, NEW.id, 'INSERT', 'properties', NEW.id, NULL, NULL, CONCAT('Property created with initial address: ', NEW.address1, NEW.address2, NEW.address3, NEW.city, NEW.county, NEW.postCode, NEW.country)),
-    (changerId, NEW.id, 'INSERT', 'properties', NEW.id, NULL, NULL, CONCAT('Property created with manager: ', NEW.managerName, NEW.email, NEW.telephone));
+    (changerId, NEW.id, 'INSERT', 'properties', NEW.id, NULL, NULL, CONCAT('Property created with manager: ', NEW.managerName, NEW.managerEmail, NEW.telephone));
 END
 $$
 DELIMITER ;
@@ -54,8 +54,8 @@ BEGIN
         INSERT INTO audit_log (performingUserId, propertyId, actionType, tableName, recordId, fieldName, oldValue, newValue) VALUES (changerId, OLD.id, 'UPDATE', 'properties', OLD.id, 'country', OLD.country, NEW.country);
     END IF;
 
-    IF NOT (OLD.email <=> NEW.email) THEN
-        INSERT INTO audit_log (performingUserId, propertyId, actionType, tableName, recordId, fieldName, oldValue, newValue) VALUES (changerId, OLD.id, 'UPDATE', 'properties', OLD.id, 'email', OLD.email, NEW.email);
+    IF NOT (OLD.managerEmail <=> NEW.managerEmail) THEN
+        INSERT INTO audit_log (performingUserId, propertyId, actionType, tableName, recordId, fieldName, oldValue, newValue) VALUES (changerId, OLD.id, 'UPDATE', 'properties', OLD.id, 'managerEmail', OLD.managerEmail, NEW.managerEmail);
     END IF;
 
     IF NOT (OLD.telephone <=> NEW.telephone) THEN
@@ -68,18 +68,6 @@ BEGIN
 
     IF NOT (OLD.companyId <=> NEW.companyId) THEN
         INSERT INTO audit_log (performingUserId, propertyId, actionType, tableName, recordId, fieldName, oldValue, newValue) VALUES (changerId, OLD.id, 'UPDATE', 'properties', OLD.id, 'companyId', OLD.companyId, NEW.companyId);
-    END IF;
-
-    IF NOT (OLD.teamId <=> NEW.teamId) THEN
-        INSERT INTO audit_log (performingUserId, propertyId, actionType, tableName, recordId, fieldName, oldValue, newValue) VALUES (changerId, OLD.id, 'UPDATE', 'properties', OLD.id, 'teamId', OLD.teamId, NEW.teamId);
-    END IF;
-
-    IF NOT (OLD.createdAt <=> NEW.createdAt) THEN
-        INSERT INTO audit_log (performingUserId, propertyId, actionType, tableName, recordId, fieldName, oldValue, newValue) VALUES (changerId, OLD.id, 'UPDATE', 'properties', OLD.id, 'createdAt', OLD.createdAt, NEW.createdAt);
-    END IF;
-
-    IF NOT (OLD.createdBy <=> NEW.createdBy) THEN
-        INSERT INTO audit_log (performingUserId, propertyId, actionType, tableName, recordId, fieldName, oldValue, newValue) VALUES (changerId, OLD.id, 'UPDATE', 'properties', OLD.id, 'createdBy', OLD.createdBy, NEW.createdBy);
     END IF;
 
     IF NOT (OLD.occupancyType <=> NEW.occupancyType) THEN
