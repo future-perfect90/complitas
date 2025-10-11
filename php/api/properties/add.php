@@ -28,7 +28,7 @@ if ($data) {
         'postCode' => $data['payload']['postCode'] ?? '',
         'country' => $data['payload']['country'] ?? '',
         'managerName' => $data['payload']['managerName'],
-        'email' => $data['payload']['email'] ?? '',
+        'managerEmail' => $data['payload']['managerEmail'] ?? '',
         'telephone' => $data['payload']['telephone'] ?? '',
         'companyId' => $data['companyId']
     ];

@@ -41,6 +41,8 @@ class Properties
         $sql = "INSERT INTO properties (id, name, address1, address2, address3, city, county, postCode, country, managerEmail, telephone, managerName, companyId, createdBy) 
                 VALUES (:id, :property_name, :address_line_1, :address_line_2, :address_line_3, :city, :county, :post_code, :country, :email, :telephone, :manager_name, :company_id, :created_by)";
 
+        var_dump($sql);
+        var_dump($propertyData);
         $stmt = $this->pdo->prepare($sql);
 
         $stmt->bindParam(':id', $propertyData['id']);
@@ -53,7 +55,7 @@ class Properties
         $stmt->bindParam(':post_code', $propertyData['postCode']);
         $stmt->bindParam(':country', $propertyData['country']);
         $stmt->bindParam(':manager_name', $propertyData['managerName']);
-        $stmt->bindParam(':email', $propertyData['email']);
+        $stmt->bindParam(':email', $propertyData['managerEmail']);
         $stmt->bindParam(':telephone', $propertyData['telephone']);
         $stmt->bindParam(':company_id', $propertyData['companyId']);
         $stmt->bindParam(':created_by', $createdBy);
