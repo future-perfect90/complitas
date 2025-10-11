@@ -88,7 +88,7 @@ const TeamAssignmentModal: React.FC<Props> = ({
 								<p
 									key={property.id}
 									className="text-slate-800 dark:text-slate-300">
-									{property.name} ({property.email})
+									{property.name} ({property.managerEmail})
 								</p>
 							))}
 						</div>

@@ -83,7 +83,7 @@ const TeamList: React.FC = () => {
 				unassignedProperties && unassignedProperties.length > 0 ?
 					unassignedProperties.map((u: Property) => ({
 						value: u.id,
-						label: `${u.name} (${u.email})`,
+						label: `${u.name} (${u.managerEmail})`,
 					}))
 				:	[];
 			setUnassignedProperties(options);
