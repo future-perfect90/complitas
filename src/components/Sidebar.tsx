@@ -21,7 +21,6 @@ const Sidebar = () => {
 				{ name: 'Dashboard', href: '/dashboard', current: false },
 				{ name: 'Properties', href: '/properties', current: false },
 				{ name: 'Users', href: '/users', current: false },
-				{ name: 'Teams', href: '/teams', current: false },
 			];
 	if (isAuthenticated && isSuperAdmin) {
 		navigation.splice(1, 0, {

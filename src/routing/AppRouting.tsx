@@ -9,7 +9,6 @@ import PDFReport from '../pages/PDFReport';
 import Profile from '../pages/Profile';
 import Property from '../pages/Property';
 import PropertyList from '../pages/PropertyList';
-import TeamList from '../pages/TeamList';
 import UserList from '../pages/UserManagementList';
 import PrivateRoute from './PrivateRoute';
 import PublicRoute from './PublicRoute';
@@ -42,7 +41,6 @@ const AppRoutes = () => {
 					element: <ComplianceOverview />,
 				},
 				{ path: '/users', element: <UserList /> },
-				{ path: '/teams', element: <TeamList /> },
 				{ path: '/profile', element: <Profile /> },
 				{
 					path: '/properties/:id/compliance-reports/:reportId/pdf',
