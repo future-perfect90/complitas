@@ -62,6 +62,9 @@ export default function FileUpload({
 
 			const { presignedUrl } = await res.json();
 
+			console.log(presignedUrl);
+			console.log(file);
+
 			const upload = await fetch(presignedUrl, {
 				method: 'PUT',
 				headers: { 'Content-Type': file.type },
