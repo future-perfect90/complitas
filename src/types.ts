@@ -27,7 +27,7 @@ export interface Property {
 	postCode: string;
 	managerName: string;
 	telephone: string;
-	email: string;
+	managerEmail: string;
 	occupancyType?: string;
 	habitableHeight?: number;
 	buildingHeight?: number;
@@ -44,7 +44,6 @@ export interface Property {
 	mitigationPlan?: string;
 	refurbished?: boolean | 1 | 0;
 	refurbishedCDM?: string;
-	managerEmail?: string;
 	managerTelephone?: string;
 	managerAddress?: string;
 	siteEmail?: string;

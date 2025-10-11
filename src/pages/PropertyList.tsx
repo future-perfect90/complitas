@@ -36,7 +36,7 @@ const PropertyList: React.FC = () => {
 	}, [companyUuid, isLoading, fetchProperties]);
 
 	const propertySearchKeys = useMemo(
-		() => ['name', 'address1', 'address2', 'telephone', 'email'],
+		() => ['name', 'address1', 'address2', 'telephone', 'managerEmail'],
 		[]
 	);
 	const filteredProperties = useSearch(
@@ -113,7 +113,7 @@ const PropertyList: React.FC = () => {
 										{p.address2 && `, ${p.address2}`}
 									</td>
 									<td className="px-4 py-2 text-slate-800">{p.telephone}</td>
-									<td className="px-4 py-2 text-slate-800">{p.email}</td>
+									<td className="px-4 py-2 text-slate-800">{p.managerEmail}</td>
 									<td className="px-4 py-2 flex gap-2">
 										<Button
 											label="View"

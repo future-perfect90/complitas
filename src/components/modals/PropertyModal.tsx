@@ -32,7 +32,7 @@ const PropertyModal: React.FC<Props> = ({
 	const [postCode, setPostCode] = useState('');
 	const [managerName, setManagerName] = useState('');
 	const [telephone, setTelephone] = useState('');
-	const [email, setEmail] = useState('');
+	const [managerEmail, setManagerEmail] = useState('');
 	const [id, setId] = useState('');
 
 	useEffect(() => {
@@ -48,7 +48,7 @@ const PropertyModal: React.FC<Props> = ({
 			setPostCode(initialData.postCode);
 			setManagerName(initialData.managerName);
 			setTelephone(initialData.telephone);
-			setEmail(initialData.email);
+			setManagerEmail(initialData.managerEmail);
 		} else {
 			setId('');
 			setName('');
@@ -61,7 +61,7 @@ const PropertyModal: React.FC<Props> = ({
 			setPostCode('');
 			setManagerName('');
 			setTelephone('');
-			setEmail('');
+			setManagerEmail('');
 		}
 	}, [initialData]);
 
@@ -78,7 +78,7 @@ const PropertyModal: React.FC<Props> = ({
 			toast.error('Invalid phone number.');
 			return;
 		}
-		if (!emailRegex.test(email)) {
+		if (!emailRegex.test(managerEmail)) {
 			toast.error('Invalid email address.');
 			return;
 		}
@@ -97,7 +97,7 @@ const PropertyModal: React.FC<Props> = ({
 						postCode,
 						managerName,
 						telephone,
-						email,
+						managerEmail,
 					},
 					id
 				);
@@ -114,7 +114,7 @@ const PropertyModal: React.FC<Props> = ({
 						county,
 						country,
 						postCode,
-						email,
+						managerEmail,
 						telephone,
 						managerName,
 					},
@@ -191,8 +191,8 @@ const PropertyModal: React.FC<Props> = ({
 				<TextField
 					label="Email Address"
 					type="email"
-					value={email}
-					onChange={(e: any) => setEmail(e.target.value)}
+					value={managerEmail}
+					onChange={(e: any) => setManagerEmail(e.target.value)}
 					required
 				/>
 			</div>

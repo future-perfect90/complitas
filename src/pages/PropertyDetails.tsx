@@ -142,7 +142,7 @@ export default function PropertyDetails({
 						<p className="text-gray-900 dark:text-gray-100">
 							{property.managerName}
 							<br />
-							{property.email}
+							{property.managerEmail}
 							<br />
 							{property.telephone}
 						</p>
