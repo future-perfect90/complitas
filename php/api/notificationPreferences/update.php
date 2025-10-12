@@ -10,7 +10,6 @@ $db = (new Database())->connect();
 $property = new Properties($db);
 $data = json_decode(file_get_contents('php://input'), true);
 
-var_dump($data);
 $propertyId = $data['propertyId'] ?? null;
 $days = $data['days'] ?? [];
 
@@ -21,7 +20,6 @@ if (!$propertyId) {
 }
 
 $result = $property->updateNotificationPreferences($propertyId, $days);
-var_dump($result);
 if ($result['success']) {
     http_response_code(204);
     echo json_encode($result);
