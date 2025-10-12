@@ -7,7 +7,6 @@ import {
 	Text,
 	View,
 } from '@react-pdf/renderer';
-import { createCanvas } from 'canvas';
 import workerUrl from 'pdfjs-dist/build/pdf.worker.mjs?url';
 import { useEffect, useState } from 'react';
 import { pdfjs } from 'react-pdf';
@@ -349,59 +348,59 @@ const ReportDocument = ({
 	);
 };
 
-async function convertPdfToImages(
-	pdfUrl: string,
-	scale: number = 1
-): Promise<string[]> {
-	if (!pdfUrl) {
-		throw new Error('PDF URL is required for conversion.');
-	}
+// async function convertPdfToImages(
+// 	pdfUrl: string,
+// 	scale: number = 1
+// ): Promise<string[]> {
+// 	if (!pdfUrl) {
+// 		throw new Error('PDF URL is required for conversion.');
+// 	}
 
-	if (!pdfjs.GlobalWorkerOptions.workerSrc) {
-		throw new Error('PDF Worker not yet initialized. Please wait.');
-	}
+// 	if (!pdfjs.GlobalWorkerOptions.workerSrc) {
+// 		throw new Error('PDF Worker not yet initialized. Please wait.');
+// 	}
 
-	const imageDataUrls: string[] = [];
+// 	const imageDataUrls: string[] = [];
 
-	try {
-		// Use a custom fetch to handle authentication if your API requires it
-		const loadingTask = pdfjs.getDocument(pdfUrl);
-		const pdf = await loadingTask.promise;
+// 	try {
+// 		// Use a custom fetch to handle authentication if your API requires it
+// 		const loadingTask = pdfjs.getDocument(pdfUrl);
+// 		const pdf = await loadingTask.promise;
 
-		for (let i = 1; i <= pdf.numPages; i++) {
-			const page = await pdf.getPage(i);
-			const viewport = page.getViewport({ scale: scale });
+// 		for (let i = 1; i <= pdf.numPages; i++) {
+// 			const page = await pdf.getPage(i);
+// 			const viewport = page.getViewport({ scale: scale });
 
-			// Create a canvas element
-			const canvas = createCanvas(viewport.width, viewport.height);
-			const canvasContext = canvas.getContext('2d');
-			if (!canvasContext) {
-				throw new Error('Could not get canvas context.');
-			}
+// 			// Create a canvas element
+// 			const canvas = createCanvas(viewport.width, viewport.height);
+// 			const canvasContext = canvas.getContext('2d');
+// 			if (!canvasContext) {
+// 				throw new Error('Could not get canvas context.');
+// 			}
 
-			canvas.height = viewport.height;
-			canvas.width = viewport.width;
+// 			canvas.height = viewport.height;
+// 			canvas.width = viewport.width;
 
-			const renderContext = {
-				canvasContext: canvasContext as any,
-				viewport,
-			};
-			await page.render(renderContext).promise;
+// 			const renderContext = {
+// 				canvasContext: canvasContext as any,
+// 				viewport,
+// 			};
+// 			await page.render(renderContext).promise;
 
-			const dataUrl = canvas.toDataURL('image/png');
-			imageDataUrls.push(dataUrl);
-			// Clean up page object
-			page.cleanup();
-		}
-		return imageDataUrls;
-	} catch (err) {
-		console.error('PDF conversion to image failed:', err);
-		// Re-throw a clearer error for the calling component
-		throw new Error(
-			`Failed to load or process PDF. Error: ${err instanceof Error ? err.message : String(err)}`
-		);
-	}
-}
+// 			const dataUrl = canvas.toDataURL('image/png');
+// 			imageDataUrls.push(dataUrl);
+// 			// Clean up page object
+// 			page.cleanup();
+// 		}
+// 		return imageDataUrls;
+// 	} catch (err) {
+// 		console.error('PDF conversion to image failed:', err);
+// 		// Re-throw a clearer error for the calling component
+// 		throw new Error(
+// 			`Failed to load or process PDF. Error: ${err instanceof Error ? err.message : String(err)}`
+// 		);
+// 	}
+// }
 
 export const ComplianceReportPDF = ({
 	reportId,
