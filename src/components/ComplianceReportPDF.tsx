@@ -140,6 +140,8 @@ const ReportDocument = ({
 				<Text style={tw('text-2xl mb-5 text-center font-bold')}>
 					Compliance Report for: {propertyName}
 				</Text>
+			</Page>
+			<Page style={tw('p-[30px] text-[11px] text-gray-800')}>
 				{Object.entries(groupedData).map(([area, questions]) => (
 					<View key={area}>
 						<Text
@@ -362,12 +364,9 @@ async function convertPdfToImages(
 	}
 
 	const imageDataUrls: string[] = [];
-	console.log('hit');
 	try {
-		console.log(pdfUrl);
 		// Use a custom fetch to handle authentication if your API requires it
 		const loadingTask = pdfjs.getDocument(pdfUrl);
-		console.log(loadingTask);
 		const pdf = await loadingTask.promise;
 
 		for (let i = 1; i <= pdf.numPages; i++) {
