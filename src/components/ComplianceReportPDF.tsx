@@ -11,6 +11,7 @@ import workerUrl from 'pdfjs-dist/build/pdf.worker.mjs?url';
 import { useEffect, useState } from 'react';
 import { pdfjs } from 'react-pdf';
 import { createTw } from 'react-pdf-tailwind';
+import { useAuthMeta } from '../context/AuthProvider';
 import {
 	getAuditData,
 	getMaintenanceTasksReportData,
@@ -18,7 +19,6 @@ import {
 } from '../utils/api';
 import { formatFieldName, formatTimestamp } from '../utils/helper';
 import LoadingSpinner from './modals/Loading';
-import { useAuthMeta } from '../context/AuthProvider';
 
 // Configure pdfjs worker
 pdfjs.GlobalWorkerOptions.workerSrc = workerUrl;
@@ -374,7 +374,7 @@ async function convertPdfToImages(
 
 		for (let i = 1; i <= pdf.numPages; i++) {
 			const page = await pdf.getPage(i);
-
+			console.log(page);
 			const viewport = page.getViewport({ scale: scale });
 			canvas.height = viewport.height;
 			canvas.width = viewport.width;
