@@ -365,13 +365,15 @@ async function convertPdfToImages(
 	try {
 		const loadingTask = pdfjs.getDocument({ url: pdfUrl });
 		const pdf = await loadingTask.promise;
-
+		console.log(loadingTask);
+		console.log(pdf);
 		const canvas = document.createElement('canvas');
 		const canvasContext = canvas.getContext('2d');
 		if (!canvasContext) {
 			throw new Error('Could not get canvas context.');
 		}
-
+		console.log(canvas);
+		console.log(canvasContext);
 		for (let i = 1; i <= pdf.numPages; i++) {
 			const page = await pdf.getPage(i);
 			console.log(page);
