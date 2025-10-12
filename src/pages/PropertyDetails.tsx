@@ -92,15 +92,15 @@ export default function PropertyDetails({
 			</div>
 			{/* Basic Information Card */}
 			<Card className="rounded-2xl shadow-lg">
-				<CardHeader className="w-full flex-nowrap gap-4 items-center">
-					<CardTitle className="text-xl font-semibold flex-1">
+				<CardHeader>
+					<CardTitle className="text-xl font-semibold">
 						Basic Information
+						<Button
+							label="Edit"
+							onClick={() => onEdit('basic', property)}
+							className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-4 rounded float-right"
+						/>
 					</CardTitle>
-					<Button
-						label="Edit"
-						onClick={() => onEdit('basic', property)}
-						className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-4 rounded flex-shrink-0"
-					/>
 				</CardHeader>
 				<CardContent className="pt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
 					<div className="space-y-4">
@@ -203,15 +203,15 @@ export default function PropertyDetails({
 			</Card>
 			{/* Additional Information Card */}
 			<Card className="rounded-2xl shadow-lg">
-				<CardHeader className="w-full flex justify-between items-center flex-nowrap gap-4">
+				<CardHeader>
 					<CardTitle className="text-xl font-semibold">
 						Additional Information
+						<Button
+							label="Edit"
+							onClick={() => onEdit('additional', property)}
+							className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-4 rounded flex-shrink-0 float-right"
+						/>
 					</CardTitle>
-					<Button
-						label="Edit"
-						onClick={() => onEdit('additional', property)}
-						className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-4 rounded flex-shrink-0"
-					/>
 				</CardHeader>
 				<CardContent className="pt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
 					<div className="space-y-4">
@@ -302,15 +302,15 @@ export default function PropertyDetails({
 			</Card>
 			{/* Additional Contacts Card */}
 			<Card className="rounded-2xl shadow-lg">
-				<CardHeader className="w-full flex justify-between items-center flex-nowrap gap-4">
+				<CardHeader>
 					<CardTitle className="text-xl font-semibold">
 						Additional contacts
+						<Button
+							label="Edit"
+							onClick={() => onEdit('contacts', property)}
+							className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-4 rounded flex-shrink-0 float-right"
+						/>
 					</CardTitle>
-					<Button
-						label="Edit"
-						onClick={() => onEdit('contacts', property)}
-						className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-4 rounded flex-shrink-0"
-					/>
 				</CardHeader>
 				<CardContent className="pt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
 					<div className="space-y-4">
@@ -359,13 +359,15 @@ export default function PropertyDetails({
 			</Card>
 			{/* Audit Details Card */}
 			<Card className="rounded-2xl shadow-lg">
-				<CardHeader className="w-full flex justify-between items-center flex-nowrap gap-4">
-					<CardTitle className="text-xl font-semibold">Audit details</CardTitle>
-					<Button
-						label="Edit"
-						onClick={() => onEdit('audit', property)}
-						className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-4 rounded flex-shrink-0"
-					/>
+				<CardHeader>
+					<CardTitle className="text-xl font-semibold">
+						Audit details
+						<Button
+							label="Edit"
+							onClick={() => onEdit('audit', property)}
+							className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-4 rounded flex-shrink-0 float-right"
+						/>
+					</CardTitle>
 				</CardHeader>
 				<CardContent className="pt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
 					<div className="space-y-4">
