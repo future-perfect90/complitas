@@ -453,15 +453,16 @@ export const ComplianceReportPDF = ({
 								name: row.fileName!,
 								url: row.fileUrl!,
 							};
-						} else if (ext === 'pdf') {
-							const images = await convertPdfToImages(row.fileUrl!);
-							return {
-								type: 'pdf',
-								name: row.fileName!,
-								url: row.fileUrl!,
-								images,
-							};
 						}
+						// } else if (ext === 'pdf') {
+						// 	const images = await convertPdfToImages(row.fileUrl!);
+						// 	return {
+						// 		type: 'pdf',
+						// 		name: row.fileName!,
+						// 		url: row.fileUrl!,
+						// 		images,
+						// 	};
+						// }
 						return null; // Handle unsupported file types if any
 					});
 
