@@ -175,6 +175,7 @@ CREATE TABLE audit_log (
     fieldName VARCHAR(255),
     oldValue TEXT,
     newValue TEXT,
+    propertyId VARCHAR(36),
     FOREIGN KEY (performingUserId) REFERENCES user(id),
     PRIMARY KEY (`id`)
 );
