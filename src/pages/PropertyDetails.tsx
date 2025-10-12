@@ -393,6 +393,30 @@ export default function PropertyDetails({
 										:	'No'}
 									</p>
 								</div>
+								<div className="space-y-4">
+									<p className="text-sm text-gray-500 dark:text-gray-400">
+										External Isolation Valve Chambers Located and Clear
+									</p>
+									<p className="text-gray-900 dark:text-gray-100">
+										{property.isolationValvesClear === null || '' ?
+											'Not set'
+										: property.isolationValvesClear ?
+											'Yes'
+										:	'No'}
+										<br />
+									</p>
+									<p className="text-sm text-gray-500 dark:text-gray-400">
+										Access Controlled Spaces
+									</p>
+									<p className="text-gray-900 dark:text-gray-100">
+										{property.accessControlled === null || '' ?
+											'Not set'
+										: property.accessControlled ?
+											'Yes'
+										:	'No'}
+										<br />
+									</p>
+								</div>
 							</CardContent>
 						</Card>
 					</TabPanel>
