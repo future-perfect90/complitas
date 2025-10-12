@@ -1,6 +1,5 @@
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react';
 import { Fragment, useCallback, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Button } from '../components/Button';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/Card';
@@ -44,8 +43,6 @@ export default function PropertyDetails({
 	const [isCompletingTask, setIsCompletingTask] = useState(false);
 	const [isNotificationModalOpen, setIsNotificationModalOpen] = useState(false);
 
-	const navigate = useNavigate();
-
 	const handleModalSuccess = useCallback(() => {
 		setIsMaintenanceTaskModalOpen(false);
 		if (isCompletingTask) {
@@ -87,7 +84,7 @@ export default function PropertyDetails({
 			</div>
 
 			<TabGroup>
-				<TabList className="flex space-x-1 rounded-xl bg-blue-900/20 p-1">
+				<TabList className="flex space-x-1 rounded-xl bg-gray-700/20 p-1">
 					{tabs.map((tab) => (
 						<Tab key={tab.name} as={Fragment}>
 							{({ selected }) => (
