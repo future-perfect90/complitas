@@ -13,11 +13,5 @@ $companyId = $_GET['companyId'];
 
 $properties = $property->listAll(companyId: $companyId);
 
-if (!empty($properties)) {
-    http_response_code(200);
-    echo json_encode($properties);
-} else {
-    http_response_code(404);
-    $properties = ['message' => 'No properties found'];
-    echo json_encode($properties);
-}
+http_response_code(200);
+echo json_encode($properties);
