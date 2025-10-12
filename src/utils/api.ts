@@ -11,16 +11,17 @@ export interface Answer {
 	fileName?: string;
 }
 
-// Update a section of property data by key-value array
+const retrieveToken = async () =>
+	authService.getAccessTokenSilently ?
+		await authService.getAccessTokenSilently()
+	:	'';
 
 export async function updatePropertySection(
 	id: string,
 	data: Record<string, any>
 ) {
-	const jwt =
-		authService.getAccessTokenSilently ?
-			await authService.getAccessTokenSilently()
-		:	'';
+	const jwt = await retrieveToken();
+
 	const response = await fetch(
 		`${import.meta.env.VITE_API_BASE_URL}/properties/update.php`,
 		{
@@ -39,10 +40,7 @@ export async function updatePropertySection(
 }
 
 export async function getCompanies() {
-	const jwt =
-		authService.getAccessTokenSilently ?
-			await authService.getAccessTokenSilently()
-		:	'';
+	const jwt = await retrieveToken();
 	const response = await fetch(
 		`${import.meta.env.VITE_API_BASE_URL}/company/list.php`,
 		{
@@ -60,10 +58,7 @@ export async function getCompanies() {
 }
 
 export async function getCompany(id: string) {
-	const jwt =
-		authService.getAccessTokenSilently ?
-			await authService.getAccessTokenSilently()
-		:	'';
+	const jwt = await retrieveToken();
 	const response = await fetch(
 		`${import.meta.env.VITE_API_BASE_URL}/company/get.php?id=${id}`,
 		{
@@ -81,10 +76,7 @@ export async function getCompany(id: string) {
 }
 
 export async function createCompany(payload: Company) {
-	const jwt =
-		authService.getAccessTokenSilently ?
-			await authService.getAccessTokenSilently()
-		:	'';
+	const jwt = await retrieveToken();
 	const response = await fetch(
 		`${import.meta.env.VITE_API_BASE_URL}/company/add.php`,
 		{
@@ -103,10 +95,7 @@ export async function createCompany(payload: Company) {
 }
 
 export async function updateCompany(payload: Company, id: string) {
-	const jwt =
-		authService.getAccessTokenSilently ?
-			await authService.getAccessTokenSilently()
-		:	'';
+	const jwt = await retrieveToken();
 	const response = await fetch(
 		`${import.meta.env.VITE_API_BASE_URL}/company/update.php`,
 		{
@@ -125,10 +114,7 @@ export async function updateCompany(payload: Company, id: string) {
 }
 
 export async function deleteCompany(id: string) {
-	const jwt =
-		authService.getAccessTokenSilently ?
-			await authService.getAccessTokenSilently()
-		:	'';
+	const jwt = await retrieveToken();
 	const response = await fetch(
 		`${import.meta.env.VITE_API_BASE_URL}/company/delete.php?id=${id}`,
 		{
@@ -146,10 +132,7 @@ export async function deleteCompany(id: string) {
 }
 
 export async function getProperties(companyId: string) {
-	const jwt =
-		authService.getAccessTokenSilently ?
-			await authService.getAccessTokenSilently()
-		:	'';
+	const jwt = await retrieveToken();
 	const response = await fetch(
 		`${import.meta.env.VITE_API_BASE_URL}/properties/list.php?companyId=${companyId}`,
 		{
@@ -167,7 +150,7 @@ export async function getProperties(companyId: string) {
 }
 
 export async function getProperty(id: string) {
-	const jwt = authService.getAccessTokenSilently;
+	const jwt = await retrieveToken();
 	const response = await fetch(
 		`${import.meta.env.VITE_API_BASE_URL}/properties/get.php?id=${id}`,
 		{
@@ -185,10 +168,7 @@ export async function getProperty(id: string) {
 }
 
 export async function createProperty(payload: Property, companyId: string) {
-	const jwt =
-		authService.getAccessTokenSilently ?
-			await authService.getAccessTokenSilently()
-		:	'';
+	const jwt = await retrieveToken();
 	const response = await fetch(
 		`${import.meta.env.VITE_API_BASE_URL}/properties/add.php`,
 		{
@@ -207,10 +187,7 @@ export async function createProperty(payload: Property, companyId: string) {
 }
 
 export async function updateProperty(data: Property, id: string) {
-	const jwt =
-		authService.getAccessTokenSilently ?
-			await authService.getAccessTokenSilently()
-		:	'';
+	const jwt = await retrieveToken();
 	const response = await fetch(
 		`${import.meta.env.VITE_API_BASE_URL}/properties/update.php`,
 		{
@@ -229,10 +206,7 @@ export async function updateProperty(data: Property, id: string) {
 }
 
 export async function deleteProperty(id: string) {
-	const jwt =
-		authService.getAccessTokenSilently ?
-			await authService.getAccessTokenSilently()
-		:	'';
+	const jwt = await retrieveToken();
 	const response = await fetch(
 		`${import.meta.env.VITE_API_BASE_URL}/properties/delete.php?id=${id}`,
 		{
@@ -250,10 +224,7 @@ export async function deleteProperty(id: string) {
 }
 
 export async function createUser(payload: User, companyId: string) {
-	const jwt =
-		authService.getAccessTokenSilently ?
-			await authService.getAccessTokenSilently()
-		:	'';
+	const jwt = await retrieveToken();
 	const response = await fetch(
 		`${import.meta.env.VITE_API_BASE_URL}/user-management/add.php`,
 		{
@@ -272,10 +243,7 @@ export async function createUser(payload: User, companyId: string) {
 }
 
 export async function getUsers(companyId: string) {
-	const jwt =
-		authService.getAccessTokenSilently ?
-			await authService.getAccessTokenSilently()
-		:	'';
+	const jwt = await retrieveToken();
 	const response = await fetch(
 		`${import.meta.env.VITE_API_BASE_URL}/user-management/list.php?companyId=${companyId}`,
 		{
@@ -293,10 +261,7 @@ export async function getUsers(companyId: string) {
 }
 
 export async function createTeam(name: string, companyId: string) {
-	const jwt =
-		authService.getAccessTokenSilently ?
-			await authService.getAccessTokenSilently()
-		:	'';
+	const jwt = await retrieveToken();
 	const response = await fetch(
 		`${import.meta.env.VITE_API_BASE_URL}/teams/add.php`,
 		{
@@ -322,10 +287,7 @@ export async function assignToTeam(
 	userId: MultiValue<MultiValueOption>,
 	teamId: string
 ) {
-	const jwt =
-		authService.getAccessTokenSilently ?
-			await authService.getAccessTokenSilently()
-		:	'';
+	const jwt = await retrieveToken();
 	const response = await fetch(
 		`${import.meta.env.VITE_API_BASE_URL}/teams/assignToTeam.php`,
 		{
@@ -347,10 +309,7 @@ export async function assignTeamToProperty(
 	propertyId: MultiValue<MultiValueOption>,
 	teamId: string
 ) {
-	const jwt =
-		authService.getAccessTokenSilently ?
-			await authService.getAccessTokenSilently()
-		:	'';
+	const jwt = await retrieveToken();
 	const response = await fetch(
 		`${import.meta.env.VITE_API_BASE_URL}/teams/assignTeamToProperty.php`,
 		{
@@ -369,10 +328,7 @@ export async function assignTeamToProperty(
 }
 
 export async function getTeams(companyId: string) {
-	const jwt =
-		authService.getAccessTokenSilently ?
-			await authService.getAccessTokenSilently()
-		:	'';
+	const jwt = await retrieveToken();
 	const response = await fetch(
 		`${import.meta.env.VITE_API_BASE_URL}/teams/listTeams.php?companyId=${companyId}`,
 		{
@@ -390,10 +346,7 @@ export async function getTeams(companyId: string) {
 }
 
 export async function getTeamMembers(companyId: string, teamId: string) {
-	const jwt =
-		authService.getAccessTokenSilently ?
-			await authService.getAccessTokenSilently()
-		:	'';
+	const jwt = await retrieveToken();
 	const url = `${import.meta.env.VITE_API_BASE_URL}/teams/listTeamMembers.php?companyId=${companyId}&teamId=${teamId}`;
 	const response = await fetch(url, {
 		method: 'GET',
@@ -409,10 +362,7 @@ export async function getTeamMembers(companyId: string, teamId: string) {
 }
 
 export async function removeFromTeam(userId: string, teamId: string) {
-	const jwt =
-		authService.getAccessTokenSilently ?
-			await authService.getAccessTokenSilently()
-		:	'';
+	const jwt = await retrieveToken();
 	const url = `${import.meta.env.VITE_API_BASE_URL}/teams/removeFromTeam.php?userId=${userId}&teamId=${teamId}`;
 	const response = await fetch(url, {
 		method: 'DELETE',
@@ -428,10 +378,7 @@ export async function removeFromTeam(userId: string, teamId: string) {
 }
 
 export async function getTeamProperties(companyId: string, teamId: string) {
-	const jwt =
-		authService.getAccessTokenSilently ?
-			await authService.getAccessTokenSilently()
-		:	'';
+	const jwt = await retrieveToken();
 	const response = await fetch(
 		`${import.meta.env.VITE_API_BASE_URL}/teams/listProperties.php?companyId=${companyId}&teamId=${teamId}`,
 		{
@@ -449,10 +396,7 @@ export async function getTeamProperties(companyId: string, teamId: string) {
 }
 
 export async function getMyTeams(userId: string) {
-	const jwt =
-		authService.getAccessTokenSilently ?
-			await authService.getAccessTokenSilently()
-		:	'';
+	const jwt = await retrieveToken();
 	const response = await fetch(
 		`${import.meta.env.VITE_API_BASE_URL}/teams/getMyTeams.php?user_id=${userId}`,
 		{
@@ -470,10 +414,7 @@ export async function getMyTeams(userId: string) {
 }
 
 export async function getProfile(userId: string) {
-	const jwt =
-		authService.getAccessTokenSilently ?
-			await authService.getAccessTokenSilently()
-		:	'';
+	const jwt = await retrieveToken();
 	const response = await fetch(
 		`${import.meta.env.VITE_API_BASE_URL}/user-management/getProfile.php?user_id=${userId}`,
 		{
@@ -492,10 +433,7 @@ export async function getProfile(userId: string) {
 }
 
 export async function createCompliance(propertyId: string) {
-	const jwt =
-		authService.getAccessTokenSilently ?
-			await authService.getAccessTokenSilently()
-		:	'';
+	const jwt = await retrieveToken();
 	const response = await fetch(
 		`${import.meta.env.VITE_API_BASE_URL}/compliance/create.php`,
 		{
@@ -514,10 +452,7 @@ export async function createCompliance(propertyId: string) {
 }
 
 export async function getComplianceReports(propertyId: string) {
-	const jwt =
-		authService.getAccessTokenSilently ?
-			await authService.getAccessTokenSilently()
-		:	'';
+	const jwt = await retrieveToken();
 	const response = await fetch(
 		`${import.meta.env.VITE_API_BASE_URL}/compliance/listReports.php?propertyId=${propertyId}`,
 		{
@@ -535,10 +470,7 @@ export async function getComplianceReports(propertyId: string) {
 }
 
 export async function getComplianceQuestions(propertyId: string) {
-	const jwt =
-		authService.getAccessTokenSilently ?
-			await authService.getAccessTokenSilently()
-		:	'';
+	const jwt = await retrieveToken();
 	const response = await fetch(
 		`${import.meta.env.VITE_API_BASE_URL}/compliance/getComplianceQuestions.php?propertyId=${propertyId}`,
 		{
@@ -556,10 +488,7 @@ export async function getComplianceQuestions(propertyId: string) {
 }
 
 export async function saveAnswer(answer: Answer) {
-	const jwt =
-		authService.getAccessTokenSilently ?
-			await authService.getAccessTokenSilently()
-		:	'';
+	const jwt = await retrieveToken();
 	const response = await fetch(
 		`${import.meta.env.VITE_API_BASE_URL}/compliance/saveAnswer.php`,
 		{
@@ -578,10 +507,7 @@ export async function saveAnswer(answer: Answer) {
 }
 
 export async function getComplianceAnswers(propertyComplianceId: string) {
-	const jwt =
-		authService.getAccessTokenSilently ?
-			await authService.getAccessTokenSilently()
-		:	'';
+	const jwt = await retrieveToken();
 	const response = await fetch(
 		`${import.meta.env.VITE_API_BASE_URL}/compliance/getAnswers.php?propertyComplianceId=${propertyComplianceId}`,
 		{
@@ -599,10 +525,7 @@ export async function getComplianceAnswers(propertyComplianceId: string) {
 }
 
 export async function getReportData(reportId: string) {
-	const jwt =
-		authService.getAccessTokenSilently ?
-			await authService.getAccessTokenSilently()
-		:	'';
+	const jwt = await retrieveToken();
 	const response = await fetch(
 		`${import.meta.env.VITE_API_BASE_URL}/document/getReportData.php?reportId=${reportId}`,
 		{
@@ -621,10 +544,7 @@ export async function getReportData(reportId: string) {
 }
 
 export async function getMaintenanceTasksReportData(propertyId: string) {
-	const jwt =
-		authService.getAccessTokenSilently ?
-			await authService.getAccessTokenSilently()
-		:	'';
+	const jwt = await retrieveToken();
 	const response = await fetch(
 		`${import.meta.env.VITE_API_BASE_URL}/document/getMaintenanceTasksReportData.php?propertyId=${propertyId}`,
 		{
@@ -643,10 +563,7 @@ export async function getMaintenanceTasksReportData(propertyId: string) {
 }
 
 export async function changePassword(userId: string, password: string) {
-	const jwt =
-		authService.getAccessTokenSilently ?
-			await authService.getAccessTokenSilently()
-		:	'';
+	const jwt = await retrieveToken();
 	const url = `${import.meta.env.VITE_API_BASE_URL}/user-management/changePassword.php`;
 	return fetch(url, {
 		method: 'POST',
@@ -668,10 +585,7 @@ export async function changePassword(userId: string, password: string) {
 }
 
 export async function getMaintenanceTasks(propertyId: string) {
-	const jwt =
-		authService.getAccessTokenSilently ?
-			await authService.getAccessTokenSilently()
-		:	'';
+	const jwt = await retrieveToken();
 	const response = await fetch(
 		`${import.meta.env.VITE_API_BASE_URL}/maintenance/list.php?propertyId=${propertyId}`,
 		{
@@ -689,10 +603,7 @@ export async function getMaintenanceTasks(propertyId: string) {
 }
 
 export async function createMaintenanceTask(payload: any) {
-	const jwt =
-		authService.getAccessTokenSilently ?
-			await authService.getAccessTokenSilently()
-		:	'';
+	const jwt = await retrieveToken();
 	const response = await fetch(
 		`${import.meta.env.VITE_API_BASE_URL}/maintenance/create.php`,
 		{
@@ -711,10 +622,7 @@ export async function createMaintenanceTask(payload: any) {
 }
 
 export async function completeMaintenanceTask(payload: any, id: string) {
-	const jwt =
-		authService.getAccessTokenSilently ?
-			await authService.getAccessTokenSilently()
-		:	'';
+	const jwt = await retrieveToken();
 	const response = await fetch(
 		`${import.meta.env.VITE_API_BASE_URL}/maintenance/complete.php`,
 		{
@@ -733,10 +641,7 @@ export async function completeMaintenanceTask(payload: any, id: string) {
 }
 
 export async function getPreferences(propertyId: string) {
-	const jwt =
-		authService.getAccessTokenSilently ?
-			await authService.getAccessTokenSilently()
-		:	'';
+	const jwt = await retrieveToken();
 	const response = await fetch(
 		`${import.meta.env.VITE_API_BASE_URL}/notificationPreferences/list.php?propertyId=${propertyId}`,
 		{
@@ -757,10 +662,7 @@ export async function updateNotificationPreferences(
 	propertyId: string,
 	days: number[]
 ) {
-	const jwt =
-		authService.getAccessTokenSilently ?
-			await authService.getAccessTokenSilently()
-		:	'';
+	const jwt = await retrieveToken();
 	const response = await fetch(
 		`${import.meta.env.VITE_API_BASE_URL}/notificationPreferences/update.php`,
 		{
@@ -779,10 +681,7 @@ export async function updateNotificationPreferences(
 }
 
 export async function getAuditData(propertyId: string) {
-	const jwt =
-		authService.getAccessTokenSilently ?
-			await authService.getAccessTokenSilently()
-		:	'';
+	const jwt = await retrieveToken();
 	const response = await fetch(
 		`${import.meta.env.VITE_API_BASE_URL}/audit/auditLog.php?propertyId=${propertyId}`,
 		{
@@ -804,10 +703,7 @@ export async function fetchUrl(
 	directory: string,
 	imageName: string
 ) {
-	const jwt =
-		authService.getAccessTokenSilently ?
-			await authService.getAccessTokenSilently()
-		:	'';
+	const jwt = await retrieveToken();
 
 	const response = await fetch(url, {
 		method: 'POST',
