@@ -54,7 +54,6 @@ export const ReportFrontPage = ({
 					'absolute bottom-10 left-10 right-10 text-center text-gray-500 z-10 text-md'
 				)}
 				fixed>
-				<Text style={tw('mb-1')}>Prepared By: {}</Text>
 				<Text>Date: {reportDate}</Text>
 			</View>
 		</Page>
