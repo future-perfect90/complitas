@@ -13,7 +13,12 @@ import { useEffect, useState } from 'react';
 import { pdfjs } from 'react-pdf';
 import { createTw } from 'react-pdf-tailwind';
 import { useAuthMeta } from '../context/AuthProvider';
-import type { Company, MaintenanceDataItem } from '../types';
+import type {
+	AuditReportResponseData,
+	Company,
+	MaintenanceDataItem,
+	PropertyLog,
+} from '../types';
 import {
 	fetchUrl,
 	getAuditData,
@@ -21,10 +26,11 @@ import {
 	getMaintenanceTasksReportData,
 	getReportData,
 } from '../utils/api';
-import { formatFieldName, formatTimestamp } from '../utils/helper';
+import { formatTimestamp } from '../utils/helper';
 import LoadingSpinner from './modals/Loading';
 import { ReportFrontPage } from './pdf/ReportFrontPage';
 import { ReportMaintenancePage } from './pdf/ReportMaintenancePage';
+import { ReportPropertyAuditPage } from './pdf/ReportPropertyAuditPage';
 
 // Configure pdfjs worker
 pdfjs.GlobalWorkerOptions.workerSrc = workerUrl;
@@ -40,31 +46,9 @@ interface ReportDataItem {
 	attachmentId?: string;
 }
 
-interface responseData {
-	timestamp: string;
-	propertyId: string;
-	actionType: string;
-	oldValue: string;
-	newValue: string;
-	actionedBy: string;
-	question: string;
-	area: string;
-	fieldName: string;
-}
-
-interface propertyLog {
-	propertyId: string;
-	timestamp: string;
-	actionType: string;
-	oldValue: string;
-	newValue: string;
-	actionedBy: string;
-	fieldName: string;
-}
-
 interface AuditData {
-	responseLog: responseData[];
-	propertyLog: propertyLog[];
+	responseLog: AuditReportResponseData[];
+	propertyLog: PropertyLog[];
 }
 
 interface Attachment {
@@ -166,32 +150,7 @@ const ReportDocument = ({
 				propertyName={propertyName}
 				maintenanceData={maintenanceData}
 			/>
-			<Page style={tw('p-[30px] text-[11px] text-gray-800')}>
-				<Text style={tw('text-2xl mb-5 text-center font-bold')}>
-					Property Audit Log
-				</Text>
-				{auditData.propertyLog.map((item, index) => (
-					<View key={index}>
-						<Text style={tw('p-3 mb-2 text-sm text-gray-800')}>
-							<Text style={tw('font-bold')}>
-								{formatFieldName(item.fieldName)}
-							</Text>{' '}
-							was updated from{' '}
-							{item.oldValue ?
-								<Text style={tw('font-semibold text-red-600')}>
-									'{item.oldValue}'
-								</Text>
-							:	<Text style={tw('italic text-gray-500')}>'blank'</Text>}{' '}
-							to{' '}
-							<Text style={tw('font-semibold text-green-600')}>
-								'{item.newValue}'
-							</Text>{' '}
-							by <Text style={tw('font-semibold')}>{item.actionedBy}</Text> at{' '}
-							{formatTimestamp(item.timestamp)}
-						</Text>
-					</View>
-				))}
-			</Page>
+			<ReportPropertyAuditPage propertyLog={auditData.propertyLog} />
 
 			<Page style={tw('p-[30px] text-[11px] text-gray-800')}>
 				<Text style={tw('text-2xl mb-5 text-center font-bold')}>

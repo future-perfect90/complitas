@@ -137,3 +137,25 @@ export interface MaintenanceDataItem {
 	contactNumber: string | null;
 	attachmentId?: string;
 }
+
+export interface AuditReportResponseData {
+	timestamp: string;
+	propertyId: string;
+	actionType: string;
+	oldValue: string;
+	newValue: string;
+	actionedBy: string;
+	question: string;
+	area: string;
+	fieldName: string;
+}
+
+export interface PropertyLog {
+	propertyId: string;
+	timestamp: string;
+	actionType: string;
+	oldValue: string;
+	newValue: string;
+	actionedBy: string;
+	fieldName: string;
+}
