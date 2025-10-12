@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import AreaCard from '../components/AreaCard';
+import { BackButton } from '../components/BackButton';
 import LoadingSpinner from '../components/modals/Loading';
 import QuestionsModal from '../components/modals/QuestionsModal';
 import { useAuthMeta } from '../context/AuthProvider';
@@ -46,25 +47,27 @@ export default function ComplianceOverview() {
 	}
 
 	return (
-		<>
-			<div className="mb-8">
-				<h1 className="text-3xl font-bold">Compliance Overview</h1>
-				<p className="text-gray-500">Select an area to answer questions.</p>
-			</div>
+		<div className="min-h-screen p-8">
+			<div className="max-w-5xl mx-auto space-y-8">
+				<BackButton />
+				<div className="mb-8">
+					<h1 className="text-3xl font-bold">Compliance Overview</h1>
+					<p className="text-gray-500">Select an area to answer questions.</p>
+				</div>
 
-			<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-				{groupedAreas.map((area: any) => (
-					<AreaCard
-						key={area.name}
-						areaName={area.name}
-						answeredCount={area.answeredCount}
-						totalCount={area.totalCount}
-						missingUploadsCount={area.missingUploadsCount}
-						onSelect={setSelectedAreaName}
-					/>
-				))}
+				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+					{groupedAreas.map((area: any) => (
+						<AreaCard
+							key={area.name}
+							areaName={area.name}
+							answeredCount={area.answeredCount}
+							totalCount={area.totalCount}
+							missingUploadsCount={area.missingUploadsCount}
+							onSelect={setSelectedAreaName}
+						/>
+					))}
+				</div>
 			</div>
-
 			{selectedArea && (
 				<QuestionsModal
 					areaName={selectedArea.name}
@@ -74,6 +77,6 @@ export default function ComplianceOverview() {
 					reportId={reportId ?? ''}
 				/>
 			)}
-		</>
+		</div>
 	);
 }
