@@ -8,6 +8,7 @@ interface Answer {
 	questionId: string;
 	answer: 'Yes' | 'No' | 'NA' | null;
 	fileName?: string;
+	validUntil?: string;
 }
 
 interface AreaGroup {
@@ -45,7 +46,7 @@ export const groupQuestionsByArea = (
 			savedAnswer &&
 			savedAnswer.answer === 'Yes' &&
 			(question as any).uploadRequired &&
-			!savedAnswer.fileName
+			(!savedAnswer.fileName || !savedAnswer.validUntil)
 		) {
 			acc[question.area].missingUploadsCount++;
 		}
@@ -71,8 +72,8 @@ export const formatTimestamp = (dateString: string): string => {
 };
 
 export const formatFieldName = (fieldName: string): string => {
-    if (!fieldName) return '';
-    // Add a space before each uppercase letter, then capitalize the first letter of the whole string.
-    const withSpaces = fieldName.replace(/([A-Z])/g, ' $1');
-    return withSpaces.charAt(0).toUpperCase() + withSpaces.slice(1);
+	if (!fieldName) return '';
+	// Add a space before each uppercase letter, then capitalize the first letter of the whole string.
+	const withSpaces = fieldName.replace(/([A-Z])/g, ' $1');
+	return withSpaces.charAt(0).toUpperCase() + withSpaces.slice(1);
 };

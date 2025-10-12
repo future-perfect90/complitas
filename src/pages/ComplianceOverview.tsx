@@ -1,13 +1,11 @@
-// src/pages/ComplianceOverview.tsx
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import AreaCard from '../components/AreaCard';
 import { BackButton } from '../components/BackButton';
-import LoadingSpinner from '../components/modals/Loading';
 import QuestionsModal from '../components/modals/QuestionsModal';
 import { useAuthMeta } from '../context/AuthProvider';
 import { getComplianceAnswers, getComplianceQuestions } from '../utils/api';
-import { groupQuestionsByArea } from '../utils/helper'; // Our new helper
+import { groupQuestionsByArea } from '../utils/helper';
 
 export default function ComplianceOverview() {
 	const { id, reportId } = useParams();
@@ -19,7 +17,6 @@ export default function ComplianceOverview() {
 	useEffect(() => {
 		const fetchData = async () => {
 			if (!reportId) return;
-			setIsLoadingData(true);
 			try {
 				if (!isLoading && isAuthenticated) {
 					const [questions, answers] = await Promise.all([
@@ -31,8 +28,6 @@ export default function ComplianceOverview() {
 				}
 			} catch (error) {
 				console.error('Error fetching compliance data:', error);
-			} finally {
-				setIsLoadingData(false);
 			}
 		};
 		fetchData();
@@ -41,10 +36,6 @@ export default function ComplianceOverview() {
 	const selectedArea = groupedAreas.find(
 		(area: any) => area.name === selectedAreaName
 	);
-
-	if (isLoadingData) {
-		return <LoadingSpinner message={'Loading overview...'} />;
-	}
 
 	return (
 		<div className="min-h-screen p-8">
