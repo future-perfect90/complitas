@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import AreaCard from '../components/AreaCard';
 import LoadingSpinner from '../components/modals/Loading';
 import QuestionsModal from '../components/modals/QuestionsModal';
+import { useAuthMeta } from '../context/AuthProvider';
 import { getComplianceAnswers, getComplianceQuestions } from '../utils/api';
 import { groupQuestionsByArea } from '../utils/helper'; // Our new helper
 
@@ -11,33 +12,36 @@ export default function ComplianceOverview() {
 	const { id, reportId } = useParams();
 	const [groupedAreas, setGroupedAreas] = useState<any>([]);
 	const [selectedAreaName, setSelectedAreaName] = useState<string | null>(null);
-	const [isLoading, setIsLoading] = useState(true);
+	const [isLoadingData, setIsLoadingData] = useState(true);
+	const authMeta = useAuthMeta();
+	const { isLoading, isAuthenticated } = authMeta;
 	useEffect(() => {
 		const fetchData = async () => {
 			if (!reportId) return;
-			setIsLoading(true);
+			setIsLoadingData(true);
 			try {
-				const [questions, answers] = await Promise.all([
-					getComplianceQuestions(id ?? ''),
-					getComplianceAnswers(reportId),
-				]);
-
-				const groupedData = groupQuestionsByArea(questions, answers);
-				setGroupedAreas(groupedData);
+				if (!isLoading && isAuthenticated) {
+					const [questions, answers] = await Promise.all([
+						getComplianceQuestions(id ?? ''),
+						getComplianceAnswers(reportId),
+					]);
+					const groupedData = groupQuestionsByArea(questions, answers);
+					setGroupedAreas(groupedData);
+				}
 			} catch (error) {
 				console.error('Error fetching compliance data:', error);
 			} finally {
-				setIsLoading(false);
+				setIsLoadingData(false);
 			}
 		};
 		fetchData();
-	}, [reportId, selectedAreaName]);
+	}, [reportId, selectedAreaName, isLoading, isAuthenticated]);
 
 	const selectedArea = groupedAreas.find(
 		(area: any) => area.name === selectedAreaName
 	);
 
-	if (isLoading) {
+	if (isLoadingData) {
 		return <LoadingSpinner message={'Loading overview...'} />;
 	}
 
