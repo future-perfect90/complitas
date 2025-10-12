@@ -17,7 +17,7 @@ import {
 import PropertyDetails from './PropertyDetails';
 
 export default function Property() {
-	const { isAuthenticated } = useAuth0();
+	const { isAuthenticated, isLoading } = useAuth0();
 	const [property, setProperty] = useState<Property>();
 	const { id } = useParams();
 	const [editingSection, setEditingSection] = useState<string | null>(null);
@@ -42,10 +42,10 @@ export default function Property() {
 	}, [id]);
 
 	useEffect(() => {
-		if (isAuthenticated) {
+		if (isAuthenticated && !isLoading) {
 			fetchProperty();
 		}
-	}, [isAuthenticated, fetchProperty]);
+	}, [isAuthenticated, isLoading, fetchProperty]);
 
 	// Modal open handler
 	const handleEdit = (section: string) => {
