@@ -120,3 +120,20 @@ export interface NotificationPreferences {
 	daysBeforeExpiry: number;
 	isActive: 1 | 0;
 }
+
+export interface MaintenanceDataItem {
+	id: string;
+	title: string;
+	description: string;
+	typeOfWork: string;
+	fileName: string | null;
+	fileUrl?: string;
+	completedAt: string | null;
+	propertyId: string;
+	createdAt: string;
+	name: string | null;
+	contactName: string | null;
+	contactAddress: string | null;
+	contactNumber: string | null;
+	attachmentId?: string;
+}
