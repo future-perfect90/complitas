@@ -89,4 +89,16 @@ class Company
         $stmt->execute();
         return $stmt->execute();
     }
+
+    public function getCompanyViaPropertyId(string $propertyId): ?array
+    {
+        $sql = "SELECT c.name, c.address1, c.address2, c.address3, c.city, c.county, c.postCode, c.country, c.vatNo, c.companyRegNo, c.email, c.telephone, c.logo FROM companies c LEFT JOIN properties p ON c.id = p.companyId WHERE p.id = :id";
+        $sql = "SELECT c.* FROM companies c LEFT JOIN properties p ON c.id = p.companyId WHERE p.id = :id";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindParam(':id', $propertyId);
+        $stmt->execute();
+
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result !== false ? $result : null;
+    }
 }

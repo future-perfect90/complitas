@@ -13,8 +13,11 @@ import { useEffect, useState } from 'react';
 import { pdfjs } from 'react-pdf';
 import { createTw } from 'react-pdf-tailwind';
 import { useAuthMeta } from '../context/AuthProvider';
+import type { Company } from '../types';
 import {
+	fetchUrl,
 	getAuditData,
+	getCompanyByPropertyId,
 	getMaintenanceTasksReportData,
 	getReportData,
 } from '../utils/api';
@@ -101,12 +104,17 @@ const ReportDocument = ({
 	maintenanceData,
 	attachments,
 	auditData,
+	companyLogoUrl,
+	companyData,
 }: {
 	data: ReportDataItem[];
 	maintenanceData: MaintenanceDataItem[];
 	attachments: Attachment[];
 	auditData: AuditData;
+	companyLogoUrl: string;
+	companyData: Company;
 }) => {
+	console.log(companyData);
 	if (!data || data.length === 0) {
 		return (
 			<Document>
@@ -134,12 +142,19 @@ const ReportDocument = ({
 		}
 		groupedMaintenanceData[row.title].push(row);
 	});
+
 	return (
 		<Document>
 			<Page style={tw('p-[30px] text-[11px] text-gray-800')}>
 				<Text style={tw('text-2xl mb-5 text-center font-bold')}>
 					Compliance Report for: {propertyName}
 				</Text>
+				{companyLogoUrl && (
+					<Image
+						style={tw('h-auto max-h-40 w-auto mx-auto my-5')}
+						src={companyLogoUrl}
+					/>
+				)}
 			</Page>
 			<Page style={tw('p-[30px] text-[11px] text-gray-800')}>
 				{Object.entries(groupedData).map(([area, questions]) => (
@@ -422,6 +437,8 @@ export const ComplianceReportPDF = ({
 	});
 	const [loading, setLoading] = useState(true);
 	const [attachments, setAttachments] = useState<Attachment[]>([]);
+	const [companyData, setCompanyData] = useState<Company>();
+	const [companyLogoUrl, setCompanyLogoUrl] = useState('');
 	const authMeta = useAuthMeta();
 	const { isLoading, isAuthenticated } = authMeta;
 
@@ -429,11 +446,24 @@ export const ComplianceReportPDF = ({
 		const fetchAndProcessReport = async () => {
 			setLoading(true);
 			try {
-				const [data, maintenanceData, auditData] = await Promise.all([
-					getReportData(reportId),
-					getMaintenanceTasksReportData(propertyId),
-					getAuditData(propertyId),
-				]);
+				const [data, maintenanceData, auditData, companyInfo] =
+					await Promise.all([
+						getReportData(reportId),
+						getMaintenanceTasksReportData(propertyId),
+						getAuditData(propertyId),
+						getCompanyByPropertyId(propertyId),
+					]);
+
+				setCompanyData(companyInfo);
+
+				if (companyInfo && companyInfo.logo) {
+					const logoUrl = await fetchUrl(
+						`${import.meta.env.VITE_API_BASE_URL}/document/presignedUrl.php`,
+						'company/logos/',
+						companyInfo.logo
+					);
+					setCompanyLogoUrl(logoUrl);
+				}
 
 				if (
 					(!data || !data.length) &&
@@ -510,7 +540,13 @@ export const ComplianceReportPDF = ({
 		}
 	}, [reportId, propertyId, isLoading, isAuthenticated]);
 
-	if (loading || !reportData || !maintenanceReportData || !auditReportData) {
+	if (
+		loading ||
+		!reportData ||
+		!maintenanceReportData ||
+		!auditReportData ||
+		!companyData
+	) {
 		return <LoadingSpinner message={'Loading report...'} />;
 	}
 	return (
@@ -521,6 +557,8 @@ export const ComplianceReportPDF = ({
 					maintenanceData={maintenanceReportData}
 					attachments={attachments}
 					auditData={auditReportData}
+					companyLogoUrl={companyLogoUrl}
+					companyData={companyData}
 				/>
 			</PDFViewer>
 		</>
