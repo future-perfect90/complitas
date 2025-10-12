@@ -364,8 +364,10 @@ async function convertPdfToImages(
 	const imageDataUrls: string[] = [];
 	console.log('hit');
 	try {
+		console.log(pdfUrl);
 		// Use a custom fetch to handle authentication if your API requires it
 		const loadingTask = pdfjs.getDocument(pdfUrl);
+		console.log(loadingTask);
 		const pdf = await loadingTask.promise;
 
 		for (let i = 1; i <= pdf.numPages; i++) {
