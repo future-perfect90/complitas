@@ -1,10 +1,10 @@
-import { useAuth0 } from '@auth0/auth0-react';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Button } from '../components/Button';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/Card';
 import ConfirmationModal from '../components/modals/ConfirmationModal';
+import { useAuthMeta } from '../context/AuthProvider';
 import { createCompliance, getComplianceReports } from '../utils/api';
 
 interface ComplianceReport {
@@ -14,7 +14,8 @@ interface ComplianceReport {
 }
 
 export default function ComplianceReports() {
-	const { isAuthenticated } = useAuth0();
+	const authMeta = useAuthMeta();
+	const {isLoading, isAuthenticated} = authMeta;
 	const [reports, setReports] = useState<Array<ComplianceReport>>([]);
 	const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
 	const navigate = useNavigate();
@@ -30,10 +31,10 @@ export default function ComplianceReports() {
 			}
 		};
 
-		if (isAuthenticated) {
+		if (!isLoading && isAuthenticated) {
 			fetchQuestionnaires();
 		}
-	}, [isAuthenticated]);
+	}, [isLoading, isAuthenticated]);
 
 	const handleCreation = async () => {
 		const complianceId = await createCompliance(id ?? '');
