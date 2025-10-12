@@ -25,6 +25,7 @@ import {
 	getMaintenanceTasksReportData,
 	getReportData,
 } from '../utils/api';
+import { BackButton } from './BackButton';
 import LoadingSpinner from './modals/Loading';
 import { ReportComplianceAuditPage } from './pdf/ReportComplianceAuditPage';
 import { ReportFrontPage } from './pdf/ReportFrontPage';
@@ -368,6 +369,7 @@ export const ComplianceReportPDF = ({
 	}
 	return (
 		<>
+			<BackButton />
 			<PDFViewer style={{ width: '100%', height: '100vh' }}>
 				<ReportDocument
 					data={reportData}

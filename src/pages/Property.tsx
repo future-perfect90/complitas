@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import EditPropertyModal from '../components/modals/EditPropertyModal';
 import { useAuthMeta } from '../context/AuthProvider';
 
+import { useParams } from 'react-router-dom';
+import { BackButton } from '../components/BackButton';
 import LoadingSpinner from '../components/modals/Loading';
 import type {
 	MaintenanceTask,
@@ -54,29 +55,26 @@ export default function Property() {
 		}
 	}, [isLoading, fetchProperty]);
 
-	// Modal open handler
 	const handleEdit = (section: string) => {
 		setEditingSection(section);
 		setModalOpen(true);
 	};
-	// Modal close handler
+
 	const handleClose = () => {
 		setModalOpen(false);
 		setEditingSection(null);
 	};
-	// Modal save handler: call updatePropertySection API
+
 	const handleSave = async (updated: Partial<Property>, closeModal = true) => {
 		if (!id || !editingSection) return;
 		try {
 			await updatePropertySection(id, updated);
-			setProperty((prev) => ({ ...prev, ...updated }) as Property); // Update local state
+			setProperty((prev) => ({ ...prev, ...updated }) as Property);
 			if (closeModal) {
 				toast.success('Property section updated!');
 			}
 		} catch (err) {
-			// Optionally show error to user
 			toast.error('Failed to update property section');
-
 			console.error('Failed to update property section', err);
 		}
 		if (closeModal) handleClose();
@@ -89,7 +87,7 @@ export default function Property() {
 	return (
 		<div className="min-h-screen p-8">
 			<div className="max-w-5xl mx-auto space-y-8">
-				{/* Property Details Section */}
+				<BackButton />
 				{property && (
 					<>
 						<PropertyDetails
@@ -99,7 +97,6 @@ export default function Property() {
 							preferences={preferences}
 							maintenanceTasks={maintenanceTasks}
 						/>
-						{/* Edit Modal */}
 						{modalOpen && (
 							<EditPropertyModal
 								isOpen={modalOpen}

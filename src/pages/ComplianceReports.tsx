@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { BackButton } from '../components/BackButton';
 import { Button } from '../components/Button';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/Card';
 import ConfirmationModal from '../components/modals/ConfirmationModal';
@@ -18,6 +19,7 @@ export default function ComplianceReports() {
 	const authMeta = useAuthMeta();
 	const { isLoading, isAuthenticated } = authMeta;
 	const [reports, setReports] = useState<Array<ComplianceReport>>([]);
+	const [isReportsLoading, setIsReportsLoading] = useState(true);
 	const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
 	const navigate = useNavigate();
 	const { id } = useParams();
@@ -25,10 +27,13 @@ export default function ComplianceReports() {
 	useEffect(() => {
 		const fetchQuestionnaires = async () => {
 			try {
+				setIsReportsLoading(true);
 				const data = await getComplianceReports(id ?? '');
 				setReports(data);
 			} catch (error) {
 				console.error('Error fetching questionnaires:', error);
+			} finally {
+				setIsReportsLoading(false);
 			}
 		};
 
@@ -51,37 +56,42 @@ export default function ComplianceReports() {
 		setIsConfirmationModalOpen(false);
 	};
 
+	if (isLoading || isReportsLoading) {
+		return <LoadingSpinner message={'Loading reports...'} />;
+	}
+
 	return (
-		<>
-			<div className="flex items-center justify-left">
-				<div className="flex-1 justify-left">
-					<h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-						Compliance Reports
-					</h1>
-					<p className="text-gray-300">
-						Log compliance activities and responses.
-					</p>
+		<div className="min-h-screen p-8">
+			<div className="max-w-5xl mx-auto space-y-8">
+				<BackButton />
+				<div className="flex items-center justify-between">
+					<div className="flex-1">
+						<h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+							Compliance Reports
+						</h1>
+						<p className="text-gray-600 dark:text-gray-400">
+							Log compliance activities and responses.
+						</p>
+					</div>
+					<div>
+						<Button
+							label="Create questionnaire"
+							onClick={
+								reports && reports.length >= 1 ?
+									handleOpenConfirmation
+								:	handleCreation
+							}
+							className="px-2 py-1 bg-purple-800 text-white rounded"
+						/>
+					</div>
 				</div>
-				<div className="items-center justify-right">
-					<Button
-						label="Create questionnaire"
-						onClick={
-							reports && reports.length >= 1 ?
-								handleOpenConfirmation
-							:	handleCreation
-						}
-						className="px-2 py-1 bg-purple-800 text-white rounded"
-					/>
-				</div>
-			</div>
-			<div className="mt-5">
 				<Card className="rounded-2xl shadow-lg">
 					<CardHeader>
 						<CardTitle className="text-xl font-semibold">Reports</CardTitle>
 					</CardHeader>
 					<br />
 					<CardContent className="space-y-2 flex">
-						<div className="flex-1 justify-left">
+						<div className="flex-1">
 							{reports && reports.length > 0 ?
 								reports.map((report) => (
 									<div key={report.id}>
@@ -109,12 +119,11 @@ export default function ComplianceReports() {
 										</h3>
 									</div>
 								))
-							:	<LoadingSpinner message={'Loading reports...'} />}
+							:	<p>No compliance reports found for this property.</p>}
 						</div>
 					</CardContent>
 				</Card>
 			</div>
-
 			<ConfirmationModal
 				isOpen={isConfirmationModalOpen}
 				onClose={handleCloseModal}
@@ -124,6 +133,6 @@ export default function ComplianceReports() {
 				confirmText="Yes, Create It"
 				confirmButtonClass="bg-blue-600 hover:bg-blue-700"
 			/>
-		</>
+		</div>
 	);
 }
