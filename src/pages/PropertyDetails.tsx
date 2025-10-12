@@ -317,6 +317,84 @@ export default function PropertyDetails({
 								</div>
 							</CardContent>
 						</Card>
+						<Card className="rounded-2xl shadow-lg">
+							<CardHeader className="w-full flex justify-between items-center flex-nowrap gap-4">
+								<CardTitle className="text-xl font-semibold">
+									Audit details
+								</CardTitle>
+								<Button
+									label="Edit"
+									onClick={() => onEdit('audit', property)}
+									className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-4 rounded flex-shrink-0"
+								/>
+							</CardHeader>
+							<CardContent className="pt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+								<div className="space-y-4">
+									<p className="text-sm text-gray-500 dark:text-gray-400">
+										Log Book/CDM Folder
+									</p>
+									<p className="text-gray-900 dark:text-gray-100">
+										{property.logBook === null || '' ?
+											'Not set'
+										: property.logBook ?
+											'Yes'
+										:	'No'}
+									</p>
+									<p className="text-sm text-gray-500 dark:text-gray-400">
+										Fire Safety Log Book
+									</p>
+									<p className="text-gray-900 dark:text-gray-100">
+										{property.fireSafetyLogBook === null || '' ?
+											'Not set'
+										: property.fireSafetyLogBook ?
+											'Yes'
+										:	'No'}
+									</p>
+									<p className="text-sm text-gray-500 dark:text-gray-400">
+										Waste Electrical and Electronic Equipment Audit
+									</p>
+									<p className="text-gray-900 dark:text-gray-100">
+										{property.electronicAuditCompleted === null || '' ?
+											'Not set'
+										: property.electronicAuditCompleted ?
+											'Yes'
+										:	'No'}
+									</p>
+								</div>
+								<div className="space-y-4">
+									<p className="text-sm text-gray-500 dark:text-gray-400">
+										EPC
+									</p>
+									<p className="text-gray-900 dark:text-gray-100">
+										{property.epc === null || '' ?
+											'Not set'
+										: property.epc ?
+											'Yes'
+										:	'No'}
+									</p>
+									<p className="text-sm text-gray-500 dark:text-gray-400">
+										Energy Certificates (DEC's)
+									</p>
+									<p className="text-gray-900 dark:text-gray-100">
+										{property.energyCertificates === null || '' ?
+											'Not set'
+										: property.energyCertificates ?
+											'Yes'
+										:	'No'}
+									</p>
+									<p className="text-sm text-gray-500 dark:text-gray-400">
+										O&M's
+									</p>
+									<p className="text-gray-900 dark:text-gray-100">
+										{property.oms === null || '' ?
+											'Not set'
+										: property.oms ?
+											'Yes'
+										:	'No'}
+									</p>
+								</div>
+							</CardContent>
+						</Card>
 					</TabPanel>
 					<TabPanel>
 						<Card className="rounded-2xl shadow-lg">
