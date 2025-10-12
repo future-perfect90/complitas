@@ -23,7 +23,6 @@ class Auth
 
     public function validateToken(string $authHeader): ?object
     {
-        var_dump($authHeader);
         $parts = explode(' ', $authHeader);
         if (count($parts) !== 2 || strtolower($parts[0]) !== 'bearer') {
             return null;
