@@ -11,7 +11,6 @@ export default function ComplianceOverview() {
 	const { id, reportId } = useParams();
 	const [groupedAreas, setGroupedAreas] = useState<any>([]);
 	const [selectedAreaName, setSelectedAreaName] = useState<string | null>(null);
-	const [isLoadingData, setIsLoadingData] = useState(true);
 	const authMeta = useAuthMeta();
 	const { isLoading, isAuthenticated } = authMeta;
 	useEffect(() => {
