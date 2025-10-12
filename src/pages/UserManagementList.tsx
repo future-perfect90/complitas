@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { toast } from 'react-toastify';
+import { Card, CardContent, CardHeader, CardTitle } from '../components/Card';
 import UserModal from '../components/modals/UserModal';
 import { useAuthMeta } from '../context/AuthProvider';
 
@@ -83,51 +84,50 @@ const UserList: React.FC = () => {
 					</button>
 				</div>
 			</div>
-			<div className="max-w-5xl mx-auto space-y-8 bg-white shadow rounded-lg overflow-x-auto">
-				<table className="min-w-full min-w-xl w-full border dark:border-none">
-					<thead className="bg-gray-400">
-						<tr>
-							<th className="px-4 py-2 text-left text-slate-800">Name</th>
-							<th className="px-4 py-2 text-left text-slate-800">Email</th>
-							{isSuperAdmin && (
-								<th className="px-4 py-2 text-left text-slate-800">Company</th>
-							)}
-						</tr>
-					</thead>
-					<tbody>
-						{filteredUsers && filteredUsers.length > 0 ?
-							filteredUsers.map((c) => (
-								<tr key={c.id} className="border-t">
-									<td className="px-4 py-2 text-slate-800">{c.name}</td>
-									<td className="px-4 py-2 text-slate-800">{c.email}</td>
-									{isSuperAdmin && (
-										<td className="px-4 py-2 text-slate-800">{c.company}</td>
-									)}
-									{/* <td className="px-4 py-2 flex gap-2">
-										<button
-											onClick={() => c.id && handleEdit(c.id)}
-											className="px-2 py-1 bg-blue-500 text-white rounded">
-											Edit
-										</button>
-										<button
-											onClick={() => c.id && handleDelete(c.id)}
-											className="px-2 py-1 bg-red-500 text-white rounded">
-											Delete
-										</button>
-									</td> */}
-								</tr>
-							))
-						:	<tr className="border-t">
-								<td
-									colSpan={3}
-									className="px-4 py-2 text-slate-800 justify-center text-center">
-									No users found
-								</td>
-							</tr>
-						}
-					</tbody>
-				</table>
-			</div>
+			{filteredUsers.length > 0 ?
+				<div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+					{filteredUsers.map((user) => (
+						<Card
+							key={user.id}
+							className="rounded-xl shadow-lg flex flex-col justify-between">
+							<CardHeader>
+								<CardTitle className="text-xl font-bold">{user.name}</CardTitle>
+							</CardHeader>
+							<CardContent className="space-y-5 text-sm">
+								<div className="mt-3">
+									<p className="font-semibold text-gray-600 dark:text-gray-400">
+										Email
+									</p>
+									<p>{user.email}</p>
+								</div>
+								{isSuperAdmin && user.company && (
+									<div>
+										<p className="font-semibold text-gray-600 dark:text-gray-400">
+											Company
+										</p>
+										<p>{user.company}</p>
+									</div>
+								)}
+							</CardContent>
+							{/* <div className="p-4 flex flex-wrap justify-end gap-2 border-t border-gray-200 dark:border-gray-700 mt-4">
+								<Button
+									label="Edit"
+									onClick={() => user.id && handleEdit(user.id)}
+									className="px-2 sm:px-3 py-1 bg-blue-500 text-white rounded text-xs sm:text-sm"
+								/>
+								<Button
+									label="Delete"
+									onClick={() => user.id && handleDelete(user.id)}
+									className="px-2 sm:px-3 py-1 bg-red-500 text-white rounded text-xs sm:text-sm"
+								/>
+							</div> */}
+						</Card>
+					))}
+				</div>
+			:	<div className="max-w-5xl mx-auto text-center py-16">
+					<p className="text-gray-500 dark:text-gray-400">No users found.</p>
+				</div>
+			}
 			<UserModal
 				isOpen={isModalOpen}
 				onClose={() => setIsModalOpen(false)}

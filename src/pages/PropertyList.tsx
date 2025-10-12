@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Button } from '../components/Button';
+import { Card, CardContent, CardHeader, CardTitle } from '../components/Card';
 import SearchInput from '../components/SearchInput';
 import LoadingSpinner from '../components/modals/Loading';
 import PropertyModal from '../components/modals/PropertyModal';
@@ -96,58 +97,64 @@ const PropertyList: React.FC = () => {
 					</button>
 				</div>
 			</div>
-			<div className="max-w-5xl mx-auto space-y-8 bg-white shadow rounded-lg overflow-x-auto">
-				<table className="min-w-full min-w-xl w-full border dark:border-none">
-					<thead className="bg-gray-400">
-						<tr>
-							<th className="px-4 py-2 text-left text-slate-800">Name</th>
-							<th className="px-4 py-2 text-left text-slate-800">Address</th>
-							<th className="px-4 py-2 text-left text-slate-800">Telephone</th>
-							<th className="px-4 py-2 text-left text-slate-800">Email</th>
-							<th className="px-4 py-2 text-slate-800">Actions</th>
-						</tr>
-					</thead>
-					<tbody>
-						{filteredProperties.length > 0 ?
-							filteredProperties.map((p) => (
-								<tr key={p.id} className="border-t">
-									<td className="px-4 py-2 text-slate-800">{p.name}</td>
-									<td className="px-4 py-2 text-slate-800">
+			{filteredProperties.length > 0 ?
+				<div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+					{filteredProperties.map((p) => (
+						<Card
+							key={p.id}
+							className="rounded-xl shadow-lg flex flex-col justify-between">
+							<CardHeader>
+								<CardTitle className="text-xl font-bold">{p.name}</CardTitle>
+							</CardHeader>
+							<CardContent className="space-y-3 text-sm">
+								<div className="mt-3">
+									<p className="font-semibold text-gray-600 dark:text-gray-400">
+										Address
+									</p>
+									<p>
 										{p.address1}
 										{p.address2 && `, ${p.address2}`}
-									</td>
-									<td className="px-4 py-2 text-slate-800">{p.telephone}</td>
-									<td className="px-4 py-2 text-slate-800">{p.managerEmail}</td>
-									<td className="px-4 py-2 flex gap-2">
-										<Button
-											label="View"
-											onClick={() => p.id && navigate(`/properties/${p.id}`)}
-											className="px-2 py-1 bg-green-500 text-white rounded"
-										/>
-										<Button
-											label="Edit"
-											onClick={() => p.id && handleEdit(p.id)}
-											className="px-2 py-1 bg-blue-500 text-white rounded"
-										/>
-										<Button
-											label="Delete"
-											onClick={() => p.id && handleDelete(p.id)}
-											className="px-2 py-1 bg-red-500 text-white rounded"
-										/>
-									</td>
-								</tr>
-							))
-						:	<tr className="border-t">
-								<td
-									colSpan={5}
-									className="px-4 py-2 text-slate-800 justify-center text-center">
-									No properties found
-								</td>
-							</tr>
-						}
-					</tbody>
-				</table>
-			</div>
+									</p>
+								</div>
+								<div>
+									<p className="font-semibold text-gray-600 dark:text-gray-400">
+										Telephone
+									</p>
+									<p>{p.telephone}</p>
+								</div>
+								<div>
+									<p className="font-semibold text-gray-600 dark:text-gray-400">
+										Email
+									</p>
+									<p className="break-words">{p.managerEmail}</p>
+								</div>
+							</CardContent>
+							<div className="p-4 flex flex-wrap justify-end gap-2 border-t border-gray-200 dark:border-gray-700 mt-4">
+								<Button
+									label="View"
+									onClick={() => p.id && navigate(`/properties/${p.id}`)}
+									className="px-2 sm:px-3 py-1 bg-green-500 text-white rounded text-xs sm:text-sm"
+								/>
+								<Button
+									label="Edit"
+									onClick={() => p.id && handleEdit(p.id)}
+									className="px-2 sm:px-3 py-1 bg-blue-500 text-white rounded text-xs sm:text-sm"
+								/>
+								<Button
+									label="Delete"
+									onClick={() => p.id && handleDelete(p.id)}
+									className="px-2 sm:px-3 py-1 bg-red-500 text-white rounded text-xs sm:text-sm"
+								/>
+							</div>
+						</Card>
+					))}
+				</div>
+			:	<div className="max-w-5xl mx-auto text-center py-16">
+					<p className="text-gray-500 dark:text-gray-400">
+						No properties found.
+					</p>
+				</div>
+			}
 			<PropertyModal
 				isOpen={isModalOpen}
 				onClose={() => setIsModalOpen(false)}
