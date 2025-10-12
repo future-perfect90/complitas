@@ -454,7 +454,7 @@ export default function EditPropertyModal({
 									onClick={() => setChangeMitigationPlan(true)}
 									className="text-sm text-blue-600 hover:underline">
 									<img
-										src="/public/change.svg"
+										src="/change.svg"
 										className="w-4 h-4"
 										alt="Change"
 									/>
@@ -487,7 +487,7 @@ export default function EditPropertyModal({
 									onClick={() => setChangeRefurbishedCdm(true)}
 									className="text-sm text-blue-600 hover:underline">
 									<img
-										src="/public/change.svg"
+										src="/change.svg"
 										className="w-4 h-4"
 										alt="Change"
 									/>
