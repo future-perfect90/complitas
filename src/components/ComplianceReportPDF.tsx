@@ -18,6 +18,7 @@ import {
 } from '../utils/api';
 import { formatFieldName, formatTimestamp } from '../utils/helper';
 import LoadingSpinner from './modals/Loading';
+import { useAuthMeta } from '../context/AuthProvider';
 
 // Configure pdfjs worker
 pdfjs.GlobalWorkerOptions.workerSrc = workerUrl;
@@ -417,6 +418,8 @@ export const ComplianceReportPDF = ({
 	});
 	const [loading, setLoading] = useState(true);
 	const [attachments, setAttachments] = useState<Attachment[]>([]);
+	const authMeta = useAuthMeta();
+	const { isLoading, isAuthenticated } = authMeta;
 
 	useEffect(() => {
 		const fetchAndProcessReport = async () => {
@@ -498,8 +501,10 @@ export const ComplianceReportPDF = ({
 			}
 		};
 
-		fetchAndProcessReport();
-	}, [reportId, propertyId]);
+		if (!isLoading && isAuthenticated) {
+			fetchAndProcessReport();
+		}
+	}, [reportId, propertyId, isLoading, isAuthenticated]);
 
 	if (loading || !reportData || !maintenanceReportData || !auditReportData) {
 		return <LoadingSpinner message={'Loading report...'} />;

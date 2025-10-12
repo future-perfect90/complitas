@@ -20,7 +20,7 @@ export default function Profile() {
 					const { data } = await getProfile(userUuid);
 					setProfile(data);
 				} catch (error) {
-					console.error('Error fetching teams:', error);
+					console.error('Error fetching profile:', error);
 				}
 			}
 		};
