@@ -21,18 +21,14 @@ export default function ComplianceReports() {
 	const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
 	const navigate = useNavigate();
 	const { id } = useParams();
-	const [isReportLoading, setIsReportLoading] = useState(true);
 
 	useEffect(() => {
-		setIsReportLoading(true);
 		const fetchQuestionnaires = async () => {
 			try {
 				const data = await getComplianceReports(id ?? '');
 				setReports(data);
 			} catch (error) {
 				console.error('Error fetching questionnaires:', error);
-			} finally {
-				setIsReportLoading(false);
 			}
 		};
 
