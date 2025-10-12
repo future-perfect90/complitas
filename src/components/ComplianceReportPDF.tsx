@@ -7,6 +7,7 @@ import {
 	Text,
 	View,
 } from '@react-pdf/renderer';
+import { createCanvas } from 'canvas';
 import workerUrl from 'pdfjs-dist/build/pdf.worker.mjs?url';
 import { useEffect, useState } from 'react';
 import { pdfjs } from 'react-pdf';
@@ -363,26 +364,26 @@ async function convertPdfToImages(
 	const imageDataUrls: string[] = [];
 
 	try {
-		const loadingTask = pdfjs.getDocument({ url: pdfUrl });
+		// Use a custom fetch to handle authentication if your API requires it
+		const loadingTask = pdfjs.getDocument(pdfUrl);
 		const pdf = await loadingTask.promise;
-		console.log(loadingTask);
-		console.log(pdf);
-		const canvas = document.createElement('canvas');
-		const canvasContext = canvas.getContext('2d');
-		if (!canvasContext) {
-			throw new Error('Could not get canvas context.');
-		}
-		console.log(canvas);
-		console.log(canvasContext);
+
 		for (let i = 1; i <= pdf.numPages; i++) {
 			const page = await pdf.getPage(i);
-			console.log(page);
 			const viewport = page.getViewport({ scale: scale });
+
+			// Create a canvas element
+			const canvas = createCanvas(viewport.width, viewport.height);
+			const canvasContext = canvas.getContext('2d');
+			if (!canvasContext) {
+				throw new Error('Could not get canvas context.');
+			}
+
 			canvas.height = viewport.height;
 			canvas.width = viewport.width;
 
 			const renderContext = {
-				canvasContext,
+				canvasContext: canvasContext as any,
 				viewport,
 			};
 			await page.render(renderContext).promise;
@@ -394,7 +395,7 @@ async function convertPdfToImages(
 		}
 		return imageDataUrls;
 	} catch (err) {
-		console.error('PDF conversion failed:', err);
+		console.error('PDF conversion to image failed:', err);
 		// Re-throw a clearer error for the calling component
 		throw new Error(
 			`Failed to load or process PDF. Error: ${err instanceof Error ? err.message : String(err)}`
