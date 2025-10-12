@@ -1,19 +1,18 @@
-import { useAuth0 } from '@auth0/auth0-react';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { Button } from '../components/Button';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/Card';
 import ChangePasswordModal from '../components/modals/ChangePasswordModal';
+import { useAuthMeta } from '../context/AuthProvider';
 import type { ProfileData } from '../types';
 import { getProfile } from '../utils/api';
 
 export default function Profile() {
-	const { user, isAuthenticated } = useAuth0();
+	const authMeta = useAuthMeta();
+	const { isLoading, isAuthenticated, userUuid, auth0sub } = authMeta;
 	const [profile, setProfile] = useState<ProfileData>();
 	const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
 
-	const userUuid = user?.['https://complitas.dev/user_uuid'];
-	const auth0Id = user?.sub;
 	useEffect(() => {
 		const fetchClaimsAndData = async () => {
 			if (userUuid) {
@@ -26,7 +25,7 @@ export default function Profile() {
 			}
 		};
 
-		if (isAuthenticated) {
+		if (isAuthenticated && !isLoading) {
 			fetchClaimsAndData();
 		}
 	}, [isAuthenticated, userUuid]);
@@ -129,12 +128,12 @@ export default function Profile() {
 						No properties assigned.
 					</p>
 				} */}
-				{auth0Id && (
+				{auth0sub && (
 					<ChangePasswordModal
 						isOpen={isPasswordModalOpen}
 						onClose={() => setIsPasswordModalOpen(false)}
 						onSuccess={handlePasswordSuccess}
-						userUuid={auth0Id}
+						userUuid={auth0sub}
 					/>
 				)}
 			</div>

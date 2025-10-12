@@ -7,6 +7,7 @@ type AuthMeta = {
 	companyUuid?: string;
 	isAuthenticated: boolean;
 	isLoading: boolean;
+	auth0sub?: string;
 };
 
 export const AuthContext = createContext<AuthMeta | undefined>(undefined);
@@ -49,6 +50,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 				claims ? claims['https://complitas.dev/company_uuid'] : undefined;
 			const tokenExpiry = claims ? claims.exp : undefined;
 			const now = Date.now() / 1000;
+			const auth0sub = claims ? claims.sub : undefined;
 
 			if (tokenExpiry && tokenExpiry < now) {
 				// Token is expired, redirect to login
@@ -62,7 +64,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 				isAuthenticated,
 				roles,
 				isLoading: false,
-			}); // Now we are done loading.
+				auth0sub,
+			});
 		};
 
 		fetchClaims();
