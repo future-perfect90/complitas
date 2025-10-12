@@ -1,6 +1,5 @@
 import {
 	Document,
-	Image,
 	Link,
 	PDFViewer,
 	Page,
@@ -29,7 +28,9 @@ import {
 import LoadingSpinner from './modals/Loading';
 import { ReportComplianceAuditPage } from './pdf/ReportComplianceAuditPage';
 import { ReportFrontPage } from './pdf/ReportFrontPage';
+import { ReportImageAttachmentPage } from './pdf/ReportImageAttachmentPage';
 import { ReportMaintenancePage } from './pdf/ReportMaintenancePage';
+import { ReportPdfAttachmentPage } from './pdf/ReportPdfAttachmentPage';
 import { ReportPropertyAuditPage } from './pdf/ReportPropertyAuditPage';
 
 // Configure pdfjs worker
@@ -160,35 +161,20 @@ const ReportDocument = ({
 
 				if (att.type === 'image') {
 					return (
-						<Page
+						<ReportImageAttachmentPage
 							key={`att-${index}`}
-							style={tw('justify-center items-center')}>
-							<Text style={tw('absolute top-5 text-xs')} id={attachmentId}>
-								Attachment: {attachmentId}
-							</Text>
-							<Image style={tw('h-auto max-h-[90%] w-screen')} src={att.url} />
-						</Page>
+							attachmentId={attachmentId}
+							imageUrl={att.url}
+						/>
 					);
 				}
 				if (att.type === 'pdf') {
 					return (
-						<>
-							<Page
-								key={`att-${index}`}
-								style={tw('justify-center items-center')}>
-								<Text style={tw('absolute top-5 text-xs')} id={attachmentId}>
-									Attachment: {attachmentId}
-								</Text>
-								{att.images &&
-									att.images.map((img, idx) => (
-										<Image
-											key={`img-${idx}`}
-											style={tw('h-auto max-h-[90%] w-screen')}
-											src={img}
-										/>
-									))}
-							</Page>
-						</>
+						<ReportPdfAttachmentPage
+							key={`att-${index}`}
+							attachmentId={attachmentId}
+							images={att.images || []}
+						/>
 					);
 				}
 				return null;
