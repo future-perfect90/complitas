@@ -92,8 +92,8 @@ export default function PropertyDetails({
 			</div>
 			{/* Basic Information Card */}
 			<Card className="rounded-2xl shadow-lg">
-				<CardHeader className="w-full flex justify-between items-center flex-nowrap gap-4">
-					<CardTitle className="text-xl font-semibold">
+				<CardHeader className="w-full flex-nowrap gap-4 items-center">
+					<CardTitle className="text-xl font-semibold flex-1">
 						Basic Information
 					</CardTitle>
 					<Button
