@@ -3,6 +3,7 @@ import { toast } from 'react-toastify';
 import { Button } from '../components/Button';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/Card';
 import ChangePasswordModal from '../components/modals/ChangePasswordModal';
+import LoadingSpinner from '../components/modals/Loading';
 import { useAuthMeta } from '../context/AuthProvider';
 import type { ProfileData } from '../types';
 import { getProfile } from '../utils/api';
@@ -12,15 +13,19 @@ export default function Profile() {
 	const { isLoading, isAuthenticated, userUuid, auth0sub } = authMeta;
 	const [profile, setProfile] = useState<ProfileData>();
 	const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
+	const [isProfileLoading, setIsProfileLoading] = useState(true);
 
 	useEffect(() => {
 		const fetchClaimsAndData = async () => {
+			setIsProfileLoading(true);
 			if (userUuid) {
 				try {
 					const { data } = await getProfile(userUuid);
 					setProfile(data);
 				} catch (error) {
 					console.error('Error fetching profile:', error);
+				} finally {
+					setIsProfileLoading(false);
 				}
 			}
 		};
@@ -34,6 +39,10 @@ export default function Profile() {
 		setIsPasswordModalOpen(false);
 		toast.success('Password updated successfully!');
 	};
+
+	if (isLoading || isProfileLoading) {
+		return <LoadingSpinner message={'Loading profile...'} />;
+	}
 
 	return (
 		<div className="min-h-screen p-8">

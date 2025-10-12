@@ -4,6 +4,7 @@ import { toast } from 'react-toastify';
 import EditPropertyModal from '../components/modals/EditPropertyModal';
 import { useAuthMeta } from '../context/AuthProvider';
 
+import LoadingSpinner from '../components/modals/Loading';
 import type {
 	MaintenanceTask,
 	NotificationPreferences,
@@ -21,6 +22,7 @@ export default function Property() {
 	const authMeta = useAuthMeta();
 	const isLoading = authMeta?.isLoading;
 	const [property, setProperty] = useState<Property>();
+	const [isPropertyLoading, setIsPropertyLoading] = useState(true);
 	const { id } = useParams();
 	const [editingSection, setEditingSection] = useState<string | null>(null);
 	const [modalOpen, setModalOpen] = useState(false);
@@ -31,6 +33,7 @@ export default function Property() {
 
 	const fetchProperty = useCallback(async () => {
 		if (!id) return;
+		setIsPropertyLoading(true);
 		try {
 			const data = await getProperty(id);
 			const maintenaceData = await getMaintenanceTasks(id);
@@ -40,6 +43,8 @@ export default function Property() {
 			setMaintenanceTasks(maintenaceData);
 		} catch (error) {
 			console.error('Error fetching property:', error);
+		} finally {
+			setIsPropertyLoading(false);
 		}
 	}, [id]);
 
@@ -77,11 +82,15 @@ export default function Property() {
 		if (closeModal) handleClose();
 	};
 
+	if (isLoading || isPropertyLoading) {
+		return <LoadingSpinner message={'Loading property...'} />;
+	}
+
 	return (
 		<div className="min-h-screen p-8">
 			<div className="max-w-5xl mx-auto space-y-8">
 				{/* Property Details Section */}
-				{property ?
+				{property && (
 					<>
 						<PropertyDetails
 							property={property}
@@ -101,8 +110,7 @@ export default function Property() {
 							/>
 						)}
 					</>
-				:	<h2 className="text-gray-500 dark:text-gray-400">No property data.</h2>
-				}
+				)}
 			</div>
 		</div>
 	);

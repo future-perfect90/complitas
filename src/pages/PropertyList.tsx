@@ -3,18 +3,19 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Button } from '../components/Button';
 import SearchInput from '../components/SearchInput';
+import LoadingSpinner from '../components/modals/Loading';
 import PropertyModal from '../components/modals/PropertyModal';
 import { useAuthMeta } from '../context/AuthProvider';
 import { useSearch } from '../hooks/useSearch';
 import type { Property } from '../types';
 import { deleteProperty, getProperties, getProperty } from '../utils/api';
-import LoadingSpinner from '../components/modals/Loading';
 
 const PropertyList: React.FC = () => {
 	const [properties, setProperties] = useState<Property[]>([]);
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [searchTerm, setSearchTerm] = useState('');
 	const [editData, setEditData] = useState<Property | undefined>(undefined);
+	const [isPropertiesLoading, setIsPropertiesLoading] = useState(true);
 	const authMeta = useAuthMeta();
 	const companyUuid = authMeta?.companyUuid || '';
 	const isLoading = authMeta?.isLoading;
@@ -22,10 +23,13 @@ const PropertyList: React.FC = () => {
 
 	const fetchProperties = useCallback(async (companyUuid: string) => {
 		try {
+			setIsPropertiesLoading(true);
 			const data = await getProperties(companyUuid);
 			setProperties(data);
 		} catch {
 			toast.error('Failed to load properties.');
+		} finally {
+			setIsPropertiesLoading(false);
 		}
 	}, []);
 
@@ -67,16 +71,16 @@ const PropertyList: React.FC = () => {
 		}
 	};
 
-	if (isLoading) {
+	if (isLoading || isPropertiesLoading) {
 		return <LoadingSpinner message={'Loading properties...'} />;
 	}
 	return (
-		<div className="max-w-4xl mx-auto p-4">
-			<div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-4">
+		<div className="min-h-screen p-8">
+			<div className="max-w-5xl mx-auto space-y-8 flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-4">
 				<div>
 					<h1 className="text-2xl font-bold">Property List</h1>
 				</div>
-				<div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 w-full sm:w-auto">
+				<div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:w-auto">
 					<SearchInput
 						value={searchTerm}
 						onChange={setSearchTerm}
@@ -92,7 +96,7 @@ const PropertyList: React.FC = () => {
 					</button>
 				</div>
 			</div>
-			<div className="bg-white shadow rounded-lg overflow-x-auto">
+			<div className="max-w-5xl mx-auto space-y-8 bg-white shadow rounded-lg overflow-x-auto">
 				<table className="min-w-full min-w-xl w-full border dark:border-none">
 					<thead className="bg-gray-400">
 						<tr>

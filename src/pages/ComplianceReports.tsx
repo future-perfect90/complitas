@@ -4,6 +4,7 @@ import { toast } from 'react-toastify';
 import { Button } from '../components/Button';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/Card';
 import ConfirmationModal from '../components/modals/ConfirmationModal';
+import LoadingSpinner from '../components/modals/Loading';
 import { useAuthMeta } from '../context/AuthProvider';
 import { createCompliance, getComplianceReports } from '../utils/api';
 
@@ -15,19 +16,23 @@ interface ComplianceReport {
 
 export default function ComplianceReports() {
 	const authMeta = useAuthMeta();
-	const {isLoading, isAuthenticated} = authMeta;
+	const { isLoading, isAuthenticated } = authMeta;
 	const [reports, setReports] = useState<Array<ComplianceReport>>([]);
 	const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
 	const navigate = useNavigate();
 	const { id } = useParams();
+	const [isReportLoading, setIsReportLoading] = useState(true);
 
 	useEffect(() => {
+		setIsReportLoading(true);
 		const fetchQuestionnaires = async () => {
 			try {
 				const data = await getComplianceReports(id ?? '');
 				setReports(data);
 			} catch (error) {
 				console.error('Error fetching questionnaires:', error);
+			} finally {
+				setIsReportLoading(false);
 			}
 		};
 
@@ -62,7 +67,6 @@ export default function ComplianceReports() {
 					</p>
 				</div>
 				<div className="items-center justify-right">
-					{/* Maybe put a stop here that once a new one is created it prevents the old one from being edited? */}
 					<Button
 						label="Create questionnaire"
 						onClick={
@@ -82,37 +86,34 @@ export default function ComplianceReports() {
 					<br />
 					<CardContent className="space-y-2 flex">
 						<div className="flex-1 justify-left">
-							{!reports || reports.length === 0 ?
-								<p className="text-gray-500">No compliance reports found.</p>
-							:	<>
-									{reports.map((report) => (
-										<div key={report.id}>
-											<h3 className="text-lg font-semibold">
-												Report from -{' '}
-												{new Date(report.createdAt).toLocaleString()} -{' '}
-												<Button
-													label="Update Report"
-													onClick={() =>
-														navigate(
-															`/properties/${id}/compliance-reports/${report.id}`
-														)
-													}
-													className="px-2 py-1 bg-green-800 text-white rounded"
-												/>{' '}
-												<Button
-													label="View Report"
-													onClick={() =>
-														navigate(
-															`/properties/${id}/compliance-reports/${report.id}/pdf`
-														)
-													}
-													className="px-2 py-1 bg-blue-800 text-white rounded"
-												/>
-											</h3>
-										</div>
-									))}
-								</>
-							}
+							{reports && reports.length > 0 ?
+								reports.map((report) => (
+									<div key={report.id}>
+										<h3 className="text-lg font-semibold">
+											Report from -{' '}
+											{new Date(report.createdAt).toLocaleString()} -{' '}
+											<Button
+												label="Update Report"
+												onClick={() =>
+													navigate(
+														`/properties/${id}/compliance-reports/${report.id}`
+													)
+												}
+												className="px-2 py-1 bg-green-800 text-white rounded"
+											/>{' '}
+											<Button
+												label="View Report"
+												onClick={() =>
+													navigate(
+														`/properties/${id}/compliance-reports/${report.id}/pdf`
+													)
+												}
+												className="px-2 py-1 bg-blue-800 text-white rounded"
+											/>
+										</h3>
+									</div>
+								))
+							:	<LoadingSpinner message={'Loading reports...'} />}
 						</div>
 					</CardContent>
 				</Card>
