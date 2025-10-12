@@ -167,10 +167,7 @@ export async function getProperties(companyId: string) {
 }
 
 export async function getProperty(id: string) {
-	const jwt =
-		authService.getAccessTokenSilently ?
-			await authService.getAccessTokenSilently()
-		:	'';
+	const jwt = authService.getAccessTokenSilently;
 	const response = await fetch(
 		`${import.meta.env.VITE_API_BASE_URL}/properties/get.php?id=${id}`,
 		{
