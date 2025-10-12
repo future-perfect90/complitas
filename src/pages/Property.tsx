@@ -1,8 +1,9 @@
-import { useAuth0 } from '@auth0/auth0-react';
 import { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import EditPropertyModal from '../components/modals/EditPropertyModal';
+import { useAuthMeta } from '../context/AuthProvider';
+
 import type {
 	MaintenanceTask,
 	NotificationPreferences,
@@ -17,7 +18,8 @@ import {
 import PropertyDetails from './PropertyDetails';
 
 export default function Property() {
-	const { isAuthenticated, isLoading } = useAuth0();
+	const authMeta = useAuthMeta();
+	const isLoading = authMeta?.isLoading;
 	const [property, setProperty] = useState<Property>();
 	const { id } = useParams();
 	const [editingSection, setEditingSection] = useState<string | null>(null);
@@ -42,10 +44,10 @@ export default function Property() {
 	}, [id]);
 
 	useEffect(() => {
-		if (isAuthenticated && !isLoading) {
+		if (!isLoading) {
 			fetchProperty();
 		}
-	}, [isAuthenticated, isLoading, fetchProperty]);
+	}, [isLoading, fetchProperty]);
 
 	// Modal open handler
 	const handleEdit = (section: string) => {
