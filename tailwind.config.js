@@ -20,6 +20,10 @@ module.exports = {
 					DEFAULT: 'rgb(77,131,175)',
 					hover: 'rgb(var(--color-primary-hover) / <alpha-value>)',
 				},
+				secondary: {
+					DEFAULT: 'rgb(var(--color-bg-secondary) / <alpha-value>)',
+					hover: 'rgb(230, 232, 234)',
+				},
 				text: {
 					primary: 'rgb(var(--color-text-primary) / <alpha-value>)',
 					secondary: 'rgb(var(--color-text-secondary) / <alpha-value>)',

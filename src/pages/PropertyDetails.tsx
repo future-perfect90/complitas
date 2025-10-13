@@ -74,10 +74,10 @@ export default function PropertyDetails({
 		<>
 			<div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
 				<div className="flex-1">
-					<h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+					<h1 className="text-3xl font-bold text-[#212529] dark:text-[#F8F9FA]">
 						{property.name}
 					</h1>
-					<p className="text-gray-600 dark:text-gray-400">
+					<p className="text-[#212529] dark:text-[#F8F9FA]">
 						Manage your property information.
 					</p>
 				</div>
@@ -89,8 +89,8 @@ export default function PropertyDetails({
 						<Tab key={tab.name} as={Fragment}>
 							{({ selected }) => (
 								<button
-									className={`w-full rounded-lg py-2.5 text-sm font-medium leading-5 text-gray-200 focus:outline-none focus:ring-2
-                    ${selected ? 'bg-[rgb(77,131,175)] shadow' : 'hover:bg-white/[0.12]'}`}>
+									className={`w-full rounded-lg py-2.5 text-sm font-medium leading-5 text-[#212529] dark:text-[#F8F9FA] focus:outline-none 
+                    ${selected ? 'bg-[#4D83AF] text-[#F8F9FA] shadow' : 'hover:bg-white/[0.12]'}`}>
 									{tab.name}
 								</button>
 							)}
@@ -106,16 +106,17 @@ export default function PropertyDetails({
 									<Button
 										label="Edit"
 										onClick={() => onEdit('basic', property)}
-										className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-4 rounded flex-shrink-0 float-right"
+										className="py-1 px-4 float-right"
+										style="primary"
 									/>
 								</CardTitle>
 							</CardHeader>
 							<CardContent className="pt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
 								<div className="space-y-4">
-									<p className="text-sm text-gray-500 dark:text-gray-400">
+									<p className="text-sm text-[#6C757D] dark:text-[#F8F9FA]">
 										Address
 									</p>
-									<p className="text-gray-900 dark:text-gray-100 break-words">
+									<p className="text-[#212529] dark:text-[#F8F9FA] break-words">
 										{property.address1}
 										<br />
 										{property.address2 && (
@@ -140,10 +141,10 @@ export default function PropertyDetails({
 									</p>
 								</div>
 								<div className="space-y-4">
-									<p className="text-sm text-gray-500 dark:text-gray-400">
+									<p className="text-sm text-[#6C757D] dark:text-[#F8F9FA]">
 										Site contact
 									</p>
-									<p className="text-gray-900 dark:text-gray-100 break-words">
+									<p className="text-[#212529] dark:text-[#F8F9FA] break-words">
 										{property.managerName}
 										<br />
 										{property.managerEmail}
@@ -152,18 +153,18 @@ export default function PropertyDetails({
 									</p>
 								</div>
 								<div className="space-y-4">
-									<p className="text-sm text-gray-500 dark:text-gray-400">
+									<p className="text-sm text-[#6C757D] dark:text-[#F8F9FA]">
 										Design Date
 									</p>
-									<p className="text-gray-900 dark:text-gray-100">
+									<p className="text-[#212529] dark:text-[#F8F9FA]">
 										{property.designDate ?? 'Not set'}
 									</p>
 								</div>
 								<div className="space-y-4">
-									<p className="text-sm text-gray-500 dark:text-gray-400">
+									<p className="text-sm text-[#6C757D] dark:text-[#F8F9FA]">
 										Unique Reference Number
 									</p>
-									<p className="text-gray-900 dark:text-gray-100 break-words">
+									<p className="text-[#212529] dark:text-[#F8F9FA] break-words">
 										{property.uniqueReferenceNumber ?? 'Not set'}
 									</p>
 								</div>
@@ -178,26 +179,26 @@ export default function PropertyDetails({
 									<Button
 										label="Edit"
 										onClick={() => onEdit('additional', property)}
-										className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-4 rounded flex-shrink-0 float-right"
+										className="bg-blue-500 hover:bg-blue-600 text-[#F8F9FA] font-semibold py-1 px-4 rounded flex-shrink-0 float-right"
 									/>
 								</CardTitle>
 							</CardHeader>
 							<CardContent className="pt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
 								<div className="space-y-4">
-									<p className="text-sm text-gray-500 dark:text-gray-400">
+									<p className="text-sm text-[#6C757D] dark:text-[#F8F9FA]">
 										Lifts
 									</p>
-									<p className="text-gray-900 dark:text-gray-100">
+									<p className="text-[#212529] dark:text-[#F8F9FA]">
 										{property.lifts === null || '' ?
 											'Not set'
 										: property.lifts ?
 											'Yes'
 										:	'No'}
 									</p>
-									<p className="text-sm text-gray-500 dark:text-gray-400">
+									<p className="text-sm text-[#6C757D] dark:text-[#F8F9FA]">
 										Basement Car park
 									</p>
-									<p className="text-gray-900 dark:text-gray-100">
+									<p className="text-[#212529] dark:text-[#F8F9FA]">
 										{property.carpark === null || '' ?
 											'Not set'
 										: property.carpark ?
@@ -206,20 +207,20 @@ export default function PropertyDetails({
 									</p>
 								</div>
 								<div className="space-y-4">
-									<p className="text-sm text-gray-500 dark:text-gray-400">
+									<p className="text-sm text-[#6C757D] dark:text-[#F8F9FA]">
 										Communal Utility Assets
 									</p>
-									<p className="text-gray-900 dark:text-gray-100">
+									<p className="text-[#212529] dark:text-[#F8F9FA]">
 										{property.communalUtilityAssets === null || '' ?
 											'Not set'
 										: property.communalUtilityAssets ?
 											'Yes'
 										:	'No'}
 									</p>
-									<p className="text-sm text-gray-500 dark:text-gray-400">
+									<p className="text-sm text-[#6C757D] dark:text-[#F8F9FA]">
 										Communal Gas Appliances
 									</p>
-									<p className="text-gray-900 dark:text-gray-100">
+									<p className="text-[#212529] dark:text-[#F8F9FA]">
 										{property.communalGasAppliances === null || '' ?
 											'Not set'
 										: property.communalGasAppliances ?
@@ -228,20 +229,20 @@ export default function PropertyDetails({
 									</p>
 								</div>
 								<div className="space-y-4">
-									<p className="text-sm text-gray-500 dark:text-gray-400">
+									<p className="text-sm text-[#6C757D] dark:text-[#F8F9FA]">
 										Well maintained?
 									</p>
-									<p className="text-gray-900 dark:text-gray-100">
+									<p className="text-[#212529] dark:text-[#F8F9FA]">
 										{property.wellMaintained === null || '' ?
 											'Not set'
 										: property.wellMaintained ?
 											'Yes'
 										:	'No'}
 									</p>
-									<p className="text-sm text-gray-500 dark:text-gray-400">
+									<p className="text-sm text-[#6C757D] dark:text-[#F8F9FA]">
 										Refurbished?
 									</p>
-									<p className="text-gray-900 dark:text-gray-100">
+									<p className="text-[#212529] dark:text-[#F8F9FA]">
 										{property.refurbished === null || '' ?
 											'Not set'
 										: property.refurbished ?
@@ -258,16 +259,16 @@ export default function PropertyDetails({
 									<Button
 										label="Edit"
 										onClick={() => onEdit('contacts', property)}
-										className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-4 rounded flex-shrink-0 float-right"
+										className="bg-blue-500 hover:bg-blue-600 text-[#F8F9FA] font-semibold py-1 px-4 rounded flex-shrink-0 float-right"
 									/>
 								</CardTitle>
 							</CardHeader>
 							<CardContent className="pt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
 								<div className="space-y-4">
-									<p className="text-sm text-gray-500 dark:text-gray-400">
+									<p className="text-sm text-[#6C757D] dark:text-[#F8F9FA]">
 										Property Manager
 									</p>
-									<p className="text-gray-900 dark:text-gray-100 break-words">
+									<p className="text-[#212529] dark:text-[#F8F9FA] break-words">
 										{property.managerName}
 										<br />
 										{property.managerAddress}
@@ -278,10 +279,10 @@ export default function PropertyDetails({
 									</p>
 								</div>
 								<div className="space-y-4">
-									<p className="text-sm text-gray-500 dark:text-gray-400">
+									<p className="text-sm text-[#6C757D] dark:text-[#F8F9FA]">
 										Emergency contact
 									</p>
-									<p className="text-gray-900 dark:text-gray-100 break-words">
+									<p className="text-[#212529] dark:text-[#F8F9FA] break-words">
 										{property.emergencyName}
 										<br />
 										{property.emergencyAddress}
@@ -292,10 +293,10 @@ export default function PropertyDetails({
 									</p>
 								</div>
 								<div className="space-y-4">
-									<p className="text-sm text-gray-500 dark:text-gray-400">
+									<p className="text-sm text-[#6C757D] dark:text-[#F8F9FA]">
 										Local Fire Service
 									</p>
-									<p className="text-gray-900 dark:text-gray-100 break-words">
+									<p className="text-[#212529] dark:text-[#F8F9FA] break-words">
 										{property.localFireName}
 										<br />
 										{property.localFireAddress}
@@ -314,36 +315,36 @@ export default function PropertyDetails({
 									<Button
 										label="Edit"
 										onClick={() => onEdit('audit', property)}
-										className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-4 rounded flex-shrink-0 float-right"
+										className="bg-blue-500 hover:bg-blue-600 text-[#F8F9FA] font-semibold py-1 px-4 rounded flex-shrink-0 float-right"
 									/>
 								</CardTitle>
 							</CardHeader>
 							<CardContent className="pt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
 								<div className="space-y-4">
-									<p className="text-sm text-gray-500 dark:text-gray-400">
+									<p className="text-sm text-[#6C757D] dark:text-[#F8F9FA]">
 										Log Book/CDM Folder
 									</p>
-									<p className="text-gray-900 dark:text-gray-100">
+									<p className="text-[#212529] dark:text-[#F8F9FA]">
 										{property.logBook === null || '' ?
 											'Not set'
 										: property.logBook ?
 											'Yes'
 										:	'No'}
 									</p>
-									<p className="text-sm text-gray-500 dark:text-gray-400">
+									<p className="text-sm text-[#6C757D] dark:text-[#F8F9FA]">
 										Fire Safety Log Book
 									</p>
-									<p className="text-gray-900 dark:text-gray-100">
+									<p className="text-[#212529] dark:text-[#F8F9FA]">
 										{property.fireSafetyLogBook === null || '' ?
 											'Not set'
 										: property.fireSafetyLogBook ?
 											'Yes'
 										:	'No'}
 									</p>
-									<p className="text-sm text-gray-500 dark:text-gray-400">
+									<p className="text-sm text-[#6C757D] dark:text-[#F8F9FA]">
 										Waste Electrical and Electronic Equipment Audit
 									</p>
-									<p className="text-gray-900 dark:text-gray-100">
+									<p className="text-[#212529] dark:text-[#F8F9FA]">
 										{property.electronicAuditCompleted === null || '' ?
 											'Not set'
 										: property.electronicAuditCompleted ?
@@ -352,30 +353,30 @@ export default function PropertyDetails({
 									</p>
 								</div>
 								<div className="space-y-4">
-									<p className="text-sm text-gray-500 dark:text-gray-400">
+									<p className="text-sm text-[#6C757D] dark:text-[#F8F9FA]">
 										EPC
 									</p>
-									<p className="text-gray-900 dark:text-gray-100">
+									<p className="text-[#212529] dark:text-[#F8F9FA]">
 										{property.epc === null || '' ?
 											'Not set'
 										: property.epc ?
 											'Yes'
 										:	'No'}
 									</p>
-									<p className="text-sm text-gray-500 dark:text-gray-400">
+									<p className="text-sm text-[#6C757D] dark:text-[#F8F9FA]">
 										Energy Certificates (DEC's)
 									</p>
-									<p className="text-gray-900 dark:text-gray-100">
+									<p className="text-[#212529] dark:text-[#F8F9FA]">
 										{property.energyCertificates === null || '' ?
 											'Not set'
 										: property.energyCertificates ?
 											'Yes'
 										:	'No'}
 									</p>
-									<p className="text-sm text-gray-500 dark:text-gray-400">
+									<p className="text-sm text-[#6C757D] dark:text-[#F8F9FA]">
 										O&M's
 									</p>
-									<p className="text-gray-900 dark:text-gray-100">
+									<p className="text-[#212529] dark:text-[#F8F9FA]">
 										{property.oms === null || '' ?
 											'Not set'
 										: property.oms ?
@@ -384,10 +385,10 @@ export default function PropertyDetails({
 									</p>
 								</div>
 								<div className="space-y-4">
-									<p className="text-sm text-gray-500 dark:text-gray-400">
+									<p className="text-sm text-[#6C757D] dark:text-[#F8F9FA]">
 										External Isolation Valve Chambers Located and Clear
 									</p>
-									<p className="text-gray-900 dark:text-gray-100">
+									<p className="text-[#212529] dark:text-[#F8F9FA]">
 										{property.isolationValvesClear === null || '' ?
 											'Not set'
 										: property.isolationValvesClear ?
@@ -395,10 +396,10 @@ export default function PropertyDetails({
 										:	'No'}
 										<br />
 									</p>
-									<p className="text-sm text-gray-500 dark:text-gray-400">
+									<p className="text-sm text-[#6C757D] dark:text-[#F8F9FA]">
 										Access Controlled Spaces
 									</p>
-									<p className="text-gray-900 dark:text-gray-100">
+									<p className="text-[#212529] dark:text-[#F8F9FA]">
 										{property.accessControlled === null || '' ?
 											'Not set'
 										: property.accessControlled ?
@@ -418,7 +419,7 @@ export default function PropertyDetails({
 									<Button
 										label="Add Maintenance Task"
 										onClick={handleOpenAddTask}
-										className="px-2 py-1 bg-purple-800 text-white rounded float-right"
+										className="px-2 py-1 bg-purple-800 text-[#F8F9FA] rounded float-right"
 									/>
 								</CardTitle>
 							</CardHeader>
@@ -428,22 +429,22 @@ export default function PropertyDetails({
 										<table className="min-w-full w-full text-left">
 											<thead className="border-b dark:border-gray-700">
 												<tr>
-													<th className="px-3 py-2 text-sm font-semibold text-gray-800 dark:text-gray-200">
+													<th className="px-3 py-2 text-sm font-semibold text-[#212529] dark:text-[#F8F9FA]">
 														Title
 													</th>
-													<th className="px-3 py-2 text-sm font-semibold text-gray-800 dark:text-gray-200">
+													<th className="px-3 py-2 text-sm font-semibold text-[#212529] dark:text-[#F8F9FA]">
 														Type of Work
 													</th>
-													<th className="px-3 py-2 text-sm font-semibold text-gray-800 dark:text-gray-200">
+													<th className="px-3 py-2 text-sm font-semibold text-[#212529] dark:text-[#F8F9FA]">
 														Created at
 													</th>
-													<th className="px-3 py-2 text-sm font-semibold text-gray-800 dark:text-gray-200">
+													<th className="px-3 py-2 text-sm font-semibold text-[#212529] dark:text-[#F8F9FA]">
 														Completed On
 													</th>
-													<th className="px-3 py-2 text-sm font-semibold text-gray-800 dark:text-gray-200">
+													<th className="px-3 py-2 text-sm font-semibold text-[#212529] dark:text-[#F8F9FA]">
 														Completed By
 													</th>
-													<th className="px-3 py-2 text-sm font-semibold text-gray-800 dark:text-gray-200 text-right">
+													<th className="px-3 py-2 text-sm font-semibold text-[#212529] dark:text-[#F8F9FA] text-right">
 														Actions
 													</th>
 												</tr>
@@ -453,19 +454,19 @@ export default function PropertyDetails({
 													<tr
 														key={task.id}
 														className="border-b dark:border-gray-700">
-														<td className="px-3 py-3 text-sm text-gray-800 dark:text-gray-200">
+														<td className="px-3 py-3 text-sm text-[#212529] dark:text-[#F8F9FA]">
 															{task.title}
 														</td>
-														<td className="px-3 py-3 text-sm text-gray-800 dark:text-gray-200">
+														<td className="px-3 py-3 text-sm text-[#212529] dark:text-[#F8F9FA]">
 															{task.typeOfWork}
 														</td>
-														<td className="px-3 py-3 text-sm text-gray-800 dark:text-gray-200">
+														<td className="px-3 py-3 text-sm text-[#212529] dark:text-[#F8F9FA]">
 															{task.createdAt || '-'}
 														</td>
-														<td className="px-3 py-3 text-sm text-gray-800 dark:text-gray-200">
+														<td className="px-3 py-3 text-sm text-[#212529] dark:text-[#F8F9FA]">
 															{task.completedAt || '-'}
 														</td>
-														<td className="px-3 py-3 text-sm text-gray-800 dark:text-gray-200">
+														<td className="px-3 py-3 text-sm text-[#212529] dark:text-[#F8F9FA]">
 															{task.name ?
 																<Tooltip
 																	content={
@@ -495,7 +496,7 @@ export default function PropertyDetails({
 																<Button
 																	label="Complete Task"
 																	onClick={() => handleOpenCompleteTask(task)}
-																	className="bg-green-500 text-white px-3 py-1 rounded"
+																	className="bg-green-500 text-[#F8F9FA] px-3 py-1 rounded"
 																/>
 															)}
 														</td>
@@ -503,7 +504,8 @@ export default function PropertyDetails({
 												))}
 											</tbody>
 										</table>
-									:	<p className="text-gray-500">No maintenance tasks found.</p>}
+									:	<p className="text-[#6C757D]">No maintenance tasks found.</p>
+									}
 								</div>
 							</CardContent>
 						</Card>

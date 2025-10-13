@@ -54,7 +54,7 @@ const CompanyList: React.FC = () => {
 						setEditData(undefined);
 						setIsModalOpen(true);
 					}}
-					className="px-4 py-2 bg-green-600 text-white rounded">
+					className="px-4 py-2 bg-green-600 text-[#F8F9FA] rounded">
 					Add Company
 				</button>
 			</div>
@@ -83,12 +83,12 @@ const CompanyList: React.FC = () => {
 									<td className="px-4 py-2 flex gap-2">
 										<button
 											onClick={() => c.id && handleEdit(c.id)}
-											className="px-2 py-1 bg-blue-500 text-white rounded">
+											className="px-2 py-1 bg-blue-500 text-[#F8F9FA] rounded">
 											Edit
 										</button>
 										<button
 											onClick={() => c.id && handleDelete(c.id)}
-											className="px-2 py-1 bg-red-500 text-white rounded">
+											className="px-2 py-1 bg-red-500 text-[#F8F9FA] rounded">
 											Delete
 										</button>
 									</td>

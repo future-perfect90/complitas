@@ -42,7 +42,7 @@ export default function ComplianceOverview() {
 				<BackButton />
 				<div className="mb-8">
 					<h1 className="text-3xl font-bold">Compliance Overview</h1>
-					<p className="text-gray-500">Select an area to answer questions.</p>
+					<p className="text-[#6C757D]">Select an area to answer questions.</p>
 				</div>
 
 				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

@@ -26,7 +26,7 @@ import {
 	getReportData,
 } from '../utils/api';
 import { BackButton } from './BackButton';
-import LoadingSpinner from './modals/Loading';
+import LoadingSpinner from './Loading';
 import { ReportComplianceAuditPage } from './pdf/ReportComplianceAuditPage';
 import { ReportFrontPage } from './pdf/ReportFrontPage';
 import { ReportImageAttachmentPage } from './pdf/ReportImageAttachmentPage';
@@ -89,7 +89,7 @@ const ReportDocument = ({
 	if (!data || data.length === 0) {
 		return (
 			<Document>
-				<Page style={tw('font-roboto p-[30px] text-[11px] text-gray-800')}>
+				<Page style={tw('font-roboto p-[30px] text-[11px] text-[#212529]')}>
 					<Text>No report data available.</Text>
 				</Page>
 			</Document>
@@ -114,7 +114,7 @@ const ReportDocument = ({
 				companyLogoUrl={companyLogoUrl}
 				companyData={companyData}
 			/>
-			<Page style={tw('p-[30px] text-[11px] text-gray-800')}>
+			<Page style={tw('p-[30px] text-[11px] text-[#212529]')}>
 				{Object.entries(groupedData).map(([area, questions]) => (
 					<View>
 						<Text
@@ -131,7 +131,7 @@ const ReportDocument = ({
 									{item.answer ? answerMap[item.answer] : 'Not Answered'}
 								</Text>
 								{item.answer === '1' && item.validUntil && (
-									<Text style={tw('ml-4 text-[10px] text-gray-500')}>
+									<Text style={tw('ml-4 text-[10px] text-[#6C757D]')}>
 										Valid Until:{' '}
 										{new Date(item.validUntil).toLocaleDateString()}
 									</Text>

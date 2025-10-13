@@ -15,7 +15,7 @@ export const ReportComplianceAuditPage = ({
 	responseLog,
 }: ReportComplianceAuditPageProps) => {
 	return (
-		<Page style={tw('p-[30px] text-[11px] text-gray-800')}>
+		<Page style={tw('p-[30px] text-[11px] text-[#212529]')}>
 			<Text style={tw('text-2xl mb-5 text-center font-bold')}>
 				Compliance Audit Log
 			</Text>
@@ -33,9 +33,9 @@ export const ReportComplianceAuditPage = ({
 								{item.area}
 							</Text>
 						)}
-						<Text style={tw('p-2 mb-2 text-base text-gray-800 leading-6')}>
+						<Text style={tw('p-2 mb-2 text-base text-[#212529] leading-6')}>
 							{item.fieldName === 'validUntil' ?
-								<Text style={tw('p-2 mb-2 text-base text-gray-800 leading-6')}>
+								<Text style={tw('p-2 mb-2 text-base text-[#212529] leading-6')}>
 									The expiry date for question{' '}
 									<Text style={tw('font-bold')}>'{item.question}'</Text> was
 									changed from{' '}
@@ -43,7 +43,7 @@ export const ReportComplianceAuditPage = ({
 										<Text style={tw('font-semibold text-red-600')}>
 											'{formatTimestamp(item.oldValue)}'
 										</Text>
-									:	<Text style={tw('italic text-gray-500')}>blank</Text>}{' '}
+									:	<Text style={tw('italic text-[#6C757D]')}>blank</Text>}{' '}
 									to{' '}
 									<Text style={tw('font-semibold text-green-600')}>
 										'{formatTimestamp(item.newValue)}'
@@ -51,7 +51,7 @@ export const ReportComplianceAuditPage = ({
 									by <Text style={tw('font-semibold')}>{item.actionedBy}</Text>{' '}
 									on {formatTimestamp(item.timestamp)}.
 								</Text>
-							:	<Text style={tw('p-2 mb-2 text-base text-gray-800 leading-6')}>
+							:	<Text style={tw('p-2 mb-2 text-base text-[#212529] leading-6')}>
 									The answer for question{' '}
 									<Text style={tw('font-bold')}>'{item.question}'</Text> was
 									updated from{' '}
@@ -59,7 +59,7 @@ export const ReportComplianceAuditPage = ({
 										<Text style={tw('font-semibold text-red-600')}>
 											'{item.oldValue}'
 										</Text>
-									:	<Text style={tw('italic text-gray-500')}>blank</Text>}{' '}
+									:	<Text style={tw('italic text-[#6C757D]')}>blank</Text>}{' '}
 									to{' '}
 									<Text style={tw('font-semibold text-green-600')}>
 										'{item.newValue}'

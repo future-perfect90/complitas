@@ -5,8 +5,8 @@ import { useAuthMeta } from '../context/AuthProvider';
 import { createComplianceAudit, getComplianceAudits } from '../utils/api';
 import { Button } from './Button';
 import { Card, CardContent, CardHeader, CardTitle } from './Card';
+import LoadingSpinner from './Loading';
 import ConfirmationModal from './modals/ConfirmationModal';
-import LoadingSpinner from './modals/Loading';
 
 interface ComplianceAudit {
 	id: string;
@@ -66,7 +66,8 @@ export const ComplianceAuditList = () => {
 									() => setIsConfirmationModalOpen(true)
 								:	handleCreation
 							}
-							className="px-2 py-1 bg-purple-800 text-white rounded float-right"
+							className="px-2 py-1 float-right"
+							style="primary"
 						/>
 					</CardTitle>
 				</CardHeader>
@@ -88,7 +89,8 @@ export const ComplianceAuditList = () => {
 													`/properties/${id}/compliance-audits/${audit.id}`
 												)
 											}
-											className="px-2 py-1 bg-green-800 text-white rounded"
+											className="px-2 py-1"
+											style="primary"
 										/>
 										<Button
 											label="View audit"
@@ -97,7 +99,8 @@ export const ComplianceAuditList = () => {
 													`/properties/${id}/compliance-audits/${audit.id}/pdf`
 												)
 											}
-											className="px-2 py-1 bg-blue-800 text-white rounded"
+											className="px-2 py-1"
+											style="secondary"
 										/>
 									</div>
 								</div>

@@ -24,7 +24,7 @@ export const ReportMaintenancePage = ({
 	});
 
 	return (
-		<Page style={tw('p-[30px] text-[11px] text-gray-800')}>
+		<Page style={tw('p-[30px] text-[11px] text-[#212529]')}>
 			<Text style={tw('text-2xl mb-5 text-center font-bold')}>
 				Maintenance Report for: {propertyName}
 			</Text>

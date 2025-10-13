@@ -213,7 +213,7 @@ const CompanyModal: React.FC<Props> = ({
 					{logo && logo.length > 0 && (
 						<>
 							<div>
-								<label className="block text-sm font-medium text-gray-700 mb-1">
+								<label className="block text-sm font-medium text-[#212529] mb-1">
 									Current Logo
 								</label>
 								<PresignedImage
@@ -234,7 +234,7 @@ const CompanyModal: React.FC<Props> = ({
 						</>
 					)}
 					<div className={`${visible ? 'block' : 'hidden'}`}>
-						<label className="block text-sm font-medium text-gray-700 mb-1">
+						<label className="block text-sm font-medium text-[#212529] mb-1">
 							Logo
 						</label>
 						<FileUpload

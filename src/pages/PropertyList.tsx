@@ -3,9 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Button } from '../components/Button';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/Card';
-import SearchInput from '../components/SearchInput';
-import LoadingSpinner from '../components/modals/Loading';
+import LoadingSpinner from '../components/Loading';
 import PropertyModal from '../components/modals/PropertyModal';
+import SearchInput from '../components/SearchInput';
 import { useAuthMeta } from '../context/AuthProvider';
 import { useSearch } from '../hooks/useSearch';
 import type { Property } from '../types';
@@ -79,7 +79,9 @@ const PropertyList: React.FC = () => {
 		<div className="min-h-screen p-8">
 			<div className="max-w-5xl mx-auto space-y-8 flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-4">
 				<div>
-					<h1 className="text-2xl font-bold">Property List</h1>
+					<h1 className="text-2xl text-[#212529] dark:text-[#F8F9FA] font-bold">
+						Property List
+					</h1>
 				</div>
 				<div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:w-auto">
 					<SearchInput
@@ -87,28 +89,27 @@ const PropertyList: React.FC = () => {
 						onChange={setSearchTerm}
 						placeholder="Search properties..."
 					/>
-					<button
+					<Button
+						label="Add Property"
 						onClick={() => {
 							setEditData(undefined);
 							setIsModalOpen(true);
 						}}
-						className="px-4 py-2 bg-green-600 text-white rounded w-full sm:w-auto">
-						Add Property
-					</button>
+						className="px-2 sm:px-3 py-1 text-xs sm:text-sm"
+						style="primary"
+					/>
 				</div>
 			</div>
 			{filteredProperties.length > 0 ?
 				<div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 					{filteredProperties.map((p) => (
-						<Card
-							key={p.id}
-							className="rounded-xl shadow-lg flex flex-col justify-between">
+						<Card key={p.id} className="flex flex-col">
 							<CardHeader>
 								<CardTitle className="text-xl font-bold">{p.name}</CardTitle>
 							</CardHeader>
 							<CardContent className="space-y-3 text-sm">
 								<div className="mt-3">
-									<p className="font-semibold text-gray-600 dark:text-gray-400">
+									<p className="font-semibold text-[#212529] dark:text-[#F8F9FA]">
 										Address
 									</p>
 									<p>
@@ -117,13 +118,13 @@ const PropertyList: React.FC = () => {
 									</p>
 								</div>
 								<div>
-									<p className="font-semibold text-gray-600 dark:text-gray-400">
+									<p className="font-semibold text-[#212529] dark:text-[#F8F9FA]">
 										Telephone
 									</p>
 									<p>{p.telephone}</p>
 								</div>
 								<div>
-									<p className="font-semibold text-gray-600 dark:text-gray-400">
+									<p className="font-semibold text-[#212529] dark:text-[#F8F9FA]">
 										Email
 									</p>
 									<p className="break-words">{p.managerEmail}</p>
@@ -133,24 +134,27 @@ const PropertyList: React.FC = () => {
 								<Button
 									label="View"
 									onClick={() => p.id && navigate(`/properties/${p.id}`)}
-									className="px-2 sm:px-3 py-1 bg-green-500 text-white rounded text-xs sm:text-sm"
+									className="px-2 sm:px-3 py-1 text-xs sm:text-sm"
+									style="primary"
 								/>
 								<Button
 									label="Edit"
 									onClick={() => p.id && handleEdit(p.id)}
-									className="px-2 sm:px-3 py-1 bg-blue-500 text-white rounded text-xs sm:text-sm"
+									className="px-2 sm:px-3 py-1 text-xs sm:text-sm"
+									style="secondary"
 								/>
 								<Button
 									label="Delete"
 									onClick={() => p.id && handleDelete(p.id)}
-									className="px-2 sm:px-3 py-1 bg-red-500 text-white rounded text-xs sm:text-sm"
+									className="px-2 sm:px-3 py-1 text-xs sm:text-sm"
+									style="tertiary"
 								/>
 							</div>
 						</Card>
 					))}
 				</div>
 			:	<div className="max-w-5xl mx-auto text-center py-16">
-					<p className="text-gray-500 dark:text-gray-400">
+					<p className="text-[#6C757D] dark:text-[#F8F9FA]">
 						No properties found.
 					</p>
 				</div>

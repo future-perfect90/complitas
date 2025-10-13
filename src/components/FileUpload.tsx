@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import authService from '../utils/authService';
+import { Button } from './Button';
 import Label from './Label';
 
 interface FileUploadProps {
@@ -91,18 +92,20 @@ export default function FileUpload({
 				onChange={handleFileChange}
 				className="mb-3 block text-slate-400"
 			/>
-			<button
-				onClick={handleUpload}
+			<Button
+				label={uploading ? 'Uploading...' : 'Upload'}
 				disabled={uploading}
-				className="px-4 py-2 bg-blue-600 text-white rounded-lg disabled:opacity-50">
-				{uploading ? 'Uploading...' : 'Upload'}
-			</button>{' '}
-			<button
-				onClick={onClose}
-				className="px-4 py-2 bg-red-600 text-white rounded-lg disabled:opacity-50">
-				{'Cancel'}
-			</button>
-			{message && <p className="mt-3 text-sm text-white">{message}</p>}
+				onClick={handleUpload}
+				className="px-2 py-1"
+				style="primary"
+			/>{' '}
+			<Button
+				label="Cancel"
+				onClick={handleUpload}
+				className="px-2 py-1"
+				style="secondary"
+			/>
+			{message && <p className="mt-3 text-sm text-[#F8F9FA]">{message}</p>}
 		</div>
 	);
 }

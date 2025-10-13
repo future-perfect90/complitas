@@ -200,12 +200,14 @@ const PropertyModal: React.FC<Props> = ({
 				<Button
 					label="Cancel"
 					onClick={onClose}
-					className="bg-red-400 py-2 px-5"
+					className="py-2 px-5"
+					style="secondary"
 				/>
 				<Button
 					label={initialData ? 'Update' : 'Create'}
 					onClick={handleSubmit}
-					className="bg-green-400 py-2 px-5"
+					className="py-2 px-5"
+					style="primary"
 				/>
 			</div>
 		</Modal>

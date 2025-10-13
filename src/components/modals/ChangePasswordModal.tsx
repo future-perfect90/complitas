@@ -73,7 +73,7 @@ const ChangePasswordModal: React.FC<Props> = ({
 					/>
 					<label
 						htmlFor="show-password"
-						className="ml-2 block text-sm text-gray-900 dark:text-gray-300">
+						className="ml-2 block text-sm text-[#212529] dark:text-[#F8F9FA]">
 						Show passwords
 					</label>
 				</div>
@@ -82,13 +82,15 @@ const ChangePasswordModal: React.FC<Props> = ({
 						type="button"
 						label="Cancel"
 						onClick={onClose}
-						className="bg-gray-300 hover:bg-gray-400 text-gray-800 py-2 px-4"
+						className="py-2 px-4"
+						style="secondary"
 					/>
 					<Button
 						type="submit"
 						label={isSubmitting ? 'Updating...' : 'Update Password'}
 						disabled={isSubmitting}
-						className="bg-green-600 hover:bg-green-700 text-white py-2 px-4"
+						className="py-2 px-4"
+						style="primary"
 					/>
 				</div>
 			</form>

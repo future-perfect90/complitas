@@ -20,7 +20,7 @@ export default function Modal({ title, isOpen, onClose, children }: Props) {
 					</h3>
 					<button
 						onClick={onClose}
-						className="text-slate-600 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white">
+						className="text-slate-600 hover:text-slate-900 dark:text-slate-300 dark:hover:text-[#F8F9FA]">
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
 							className="h-6 w-6"

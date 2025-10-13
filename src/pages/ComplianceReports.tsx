@@ -8,10 +8,10 @@ export default function ComplianceReports() {
 				<BackButton />
 				<div className="flex items-center justify-between">
 					<div className="flex-1">
-						<h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+						<h1 className="text-3xl font-bold text-[#212529] dark:text-[#F8F9FA]">
 							Compliance Reports
 						</h1>
-						<p className="text-gray-600 dark:text-gray-400">
+						<p className="text-[#212529] dark:text-[#F8F9FA]">
 							Log compliance activities and responses.
 						</p>
 					</div>

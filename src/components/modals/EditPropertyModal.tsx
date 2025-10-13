@@ -108,7 +108,7 @@ export default function EditPropertyModal({
 						onChange={(e) =>
 							handleFieldChange(key as keyof Property, e.target.value)
 						}
-						className="w-full border rounded px-2 py-1 text-gray-900 dark:text-gray-200 dark:bg-gray-600 dark:border-gray-500"
+						className="w-full border rounded px-2 py-1 text-[#212529] dark:text-[#F8F9FA] dark:bg-gray-600 dark:border-gray-500"
 					/>
 				</div>
 			);
@@ -122,7 +122,7 @@ export default function EditPropertyModal({
 						onChange={(e) =>
 							handleFieldChange(key as keyof Property, e.target.value)
 						}
-						className="w-full border rounded px-2 py-1 text-gray-900 dark:text-gray-200 dark:bg-gray-600 dark:border-gray-500"
+						className="w-full border rounded px-2 py-1 text-[#212529] dark:text-[#F8F9FA] dark:bg-gray-600 dark:border-gray-500"
 					/>
 				</div>
 			);
@@ -142,7 +142,7 @@ export default function EditPropertyModal({
 								onChange={() => handleAutoSave(key as keyof Property, true)}
 								className="checked:bg-orange-600"
 							/>{' '}
-							<span className="text-gray-900 dark:text-gray-200">Yes</span>
+							<span className="text-[#212529] dark:text-[#F8F9FA]">Yes</span>
 						</label>
 						<label>
 							<input
@@ -153,7 +153,7 @@ export default function EditPropertyModal({
 								}
 								onChange={() => handleAutoSave(key as keyof Property, false)}
 							/>{' '}
-							<span className="text-gray-900 dark:text-gray-200">No</span>
+							<span className="text-[#212529] dark:text-[#F8F9FA]">No</span>
 						</label>
 					</div>
 				</div>
@@ -174,7 +174,7 @@ export default function EditPropertyModal({
 						onChange={(e) =>
 							handleFieldChange(key as keyof Property, e.target.value)
 						}
-						className="w-full border rounded px-2 py-2 text-gray-900 dark:text-gray-200 dark:bg-gray-600 dark:border-gray-500">
+						className="w-full border rounded px-2 py-2 text-[#212529] dark:text-[#F8F9FA] dark:bg-gray-600 dark:border-gray-500">
 						<option value="">Select Residential Awareness</option>
 						{residentialOptions.map((option) => (
 							<option key={option.value} value={option.value}>
@@ -199,7 +199,7 @@ export default function EditPropertyModal({
 						onChange={(e) =>
 							handleFieldChange(key as keyof Property, e.target.value)
 						}
-						className="w-full border rounded px-2 py-2 text-gray-900 dark:text-gray-200 dark:bg-gray-600 dark:border-gray-500">
+						className="w-full border rounded px-2 py-2 text-[#212529] dark:text-[#F8F9FA] dark:bg-gray-600 dark:border-gray-500">
 						<option value="">Select Occupancy Type</option>
 						{occupancyOptions.map((option) => (
 							<option key={option.value} value={option.value}>
@@ -422,7 +422,7 @@ export default function EditPropertyModal({
 			title={`Edit ${section.charAt(0).toUpperCase() + section.slice(1)} Section`}>
 			<form>
 				{isSaving && (
-					<span className="text-sm text-gray-400 absolute top-4 right-24">
+					<span className="text-sm text-[#F8F9FA] absolute top-4 right-24">
 						Saving...
 					</span>
 				)}
@@ -453,11 +453,7 @@ export default function EditPropertyModal({
 								<button
 									onClick={() => setChangeMitigationPlan(true)}
 									className="text-sm text-blue-600 hover:underline">
-									<img
-										src="/change.svg"
-										className="w-4 h-4"
-										alt="Change"
-									/>
+									<img src="/change.svg" className="w-4 h-4" alt="Change" />
 								</button>
 							</div>
 						:	<FileUpload
@@ -486,11 +482,7 @@ export default function EditPropertyModal({
 								<button
 									onClick={() => setChangeRefurbishedCdm(true)}
 									className="text-sm text-blue-600 hover:underline">
-									<img
-										src="/change.svg"
-										className="w-4 h-4"
-										alt="Change"
-									/>
+									<img src="/change.svg" className="w-4 h-4" alt="Change" />
 								</button>
 							</div>
 						:	<FileUpload
@@ -509,13 +501,15 @@ export default function EditPropertyModal({
 					<Button
 						label="Close"
 						onClick={onClose}
-						className="bg-gray-300 hover:bg-gray-400 text-black font-semibold py-1 px-4 rounded"
+						className="py-1 px-4"
+						style="secondary"
 					/>
 					{(section === 'basic' || section === 'contacts') && (
 						<Button
 							label="Save"
-							className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-4 rounded"
+							className="py-1 px-4"
 							onClick={handleSubmit}
+							style="primary"
 						/>
 					)}
 				</div>

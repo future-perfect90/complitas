@@ -79,7 +79,7 @@ const UserList: React.FC = () => {
 							setEditData(undefined);
 							setIsModalOpen(true);
 						}}
-						className="px-4 py-2 bg-green-600 text-white rounded">
+						className="px-4 py-2 bg-green-600 text-[#F8F9FA] rounded">
 						Add User
 					</button>
 				</div>
@@ -95,14 +95,14 @@ const UserList: React.FC = () => {
 							</CardHeader>
 							<CardContent className="space-y-5 text-sm">
 								<div className="mt-3">
-									<p className="font-semibold text-gray-600 dark:text-gray-400">
+									<p className="font-semibold text-[#212529] dark:text-[#F8F9FA]">
 										Email
 									</p>
 									<p>{user.email}</p>
 								</div>
 								{isSuperAdmin && user.company && (
 									<div>
-										<p className="font-semibold text-gray-600 dark:text-gray-400">
+										<p className="font-semibold text-[#212529] dark:text-[#F8F9FA]">
 											Company
 										</p>
 										<p>{user.company}</p>
@@ -113,19 +113,19 @@ const UserList: React.FC = () => {
 								<Button
 									label="Edit"
 									onClick={() => user.id && handleEdit(user.id)}
-									className="px-2 sm:px-3 py-1 bg-blue-500 text-white rounded text-xs sm:text-sm"
+									className="px-2 sm:px-3 py-1 bg-blue-500 text-[#F8F9FA] rounded text-xs sm:text-sm"
 								/>
 								<Button
 									label="Delete"
 									onClick={() => user.id && handleDelete(user.id)}
-									className="px-2 sm:px-3 py-1 bg-red-500 text-white rounded text-xs sm:text-sm"
+									className="px-2 sm:px-3 py-1 bg-red-500 text-[#F8F9FA] rounded text-xs sm:text-sm"
 								/>
 							</div> */}
 						</Card>
 					))}
 				</div>
 			:	<div className="max-w-5xl mx-auto text-center py-16">
-					<p className="text-gray-500 dark:text-gray-400">No users found.</p>
+					<p className="text-[#6C757D] dark:text-[#F8F9FA]">No users found.</p>
 				</div>
 			}
 			<UserModal
