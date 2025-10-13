@@ -24,21 +24,21 @@ export const ComplianceReportList = () => {
 	const { id } = useParams();
 
 	useEffect(() => {
-		const fetchQuestionnaires = async () => {
+		const fetchAudits = async () => {
 			if (!id) return;
 			try {
 				setIsReportsLoading(true);
 				const data = await getComplianceReports(id);
 				setReports(data);
 			} catch (error) {
-				console.error('Error fetching questionnaires:', error);
+				console.error('Error fetching audits:', error);
 			} finally {
 				setIsReportsLoading(false);
 			}
 		};
 
 		if (!isLoading && isAuthenticated) {
-			fetchQuestionnaires();
+			fetchAudits();
 		}
 	}, [id, isLoading, isAuthenticated]);
 
