@@ -55,12 +55,12 @@ export default function ConfirmationModal({
 					</div>
 					<div className="ml-4 text-left">
 						<h3
-							className="text-lg leading-6 font-bold text-gray-900"
+							className="text-lg leading-6 font-bold text-[#212529]"
 							id="modal-title">
 							{title}
 						</h3>
 						<div className="mt-2">
-							<p className="text-sm text-gray-600">{message}</p>
+							<p className="text-sm text-[#212529]">{message}</p>
 						</div>
 					</div>
 				</div>
@@ -68,7 +68,7 @@ export default function ConfirmationModal({
 				<div className="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
 					<button
 						type="button"
-						className={`w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 text-base font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm ${confirmButtonClass}`}
+						className={`w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 text-base font-medium text-[#F8F9FA] focus:outline-none focus:ring-2 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm ${confirmButtonClass}`}
 						onClick={() => {
 							onConfirm();
 							onClose();
@@ -77,7 +77,7 @@ export default function ConfirmationModal({
 					</button>
 					<button
 						type="button"
-						className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:w-auto sm:text-sm"
+						className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-[#212529] hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:w-auto sm:text-sm"
 						onClick={onClose}>
 						{cancelText}
 					</button>

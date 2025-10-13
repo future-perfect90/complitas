@@ -29,15 +29,15 @@ export default function AreaCard({
 			</CardHeader>
 			<CardContent>
 				<div className="mb-4">
-					<div className="flex justify-between items-center text-sm text-gray-600 mb-1">
-						<span>Progress</span>
+					<div className="flex justify-between items-center text-sm text-[#6C757D] dark:text-[#ADB5BD] mt-2">
+						<span className="">Progress</span>
 						<span>
 							{answeredCount} / {totalCount} Answered
 						</span>
 					</div>
 					<div className="w-full bg-gray-200 rounded-full h-2.5">
 						<div
-							className={`h-2.5 rounded-full ${isComplete ? 'bg-green-500' : 'bg-purple-600'}`}
+							className={`h-2.5 rounded-full ${isComplete ? 'bg-[#4D83AF]' : 'bg-[#F29F05] dark:bg-[#F2B705]'}`}
 							style={{ width: `${progress}%` }}></div>
 					</div>
 				</div>
@@ -49,7 +49,7 @@ export default function AreaCard({
 				<Button
 					label="Open Questions"
 					onClick={() => onSelect(areaName)}
-					className="w-full"
+					className="w-full bg-inherit! text-[#212529]! dark:text-[#F8F9FA]!"
 				/>
 			</CardContent>
 		</Card>

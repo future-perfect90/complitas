@@ -158,7 +158,7 @@ const PropertyModal: React.FC<Props> = ({
 					onChange={(e: any) => setAddress3(e.target.value)}
 				/>
 				<TextField
-					label="City"
+					label="Town/City"
 					value={city}
 					onChange={(e: any) => setCity(e.target.value)}
 				/>
@@ -181,6 +181,8 @@ const PropertyModal: React.FC<Props> = ({
 					label="Manager Name"
 					value={managerName}
 					onChange={(e: any) => setManagerName(e.target.value)}
+					tooltip={true}
+					tooltipContent="Property manager name"
 				/>
 				<Telephone
 					label="Telephone Number"
@@ -200,12 +202,14 @@ const PropertyModal: React.FC<Props> = ({
 				<Button
 					label="Cancel"
 					onClick={onClose}
-					className="bg-red-400 py-2 px-5"
+					className="py-2 px-5"
+					style="secondary"
 				/>
 				<Button
 					label={initialData ? 'Update' : 'Create'}
 					onClick={handleSubmit}
-					className="bg-green-400 py-2 px-5"
+					className="py-2 px-5"
+					style="primary"
 				/>
 			</div>
 		</Modal>

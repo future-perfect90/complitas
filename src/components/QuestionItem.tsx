@@ -96,16 +96,16 @@ export default function QuestionItem({
 	return (
 		<div className="p-4 relative">
 			<div className="flex justify-between items-start">
-				<p className="font-semibold text-gray-800 dark:text-slate-300 pr-4">
+				<p className="font-semibold text-[#212529] dark:text-slate-300 pr-4">
 					{questionObject.question}
 				</p>
-				{isSaving && <span className="text-sm text-gray-400">Saving...</span>}
+				{isSaving && <span className="text-sm text-[#F8F9FA]">Saving...</span>}
 			</div>
 			<div className="flex items-center justify-left space-x-4 mt-2">
 				{['Yes', 'No', 'NA'].map((option) => (
 					<label
 						key={option}
-						className="flex items-center space-x-1 cursor-pointer text-slate-600 text-gray-900 dark:text-gray-200">
+						className="flex items-center space-x-1 cursor-pointer text-slate-600 text-[#212529] dark:text-[#F8F9FA]">
 						<input
 							type="radio"
 							name={questionObject.id}
@@ -148,12 +148,8 @@ export default function QuestionItem({
 							/>
 							<button
 								onClick={() => setIsReplacingFile(true)}
-								className="text-sm text-blue-600 hover:underline">
-								<img
-									src="/change.svg"
-									className="w-4 h-4"
-									alt="Change"
-								/>
+								className="text-sm">
+								<img src="/change.svg" className="w-4 h-4" alt="Change" />
 							</button>
 						</div>
 					:	<FileUpload

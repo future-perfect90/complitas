@@ -1,8 +1,9 @@
-import { useCallback, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react';
+import { Fragment, useCallback, useState } from 'react';
 import { toast } from 'react-toastify';
 import { Button } from '../components/Button';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/Card';
+import { ComplianceAuditList } from '../components/ComplianceAuditList';
 import Tooltip from '../components/Tooltip';
 import MaintenanceTaskModal from '../components/modals/MaintenanceTaskModal';
 import NotificationPreferencesModal from '../components/modals/NotificationPreferencesModal';
@@ -11,6 +12,13 @@ import type {
 	NotificationPreferences,
 	Property,
 } from '../types';
+
+const tabs = [
+	{ name: 'Overview' },
+	{ name: 'Details' },
+	{ name: 'Maintenance' },
+	{ name: 'Compliance' },
+];
 
 interface PropertyDetailsProps {
 	property: Property;
@@ -34,8 +42,6 @@ export default function PropertyDetails({
 	);
 	const [isCompletingTask, setIsCompletingTask] = useState(false);
 	const [isNotificationModalOpen, setIsNotificationModalOpen] = useState(false);
-
-	const navigate = useNavigate();
 
 	const handleModalSuccess = useCallback(() => {
 		setIsMaintenanceTaskModalOpen(false);
@@ -68,523 +74,490 @@ export default function PropertyDetails({
 		<>
 			<div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
 				<div className="flex-1">
-					<h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+					<h1 className="text-3xl font-bold text-[#212529] dark:text-[#F8F9FA]">
 						{property.name}
 					</h1>
-					<p className="text-gray-600 dark:text-gray-400">
+					<p className="text-[#212529] dark:text-[#F8F9FA]">
 						Manage your property information.
 					</p>
 				</div>
-				<div className="flex flex-col sm:flex-row gap-2">
-					<Button
-						label="Compliance reports"
-						onClick={() =>
-							navigate(`/properties/${property.id}/compliance-reports`)
-						}
-						className="px-2 py-1 bg-purple-800 text-white rounded w-full sm:w-auto"
-					/>
-					<Button
-						label="Add Maintenance Task"
-						onClick={handleOpenAddTask}
-						className="px-2 py-1 ml-2 bg-purple-800 text-white rounded"
-					/>
-				</div>
 			</div>
-			{/* Basic Information Card */}
-			<Card className="rounded-2xl shadow-lg">
-				<CardHeader>
-					<CardTitle className="text-xl font-semibold">
-						Basic Information
-						<Button
-							label="Edit"
-							onClick={() => onEdit('basic', property)}
-							className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-4 rounded float-right"
-						/>
-					</CardTitle>
-				</CardHeader>
-				<CardContent className="pt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-					<div className="space-y-4">
-						<p className="text-sm text-gray-500 dark:text-gray-400">Address</p>
-						<p className="text-gray-900 dark:text-gray-100 break-words">
-							{property.address1}
-							<br />
-							{property.address2 && (
-								<>
-									<span>{property.address2}</span>
-									<br />
-								</>
+
+			<TabGroup>
+				<TabList className="flex space-x-1 rounded-xl bg-gray-700/20 p-1">
+					{tabs.map((tab) => (
+						<Tab key={tab.name} as={Fragment}>
+							{({ selected }) => (
+								<button
+									className={`w-full rounded-lg py-2.5 text-sm font-medium leading-5 text-[#212529] dark:text-[#F8F9FA] focus:outline-none 
+                    ${selected ? 'bg-[#4D83AF] text-[#F8F9FA] shadow' : 'hover:bg-white/[0.12]'}`}>
+									{tab.name}
+								</button>
 							)}
-							{property.address3 && (
-								<>
-									<span>{property.address3}</span>
-									<br />
-								</>
-							)}
-							{property.city}
-							<br />
-							{property.postCode}
-							<br />
-							{property.county}
-							<br />
-							{property.country}
-						</p>
-						<p className="text-sm text-gray-500 dark:text-gray-400">
-							Design Date
-						</p>
-						<p className="text-gray-900 dark:text-gray-100">
-							{property.designDate ?? 'Not set'}
-						</p>
-					</div>
-					<div className="space-y-4">
-						<p className="text-sm text-gray-500 dark:text-gray-400">
-							Site contact
-						</p>
-						<p className="text-gray-900 dark:text-gray-100 break-words">
-							{property.managerName}
-							<br />
-							{property.managerEmail}
-							<br />
-							{property.telephone}
-						</p>
-						<p className="text-sm text-gray-500 dark:text-gray-400">
-							Unique Reference Number
-						</p>
-						<p className="text-gray-900 dark:text-gray-100 break-words">
-							{property.uniqueReferenceNumber ?? 'Not set'}
-						</p>
-						<p className="text-sm text-gray-500 dark:text-gray-400">
-							Residential Awareness
-						</p>
-						<p className="text-gray-900 dark:text-gray-100">
-							{property.residentialAwareness ?? 'Not set'}
-						</p>
-					</div>
-					<div className="space-y-4">
-						<p className="text-sm text-gray-500 dark:text-gray-400">
-							Habitable Height
-						</p>
-						<p className="text-gray-900 dark:text-gray-100">
-							{property.habitableHeight ?? 'Not set'}
-						</p>
-						<p className="text-sm text-gray-500 dark:text-gray-400">
-							Building Height
-						</p>
-						<p className="text-gray-900 dark:text-gray-100">
-							{property.buildingHeight ?? 'Not set'}
-						</p>
-						<p className="text-sm text-gray-500 dark:text-gray-400">
-							Occupancy Type
-						</p>
-						<p className="text-gray-900 dark:text-gray-100">
-							{property.occupancyType ?? 'Not set'}
-						</p>
-					</div>
-					<div className="space-y-4">
-						<p className="text-sm text-gray-500 dark:text-gray-400">
-							Number of Residential Flats
-						</p>
-						<p className="text-gray-900 dark:text-gray-100">
-							{property.residentalFlats ?? 'Not set'}
-						</p>
-						<p className="text-sm text-gray-500 dark:text-gray-400">
-							Unique Supply Points
-						</p>
-						<p className="text-gray-900 dark:text-gray-100">
-							{property.uniqueSupplyPoints ?? 'Not set'}
-						</p>
-						<p className="text-sm text-gray-500 dark:text-gray-400">
-							Number of Commercial Units
-						</p>
-						<p className="text-gray-900 dark:text-gray-100">
-							{property.commercialUnits ?? 'Not set'}
-						</p>
-					</div>
-				</CardContent>
-			</Card>
-			{/* Additional Information Card */}
-			<Card className="rounded-2xl shadow-lg">
-				<CardHeader>
-					<CardTitle className="text-xl font-semibold">
-						Additional Information
-						<Button
-							label="Edit"
-							onClick={() => onEdit('additional', property)}
-							className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-4 rounded flex-shrink-0 float-right"
-						/>
-					</CardTitle>
-				</CardHeader>
-				<CardContent className="pt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-					<div className="space-y-4">
-						<p className="text-sm text-gray-500 dark:text-gray-400">Lifts</p>
-						<p className="text-gray-900 dark:text-gray-100">
-							{property.lifts === null || '' ?
-								'Not set'
-							: property.lifts ?
-								'Yes'
-							:	'No'}
-						</p>
-						<p className="text-sm text-gray-500 dark:text-gray-400">
-							Basement Car park
-						</p>
-						<p className="text-gray-900 dark:text-gray-100">
-							{property.carpark === null || '' ?
-								'Not set'
-							: property.carpark ?
-								'Yes'
-							:	'No'}
-						</p>
-						<p className="text-sm text-gray-500 dark:text-gray-400">
-							Communal Utility Assets
-						</p>
-						<p className="text-gray-900 dark:text-gray-100">
-							{property.communalUtilityAssets === null || '' ?
-								'Not set'
-							: property.communalUtilityAssets ?
-								'Yes'
-							:	'No'}
-						</p>
-					</div>
-					<div className="space-y-4">
-						<p className="text-sm text-gray-500 dark:text-gray-400">
-							Communal Gas Appliances
-						</p>
-						<p className="text-gray-900 dark:text-gray-100">
-							{property.communalGasAppliances === null || '' ?
-								'Not set'
-							: property.communalGasAppliances ?
-								'Yes'
-							:	'No'}
-						</p>
-						<p className="text-sm text-gray-500 dark:text-gray-400">
-							Meter bank
-						</p>
-						<p className="text-gray-900 dark:text-gray-100">
-							{property.meterBank === null || '' ?
-								'Not set'
-							: property.meterBank ?
-								'Yes'
-							:	'No'}
-						</p>
-						<p className="text-sm text-gray-500 dark:text-gray-400">
-							Assets in voids or boxing?
-						</p>
-						<p className="text-gray-900 dark:text-gray-100">
-							{property.voidAssets === null || '' ?
-								'Not set'
-							: property.voidAssets ?
-								'Yes'
-							:	'No'}
-						</p>
-					</div>
-					<div className="space-y-4">
-						<p className="text-sm text-gray-500 dark:text-gray-400">
-							Well maintained?
-						</p>
-						<p className="text-gray-900 dark:text-gray-100">
-							{property.wellMaintained === null || '' ?
-								'Not set'
-							: property.wellMaintained ?
-								'Yes'
-							:	'No'}
-						</p>
-						<p className="text-sm text-gray-500 dark:text-gray-400">
-							Refurbished?
-						</p>
-						<p className="text-gray-900 dark:text-gray-100">
-							{property.refurbished === null || '' ?
-								'Not set'
-							: property.refurbished ?
-								'Yes'
-							:	'No'}
-						</p>
-					</div>
-				</CardContent>
-			</Card>
-			{/* Additional Contacts Card */}
-			<Card className="rounded-2xl shadow-lg">
-				<CardHeader>
-					<CardTitle className="text-xl font-semibold">
-						Additional contacts
-						<Button
-							label="Edit"
-							onClick={() => onEdit('contacts', property)}
-							className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-4 rounded flex-shrink-0 float-right"
-						/>
-					</CardTitle>
-				</CardHeader>
-				<CardContent className="pt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-					<div className="space-y-4">
-						<p className="text-sm text-gray-500 dark:text-gray-400">
-							Property Manager
-						</p>
-						<p className="text-gray-900 dark:text-gray-100 break-words">
-							{property.managerName}
-							<br />
-							{property.managerAddress}
-							<br />
-							{property.managerEmail}
-							<br />
-							{property.managerTelephone}
-						</p>
-					</div>
-					<div className="space-y-4">
-						<p className="text-sm text-gray-500 dark:text-gray-400">
-							Emergency contact
-						</p>
-						<p className="text-gray-900 dark:text-gray-100 break-words">
-							{property.emergencyName}
-							<br />
-							{property.emergencyAddress}
-							<br />
-							{property.emergencyEmail}
-							<br />
-							{property.emergencyTelephone}
-						</p>
-					</div>
-					<div className="space-y-4">
-						<p className="text-sm text-gray-500 dark:text-gray-400">
-							Local Fire Service
-						</p>
-						<p className="text-gray-900 dark:text-gray-100 break-words">
-							{property.localFireName}
-							<br />
-							{property.localFireAddress}
-							<br />
-							{property.localFireEmail}
-							<br />
-							{property.localFireTelephone}
-						</p>
-					</div>
-				</CardContent>
-			</Card>
-			{/* Audit Details Card */}
-			<Card className="rounded-2xl shadow-lg">
-				<CardHeader>
-					<CardTitle className="text-xl font-semibold">
-						Audit details
-						<Button
-							label="Edit"
-							onClick={() => onEdit('audit', property)}
-							className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-4 rounded flex-shrink-0 float-right"
-						/>
-					</CardTitle>
-				</CardHeader>
-				<CardContent className="pt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-					<div className="space-y-4">
-						<p className="text-sm text-gray-500 dark:text-gray-400">
-							Log Book/CDM Folder
-						</p>
-						<p className="text-gray-900 dark:text-gray-100">
-							{property.logBook === null || '' ?
-								'Not set'
-							: property.logBook ?
-								'Yes'
-							:	'No'}
-						</p>
-						<p className="text-sm text-gray-500 dark:text-gray-400">
-							Fire Safety Log Book
-						</p>
-						<p className="text-gray-900 dark:text-gray-100">
-							{property.fireSafetyLogBook === null || '' ?
-								'Not set'
-							: property.fireSafetyLogBook ?
-								'Yes'
-							:	'No'}
-						</p>
-						<p className="text-sm text-gray-500 dark:text-gray-400">
-							Waste Electrical and Electronic Equipment Audit
-						</p>
-						<p className="text-gray-900 dark:text-gray-100">
-							{property.electronicAuditCompleted === null || '' ?
-								'Not set'
-							: property.electronicAuditCompleted ?
-								'Yes'
-							:	'No'}
-						</p>
-					</div>
-					<div className="space-y-4">
-						<p className="text-sm text-gray-500 dark:text-gray-400">EPC</p>
-						<p className="text-gray-900 dark:text-gray-100">
-							{property.epc === null || '' ?
-								'Not set'
-							: property.epc ?
-								'Yes'
-							:	'No'}
-						</p>
-						<p className="text-sm text-gray-500 dark:text-gray-400">
-							Energy Certificates (DEC's)
-						</p>
-						<p className="text-gray-900 dark:text-gray-100">
-							{property.energyCertificates === null || '' ?
-								'Not set'
-							: property.energyCertificates ?
-								'Yes'
-							:	'No'}
-						</p>
-						<p className="text-sm text-gray-500 dark:text-gray-400">O&M's</p>
-						<p className="text-gray-900 dark:text-gray-100">
-							{property.oms === null || '' ?
-								'Not set'
-							: property.oms ?
-								'Yes'
-							:	'No'}
-						</p>
-					</div>
-					<div className="space-y-4">
-						<p className="text-sm text-gray-500 dark:text-gray-400">
-							External Isolation Valve Chambers Located and Clear
-						</p>
-						<p className="text-gray-900 dark:text-gray-100">
-							{property.isolationValvesClear === null || '' ?
-								'Not set'
-							: property.isolationValvesClear ?
-								'Yes'
-							:	'No'}
-							<br />
-						</p>
-						<p className="text-sm text-gray-500 dark:text-gray-400">
-							Access Controlled Spaces
-						</p>
-						<p className="text-gray-900 dark:text-gray-100">
-							{property.accessControlled === null || '' ?
-								'Not set'
-							: property.accessControlled ?
-								'Yes'
-							:	'No'}
-							<br />
-						</p>
-					</div>
-				</CardContent>
-			</Card>
-			<Card className="rounded-2xl shadow-lg">
-				<CardHeader>
-					<CardTitle className="text-xl font-semibold">Maintenance</CardTitle>
-				</CardHeader>
-				<CardContent className="pt-4">
-					<div className="overflow-x-auto">
-						{maintenanceTasks && maintenanceTasks.length > 0 ?
-							<table className="min-w-full w-full text-left">
-								<thead className="border-b dark:border-gray-700">
-									<tr>
-										<th className="px-3 py-2 text-sm font-semibold text-gray-800 dark:text-gray-200">
-											Title
-										</th>
-										<th className="px-3 py-2 text-sm font-semibold text-gray-800 dark:text-gray-200">
-											Type of Work
-										</th>
-										<th className="px-3 py-2 text-sm font-semibold text-gray-800 dark:text-gray-200">
-											Created at
-										</th>
-										<th className="px-3 py-2 text-sm font-semibold text-gray-800 dark:text-gray-200">
-											Completed On
-										</th>
-										<th className="px-3 py-2 text-sm font-semibold text-gray-800 dark:text-gray-200">
-											Completed By
-										</th>
-										<th className="px-3 py-2 text-sm font-semibold text-gray-800 dark:text-gray-200 text-right">
-											Actions
-										</th>
-									</tr>
-								</thead>
-								<tbody>
-									{maintenanceTasks.map((task) => (
-										<tr key={task.id} className="border-b dark:border-gray-700">
-											<td className="px-3 py-3 text-sm text-gray-800 dark:text-gray-200">
-												{task.title}
-											</td>
-											<td className="px-3 py-3 text-sm text-gray-800 dark:text-gray-200">
-												{task.typeOfWork}
-											</td>
-											<td className="px-3 py-3 text-sm text-gray-800 dark:text-gray-200">
-												{task.createdAt || '-'}
-											</td>
-											<td className="px-3 py-3 text-sm text-gray-800 dark:text-gray-200">
-												{task.completedAt || '-'}
-											</td>
-											<td className="px-3 py-3 text-sm text-gray-800 dark:text-gray-200">
-												{task.name ?
-													<Tooltip
-														content={
-															<div className="space-y-1">
-																<p>
-																	<strong>Contact:</strong> {task.contactName}
-																</p>
-																<p>
-																	<strong>Address:</strong>{' '}
-																	{task.contactAddress}
-																</p>
-																<p>
-																	<strong>Phone:</strong> {task.contactNumber}
-																</p>
-															</div>
-														}>
-														<span className="cursor-pointer">{task.name}</span>
-													</Tooltip>
-												:	'-'}
-											</td>
-											<td className="px-3 py-3 text-right">
-												{!task.completedAt && (
-													<Button
-														label="Complete Task"
-														onClick={() => handleOpenCompleteTask(task)}
-														className="bg-green-500 text-white px-3 py-1 rounded"
-													/>
-												)}
-											</td>
-										</tr>
-									))}
-								</tbody>
-							</table>
-						:	<p className="text-gray-500">No maintenance tasks found.</p>}
-					</div>
-				</CardContent>
-			</Card>
-			{/* <Card className="rounded-2xl shadow-lg">
-				<CardHeader>
-					<CardTitle className="text-xl font-semibold">
-						Notification Preferences
-						<Button
-							label="Edit"
-							onClick={() => setIsNotificationModalOpen(true)}
-							className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-4 rounded float-right"
-						/>
-					</CardTitle>
-				</CardHeader>
-				<br />
-				<CardContent className="space-y-2 flex">
-					<div className="w-full overflow-x-auto">
-						{preferences && preferences.length > 0 ?
-							<table className="min-w-full w-full text-left">
-								<thead className="border-b dark:border-gray-700">
-									<tr>
-										<th className="px-3 py-2 text-sm font-semibold text-gray-800 dark:text-gray-200">
-											Days from expiry
-										</th>
-										<th className="px-3 py-2 text-sm font-semibold text-gray-800 dark:text-gray-200">
-											Active?
-										</th>
-									</tr>
-								</thead>
-								<tbody>
-									{preferences.map((preference: NotificationPreferences) => (
-										<tr
-											key={preference.id}
-											className="border-b dark:border-gray-700">
-											<td className="px-3 py-3 text-sm text-gray-800 dark:text-gray-200">
-												{preference.daysBeforeExpiry}
-											</td>
-											<td className="px-3 py-3 text-sm text-gray-800 dark:text-gray-200">
-												{preference.isActive ? 'Yes' : 'No'}
-											</td>
-										</tr>
-									))}
-								</tbody>
-							</table>
-						:	<p className="text-gray-500">No notificaiton preferences found.</p>
-						}
-					</div>
-				</CardContent>
-			</Card> */}
+						</Tab>
+					))}
+				</TabList>
+				<TabPanels className="mt-2">
+					<TabPanel>
+						<Card className="rounded-2xl shadow-lg">
+							<CardHeader className="w-full flex flex-nowrap gap-4">
+								<CardTitle className="text-xl font-semibold">
+									Basic Information
+									<Button
+										label="Edit"
+										onClick={() => onEdit('basic', property)}
+										className="py-1 px-4 float-right"
+										style="primary"
+									/>
+								</CardTitle>
+							</CardHeader>
+							<CardContent className="pt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+								<div className="space-y-4">
+									<p className="text-sm text-[#6C757D] dark:text-[#ADB5BD]">
+										Address
+									</p>
+									<p className="text-[#212529] dark:text-[#F8F9FA] break-words">
+										{property.address1}
+										<br />
+										{property.address2 && (
+											<>
+												<span>{property.address2}</span>
+												<br />
+											</>
+										)}
+										{property.address3 && (
+											<>
+												<span>{property.address3}</span>
+												<br />
+											</>
+										)}
+										{property.city}
+										<br />
+										{property.postCode}
+										<br />
+										{property.county}
+										<br />
+										{property.country}
+									</p>
+									<p className="text-sm text-[#6C757D] dark:text-[#ADB5BD]">
+										Commission Date/Refurbishment Date
+									</p>
+									<p className="text-[#212529] dark:text-[#F8F9FA]">
+										{property.designDate ?? 'Not set'}
+									</p>
+								</div>
+								<div className="space-y-4">
+									<p className="text-sm text-[#6C757D] dark:text-[#ADB5BD]">
+										Site contact
+									</p>
+									<p className="text-[#212529] dark:text-[#F8F9FA] break-words">
+										{property.managerName}
+										<br />
+										{property.managerEmail}
+										<br />
+										{property.telephone}
+									</p>
+									<p className="text-sm text-[#6C757D] dark:text-[#ADB5BD]">
+										Unique reference
+									</p>
+									<p className="text-[#212529] dark:text-[#F8F9FA] break-words">
+										{property.uniqueReferenceNumber ?? 'Not set'}
+									</p>
+									<p className="text-sm text-[#6C757D] dark:text-[#ADB5BD]">
+										Residential Awareness
+									</p>
+									<p className="text-[#212529] dark:text-[#F8F9FA] break-words">
+										{property.residentialAwareness ?? 'Not set'}
+									</p>
+								</div>
+								<div className="space-y-4">
+									<p className="text-sm text-[#6C757D] dark:text-[#ADB5BD]">
+										Habitable height
+									</p>
+									<p className="text-[#212529] dark:text-[#F8F9FA] break-words">
+										{property.habitableHeight ?? 'Not set'}
+									</p>
+									<p className="text-sm text-[#6C757D] dark:text-[#ADB5BD]">
+										Building height
+									</p>
+									<p className="text-[#212529] dark:text-[#F8F9FA] break-words">
+										{property.buildingHeight ?? 'Not set'}
+									</p>
+									<p className="text-sm text-[#6C757D] dark:text-[#ADB5BD]">
+										Occupancy type
+									</p>
+									<p className="text-[#212529] dark:text-[#F8F9FA] break-words">
+										{property.occupancyType ?? 'Not set'}
+									</p>
+								</div>
+								<div className="space-y-4">
+									<p className="text-sm text-[#6C757D] dark:text-[#ADB5BD]">
+										Number of residential flats
+									</p>
+									<p className="text-[#212529] dark:text-[#F8F9FA] break-words">
+										{property.residentalFlats ?? 'Not set'}
+									</p>
+									<p className="text-sm text-[#6C757D] dark:text-[#ADB5BD]">
+										Unique supply points
+									</p>
+									<p className="text-[#212529] dark:text-[#F8F9FA] break-words">
+										{property.uniqueSupplyPoints ?? 'Not set'}
+									</p>
+									<p className="text-sm text-[#6C757D] dark:text-[#ADB5BD]">
+										Number of commercial units
+									</p>
+									<p className="text-[#212529] dark:text-[#F8F9FA] break-words">
+										{property.commercialUnits ?? 'Not set'}
+									</p>
+								</div>
+							</CardContent>
+						</Card>
+					</TabPanel>
+					<TabPanel className="space-y-8">
+						<Card className="rounded-2xl shadow-lg">
+							<CardHeader className="w-full flex flex-nowrap gap-4">
+								<CardTitle className="text-xl font-semibold">
+									Additional Information
+									<Button
+										label="Edit"
+										onClick={() => onEdit('additional', property)}
+										className="bg-blue-500 hover:bg-blue-600 text-[#F8F9FA] font-semibold py-1 px-4 rounded flex-shrink-0 float-right"
+									/>
+								</CardTitle>
+							</CardHeader>
+							<CardContent className="pt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+								<div className="space-y-4">
+									<p className="text-sm text-[#6C757D] dark:text-[#ADB5BD]">
+										Lifts
+									</p>
+									<p className="text-[#212529] dark:text-[#F8F9FA]">
+										{property.lifts === null || '' ?
+											'Not set'
+										: property.lifts ?
+											'Yes'
+										:	'No'}
+									</p>
+									<p className="text-sm text-[#6C757D] dark:text-[#ADB5BD]">
+										Basement Car park
+									</p>
+									<p className="text-[#212529] dark:text-[#F8F9FA]">
+										{property.carpark === null || '' ?
+											'Not set'
+										: property.carpark ?
+											'Yes'
+										:	'No'}
+									</p>
+								</div>
+								<div className="space-y-4">
+									<p className="text-sm text-[#6C757D] dark:text-[#ADB5BD]">
+										Communal Utility Assets
+									</p>
+									<p className="text-[#212529] dark:text-[#F8F9FA]">
+										{property.communalUtilityAssets === null || '' ?
+											'Not set'
+										: property.communalUtilityAssets ?
+											'Yes'
+										:	'No'}
+									</p>
+									<p className="text-sm text-[#6C757D] dark:text-[#ADB5BD]">
+										Communal Gas Appliances
+									</p>
+									<p className="text-[#212529] dark:text-[#F8F9FA]">
+										{property.communalGasAppliances === null || '' ?
+											'Not set'
+										: property.communalGasAppliances ?
+											'Yes'
+										:	'No'}
+									</p>
+								</div>
+								<div className="space-y-4">
+									<p className="text-sm text-[#6C757D] dark:text-[#ADB5BD]">
+										Well maintained?
+									</p>
+									<p className="text-[#212529] dark:text-[#F8F9FA]">
+										{property.wellMaintained === null || '' ?
+											'Not set'
+										: property.wellMaintained ?
+											'Yes'
+										:	'No'}
+									</p>
+									<p className="text-sm text-[#6C757D] dark:text-[#ADB5BD]">
+										Refurbished?
+									</p>
+									<p className="text-[#212529] dark:text-[#F8F9FA]">
+										{property.refurbished === null || '' ?
+											'Not set'
+										: property.refurbished ?
+											'Yes'
+										:	'No'}
+									</p>
+								</div>
+							</CardContent>
+						</Card>
+						<Card className="rounded-2xl shadow-lg">
+							<CardHeader className="w-full flex flex-nowrap gap-4">
+								<CardTitle className="text-xl font-semibold">
+									Additional contacts
+									<Button
+										label="Edit"
+										onClick={() => onEdit('contacts', property)}
+										className="bg-blue-500 hover:bg-blue-600 text-[#F8F9FA] font-semibold py-1 px-4 rounded flex-shrink-0 float-right"
+									/>
+								</CardTitle>
+							</CardHeader>
+							<CardContent className="pt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+								<div className="space-y-4">
+									<p className="text-sm text-[#6C757D] dark:text-[#ADB5BD]">
+										Property Manager
+									</p>
+									<p className="text-[#212529] dark:text-[#F8F9FA] break-words">
+										{property.managerName}
+										<br />
+										{property.managerAddress}
+										<br />
+										{property.managerEmail}
+										<br />
+										{property.managerTelephone}
+									</p>
+								</div>
+								<div className="space-y-4">
+									<p className="text-sm text-[#6C757D] dark:text-[#ADB5BD]">
+										Emergency contact
+									</p>
+									<p className="text-[#212529] dark:text-[#F8F9FA] break-words">
+										{property.emergencyName}
+										<br />
+										{property.emergencyAddress}
+										<br />
+										{property.emergencyEmail}
+										<br />
+										{property.emergencyTelephone}
+									</p>
+								</div>
+								<div className="space-y-4">
+									<p className="text-sm text-[#6C757D] dark:text-[#ADB5BD]">
+										Local Fire Service
+									</p>
+									<p className="text-[#212529] dark:text-[#F8F9FA] break-words">
+										{property.localFireName}
+										<br />
+										{property.localFireAddress}
+										<br />
+										{property.localFireEmail}
+										<br />
+										{property.localFireTelephone}
+									</p>
+								</div>
+							</CardContent>
+						</Card>
+						<Card className="rounded-2xl shadow-lg">
+							<CardHeader className="w-full flex flex-nowrap gap-4">
+								<CardTitle className="text-xl font-semibold">
+									Audit details
+									<Button
+										label="Edit"
+										onClick={() => onEdit('audit', property)}
+										className="bg-blue-500 hover:bg-blue-600 text-[#F8F9FA] font-semibold py-1 px-4 rounded flex-shrink-0 float-right"
+									/>
+								</CardTitle>
+							</CardHeader>
+							<CardContent className="pt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+								<div className="space-y-4">
+									<p className="text-sm text-[#6C757D] dark:text-[#ADB5BD]">
+										Log Book/CDM Folder
+									</p>
+									<p className="text-[#212529] dark:text-[#F8F9FA]">
+										{property.logBook === null || '' ?
+											'Not set'
+										: property.logBook ?
+											'Yes'
+										:	'No'}
+									</p>
+									<p className="text-sm text-[#6C757D] dark:text-[#ADB5BD]">
+										Fire Safety Log Book
+									</p>
+									<p className="text-[#212529] dark:text-[#F8F9FA]">
+										{property.fireSafetyLogBook === null || '' ?
+											'Not set'
+										: property.fireSafetyLogBook ?
+											'Yes'
+										:	'No'}
+									</p>
+									<p className="text-sm text-[#6C757D] dark:text-[#ADB5BD]">
+										Waste Electrical and Electronic Equipment Audit
+									</p>
+									<p className="text-[#212529] dark:text-[#F8F9FA]">
+										{property.electronicAuditCompleted === null || '' ?
+											'Not set'
+										: property.electronicAuditCompleted ?
+											'Yes'
+										:	'No'}
+									</p>
+								</div>
+								<div className="space-y-4">
+									<p className="text-sm text-[#6C757D] dark:text-[#ADB5BD]">
+										EPC
+									</p>
+									<p className="text-[#212529] dark:text-[#F8F9FA]">
+										{property.epc === null || '' ?
+											'Not set'
+										: property.epc ?
+											'Yes'
+										:	'No'}
+									</p>
+									<p className="text-sm text-[#6C757D] dark:text-[#ADB5BD]">
+										Energy Certificates (DEC's)
+									</p>
+									<p className="text-[#212529] dark:text-[#F8F9FA]">
+										{property.energyCertificates === null || '' ?
+											'Not set'
+										: property.energyCertificates ?
+											'Yes'
+										:	'No'}
+									</p>
+									<p className="text-sm text-[#6C757D] dark:text-[#ADB5BD]">
+										O&M's
+									</p>
+									<p className="text-[#212529] dark:text-[#F8F9FA]">
+										{property.oms === null || '' ?
+											'Not set'
+										: property.oms ?
+											'Yes'
+										:	'No'}
+									</p>
+								</div>
+								<div className="space-y-4">
+									<p className="text-sm text-[#6C757D] dark:text-[#ADB5BD]">
+										External Isolation Valve Chambers Located and Clear
+									</p>
+									<p className="text-[#212529] dark:text-[#F8F9FA]">
+										{property.isolationValvesClear === null || '' ?
+											'Not set'
+										: property.isolationValvesClear ?
+											'Yes'
+										:	'No'}
+										<br />
+									</p>
+									<p className="text-sm text-[#6C757D] dark:text-[#ADB5BD]">
+										Access Controlled Spaces
+									</p>
+									<p className="text-[#212529] dark:text-[#F8F9FA]">
+										{property.accessControlled === null || '' ?
+											'Not set'
+										: property.accessControlled ?
+											'Yes'
+										:	'No'}
+										<br />
+									</p>
+								</div>
+							</CardContent>
+						</Card>
+					</TabPanel>
+					<TabPanel>
+						<Card className="rounded-2xl shadow-lg">
+							<CardHeader className="flex">
+								<CardTitle className="text-xl font-semibold">
+									Maintenance
+									<Button
+										label="Add Maintenance Task"
+										onClick={handleOpenAddTask}
+										className="px-2 py-1 bg-purple-800 text-[#F8F9FA] rounded float-right"
+									/>
+								</CardTitle>
+							</CardHeader>
+							<CardContent className="pt-4">
+								<div className="overflow-x-auto">
+									{maintenanceTasks && maintenanceTasks.length > 0 ?
+										<table className="min-w-full w-full text-left">
+											<thead className="border-b dark:border-gray-700">
+												<tr>
+													<th className="px-3 py-2 text-sm font-semibold text-[#212529] dark:text-[#F8F9FA]">
+														Title
+													</th>
+													<th className="px-3 py-2 text-sm font-semibold text-[#212529] dark:text-[#F8F9FA]">
+														Type of Work
+													</th>
+													<th className="px-3 py-2 text-sm font-semibold text-[#212529] dark:text-[#F8F9FA]">
+														Created at
+													</th>
+													<th className="px-3 py-2 text-sm font-semibold text-[#212529] dark:text-[#F8F9FA]">
+														Completed On
+													</th>
+													<th className="px-3 py-2 text-sm font-semibold text-[#212529] dark:text-[#F8F9FA]">
+														Completed By
+													</th>
+													<th className="px-3 py-2 text-sm font-semibold text-[#212529] dark:text-[#F8F9FA] text-right">
+														Actions
+													</th>
+												</tr>
+											</thead>
+											<tbody>
+												{maintenanceTasks.map((task) => (
+													<tr
+														key={task.id}
+														className="border-b dark:border-gray-700">
+														<td className="px-3 py-3 text-sm text-[#212529] dark:text-[#F8F9FA]">
+															{task.title}
+														</td>
+														<td className="px-3 py-3 text-sm text-[#212529] dark:text-[#F8F9FA]">
+															{task.typeOfWork}
+														</td>
+														<td className="px-3 py-3 text-sm text-[#212529] dark:text-[#F8F9FA]">
+															{task.createdAt || '-'}
+														</td>
+														<td className="px-3 py-3 text-sm text-[#212529] dark:text-[#F8F9FA]">
+															{task.completedAt || '-'}
+														</td>
+														<td className="px-3 py-3 text-sm text-[#212529] dark:text-[#F8F9FA]">
+															{task.name ?
+																<Tooltip
+																	content={
+																		<div className="space-y-1">
+																			<p>
+																				<strong>Contact:</strong>{' '}
+																				{task.contactName}
+																			</p>
+																			<p>
+																				<strong>Address:</strong>{' '}
+																				{task.contactAddress}
+																			</p>
+																			<p>
+																				<strong>Phone:</strong>{' '}
+																				{task.contactNumber}
+																			</p>
+																		</div>
+																	}>
+																	<span className="cursor-pointer">
+																		{task.name}
+																	</span>
+																</Tooltip>
+															:	'-'}
+														</td>
+														<td className="px-3 py-3 text-right">
+															{!task.completedAt && (
+																<Button
+																	label="Complete Task"
+																	onClick={() => handleOpenCompleteTask(task)}
+																	className="bg-green-500 text-[#F8F9FA] px-3 py-1 rounded"
+																/>
+															)}
+														</td>
+													</tr>
+												))}
+											</tbody>
+										</table>
+									:	<p className="text-[#6C757D]">No maintenance tasks found.</p>
+									}
+								</div>
+							</CardContent>
+						</Card>
+					</TabPanel>
+					<TabPanel>
+						<ComplianceAuditList />
+					</TabPanel>
+				</TabPanels>
+			</TabGroup>
+
 			<MaintenanceTaskModal
 				isOpen={maintenanceTaskModalOpen}
 				onClose={() => setIsMaintenanceTaskModalOpen(false)}

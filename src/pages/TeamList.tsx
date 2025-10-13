@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { Button } from '../components/Button';
+import LoadingSpinner from '../components/Loading';
 import TeamAssignmentModal from '../components/modals/TeamAssignmentModal';
 import TeamMembersModal from '../components/modals/TeamMembersModal';
 import TeamModal from '../components/modals/TeamModal';
@@ -9,7 +10,6 @@ import { type OptionType } from '../components/MultiSelect';
 import { useAuthMeta } from '../context/AuthProvider';
 import type { Property, Team } from '../types';
 import { getTeamMembers, getTeamProperties, getTeams } from '../utils/api';
-import LoadingSpinner from '../components/modals/Loading';
 
 interface Member {
 	id: string;
@@ -139,7 +139,7 @@ const TeamList: React.FC = () => {
 				<h1 className="text-2xl font-bold">Teams</h1>
 				<button
 					onClick={() => setModal({ type: 'create' })}
-					className="px-4 py-2 bg-green-600 text-white rounded">
+					className="px-4 py-2 bg-green-600 text-[#F8F9FA] rounded">
 					Add Team
 				</button>
 			</div>
@@ -161,21 +161,21 @@ const TeamList: React.FC = () => {
 										<Button
 											label="Assign Members"
 											onClick={() => t.id && handleAssignClick(t.id, t.name)}
-											className="px-2 py-1 bg-blue-500 text-white rounded"
+											className="px-2 py-1 bg-blue-500 text-[#F8F9FA] rounded"
 										/>
 										<Button
 											label="View Members"
 											onClick={() =>
 												t.id && handleViewMembersClick(t.id, t.name)
 											}
-											className="px-2 py-1 bg-green-500 text-white rounded"
+											className="px-2 py-1 bg-green-500 text-[#F8F9FA] rounded"
 										/>
 										<Button
 											label="View properties"
 											onClick={() =>
 												t.id && handleViewAssignProperty(t.id, t.name)
 											}
-											className="px-2 py-1 bg-purple-500 text-white rounded"
+											className="px-2 py-1 bg-purple-500 text-[#F8F9FA] rounded"
 										/>
 									</td>
 								</tr>

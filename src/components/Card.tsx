@@ -9,7 +9,7 @@ interface CardProps {
 function Card({ children, className = '', onClick }: CardProps) {
 	return (
 		<div
-			className={`rounded-2xl border bg-card text-card-foreground shadow-lg dark:bg-gray-800 dark:border-gray-700 ${className}`}
+			className={`rounded-2xl border border-[#CED4DA] dark:border-[#495057] bg-white dark:bg-[#293440] shadow-lg ${className}`}
 			onClick={onClick}>
 			{children}
 		</div>

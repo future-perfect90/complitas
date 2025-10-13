@@ -5,7 +5,7 @@ import { useAuthMeta } from '../context/AuthProvider';
 
 import { useParams } from 'react-router-dom';
 import { BackButton } from '../components/BackButton';
-import LoadingSpinner from '../components/modals/Loading';
+import LoadingSpinner from '../components/Loading';
 import type {
 	MaintenanceTask,
 	NotificationPreferences,

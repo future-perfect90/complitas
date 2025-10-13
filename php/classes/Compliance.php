@@ -52,7 +52,7 @@ class Compliance
         return $stmt->execute();
     }
 
-    public function createComplianceQuestionnaire(string $propertyId): string
+    public function createComplianceAudit(string $propertyId): string
     {
         //insert the UUID due to not being able to retun last inserted ID
         $uuid = Uuid::uuid4()->toString();

@@ -26,7 +26,7 @@ import {
 	getReportData,
 } from '../utils/api';
 import { BackButton } from './BackButton';
-import LoadingSpinner from './modals/Loading';
+import LoadingSpinner from './Loading';
 import { ReportComplianceAuditPage } from './pdf/ReportComplianceAuditPage';
 import { ReportFrontPage } from './pdf/ReportFrontPage';
 import { ReportImageAttachmentPage } from './pdf/ReportImageAttachmentPage';
@@ -89,7 +89,7 @@ const ReportDocument = ({
 	if (!data || data.length === 0) {
 		return (
 			<Document>
-				<Page style={tw('font-roboto p-[30px] text-[11px] text-gray-800')}>
+				<Page style={tw('font-roboto p-[30px] text-[11px] text-[#212529]')}>
 					<Text>No report data available.</Text>
 				</Page>
 			</Document>
@@ -114,9 +114,9 @@ const ReportDocument = ({
 				companyLogoUrl={companyLogoUrl}
 				companyData={companyData}
 			/>
-			<Page style={tw('p-[30px] text-[11px] text-gray-800')}>
+			<Page style={tw('p-[30px] text-[11px] text-[#212529]')}>
 				{Object.entries(groupedData).map(([area, questions]) => (
-					<View key={area}>
+					<View>
 						<Text
 							style={tw(
 								'text-base font-bold mt-5 mb-2.5 border-b border-solid border-gray-300 pb-1'
@@ -131,7 +131,7 @@ const ReportDocument = ({
 									{item.answer ? answerMap[item.answer] : 'Not Answered'}
 								</Text>
 								{item.answer === '1' && item.validUntil && (
-									<Text style={tw('ml-4 text-[10px] text-gray-500')}>
+									<Text style={tw('ml-4 text-[10px] text-[#6C757D]')}>
 										Valid Until:{' '}
 										{new Date(item.validUntil).toLocaleDateString()}
 									</Text>
@@ -238,10 +238,10 @@ async function convertPdfToImages(
 }
 
 export const ComplianceReportPDF = ({
-	reportId,
+	auditId,
 	propertyId,
 }: {
-	reportId: string;
+	auditId: string;
 	propertyId: string;
 	authToken?: string;
 }) => {
@@ -266,7 +266,7 @@ export const ComplianceReportPDF = ({
 			try {
 				const [data, maintenanceData, auditData, companyInfo] =
 					await Promise.all([
-						getReportData(reportId),
+						getReportData(auditId),
 						getMaintenanceTasksReportData(propertyId),
 						getAuditData(propertyId),
 						getCompanyByPropertyId(propertyId),
@@ -356,7 +356,7 @@ export const ComplianceReportPDF = ({
 		if (!isLoading && isAuthenticated) {
 			fetchAndProcessReport();
 		}
-	}, [reportId, propertyId, isLoading, isAuthenticated]);
+	}, [auditId, propertyId, isLoading, isAuthenticated]);
 
 	if (
 		loading ||
@@ -365,7 +365,7 @@ export const ComplianceReportPDF = ({
 		!auditReportData ||
 		!companyData
 	) {
-		return <LoadingSpinner message={'Loading report...'} />;
+		return <LoadingSpinner message={'Loading audit...'} />;
 	}
 	return (
 		<>

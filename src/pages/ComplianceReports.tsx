@@ -1,138 +1,23 @@
-import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { toast } from 'react-toastify';
 import { BackButton } from '../components/BackButton';
-import { Button } from '../components/Button';
-import { Card, CardContent, CardHeader, CardTitle } from '../components/Card';
-import ConfirmationModal from '../components/modals/ConfirmationModal';
-import LoadingSpinner from '../components/modals/Loading';
-import { useAuthMeta } from '../context/AuthProvider';
-import { createCompliance, getComplianceReports } from '../utils/api';
-
-interface ComplianceReport {
-	id: string;
-	propertyId: string;
-	createdAt: string;
-}
+import { ComplianceAuditList } from '../components/ComplianceAuditList';
 
 export default function ComplianceReports() {
-	const authMeta = useAuthMeta();
-	const { isLoading, isAuthenticated } = authMeta;
-	const [reports, setReports] = useState<Array<ComplianceReport>>([]);
-	const [isReportsLoading, setIsReportsLoading] = useState(true);
-	const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
-	const navigate = useNavigate();
-	const { id } = useParams();
-
-	useEffect(() => {
-		const fetchQuestionnaires = async () => {
-			try {
-				setIsReportsLoading(true);
-				const data = await getComplianceReports(id ?? '');
-				setReports(data);
-			} catch (error) {
-				console.error('Error fetching questionnaires:', error);
-			} finally {
-				setIsReportsLoading(false);
-			}
-		};
-
-		if (!isLoading && isAuthenticated) {
-			fetchQuestionnaires();
-		}
-	}, [isLoading, isAuthenticated]);
-
-	const handleCreation = async () => {
-		const complianceId = await createCompliance(id ?? '');
-		navigate(`/properties/${id}/compliance-reports/${complianceId}`);
-		toast.success('New compliance report created!');
-	};
-
-	const handleOpenConfirmation = () => {
-		setIsConfirmationModalOpen(true);
-	};
-
-	const handleCloseModal = () => {
-		setIsConfirmationModalOpen(false);
-	};
-
-	if (isLoading || isReportsLoading) {
-		return <LoadingSpinner message={'Loading reports...'} />;
-	}
-
 	return (
 		<div className="min-h-screen p-8">
 			<div className="max-w-5xl mx-auto space-y-8">
 				<BackButton />
 				<div className="flex items-center justify-between">
 					<div className="flex-1">
-						<h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+						<h1 className="text-3xl font-bold text-[#212529] dark:text-[#F8F9FA]">
 							Compliance Reports
 						</h1>
-						<p className="text-gray-600 dark:text-gray-400">
+						<p className="text-[#212529] dark:text-[#F8F9FA]">
 							Log compliance activities and responses.
 						</p>
 					</div>
-					<div>
-						<Button
-							label="Create questionnaire"
-							onClick={
-								reports && reports.length >= 1 ?
-									handleOpenConfirmation
-								:	handleCreation
-							}
-							className="px-2 py-1 bg-purple-800 text-white rounded"
-						/>
-					</div>
 				</div>
-				<Card className="rounded-2xl shadow-lg">
-					<CardHeader>
-						<CardTitle className="text-xl font-semibold">Reports</CardTitle>
-					</CardHeader>
-					<br />
-					<CardContent className="space-y-2 flex">
-						<div className="flex-1">
-							{reports && reports.length > 0 ?
-								reports.map((report) => (
-									<div key={report.id}>
-										<h3 className="text-lg font-semibold">
-											Report from -{' '}
-											{new Date(report.createdAt).toLocaleString()} -{' '}
-											<Button
-												label="Update Report"
-												onClick={() =>
-													navigate(
-														`/properties/${id}/compliance-reports/${report.id}`
-													)
-												}
-												className="px-2 py-1 bg-green-800 text-white rounded"
-											/>{' '}
-											<Button
-												label="View Report"
-												onClick={() =>
-													navigate(
-														`/properties/${id}/compliance-reports/${report.id}/pdf`
-													)
-												}
-												className="px-2 py-1 bg-blue-800 text-white rounded"
-											/>
-										</h3>
-									</div>
-								))
-							:	<p>No compliance reports found for this property.</p>}
-						</div>
-					</CardContent>
-				</Card>
+				<ComplianceAuditList />
 			</div>
-			<ConfirmationModal
-				isOpen={isConfirmationModalOpen}
-				onClose={handleCloseModal}
-				onConfirm={handleCreation}
-				title="Create New Compliance Report?"
-				message="You already have a compliance report. Do you want to create a new report?"
-				confirmText="Yes, Create It"
-				confirmButtonClass="bg-blue-600 hover:bg-blue-700"
-			/>
 		</div>
 	);
 }

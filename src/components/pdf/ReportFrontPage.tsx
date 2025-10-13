@@ -40,18 +40,18 @@ export const ReportFrontPage = ({
 					PROPERTY COMPLIANCE REPORT
 				</Text>
 
-				<Text style={tw('text-base text-gray-700')}>
+				<Text style={tw('text-base text-[#212529]')}>
 					Prepared for {companyData.name}
 				</Text>
 
-				<Text style={tw('text-lg mt-1 text-gray-600')}>
+				<Text style={tw('text-lg mt-1 text-[#212529]')}>
 					Assessment of {propertyName}
 				</Text>
 			</View>
 
 			<View
 				style={tw(
-					'absolute bottom-10 left-10 right-10 text-center text-gray-500 z-10 text-md'
+					'absolute bottom-10 left-10 right-10 text-center text-[#6C757D] z-10 text-md'
 				)}
 				fixed>
 				<Text>Date: {reportDate}</Text>

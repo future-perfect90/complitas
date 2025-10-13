@@ -138,7 +138,7 @@ const MaintenanceTaskModal: React.FC<Props> = ({
 					<textarea
 						value={description}
 						onChange={(e) => setDescription(e.target.value)}
-						className="w-full border rounded px-2 py-1 text-gray-900 dark:text-gray-200 dark:bg-gray-600 dark:border-gray-500"
+						className="w-full border rounded px-2 py-1 text-[#212529] dark:text-[#F8F9FA] dark:bg-gray-600 dark:border-gray-500"
 						disabled={completed}
 					/>
 				</div>
@@ -157,11 +157,7 @@ const MaintenanceTaskModal: React.FC<Props> = ({
 								<button
 									onClick={() => setChangeEvidence(true)}
 									className="text-sm text-blue-600 hover:underline">
-									<img
-										src="/change.svg"
-										className="w-4 h-4"
-										alt="Change"
-									/>
+									<img src="/change.svg" className="w-4 h-4" alt="Change" />
 								</button>
 							</div>
 						:	<FileUpload
@@ -190,7 +186,7 @@ const MaintenanceTaskModal: React.FC<Props> = ({
 							<textarea
 								value={contactAddress}
 								onChange={(e) => setContactAddress(e.target.value)}
-								className="w-full border rounded px-2 py-1 text-gray-900 dark:text-gray-200 dark:bg-gray-600 dark:border-gray-500"
+								className="w-full border rounded px-2 py-1 text-[#212529] dark:text-[#F8F9FA] dark:bg-gray-600 dark:border-gray-500"
 								required
 							/>
 						</div>
@@ -216,12 +212,15 @@ const MaintenanceTaskModal: React.FC<Props> = ({
 					<Button
 						label="Cancel"
 						onClick={onClose}
-						className="bg-red-400 py-2 px-5"
+						className="py-2 px-5"
+						style="secondary"
 					/>
 					<Button
 						label={completed ? 'Complete task' : 'Create task'}
-						className="bg-green-400 py-2 px-5"
+						className="py-2 px-5"
 						onClick={handleSubmit}
+						style="primary"
+						disabled={submitted}
 					/>
 				</div>
 			</form>

@@ -43,6 +43,15 @@ export default function EditPropertyModal({
 		setForm((prev) => ({ ...prev, [key]: value }));
 	};
 
+	const handleOccupancyChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+		const value = e.target.value;
+		setForm((prev) => ({
+			...prev,
+			occupancyType: value,
+			commercialUnits: value === 'Residential' ? 0 : prev.commercialUnits,
+		}));
+	};
+
 	const handleAutoSave = async (key: keyof Property, value: any) => {
 		setIsSaving(true);
 		const updatedForm = { ...form, [key]: value };
@@ -65,6 +74,8 @@ export default function EditPropertyModal({
 	};
 
 	const renderField = (key: string, label: string, type: string) => {
+		const isCommercialUnitsDisabled =
+			key === 'commercialUnits' && form.occupancyType === 'Residential';
 		if (type === 'text' || type === 'number' || type === 'email') {
 			return (
 				<div className="mb-4">
@@ -78,6 +89,7 @@ export default function EditPropertyModal({
 							)
 						}
 						type={type}
+						disabled={isCommercialUnitsDisabled}
 					/>
 				</div>
 			);
@@ -108,7 +120,7 @@ export default function EditPropertyModal({
 						onChange={(e) =>
 							handleFieldChange(key as keyof Property, e.target.value)
 						}
-						className="w-full border rounded px-2 py-1 text-gray-900 dark:text-gray-200 dark:bg-gray-600 dark:border-gray-500"
+						className="w-full border rounded px-2 py-1 text-[#212529] dark:text-[#F8F9FA] dark:bg-gray-600 dark:border-gray-500"
 					/>
 				</div>
 			);
@@ -122,7 +134,7 @@ export default function EditPropertyModal({
 						onChange={(e) =>
 							handleFieldChange(key as keyof Property, e.target.value)
 						}
-						className="w-full border rounded px-2 py-1 text-gray-900 dark:text-gray-200 dark:bg-gray-600 dark:border-gray-500"
+						className="w-full border rounded px-2 py-1 text-[#212529] dark:text-[#F8F9FA] dark:bg-gray-600 dark:border-gray-500"
 					/>
 				</div>
 			);
@@ -142,7 +154,7 @@ export default function EditPropertyModal({
 								onChange={() => handleAutoSave(key as keyof Property, true)}
 								className="checked:bg-orange-600"
 							/>{' '}
-							<span className="text-gray-900 dark:text-gray-200">Yes</span>
+							<span className="text-[#212529] dark:text-[#F8F9FA]">Yes</span>
 						</label>
 						<label>
 							<input
@@ -153,7 +165,7 @@ export default function EditPropertyModal({
 								}
 								onChange={() => handleAutoSave(key as keyof Property, false)}
 							/>{' '}
-							<span className="text-gray-900 dark:text-gray-200">No</span>
+							<span className="text-[#212529] dark:text-[#F8F9FA]">No</span>
 						</label>
 					</div>
 				</div>
@@ -164,7 +176,7 @@ export default function EditPropertyModal({
 				{ value: 'Two Man visits', label: 'Two Man visits' },
 				{ value: 'Vulnerable Persons', label: 'Vulnerable Persons' },
 				{ value: 'Priority Services', label: 'Priority Services' },
-				{ value: 'Medial/EOL care', label: 'Medial/EOL care' },
+				{ value: 'Medical/EOL care', label: 'Medical/EOL care' },
 			];
 			return (
 				<div className="mb-4">
@@ -174,7 +186,7 @@ export default function EditPropertyModal({
 						onChange={(e) =>
 							handleFieldChange(key as keyof Property, e.target.value)
 						}
-						className="w-full border rounded px-2 py-2 text-gray-900 dark:text-gray-200 dark:bg-gray-600 dark:border-gray-500">
+						className="w-full border rounded px-2 py-2 text-[#212529] dark:text-[#F8F9FA] dark:bg-gray-600 dark:border-gray-500">
 						<option value="">Select Residential Awareness</option>
 						{residentialOptions.map((option) => (
 							<option key={option.value} value={option.value}>
@@ -196,10 +208,8 @@ export default function EditPropertyModal({
 					<Label label="Occupancy Type" />
 					<select
 						value={(form[key as keyof Property] as string) ?? ''}
-						onChange={(e) =>
-							handleFieldChange(key as keyof Property, e.target.value)
-						}
-						className="w-full border rounded px-2 py-2 text-gray-900 dark:text-gray-200 dark:bg-gray-600 dark:border-gray-500">
+						onChange={handleOccupancyChange}
+						className="w-full border rounded px-2 py-2 text-[#212529] dark:text-[#F8F9FA] dark:bg-gray-600 dark:border-gray-500">
 						<option value="">Select Occupancy Type</option>
 						{occupancyOptions.map((option) => (
 							<option key={option.value} value={option.value}>
@@ -220,17 +230,21 @@ export default function EditPropertyModal({
 			{ key: 'address1', label: 'Address 1', type: 'text' },
 			{ key: 'address2', label: 'Address 2', type: 'text' },
 			{ key: 'address3', label: 'Address 3', type: 'text' },
-			{ key: 'city', label: 'City', type: 'text' },
+			{ key: 'city', label: 'Town/City', type: 'text' },
 			{ key: 'postCode', label: 'Post Code', type: 'text' },
 			{ key: 'county', label: 'County', type: 'text' },
 			{ key: 'country', label: 'Country', type: 'text' },
-			{ key: 'designDate', label: 'Design Date', type: 'date' },
+			{
+				key: 'designDate',
+				label: 'Commission Date/Refurbishment Date',
+				type: 'date',
+			},
 			{ key: 'managerName', label: 'Site Contact Name', type: 'text' },
 			{ key: 'email', label: 'Site Contact Email', type: 'email' },
 			{ key: 'telephone', label: 'Site Contact Telephone', type: 'telephone' },
 			{
 				key: 'uniqueReferenceNumber',
-				label: 'Unique Reference Number',
+				label: 'Unique Reference',
 				type: 'text',
 			},
 			{
@@ -422,7 +436,7 @@ export default function EditPropertyModal({
 			title={`Edit ${section.charAt(0).toUpperCase() + section.slice(1)} Section`}>
 			<form>
 				{isSaving && (
-					<span className="text-sm text-gray-400 absolute top-4 right-24">
+					<span className="text-sm text-[#F8F9FA] absolute top-4 right-24">
 						Saving...
 					</span>
 				)}
@@ -453,11 +467,7 @@ export default function EditPropertyModal({
 								<button
 									onClick={() => setChangeMitigationPlan(true)}
 									className="text-sm text-blue-600 hover:underline">
-									<img
-										src="/change.svg"
-										className="w-4 h-4"
-										alt="Change"
-									/>
+									<img src="/change.svg" className="w-4 h-4" alt="Change" />
 								</button>
 							</div>
 						:	<FileUpload
@@ -486,11 +496,7 @@ export default function EditPropertyModal({
 								<button
 									onClick={() => setChangeRefurbishedCdm(true)}
 									className="text-sm text-blue-600 hover:underline">
-									<img
-										src="/change.svg"
-										className="w-4 h-4"
-										alt="Change"
-									/>
+									<img src="/change.svg" className="w-4 h-4" alt="Change" />
 								</button>
 							</div>
 						:	<FileUpload
@@ -509,13 +515,15 @@ export default function EditPropertyModal({
 					<Button
 						label="Close"
 						onClick={onClose}
-						className="bg-gray-300 hover:bg-gray-400 text-black font-semibold py-1 px-4 rounded"
+						className="py-1 px-4"
+						style="secondary"
 					/>
 					{(section === 'basic' || section === 'contacts') && (
 						<Button
 							label="Save"
-							className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-4 rounded"
+							className="py-1 px-4"
 							onClick={handleSubmit}
+							style="primary"
 						/>
 					)}
 				</div>

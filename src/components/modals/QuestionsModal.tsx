@@ -61,11 +61,11 @@ export default function QuestionsModal({
 					))}
 				</div>
 				<div className="p-4 flex justify-end">
-					{/* No save button needed, just a close button */}
 					<Button
 						label="Close"
-						className="bg-red-600 hover:text-slate-900 p-2 hover:bg-slate-300 rounded"
+						className="p-2"
 						onClick={onClose}
+						style="secondary"
 					/>
 				</div>
 			</div>

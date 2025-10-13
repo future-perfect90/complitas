@@ -432,7 +432,7 @@ export async function getProfile(userId: string) {
 	return response.json();
 }
 
-export async function createCompliance(propertyId: string) {
+export async function createComplianceAudit(propertyId: string) {
 	const jwt = await retrieveToken();
 	const response = await fetch(
 		`${import.meta.env.VITE_API_BASE_URL}/compliance/create.php`,
@@ -451,7 +451,7 @@ export async function createCompliance(propertyId: string) {
 	return response.json();
 }
 
-export async function getComplianceReports(propertyId: string) {
+export async function getComplianceAudits(propertyId: string) {
 	const jwt = await retrieveToken();
 	const response = await fetch(
 		`${import.meta.env.VITE_API_BASE_URL}/compliance/listReports.php?propertyId=${propertyId}`,
@@ -721,16 +721,18 @@ export async function fetchUrl(
 	return presignedUrl;
 }
 
-
 export const getCompanyByPropertyId = async (propertyId: string) => {
 	const jwt = await retrieveToken();
-	const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/company/getCompanyByPropertyId.php?propertyId=${propertyId}`, {
-		method: 'GET',
-		headers: {
-			Authorization: `Bearer ${jwt}`,
-			'Content-Type': 'application/json',
-		},
-	});
+	const response = await fetch(
+		`${import.meta.env.VITE_API_BASE_URL}/company/getCompanyByPropertyId.php?propertyId=${propertyId}`,
+		{
+			method: 'GET',
+			headers: {
+				Authorization: `Bearer ${jwt}`,
+				'Content-Type': 'application/json',
+			},
+		}
+	);
 
 	if (!response.ok) throw new Error('Failed to get company logo');
 	return response.json();

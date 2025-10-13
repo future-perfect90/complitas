@@ -34,11 +34,10 @@ const Sidebar = () => {
 
 	return (
 		<>
-			{/* Mobile menu button */}
 			<div className="md:hidden fixed top-4 left-4 z-40">
 				<button
 					onClick={() => setSidebarOpen(!sidebarOpen)}
-					className="p-2 rounded-md text-gray-400 bg-gray-800 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
+					className="p-2 rounded-md text-[#F8F9FA] bg-gray-800 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
 					<span className="sr-only">Open sidebar</span>
 					{sidebarOpen ?
 						<XMarkIcon className="h-6 w-6" aria-hidden="true" />
@@ -46,7 +45,6 @@ const Sidebar = () => {
 				</button>
 			</div>
 
-			{/* Sidebar */}
 			<div
 				className={clsx(
 					'fixed inset-y-0 left-0 z-30 w-48 bg-gray-200 dark:bg-gray-700 transition-colors duration-300 ease-in-out md:relative md:translate-x-0 md:flex md:flex-col',
@@ -55,7 +53,7 @@ const Sidebar = () => {
 						'-translate-x-full': !sidebarOpen,
 					}
 				)}>
-				<div className="flex items-center justify-center h-16 bg-gray-200 text-gray-900 dark:text-gray-200 dark:bg-gray-700 flex-shrink-0">
+				<div className="flex items-center justify-center h-16 bg-gray-200 text-[#212529] dark:text-[#F8F9FA] dark:bg-gray-700 flex-shrink-0">
 					<img
 						className="h-8 w-8"
 						src="/complitas_logo_without_text.png"
@@ -74,8 +72,8 @@ const Sidebar = () => {
 								clsx(
 									'flex items-center px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200',
 									isActive ?
-										'bg-gray-900 text-white'
-									:	'text-gray-800 dark:text-gray-200 hover:bg-gray-700 hover:text-white'
+										'bg-[#FFFFFF] text-[#212529]'
+									:	'text-[#212529] dark:text-[#F8F9FA] hover:bg-[#FFFFFF] hover:text-[#212529]'
 								)
 							}>
 							{item.name}
@@ -90,7 +88,7 @@ const Sidebar = () => {
 								})
 							}
 							className={
-								'flex items-center px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200 text-gray-800 dark:text-gray-200 hover:bg-gray-700 hover:text-white'
+								'flex items-center px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200 text-[#212529] dark:text-[#F8F9FA] hover:bg-[#FFFFFF] hover:text-[#212529]'
 							}>
 							Log out
 						</NavLink>
@@ -98,7 +96,7 @@ const Sidebar = () => {
 							to="#"
 							onClick={() => loginWithRedirect()}
 							className={
-								'flex items-center px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200 text-gray-800 dark:text-gray-200 hover:bg-gray-700 hover:text-white'
+								'flex items-center px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200 text-[#212529] dark:text-[#F8F9FA] hover:bg-[#FFFFFF] hover:text-[#212529]'
 							}>
 							Log in
 						</NavLink>

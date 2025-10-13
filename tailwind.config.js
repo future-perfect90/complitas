@@ -17,8 +17,12 @@ module.exports = {
 				background: 'rgb(var(--color-bg-primary) / <alpha-value>)',
 				surface: 'rgb(var(--color-bg-secondary) / <alpha-value>)',
 				primary: {
-					DEFAULT: 'rgb(var(--color-primary) / <alpha-value>)',
+					DEFAULT: 'rgb(77,131,175)',
 					hover: 'rgb(var(--color-primary-hover) / <alpha-value>)',
+				},
+				secondary: {
+					DEFAULT: 'rgb(var(--color-bg-secondary) / <alpha-value>)',
+					hover: 'rgb(230, 232, 234)',
 				},
 				text: {
 					primary: 'rgb(var(--color-text-primary) / <alpha-value>)',
