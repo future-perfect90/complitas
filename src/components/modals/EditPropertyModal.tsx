@@ -164,7 +164,7 @@ export default function EditPropertyModal({
 				{ value: 'Two Man visits', label: 'Two Man visits' },
 				{ value: 'Vulnerable Persons', label: 'Vulnerable Persons' },
 				{ value: 'Priority Services', label: 'Priority Services' },
-				{ value: 'Medial/EOL care', label: 'Medial/EOL care' },
+				{ value: 'Medical/EOL care', label: 'Medical/EOL care' },
 			];
 			return (
 				<div className="mb-4">
@@ -224,13 +224,17 @@ export default function EditPropertyModal({
 			{ key: 'postCode', label: 'Post Code', type: 'text' },
 			{ key: 'county', label: 'County', type: 'text' },
 			{ key: 'country', label: 'Country', type: 'text' },
-			{ key: 'designDate', label: 'Design Date', type: 'date' },
+			{
+				key: 'designDate',
+				label: 'Commission Date/Refurbishment Date',
+				type: 'date',
+			},
 			{ key: 'managerName', label: 'Site Contact Name', type: 'text' },
 			{ key: 'email', label: 'Site Contact Email', type: 'email' },
 			{ key: 'telephone', label: 'Site Contact Telephone', type: 'telephone' },
 			{
 				key: 'uniqueReferenceNumber',
-				label: 'Unique Reference Number',
+				label: 'Unique Reference',
 				type: 'text',
 			},
 			{

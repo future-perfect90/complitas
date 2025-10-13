@@ -154,7 +154,7 @@ export default function PropertyDetails({
 								</div>
 								<div className="space-y-4">
 									<p className="text-sm text-[#6C757D] dark:text-[#F8F9FA]">
-										Design Date
+										Commission Date/Refurbishment Date
 									</p>
 									<p className="text-[#212529] dark:text-[#F8F9FA]">
 										{property.designDate ?? 'Not set'}
@@ -162,7 +162,7 @@ export default function PropertyDetails({
 								</div>
 								<div className="space-y-4">
 									<p className="text-sm text-[#6C757D] dark:text-[#F8F9FA]">
-										Unique Reference Number
+										Unique Reference
 									</p>
 									<p className="text-[#212529] dark:text-[#F8F9FA] break-words">
 										{property.uniqueReferenceNumber ?? 'Not set'}

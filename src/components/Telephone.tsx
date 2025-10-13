@@ -20,8 +20,8 @@ const Telephone: React.FC<Props> = ({ label, value, onChange, required }) => {
 				value={value ?? ''}
 				onChange={(phone) => onChange?.(phone)}
 				required={required}
-				className="py-0.5 border rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-[#212529] dark:text-[#F8F9FA] dark:bg-gray-600 dark:border-gray-500"
-				inputClassName="border-none! text-md font-medium dark:text-[#F8F9FA]! dark:bg-gray-600! dark:border-gray-500!"
+				className="py-0.5 border rounded-md shadow-sm focus:outline-none focus:border-[#4D83AF] dark:focus:border-[#6DA0CE] text-[#212529] dark:text-[#F8F9FA] dark:bg-gray-600 dark:border-gray-500 bg-white"
+				inputClassName="border-none! text-md font-medium dark:text-[#F8F9FA]! dark:bg-gray-600! dark:border-gray-500! bg-white!"
 				countrySelectorStyleProps={{
 					buttonClassName:
 						'px-2! border-none! dark:text-[#F8F9FA]! dark:bg-gray-600! dark:border-gray-500!',

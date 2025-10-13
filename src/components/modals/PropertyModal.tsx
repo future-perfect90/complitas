@@ -181,6 +181,8 @@ const PropertyModal: React.FC<Props> = ({
 					label="Manager Name"
 					value={managerName}
 					onChange={(e: any) => setManagerName(e.target.value)}
+					tooltip={true}
+					tooltipContent="Property manager name"
 				/>
 				<Telephone
 					label="Telephone Number"
