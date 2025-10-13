@@ -43,6 +43,15 @@ export default function EditPropertyModal({
 		setForm((prev) => ({ ...prev, [key]: value }));
 	};
 
+	const handleOccupancyChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+		const value = e.target.value;
+		setForm((prev) => ({
+			...prev,
+			occupancyType: value,
+			commercialUnits: value === 'Residential' ? 0 : prev.commercialUnits,
+		}));
+	};
+
 	const handleAutoSave = async (key: keyof Property, value: any) => {
 		setIsSaving(true);
 		const updatedForm = { ...form, [key]: value };
@@ -65,6 +74,8 @@ export default function EditPropertyModal({
 	};
 
 	const renderField = (key: string, label: string, type: string) => {
+		const isCommercialUnitsDisabled =
+			key === 'commercialUnits' && form.occupancyType === 'Residential';
 		if (type === 'text' || type === 'number' || type === 'email') {
 			return (
 				<div className="mb-4">
@@ -78,6 +89,7 @@ export default function EditPropertyModal({
 							)
 						}
 						type={type}
+						disabled={isCommercialUnitsDisabled}
 					/>
 				</div>
 			);
@@ -196,9 +208,7 @@ export default function EditPropertyModal({
 					<Label label="Occupancy Type" />
 					<select
 						value={(form[key as keyof Property] as string) ?? ''}
-						onChange={(e) =>
-							handleFieldChange(key as keyof Property, e.target.value)
-						}
+						onChange={handleOccupancyChange}
 						className="w-full border rounded px-2 py-2 text-[#212529] dark:text-[#F8F9FA] dark:bg-gray-600 dark:border-gray-500">
 						<option value="">Select Occupancy Type</option>
 						{occupancyOptions.map((option) => (
