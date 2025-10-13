@@ -113,7 +113,7 @@ export default function PropertyDetails({
 							</CardHeader>
 							<CardContent className="pt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
 								<div className="space-y-4">
-									<p className="text-sm text-[#6C757D] dark:text-[#F8F9FA]">
+									<p className="text-sm text-[#6C757D] dark:text-[#ADB5BD]">
 										Address
 									</p>
 									<p className="text-[#212529] dark:text-[#F8F9FA] break-words">
@@ -139,9 +139,15 @@ export default function PropertyDetails({
 										<br />
 										{property.country}
 									</p>
+									<p className="text-sm text-[#6C757D] dark:text-[#ADB5BD]">
+										Commission Date/Refurbishment Date
+									</p>
+									<p className="text-[#212529] dark:text-[#F8F9FA]">
+										{property.designDate ?? 'Not set'}
+									</p>
 								</div>
 								<div className="space-y-4">
-									<p className="text-sm text-[#6C757D] dark:text-[#F8F9FA]">
+									<p className="text-sm text-[#6C757D] dark:text-[#ADB5BD]">
 										Site contact
 									</p>
 									<p className="text-[#212529] dark:text-[#F8F9FA] break-words">
@@ -151,21 +157,57 @@ export default function PropertyDetails({
 										<br />
 										{property.telephone}
 									</p>
-								</div>
-								<div className="space-y-4">
-									<p className="text-sm text-[#6C757D] dark:text-[#F8F9FA]">
-										Commission Date/Refurbishment Date
-									</p>
-									<p className="text-[#212529] dark:text-[#F8F9FA]">
-										{property.designDate ?? 'Not set'}
-									</p>
-								</div>
-								<div className="space-y-4">
-									<p className="text-sm text-[#6C757D] dark:text-[#F8F9FA]">
-										Unique Reference
+									<p className="text-sm text-[#6C757D] dark:text-[#ADB5BD]">
+										Unique reference
 									</p>
 									<p className="text-[#212529] dark:text-[#F8F9FA] break-words">
 										{property.uniqueReferenceNumber ?? 'Not set'}
+									</p>
+									<p className="text-sm text-[#6C757D] dark:text-[#ADB5BD]">
+										Residential Awareness
+									</p>
+									<p className="text-[#212529] dark:text-[#F8F9FA] break-words">
+										{property.residentialAwareness ?? 'Not set'}
+									</p>
+								</div>
+								<div className="space-y-4">
+									<p className="text-sm text-[#6C757D] dark:text-[#ADB5BD]">
+										Habitable height
+									</p>
+									<p className="text-[#212529] dark:text-[#F8F9FA] break-words">
+										{property.habitableHeight ?? 'Not set'}
+									</p>
+									<p className="text-sm text-[#6C757D] dark:text-[#ADB5BD]">
+										Building height
+									</p>
+									<p className="text-[#212529] dark:text-[#F8F9FA] break-words">
+										{property.buildingHeight ?? 'Not set'}
+									</p>
+									<p className="text-sm text-[#6C757D] dark:text-[#ADB5BD]">
+										Occupancy type
+									</p>
+									<p className="text-[#212529] dark:text-[#F8F9FA] break-words">
+										{property.occupancyType ?? 'Not set'}
+									</p>
+								</div>
+								<div className="space-y-4">
+									<p className="text-sm text-[#6C757D] dark:text-[#ADB5BD]">
+										Number of residential flats
+									</p>
+									<p className="text-[#212529] dark:text-[#F8F9FA] break-words">
+										{property.residentalFlats ?? 'Not set'}
+									</p>
+									<p className="text-sm text-[#6C757D] dark:text-[#ADB5BD]">
+										Unique supply points
+									</p>
+									<p className="text-[#212529] dark:text-[#F8F9FA] break-words">
+										{property.uniqueSupplyPoints ?? 'Not set'}
+									</p>
+									<p className="text-sm text-[#6C757D] dark:text-[#ADB5BD]">
+										Number of commercial units
+									</p>
+									<p className="text-[#212529] dark:text-[#F8F9FA] break-words">
+										{property.commercialUnits ?? 'Not set'}
 									</p>
 								</div>
 							</CardContent>
@@ -185,7 +227,7 @@ export default function PropertyDetails({
 							</CardHeader>
 							<CardContent className="pt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
 								<div className="space-y-4">
-									<p className="text-sm text-[#6C757D] dark:text-[#F8F9FA]">
+									<p className="text-sm text-[#6C757D] dark:text-[#ADB5BD]">
 										Lifts
 									</p>
 									<p className="text-[#212529] dark:text-[#F8F9FA]">
@@ -195,7 +237,7 @@ export default function PropertyDetails({
 											'Yes'
 										:	'No'}
 									</p>
-									<p className="text-sm text-[#6C757D] dark:text-[#F8F9FA]">
+									<p className="text-sm text-[#6C757D] dark:text-[#ADB5BD]">
 										Basement Car park
 									</p>
 									<p className="text-[#212529] dark:text-[#F8F9FA]">
@@ -207,7 +249,7 @@ export default function PropertyDetails({
 									</p>
 								</div>
 								<div className="space-y-4">
-									<p className="text-sm text-[#6C757D] dark:text-[#F8F9FA]">
+									<p className="text-sm text-[#6C757D] dark:text-[#ADB5BD]">
 										Communal Utility Assets
 									</p>
 									<p className="text-[#212529] dark:text-[#F8F9FA]">
@@ -217,7 +259,7 @@ export default function PropertyDetails({
 											'Yes'
 										:	'No'}
 									</p>
-									<p className="text-sm text-[#6C757D] dark:text-[#F8F9FA]">
+									<p className="text-sm text-[#6C757D] dark:text-[#ADB5BD]">
 										Communal Gas Appliances
 									</p>
 									<p className="text-[#212529] dark:text-[#F8F9FA]">
@@ -229,7 +271,7 @@ export default function PropertyDetails({
 									</p>
 								</div>
 								<div className="space-y-4">
-									<p className="text-sm text-[#6C757D] dark:text-[#F8F9FA]">
+									<p className="text-sm text-[#6C757D] dark:text-[#ADB5BD]">
 										Well maintained?
 									</p>
 									<p className="text-[#212529] dark:text-[#F8F9FA]">
@@ -239,7 +281,7 @@ export default function PropertyDetails({
 											'Yes'
 										:	'No'}
 									</p>
-									<p className="text-sm text-[#6C757D] dark:text-[#F8F9FA]">
+									<p className="text-sm text-[#6C757D] dark:text-[#ADB5BD]">
 										Refurbished?
 									</p>
 									<p className="text-[#212529] dark:text-[#F8F9FA]">
@@ -265,7 +307,7 @@ export default function PropertyDetails({
 							</CardHeader>
 							<CardContent className="pt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
 								<div className="space-y-4">
-									<p className="text-sm text-[#6C757D] dark:text-[#F8F9FA]">
+									<p className="text-sm text-[#6C757D] dark:text-[#ADB5BD]">
 										Property Manager
 									</p>
 									<p className="text-[#212529] dark:text-[#F8F9FA] break-words">
@@ -279,7 +321,7 @@ export default function PropertyDetails({
 									</p>
 								</div>
 								<div className="space-y-4">
-									<p className="text-sm text-[#6C757D] dark:text-[#F8F9FA]">
+									<p className="text-sm text-[#6C757D] dark:text-[#ADB5BD]">
 										Emergency contact
 									</p>
 									<p className="text-[#212529] dark:text-[#F8F9FA] break-words">
@@ -293,7 +335,7 @@ export default function PropertyDetails({
 									</p>
 								</div>
 								<div className="space-y-4">
-									<p className="text-sm text-[#6C757D] dark:text-[#F8F9FA]">
+									<p className="text-sm text-[#6C757D] dark:text-[#ADB5BD]">
 										Local Fire Service
 									</p>
 									<p className="text-[#212529] dark:text-[#F8F9FA] break-words">
@@ -321,7 +363,7 @@ export default function PropertyDetails({
 							</CardHeader>
 							<CardContent className="pt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
 								<div className="space-y-4">
-									<p className="text-sm text-[#6C757D] dark:text-[#F8F9FA]">
+									<p className="text-sm text-[#6C757D] dark:text-[#ADB5BD]">
 										Log Book/CDM Folder
 									</p>
 									<p className="text-[#212529] dark:text-[#F8F9FA]">
@@ -331,7 +373,7 @@ export default function PropertyDetails({
 											'Yes'
 										:	'No'}
 									</p>
-									<p className="text-sm text-[#6C757D] dark:text-[#F8F9FA]">
+									<p className="text-sm text-[#6C757D] dark:text-[#ADB5BD]">
 										Fire Safety Log Book
 									</p>
 									<p className="text-[#212529] dark:text-[#F8F9FA]">
@@ -341,7 +383,7 @@ export default function PropertyDetails({
 											'Yes'
 										:	'No'}
 									</p>
-									<p className="text-sm text-[#6C757D] dark:text-[#F8F9FA]">
+									<p className="text-sm text-[#6C757D] dark:text-[#ADB5BD]">
 										Waste Electrical and Electronic Equipment Audit
 									</p>
 									<p className="text-[#212529] dark:text-[#F8F9FA]">
@@ -353,7 +395,7 @@ export default function PropertyDetails({
 									</p>
 								</div>
 								<div className="space-y-4">
-									<p className="text-sm text-[#6C757D] dark:text-[#F8F9FA]">
+									<p className="text-sm text-[#6C757D] dark:text-[#ADB5BD]">
 										EPC
 									</p>
 									<p className="text-[#212529] dark:text-[#F8F9FA]">
@@ -363,7 +405,7 @@ export default function PropertyDetails({
 											'Yes'
 										:	'No'}
 									</p>
-									<p className="text-sm text-[#6C757D] dark:text-[#F8F9FA]">
+									<p className="text-sm text-[#6C757D] dark:text-[#ADB5BD]">
 										Energy Certificates (DEC's)
 									</p>
 									<p className="text-[#212529] dark:text-[#F8F9FA]">
@@ -373,7 +415,7 @@ export default function PropertyDetails({
 											'Yes'
 										:	'No'}
 									</p>
-									<p className="text-sm text-[#6C757D] dark:text-[#F8F9FA]">
+									<p className="text-sm text-[#6C757D] dark:text-[#ADB5BD]">
 										O&M's
 									</p>
 									<p className="text-[#212529] dark:text-[#F8F9FA]">
@@ -385,7 +427,7 @@ export default function PropertyDetails({
 									</p>
 								</div>
 								<div className="space-y-4">
-									<p className="text-sm text-[#6C757D] dark:text-[#F8F9FA]">
+									<p className="text-sm text-[#6C757D] dark:text-[#ADB5BD]">
 										External Isolation Valve Chambers Located and Clear
 									</p>
 									<p className="text-[#212529] dark:text-[#F8F9FA]">
@@ -396,7 +438,7 @@ export default function PropertyDetails({
 										:	'No'}
 										<br />
 									</p>
-									<p className="text-sm text-[#6C757D] dark:text-[#F8F9FA]">
+									<p className="text-sm text-[#6C757D] dark:text-[#ADB5BD]">
 										Access Controlled Spaces
 									</p>
 									<p className="text-[#212529] dark:text-[#F8F9FA]">
