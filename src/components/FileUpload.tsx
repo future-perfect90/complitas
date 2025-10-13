@@ -101,7 +101,7 @@ export default function FileUpload({
 			/>{' '}
 			<Button
 				label="Cancel"
-				onClick={handleUpload}
+				onClick={onClose}
 				className="px-2 py-1"
 				style="secondary"
 			/>
