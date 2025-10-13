@@ -220,7 +220,7 @@ export default function EditPropertyModal({
 			{ key: 'address1', label: 'Address 1', type: 'text' },
 			{ key: 'address2', label: 'Address 2', type: 'text' },
 			{ key: 'address3', label: 'Address 3', type: 'text' },
-			{ key: 'city', label: 'City', type: 'text' },
+			{ key: 'city', label: 'Town/City', type: 'text' },
 			{ key: 'postCode', label: 'Post Code', type: 'text' },
 			{ key: 'county', label: 'County', type: 'text' },
 			{ key: 'country', label: 'Country', type: 'text' },

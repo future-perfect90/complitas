@@ -158,7 +158,7 @@ const PropertyModal: React.FC<Props> = ({
 					onChange={(e: any) => setAddress3(e.target.value)}
 				/>
 				<TextField
-					label="City"
+					label="Town/City"
 					value={city}
 					onChange={(e: any) => setCity(e.target.value)}
 				/>
