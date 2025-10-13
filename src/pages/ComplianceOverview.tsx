@@ -8,19 +8,19 @@ import { getComplianceAnswers, getComplianceQuestions } from '../utils/api';
 import { groupQuestionsByArea } from '../utils/helper';
 
 export default function ComplianceOverview() {
-	const { id, reportId } = useParams();
+	const { id, auditId } = useParams();
 	const [groupedAreas, setGroupedAreas] = useState<any>([]);
 	const [selectedAreaName, setSelectedAreaName] = useState<string | null>(null);
 	const authMeta = useAuthMeta();
 	const { isLoading, isAuthenticated } = authMeta;
 	useEffect(() => {
 		const fetchData = async () => {
-			if (!reportId) return;
+			if (!auditId) return;
 			try {
 				if (!isLoading && isAuthenticated) {
 					const [questions, answers] = await Promise.all([
 						getComplianceQuestions(id ?? ''),
-						getComplianceAnswers(reportId),
+						getComplianceAnswers(auditId),
 					]);
 					const groupedData = groupQuestionsByArea(questions, answers);
 					setGroupedAreas(groupedData);
@@ -30,7 +30,7 @@ export default function ComplianceOverview() {
 			}
 		};
 		fetchData();
-	}, [reportId, selectedAreaName, isLoading, isAuthenticated]);
+	}, [auditId, selectedAreaName, isLoading, isAuthenticated]);
 
 	const selectedArea = groupedAreas.find(
 		(area: any) => area.name === selectedAreaName
@@ -64,7 +64,7 @@ export default function ComplianceOverview() {
 					questions={selectedArea.questions}
 					propertyId={id ?? ''}
 					onClose={() => setSelectedAreaName(null)}
-					reportId={reportId ?? ''}
+					reportId={auditId ?? ''}
 				/>
 			)}
 		</div>

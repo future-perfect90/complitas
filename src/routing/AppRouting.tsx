@@ -33,17 +33,17 @@ const AppRoutes = () => {
 				{ path: '/properties', element: <PropertyList /> },
 				{ path: '/properties/:id', element: <Property /> },
 				{
-					path: '/properties/:id/compliance-reports',
+					path: '/properties/:id/compliance-audits',
 					element: <ComplianceReports />,
 				},
 				{
-					path: '/properties/:id/compliance-reports/:reportId',
+					path: '/properties/:id/compliance-audits/:auditId',
 					element: <ComplianceOverview />,
 				},
 				{ path: '/users', element: <UserList /> },
 				{ path: '/profile', element: <Profile /> },
 				{
-					path: '/properties/:id/compliance-reports/:reportId/pdf',
+					path: '/properties/:id/compliance-audits/:auditId/pdf',
 					element: <PDFReport />,
 				},
 			],

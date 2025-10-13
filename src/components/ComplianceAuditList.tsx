@@ -2,23 +2,23 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useAuthMeta } from '../context/AuthProvider';
-import { createCompliance, getComplianceReports } from '../utils/api';
+import { createComplianceAudit, getComplianceAudits } from '../utils/api';
 import { Button } from './Button';
 import { Card, CardContent, CardHeader, CardTitle } from './Card';
 import ConfirmationModal from './modals/ConfirmationModal';
 import LoadingSpinner from './modals/Loading';
 
-interface ComplianceReport {
+interface ComplianceAudit {
 	id: string;
 	propertyId: string;
 	createdAt: string;
 }
 
-export const ComplianceReportList = () => {
+export const ComplianceAuditList = () => {
 	const authMeta = useAuthMeta();
 	const { isLoading, isAuthenticated } = authMeta;
-	const [reports, setReports] = useState<Array<ComplianceReport>>([]);
-	const [isReportsLoading, setIsReportsLoading] = useState(true);
+	const [audits, setAudits] = useState<Array<ComplianceAudit>>([]);
+	const [isAuditsLoading, setIsAuditsLoading] = useState(true);
 	const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
 	const navigate = useNavigate();
 	const { id } = useParams();
@@ -27,13 +27,13 @@ export const ComplianceReportList = () => {
 		const fetchAudits = async () => {
 			if (!id) return;
 			try {
-				setIsReportsLoading(true);
-				const data = await getComplianceReports(id);
-				setReports(data);
+				setIsAuditsLoading(true);
+				const data = await getComplianceAudits(id);
+				setAudits(data);
 			} catch (error) {
 				console.error('Error fetching audits:', error);
 			} finally {
-				setIsReportsLoading(false);
+				setIsAuditsLoading(false);
 			}
 		};
 
@@ -44,13 +44,13 @@ export const ComplianceReportList = () => {
 
 	const handleCreation = async () => {
 		if (!id) return;
-		const complianceId = await createCompliance(id);
-		navigate(`/properties/${id}/compliance-reports/${complianceId}`);
-		toast.success('New compliance report created!');
+		const complianceId = await createComplianceAudit(id);
+		navigate(`/properties/${id}/compliance-audits/${complianceId}`);
+		toast.success('New compliance audit created!');
 	};
 
-	if (isLoading || isReportsLoading) {
-		return <LoadingSpinner message={'Loading reports...'} />;
+	if (isLoading || isAuditsLoading) {
+		return <LoadingSpinner message={'Loading audits...'} />;
 	}
 
 	return (
@@ -58,11 +58,11 @@ export const ComplianceReportList = () => {
 			<Card className="rounded-2xl shadow-lg">
 				<CardHeader className="flex">
 					<CardTitle className="text-xl font-semibold">
-						Reports
+						Audits
 						<Button
-							label="Create Report"
+							label="Create audit"
 							onClick={
-								reports && reports.length >= 1 ?
+								audits && audits.length >= 1 ?
 									() => setIsConfirmationModalOpen(true)
 								:	handleCreation
 							}
@@ -72,29 +72,29 @@ export const ComplianceReportList = () => {
 				</CardHeader>
 				<CardContent className="pt-4">
 					<div className="space-y-4">
-						{reports && reports.length > 0 ?
-							reports.map((report) => (
+						{audits && audits.length > 0 ?
+							audits.map((audit) => (
 								<div
-									key={report.id}
+									key={audit.id}
 									className="flex items-center justify-between">
 									<h3 className="text-lg font-semibold">
-										Report from - {new Date(report.createdAt).toLocaleString()}
+										Audit from - {new Date(audit.createdAt).toLocaleString()}
 									</h3>
 									<div className="flex gap-2">
 										<Button
-											label="Update Report"
+											label="Update audit"
 											onClick={() =>
 												navigate(
-													`/properties/${id}/compliance-reports/${report.id}`
+													`/properties/${id}/compliance-audits/${audit.id}`
 												)
 											}
 											className="px-2 py-1 bg-green-800 text-white rounded"
 										/>
 										<Button
-											label="View Report"
+											label="View audit"
 											onClick={() =>
 												navigate(
-													`/properties/${id}/compliance-reports/${report.id}/pdf`
+													`/properties/${id}/compliance-audits/${audit.id}/pdf`
 												)
 											}
 											className="px-2 py-1 bg-blue-800 text-white rounded"
@@ -102,7 +102,7 @@ export const ComplianceReportList = () => {
 									</div>
 								</div>
 							))
-						:	<p>No compliance reports found for this property.</p>}
+						:	<p>No compliance audits found for this property.</p>}
 					</div>
 				</CardContent>
 			</Card>
@@ -110,8 +110,8 @@ export const ComplianceReportList = () => {
 				isOpen={isConfirmationModalOpen}
 				onClose={() => setIsConfirmationModalOpen(false)}
 				onConfirm={handleCreation}
-				title="Create New Compliance Report?"
-				message="You already have a compliance report. Do you want to create a new report?"
+				title="Create New Compliance Audit?"
+				message="You already have a compliance audit. Do you want to create a new audit?"
 				confirmText="Yes, Create It"
 				confirmButtonClass="bg-blue-600 hover:bg-blue-700"
 			/>

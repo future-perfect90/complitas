@@ -1,5 +1,5 @@
 import { BackButton } from '../components/BackButton';
-import { ComplianceReportList } from '../components/ComplianceReportList';
+import { ComplianceAuditList } from '../components/ComplianceAuditList';
 
 export default function ComplianceReports() {
 	return (
@@ -16,7 +16,7 @@ export default function ComplianceReports() {
 						</p>
 					</div>
 				</div>
-				<ComplianceReportList />
+				<ComplianceAuditList />
 			</div>
 		</div>
 	);

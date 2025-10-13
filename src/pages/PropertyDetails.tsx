@@ -3,7 +3,7 @@ import { Fragment, useCallback, useState } from 'react';
 import { toast } from 'react-toastify';
 import { Button } from '../components/Button';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/Card';
-import { ComplianceReportList } from '../components/ComplianceReportList';
+import { ComplianceAuditList } from '../components/ComplianceAuditList';
 import Tooltip from '../components/Tooltip';
 import MaintenanceTaskModal from '../components/modals/MaintenanceTaskModal';
 import NotificationPreferencesModal from '../components/modals/NotificationPreferencesModal';
@@ -509,7 +509,7 @@ export default function PropertyDetails({
 						</Card>
 					</TabPanel>
 					<TabPanel>
-						<ComplianceReportList />
+						<ComplianceAuditList />
 					</TabPanel>
 				</TabPanels>
 			</TabGroup>

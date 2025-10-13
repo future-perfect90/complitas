@@ -116,7 +116,7 @@ const ReportDocument = ({
 			/>
 			<Page style={tw('p-[30px] text-[11px] text-gray-800')}>
 				{Object.entries(groupedData).map(([area, questions]) => (
-					<View key={area}>
+					<View>
 						<Text
 							style={tw(
 								'text-base font-bold mt-5 mb-2.5 border-b border-solid border-gray-300 pb-1'
@@ -238,10 +238,10 @@ async function convertPdfToImages(
 }
 
 export const ComplianceReportPDF = ({
-	reportId,
+	auditId,
 	propertyId,
 }: {
-	reportId: string;
+	auditId: string;
 	propertyId: string;
 	authToken?: string;
 }) => {
@@ -266,7 +266,7 @@ export const ComplianceReportPDF = ({
 			try {
 				const [data, maintenanceData, auditData, companyInfo] =
 					await Promise.all([
-						getReportData(reportId),
+						getReportData(auditId),
 						getMaintenanceTasksReportData(propertyId),
 						getAuditData(propertyId),
 						getCompanyByPropertyId(propertyId),
@@ -356,7 +356,7 @@ export const ComplianceReportPDF = ({
 		if (!isLoading && isAuthenticated) {
 			fetchAndProcessReport();
 		}
-	}, [reportId, propertyId, isLoading, isAuthenticated]);
+	}, [auditId, propertyId, isLoading, isAuthenticated]);
 
 	if (
 		loading ||
@@ -365,7 +365,7 @@ export const ComplianceReportPDF = ({
 		!auditReportData ||
 		!companyData
 	) {
-		return <LoadingSpinner message={'Loading report...'} />;
+		return <LoadingSpinner message={'Loading audit...'} />;
 	}
 	return (
 		<>
