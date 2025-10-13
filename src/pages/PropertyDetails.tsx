@@ -100,15 +100,15 @@ export default function PropertyDetails({
 				<TabPanels className="mt-2">
 					<TabPanel>
 						<Card className="rounded-2xl shadow-lg">
-							<CardHeader className="w-full flex justify-between items-center flex-nowrap gap-4">
+							<CardHeader className="w-full flex flex-nowrap gap-4">
 								<CardTitle className="text-xl font-semibold">
 									Basic Information
+									<Button
+										label="Edit"
+										onClick={() => onEdit('basic', property)}
+										className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-4 rounded flex-shrink-0 float-right"
+									/>
 								</CardTitle>
-								<Button
-									label="Edit"
-									onClick={() => onEdit('basic', property)}
-									className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-4 rounded flex-shrink-0"
-								/>
 							</CardHeader>
 							<CardContent className="pt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
 								<div className="space-y-4">
@@ -172,15 +172,15 @@ export default function PropertyDetails({
 					</TabPanel>
 					<TabPanel className="space-y-8">
 						<Card className="rounded-2xl shadow-lg">
-							<CardHeader className="w-full flex justify-between items-center flex-nowrap gap-4">
+							<CardHeader className="w-full flex flex-nowrap gap-4">
 								<CardTitle className="text-xl font-semibold">
 									Additional Information
+									<Button
+										label="Edit"
+										onClick={() => onEdit('additional', property)}
+										className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-4 rounded flex-shrink-0 float-right"
+									/>
 								</CardTitle>
-								<Button
-									label="Edit"
-									onClick={() => onEdit('additional', property)}
-									className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-4 rounded flex-shrink-0"
-								/>
 							</CardHeader>
 							<CardContent className="pt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
 								<div className="space-y-4">
@@ -252,15 +252,15 @@ export default function PropertyDetails({
 							</CardContent>
 						</Card>
 						<Card className="rounded-2xl shadow-lg">
-							<CardHeader className="w-full flex justify-between items-center flex-nowrap gap-4">
+							<CardHeader className="w-full flex flex-nowrap gap-4">
 								<CardTitle className="text-xl font-semibold">
 									Additional contacts
+									<Button
+										label="Edit"
+										onClick={() => onEdit('contacts', property)}
+										className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-4 rounded flex-shrink-0 float-right"
+									/>
 								</CardTitle>
-								<Button
-									label="Edit"
-									onClick={() => onEdit('contacts', property)}
-									className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-4 rounded flex-shrink-0"
-								/>
 							</CardHeader>
 							<CardContent className="pt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
 								<div className="space-y-4">
@@ -308,15 +308,15 @@ export default function PropertyDetails({
 							</CardContent>
 						</Card>
 						<Card className="rounded-2xl shadow-lg">
-							<CardHeader className="w-full flex justify-between items-center flex-nowrap gap-4">
+							<CardHeader className="w-full flex flex-nowrap gap-4">
 								<CardTitle className="text-xl font-semibold">
 									Audit details
+									<Button
+										label="Edit"
+										onClick={() => onEdit('audit', property)}
+										className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-4 rounded flex-shrink-0 float-right"
+									/>
 								</CardTitle>
-								<Button
-									label="Edit"
-									onClick={() => onEdit('audit', property)}
-									className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-4 rounded flex-shrink-0"
-								/>
 							</CardHeader>
 							<CardContent className="pt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
 								<div className="space-y-4">
@@ -412,15 +412,15 @@ export default function PropertyDetails({
 					</TabPanel>
 					<TabPanel>
 						<Card className="rounded-2xl shadow-lg">
-							<CardHeader className="flex justify-between items-center">
+							<CardHeader className="flex">
 								<CardTitle className="text-xl font-semibold">
 									Maintenance
+									<Button
+										label="Add Maintenance Task"
+										onClick={handleOpenAddTask}
+										className="px-2 py-1 bg-purple-800 text-white rounded float-right"
+									/>
 								</CardTitle>
-								<Button
-									label="Add Maintenance Task"
-									onClick={handleOpenAddTask}
-									className="px-2 py-1 bg-purple-800 text-white rounded"
-								/>
 							</CardHeader>
 							<CardContent className="pt-4">
 								<div className="overflow-x-auto">

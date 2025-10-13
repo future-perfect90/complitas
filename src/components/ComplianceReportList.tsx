@@ -56,17 +56,19 @@ export const ComplianceReportList = () => {
 	return (
 		<>
 			<Card className="rounded-2xl shadow-lg">
-				<CardHeader className="flex justify-between items-center">
-					<CardTitle className="text-xl font-semibold">Reports</CardTitle>
-					<Button
-						label="Create Report"
-						onClick={
-							reports && reports.length >= 1 ?
-								() => setIsConfirmationModalOpen(true)
-							:	handleCreation
-						}
-						className="px-2 py-1 bg-purple-800 text-white rounded"
-					/>
+				<CardHeader className="flex">
+					<CardTitle className="text-xl font-semibold">
+						Reports
+						<Button
+							label="Create Report"
+							onClick={
+								reports && reports.length >= 1 ?
+									() => setIsConfirmationModalOpen(true)
+								:	handleCreation
+							}
+							className="px-2 py-1 bg-purple-800 text-white rounded float-right"
+						/>
+					</CardTitle>
 				</CardHeader>
 				<CardContent className="pt-4">
 					<div className="space-y-4">
