@@ -1,4 +1,5 @@
 import { useAuth0 } from '@auth0/auth0-react';
+import { isEqual } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import type { Property } from '../../types';
@@ -15,6 +16,20 @@ interface Props {
 	initialData?: Property;
 }
 
+const emptyForm: Partial<Property> = {
+	name: '',
+	address1: '',
+	address2: '',
+	address3: '',
+	city: '',
+	county: '',
+	country: '',
+	postCode: '',
+	managerName: '',
+	telephone: '',
+	managerEmail: '',
+};
+
 const PropertyModal: React.FC<Props> = ({
 	isOpen,
 	onClose,
@@ -22,47 +37,10 @@ const PropertyModal: React.FC<Props> = ({
 	initialData,
 }) => {
 	const { user } = useAuth0();
-	const [name, setName] = useState('');
-	const [address1, setAddress1] = useState('');
-	const [address2, setAddress2] = useState('');
-	const [address3, setAddress3] = useState('');
-	const [city, setCity] = useState('');
-	const [county, setCounty] = useState('');
-	const [country, setCountry] = useState('');
-	const [postCode, setPostCode] = useState('');
-	const [managerName, setManagerName] = useState('');
-	const [telephone, setTelephone] = useState('');
-	const [managerEmail, setManagerEmail] = useState('');
-	const [id, setId] = useState('');
+	const [form, setForm] = useState<Partial<Property>>(initialData || emptyForm);
 
 	useEffect(() => {
-		if (initialData) {
-			setId(initialData.id || '');
-			setName(initialData.name);
-			setAddress1(initialData.address1);
-			setAddress2(initialData.address2 || '');
-			setAddress3(initialData.address3 || '');
-			setCity(initialData.city);
-			setCounty(initialData.county);
-			setCountry(initialData.country);
-			setPostCode(initialData.postCode);
-			setManagerName(initialData.managerName);
-			setTelephone(initialData.telephone);
-			setManagerEmail(initialData.managerEmail);
-		} else {
-			setId('');
-			setName('');
-			setAddress1('');
-			setAddress2('');
-			setAddress3('');
-			setCity('');
-			setCounty('');
-			setCountry('');
-			setPostCode('');
-			setManagerName('');
-			setTelephone('');
-			setManagerEmail('');
-		}
+		setForm(initialData || emptyForm);
 	}, [initialData]);
 
 	const handleSubmit = async () => {
@@ -70,56 +48,33 @@ const PropertyModal: React.FC<Props> = ({
 		const phoneRegex = /^[0-9\-\+\s\(\)]+$/;
 		const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-		if (!name.trim() || !address1.trim()) {
+		if (!form.name?.trim() || !form.address1?.trim()) {
 			toast.error('Please fill in all required fields.');
 			return;
 		}
-		if (!phoneRegex.test(telephone)) {
+		if (form.telephone && !phoneRegex.test(form.telephone)) {
 			toast.error('Invalid phone number.');
 			return;
 		}
-		if (!emailRegex.test(managerEmail)) {
+		if (form.managerEmail && !emailRegex.test(form.managerEmail)) {
 			toast.error('Invalid email address.');
 			return;
 		}
 
 		try {
 			if (initialData) {
-				await updateProperty(
-					{
-						name,
-						address1,
-						address2,
-						address3,
-						city,
-						county,
-						country,
-						postCode,
-						managerName,
-						telephone,
-						managerEmail,
-					},
-					id
-				);
+				if (isEqual(initialData, form)) {
+					toast.info('No changes have been made.');
+					return;
+				}
+			}
+
+			if (initialData) {
+				await updateProperty(form, form.id!);
 				toast.success('Property updated successfully!');
 			} else {
 				const companyId = user?.['https://complitas.dev/company_uuid'] || '';
-				await createProperty(
-					{
-						name,
-						address1,
-						address2,
-						address3,
-						city,
-						county,
-						country,
-						postCode,
-						managerEmail,
-						telephone,
-						managerName,
-					},
-					companyId
-				);
+				await createProperty(form, companyId);
 				toast.success('Property created successfully!');
 			}
 			onSuccess();
@@ -127,6 +82,10 @@ const PropertyModal: React.FC<Props> = ({
 		} catch {
 			toast.error('Error saving property.');
 		}
+	};
+
+	const handleFieldChange = (field: keyof Property, value: any) => {
+		setForm((prev) => ({ ...prev, [field]: value }));
 	};
 
 	return (
@@ -137,64 +96,64 @@ const PropertyModal: React.FC<Props> = ({
 			<div className="grid grid-cols-2 gap-4">
 				<TextField
 					label="Property Name"
-					value={name}
-					onChange={(e: any) => setName(e.target.value)}
+					value={form.name || ''}
+					onChange={(e) => handleFieldChange('name', e.target.value)}
 					required
 				/>
 				<TextField
 					label="Address Line 1"
-					value={address1}
-					onChange={(e: any) => setAddress1(e.target.value)}
+					value={form.address1 || ''}
+					onChange={(e) => handleFieldChange('address1', e.target.value)}
 					required
 				/>
 				<TextField
 					label="Address Line 2"
-					value={address2}
-					onChange={(e: any) => setAddress2(e.target.value)}
+					value={form.address2 || ''}
+					onChange={(e) => handleFieldChange('address2', e.target.value)}
 				/>
 				<TextField
 					label="Address Line 3"
-					value={address3}
-					onChange={(e: any) => setAddress3(e.target.value)}
+					value={form.address3 || ''}
+					onChange={(e) => handleFieldChange('address3', e.target.value)}
 				/>
 				<TextField
 					label="Town/City"
-					value={city}
-					onChange={(e: any) => setCity(e.target.value)}
+					value={form.city || ''}
+					onChange={(e) => handleFieldChange('city', e.target.value)}
 				/>
 				<TextField
 					label="County"
-					value={county}
-					onChange={(e: any) => setCounty(e.target.value)}
+					value={form.county || ''}
+					onChange={(e) => handleFieldChange('county', e.target.value)}
 				/>
 				<TextField
 					label="Post Code"
-					value={postCode}
-					onChange={(e: any) => setPostCode(e.target.value)}
+					value={form.postCode || ''}
+					onChange={(e) => handleFieldChange('postCode', e.target.value)}
 				/>
 				<TextField
 					label="Country"
-					value={country}
-					onChange={(e: any) => setCountry(e.target.value)}
+					value={form.country || ''}
+					onChange={(e) => handleFieldChange('country', e.target.value)}
 				/>
 				<TextField
 					label="Manager Name"
-					value={managerName}
-					onChange={(e: any) => setManagerName(e.target.value)}
+					value={form.managerName || ''}
+					onChange={(e) => handleFieldChange('managerName', e.target.value)}
 					tooltip={true}
 					tooltipContent="Property manager name"
 				/>
 				<Telephone
 					label="Telephone Number"
-					value={telephone}
-					onChange={(telephone) => setTelephone(telephone)}
+					value={form.telephone || ''}
+					onChange={(value) => handleFieldChange('telephone', value)}
 					required
 				/>
 				<TextField
 					label="Email Address"
 					type="email"
-					value={managerEmail}
-					onChange={(e: any) => setManagerEmail(e.target.value)}
+					value={form.managerEmail || ''}
+					onChange={(e) => handleFieldChange('managerEmail', e.target.value)}
 					required
 				/>
 			</div>

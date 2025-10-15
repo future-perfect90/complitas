@@ -167,7 +167,10 @@ export async function getProperty(id: string) {
 	return response.json();
 }
 
-export async function createProperty(payload: Property, companyId: string) {
+export async function createProperty(
+	payload: Partial<Property>,
+	companyId: string
+) {
 	const jwt = await retrieveToken();
 	const response = await fetch(
 		`${import.meta.env.VITE_API_BASE_URL}/properties/add.php`,
@@ -186,7 +189,7 @@ export async function createProperty(payload: Property, companyId: string) {
 	return response.json();
 }
 
-export async function updateProperty(data: Property, id: string) {
+export async function updateProperty(data: Partial<Property>, id: string) {
 	const jwt = await retrieveToken();
 	const response = await fetch(
 		`${import.meta.env.VITE_API_BASE_URL}/properties/update.php`,

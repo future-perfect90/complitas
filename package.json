@@ -18,6 +18,7 @@
     "@tailwindcss/vite": "^4.1.11",
     "axios": "^1.11.0",
     "canvas": "^3.2.0",
+    "lodash": "^4.17.21",
     "lucide-react": "^0.536.0",
     "posthog-js": "^1.269.0",
     "prettier": "^3.6.2",
