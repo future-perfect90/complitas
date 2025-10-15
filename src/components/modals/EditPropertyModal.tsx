@@ -240,7 +240,7 @@ export default function EditPropertyModal({
 				type: 'date',
 			},
 			{ key: 'managerName', label: 'Site Contact Name', type: 'text' },
-			{ key: 'email', label: 'Site Contact Email', type: 'email' },
+			{ key: 'siteEmail', label: 'Site Contact Email', type: 'email' },
 			{ key: 'telephone', label: 'Site Contact Telephone', type: 'telephone' },
 			{
 				key: 'uniqueReferenceNumber',
@@ -299,7 +299,7 @@ export default function EditPropertyModal({
 				{
 					key: 'principleEmail',
 					label: 'Principle Email',
-					type: 'email',
+					type: 'principleEmail',
 				},
 				{
 					key: 'principleTelephone',
