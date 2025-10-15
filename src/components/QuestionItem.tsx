@@ -136,7 +136,7 @@ export default function QuestionItem({
 					</div>
 				)}
 			</div>
-			{questionObject.uploadRequired && currentAnswer.answer === 'Yes' && (
+			{questionObject.uploadRequired === 1 && currentAnswer.answer === 'Yes' && (
 				<div className="">
 					{currentAnswer.fileName && !isReplacingFile ?
 						<div className="flex items-center space-x-4">
