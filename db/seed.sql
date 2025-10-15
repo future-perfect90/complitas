@@ -119,7 +119,7 @@ CREATE TABLE IF NOT EXISTS question_responses (
     `questionId` VARCHAR(36) NOT NULL,
     `answer` TINYINT(1) NOT NULL,
     `fileName` VARCHAR(255) NULL,
-    `validUntil` DATETIME NULL,
+    `validUntil` DATE NULL,
     `completedBy` VARCHAR(255) NOT NULL,
     CONSTRAINT fk_reports FOREIGN KEY (reportId) REFERENCES reports(id),
     CONSTRAINT fk_question FOREIGN KEY (questionId) REFERENCES compliance_questions(id),
