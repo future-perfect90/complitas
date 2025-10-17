@@ -1,10 +1,10 @@
-// src/components/QuestionItem.tsx
 import React, { useState } from 'react';
 import { toast } from 'react-toastify';
 import { saveAnswer } from '../utils/api';
 import FileUpload from './FileUpload';
 import PresignedDocument from './PresignedDocument';
 import TextField from './TextField';
+import ConfirmationModal from './modals/ConfirmationModal';
 
 export interface Answer {
 	reportId: string;
@@ -13,7 +13,7 @@ export interface Answer {
 	answer: 'Yes' | 'No' | 'NA' | null;
 	fileUrl?: string;
 	fileName?: string;
-	validUntil?: string;
+	validUntil?: string | null;
 	dateCompleted?: string;
 }
 
@@ -48,14 +48,13 @@ export default function QuestionItem({
 	const [error, setError] = useState('');
 	const [isReplacingFile, setIsReplacingFile] = useState(false);
 	const [newFile, setNewFile] = useState<string | null>(null);
+	const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
+	const [dateToConfirm, setDateToConfirm] = useState<string | null>(null);
 
 	const handleSave = async (answerPayload: Answer) => {
 		setIsSaving(true);
 		setError('');
-		if (validUntilDate) {
-			answerPayload.validUntil = currentAnswer.validUntil;
-		}
-		console.log(answerPayload)
+
 		try {
 			await saveAnswer(answerPayload);
 			setCurrentAnswer(answerPayload);
@@ -96,7 +95,42 @@ export default function QuestionItem({
 		setIsReplacingFile(false);
 	};
 
-	const validUntilDate = currentAnswer.answer === 'Yes';
+	const handleValidUntilBlur = () => {
+		const newDate = currentAnswer.validUntil;
+		if (!newDate) {
+			handleSave({ ...currentAnswer, propertyId, validUntil: null });
+			return;
+		}
+
+		const today = new Date();
+		today.setHours(0, 0, 0, 0);
+		const selectedDate = new Date(newDate);
+
+		if (selectedDate < today) {
+			setDateToConfirm(newDate);
+			setIsConfirmationModalOpen(true);
+		} else {
+			handleSave({ ...currentAnswer, propertyId });
+		}
+	};
+
+	const confirmDateAndSave = () => {
+		if (dateToConfirm) {
+			handleSave({ ...currentAnswer, validUntil: dateToConfirm, propertyId });
+		}
+		setIsConfirmationModalOpen(false);
+		setDateToConfirm(null);
+	};
+
+	const cancelDateSelection = () => {
+		setCurrentAnswer((prev) => ({
+			...prev,
+			validUntil: savedAnswer?.validUntil || null,
+		}));
+		setIsConfirmationModalOpen(false);
+		setDateToConfirm(null);
+	};
+
 	return (
 		<div className="p-4 relative">
 			<div className="flex justify-between items-start">
@@ -109,7 +143,7 @@ export default function QuestionItem({
 				{['Yes', 'No', 'NA'].map((option) => (
 					<label
 						key={option}
-						className="flex items-center space-x-1 cursor-pointer text-slate-600 text-[#212529] dark:text-[#F8F9FA]">
+						className="flex items-center space-x-1 cursor-pointer  text-[#212529] dark:text-[#F8F9FA]">
 						<input
 							type="radio"
 							name={questionObject.id}
@@ -132,10 +166,10 @@ export default function QuestionItem({
 							onChange={(e) => {
 								setCurrentAnswer((prev) => ({
 									...prev,
-									validUntil: e.target.value,
+									validUntil: e.target.value || null,
 								}));
 							}}
-							onBlur={() => handleSave({ ...currentAnswer, propertyId })}
+							onBlur={handleValidUntilBlur}
 						/>
 					</div>
 				)}
@@ -157,34 +191,47 @@ export default function QuestionItem({
 					</div>
 				)}
 			</div>
-			{questionObject.uploadRequired === 1 &&
-				currentAnswer.answer === 'Yes' && (
-					<div className="">
-						{currentAnswer.fileName && !isReplacingFile ?
-							<div className="flex items-center space-x-4">
-								<PresignedDocument
-									fileName={newFile ?? currentAnswer.fileName}
-									uploadApiUrl={`${import.meta.env.VITE_API_BASE_URL}/document/presignedUrl.php`}
-									directory={`compliance/${reportId}/`}
-									linkTextPrefix="Evidence"
-								/>
-								<button
-									onClick={() => setIsReplacingFile(true)}
-									className="text-sm">
-									<img src="/change.svg" className="w-4 h-4" alt="Change" />
-								</button>
-							</div>
-						:	<FileUpload
-								uploadApiUrl={`${import.meta.env.VITE_API_BASE_URL}/document/presignedUrl.php`}
+			{questionObject.uploadRequired === 1 && currentAnswer.answer === 'Yes' && (
+				<div className="">
+					{currentAnswer.fileName && !isReplacingFile ? (
+						<div className="flex items-center space-x-4">
+							<PresignedDocument
+								fileName={newFile ?? currentAnswer.fileName}
+								uploadApiUrl={`${
+									import.meta.env.VITE_API_BASE_URL
+								}/document/presignedUrl.php`}
 								directory={`compliance/${reportId}/`}
-								onUploadComplete={handleUploadComplete}
-								label="Upload evidence"
+								linkTextPrefix="Evidence"
 							/>
-						}
-					</div>
-				)}
+							<button
+								onClick={() => setIsReplacingFile(true)}
+								className="text-sm">
+								<img src="/change.svg" className="w-4 h-4" alt="Change" />
+							</button>
+						</div>
+					) : (
+						<FileUpload
+							uploadApiUrl={`${
+								import.meta.env.VITE_API_BASE_URL
+							}/document/presignedUrl.php`}
+							directory={`compliance/${reportId}/`}
+							onUploadComplete={handleUploadComplete}
+							label="Upload evidence"
+						/>
+					)}
+				</div>
+			)}
 
 			{error && <p className="text-sm text-red-500 mt-2">{error}</p>}
+			<ConfirmationModal
+				isOpen={isConfirmationModalOpen}
+				onClose={cancelDateSelection}
+				onConfirm={confirmDateAndSave}
+				title="Past Date Confirmation"
+				message="The date you have selected is in the past. Are you sure you want to proceed?"
+				confirmText="Yes, I'm sure"
+				cancelText="No, cancel"
+			/>
 		</div>
 	);
 }
