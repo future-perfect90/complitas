@@ -27,20 +27,21 @@ class Compliance
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function questionResponse(string $reportId, string $propertyId, string $questionId, string $answer, string $fileName, string|null $validUntil, string $completedBy): bool
+    public function questionResponse(string $reportId, string $propertyId, string $questionId, string $answer, string $fileName, string|null $validUntil, string $completedBy, string|null $dateCompleted): bool
     {
 
         //for audit logging
         $stmt = $this->pdo->prepare("SET @current_user_id = :current_user_id");
         $stmt->bindParam(":current_user_id", $completedBy);
         $stmt->execute();
-        $sql = "INSERT INTO question_responses (reportId, propertyId, questionId, answer, fileName, validUntil, completedBy) 
-        VALUES (:reportId, :propertyId, :questionId, :answer, :fileName, :validUntil, :completedBy)
+        $sql = "INSERT INTO question_responses (reportId, propertyId, questionId, answer, fileName, validUntil, completedBy, dateCompleted) 
+        VALUES (:reportId, :propertyId, :questionId, :answer, :fileName, :validUntil, :completedBy, :dateCompleted)
         ON DUPLICATE KEY UPDATE 
         answer = VALUES(answer), 
         fileName = VALUES(fileName), 
         validUntil = VALUES(validUntil), 
-        completedBy = VALUES(completedBy)";
+        completedBy = VALUES(completedBy),
+        dateCompleted = VALUES(dateCompleted)";
         $stmt = $this->pdo->prepare($sql);
         $stmt->bindParam(':reportId', $reportId);
         $stmt->bindParam(':propertyId', $propertyId);
@@ -49,6 +50,7 @@ class Compliance
         $stmt->bindParam(':fileName', $fileName);
         $stmt->bindParam(':validUntil', $validUntil);
         $stmt->bindParam(':completedBy', $completedBy);
+        $stmt->bindParam(':dateCompleted', $dateCompleted);
         return $stmt->execute();
     }
 
@@ -94,7 +96,7 @@ class Compliance
             }
         }
 
-        $sql = "SELECT id, area, question, answerType, uploadRequired FROM compliance_questions WHERE " . implode(' AND ', $whereClauses);
+        $sql = "SELECT id, area, question, answerType, uploadRequired, validUntil, dateCompleted FROM compliance_questions WHERE " . implode(' AND ', $whereClauses);
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -107,7 +109,7 @@ class Compliance
         WHEN 2 THEN 'No'
         WHEN 3 THEN 'NA'
         ELSE NULL
-        END AS answer, fileName, validUntil, completedBy FROM question_responses WHERE reportId=:propertyComplianceId");
+        END AS answer, fileName, validUntil, completedBy, dateCompleted FROM question_responses WHERE reportId=:propertyComplianceId");
         $stmt->bindParam(':propertyComplianceId', $propertyComplianceId);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);

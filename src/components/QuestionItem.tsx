@@ -14,6 +14,7 @@ export interface Answer {
 	fileUrl?: string;
 	fileName?: string;
 	validUntil?: string;
+	dateCompleted?: string;
 }
 
 interface QuestionItemProps {
@@ -21,6 +22,8 @@ interface QuestionItemProps {
 		id: string;
 		question: string;
 		uploadRequired: boolean | 0 | 1;
+		validUntil: boolean | 0 | 1;
+		dateCompleted: boolean | 0 | 1;
 	};
 	reportId: string;
 	propertyId: string;
@@ -52,6 +55,7 @@ export default function QuestionItem({
 		if (validUntilDate) {
 			answerPayload.validUntil = currentAnswer.validUntil;
 		}
+		console.log(answerPayload)
 		try {
 			await saveAnswer(answerPayload);
 			setCurrentAnswer(answerPayload);
@@ -118,7 +122,7 @@ export default function QuestionItem({
 						<span>{option}</span>
 					</label>
 				))}
-				{validUntilDate && (
+				{questionObject.validUntil === 1 && (
 					<div className="flex items-center space-x-2">
 						<TextField
 							label="Valid until: "
@@ -135,32 +139,50 @@ export default function QuestionItem({
 						/>
 					</div>
 				)}
+				{questionObject.dateCompleted === 1 && (
+					<div className="flex items-center space-x-2">
+						<TextField
+							label="Date Completed: "
+							type="date"
+							layout="horizontal"
+							value={currentAnswer.dateCompleted?.split('T')[0] ?? ''}
+							onChange={(e) => {
+								setCurrentAnswer((prev) => ({
+									...prev,
+									dateCompleted: e.target.value,
+								}));
+							}}
+							onBlur={() => handleSave({ ...currentAnswer, propertyId })}
+						/>
+					</div>
+				)}
 			</div>
-			{questionObject.uploadRequired === 1 && currentAnswer.answer === 'Yes' && (
-				<div className="">
-					{currentAnswer.fileName && !isReplacingFile ?
-						<div className="flex items-center space-x-4">
-							<PresignedDocument
-								fileName={newFile ?? currentAnswer.fileName}
+			{questionObject.uploadRequired === 1 &&
+				currentAnswer.answer === 'Yes' && (
+					<div className="">
+						{currentAnswer.fileName && !isReplacingFile ?
+							<div className="flex items-center space-x-4">
+								<PresignedDocument
+									fileName={newFile ?? currentAnswer.fileName}
+									uploadApiUrl={`${import.meta.env.VITE_API_BASE_URL}/document/presignedUrl.php`}
+									directory={`compliance/${reportId}/`}
+									linkTextPrefix="Evidence"
+								/>
+								<button
+									onClick={() => setIsReplacingFile(true)}
+									className="text-sm">
+									<img src="/change.svg" className="w-4 h-4" alt="Change" />
+								</button>
+							</div>
+						:	<FileUpload
 								uploadApiUrl={`${import.meta.env.VITE_API_BASE_URL}/document/presignedUrl.php`}
 								directory={`compliance/${reportId}/`}
-								linkTextPrefix="Evidence"
+								onUploadComplete={handleUploadComplete}
+								label="Upload evidence"
 							/>
-							<button
-								onClick={() => setIsReplacingFile(true)}
-								className="text-sm">
-								<img src="/change.svg" className="w-4 h-4" alt="Change" />
-							</button>
-						</div>
-					:	<FileUpload
-							uploadApiUrl={`${import.meta.env.VITE_API_BASE_URL}/document/presignedUrl.php`}
-							directory={`compliance/${reportId}/`}
-							onUploadComplete={handleUploadComplete}
-							label="Upload evidence"
-						/>
-					}
-				</div>
-			)}
+						}
+					</div>
+				)}
 
 			{error && <p className="text-sm text-red-500 mt-2">{error}</p>}
 		</div>

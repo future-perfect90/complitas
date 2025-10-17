@@ -32,11 +32,12 @@ switch ($data['answer']) {
 }
 $fileName = $data['fileName'] ?? '';
 $validUntil = $data['validUntil'] ?? NULL;
+$dateCompleted = $data['dateCompleted'] ?? NULL;
 $completedBy = $token->{'https://complitas.dev/user_uuid'} ?? 'system';
 $database = (new Database())->connect();
 $compliance = new Compliance($database);
 
-$result = $compliance->questionResponse($reportId, $propertyId, $questionId, $response, $fileName, $validUntil, $completedBy);
+$result = $compliance->questionResponse($reportId, $propertyId, $questionId, $response, $fileName, $validUntil, $completedBy, $dateCompleted);
 
 if ($result) {
     http_response_code(201);

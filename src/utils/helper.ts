@@ -2,6 +2,9 @@
 interface Question {
 	id: string;
 	area: string;
+	validUntil: 1 | 0;
+	uploadRequired: 1 | 0;
+	dateCompleted: 1 | 0;
 }
 
 interface Answer {
@@ -9,6 +12,7 @@ interface Answer {
 	answer: 'Yes' | 'No' | 'NA' | null;
 	fileName?: string;
 	validUntil?: string;
+	dateCompleted?: string;
 }
 
 interface AreaGroup {
@@ -42,11 +46,21 @@ export const groupQuestionsByArea = (
 		if (savedAnswer) {
 			acc[question.area].answeredCount++;
 		}
+		console.log(savedAnswer);
+
 		if (
-			savedAnswer &&
-			savedAnswer.answer === 'Yes' &&
-			(question as any).uploadRequired &&
-			(!savedAnswer.fileName || !savedAnswer.validUntil)
+			(savedAnswer &&
+				savedAnswer.answer === 'Yes' &&
+				question.dateCompleted == 1 &&
+				!savedAnswer.dateCompleted) ||
+			(savedAnswer &&
+				savedAnswer.answer === 'Yes' &&
+				!savedAnswer.validUntil &&
+				question.validUntil == 1) ||
+			(savedAnswer &&
+				savedAnswer.answer === 'Yes' &&
+				question.uploadRequired == 1 &&
+				!savedAnswer.fileName)
 		) {
 			acc[question.area].missingUploadsCount++;
 		}
