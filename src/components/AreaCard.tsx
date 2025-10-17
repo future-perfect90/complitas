@@ -37,7 +37,7 @@ export default function AreaCard({
 					</div>
 					<div className="w-full bg-gray-200 rounded-full h-2.5">
 						<div
-							className={`h-2.5 rounded-full ${isComplete ? 'bg-[#4D83AF]' : 'bg-[#F29F05] dark:bg-[#F2B705]'}`}
+							className={`h-2.5 rounded-full ${isComplete && missingUploadsCount == 0 ? 'bg-[#4D83AF]' : 'bg-[#F29F05] dark:bg-[#F2B705]'}`}
 							style={{ width: `${progress}%` }}></div>
 					</div>
 				</div>
