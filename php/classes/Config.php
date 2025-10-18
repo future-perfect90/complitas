@@ -34,8 +34,12 @@ class Conf
         ];
     }
 
-    public function awsConfig(): array
+    public static function awsConfig(): array
     {
-        return [ 'region' => $_ENV['AWS_REGION'] ];
+        return [
+            'region' => $_ENV['AWS_REGION'],
+            'key' => $_ENV['AWS_ACCESS_KEY_ID'],
+            'secret' => $_ENV['AWS_SECRET_ACCESS_KEY']
+        ];
     }
 }

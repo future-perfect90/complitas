@@ -26,8 +26,10 @@ class Communication
     private function getEmailClient()
     {
         return $this->sesClient ?? new SesClient([
+            'key' => Conf::awsConfig()['key'],
+            'secret' => Conf::awsConfig()['secret'],
             'version' => 'latest',
-            'region'  => (new Conf())->awsConfig()['region']
+            'region'  => Conf::awsConfig()['region']
         ]);
     }
 
