@@ -25,7 +25,6 @@ class Communication
 
     private function getEmailClient()
     {
-        var_dump(Conf::awsConfig());
         return $this->sesClient ?? new SesClient([
             'key' => Conf::awsConfig()['key'],
             'secret' => Conf::awsConfig()['secret'],
