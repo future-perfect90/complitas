@@ -1,15 +1,14 @@
 <?php
-require_once __DIR__ . '/../../shared/headers.php';
-require_once __DIR__ . '/../../classes/Auth.php';
+require_once __DIR__ . '/../../shared/classes.php';
+require_once __DIR__ . '/../../classes/User.php';
 
 $token = Auth::requireAuth();
 $data = json_decode(file_get_contents("php://input"), true);
 
 if ($data) {
-    require_once __DIR__ . '/../../classes/User.php';
     $auth = new Auth();
 
-    $userId = $data['userId'];
+    $userId = Validate::ValidateString($data['userId']) ?? null;
     $password = $data['password'];
 
     $result = $auth->changePassword($userId, $password);

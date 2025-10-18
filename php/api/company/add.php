@@ -1,7 +1,6 @@
 <?php
-require_once __DIR__ . '/../../shared/headers.php';
-
-require_once __DIR__ . '/../../classes/Auth.php';
+require_once __DIR__ . '/../../shared/classes.php';
+require_once __DIR__ . '/../../classes/Company.php';
 
 $token = Auth::requireAuth();
 $auth = new Auth();
@@ -15,26 +14,24 @@ if (!$auth->hasRole('SuperAdmin', $token)) {
 $data = json_decode(file_get_contents("php://input"), true);
 
 if ($data) {
-    require_once __DIR__ . '/../../classes/Database.php';
-    require_once __DIR__ . '/../../classes/Company.php';
 
     $db = (new Database())->connect();
     $company = new Company($db);
 
     $companyData = [
-        'name' => $data['name'],
-        'address1' => $data['address1'] ?? '',
-        'address2' => $data['address2'] ?? '',
-        'address3' => $data['address3'] ?? '',
-        'city' => $data['city'] ?? '',
-        'county' => $data['county'] ?? '',
-        'postCode' => $data['postCode'] ?? '',
-        'country' => $data['country'] ?? '',
-        'vatNo' => $data['vatNo'],
-        'companyRegNo' => $data['companyRegNo'],
-        'email' => $data['email'] ?? '',
-        'telephone' => $data['telephone'] ?? '',
-        'logo' => $data['logo'] ?? ''
+        'name' => Validate::ValidateString($data['name']),
+        'address1' => Validate::ValidateString($data['address1']) ?? '',
+        'address2' => Validate::ValidateString($data['address2']) ?? '',
+        'address3' => Validate::ValidateString($data['address3']) ?? '',
+        'city' => Validate::ValidateString($data['city']) ?? '',
+        'county' => Validate::ValidateString($data['county']) ?? '',
+        'postCode' => Validate::ValidateString($data['postCode']) ?? '',
+        'country' => Validate::ValidateString($data['country']) ?? '',
+        'vatNo' => Validate::ValidateString($data['vatNo']),
+        'companyRegNo' => Validate::ValidateString($data['companyRegNo']),
+        'email' => Validate::ValidateEmail($data['email']) ?? '',
+        'telephone' => Validate::ValidateString($data['telephone']) ?? '',
+        'logo' => Validate::ValidateString($data['logo']) ?? ''
     ];
 
     $result = $company->create($companyData);

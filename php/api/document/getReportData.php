@@ -1,12 +1,10 @@
 <?php
-require_once __DIR__ . '/../../shared/headers.php';
+require_once __DIR__ . '/../../shared/classes.php';
 require_once __DIR__ . '/../../classes/Document.php';
-require_once __DIR__ . '/../../classes/Auth.php';
-require_once __DIR__ . '/../../../vendor/autoload.php';
 
 $token = Auth::requireAuth();
 
-$reportId = $_GET['reportId'] ?? null;
+$reportId = Validate::ValidateString($_GET['reportId']) ?? null;
 
 if (!$reportId) {
     http_response_code(400);

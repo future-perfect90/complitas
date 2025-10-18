@@ -1,15 +1,14 @@
 <?php
-require_once __DIR__ . '/../../shared/headers.php';
-require_once __DIR__ . '/../../classes/Database.php';
+require_once __DIR__ . '/../../shared/classes.php';
 require_once __DIR__ . '/../../classes/Properties.php';
-require_once __DIR__ . '/../../classes/Auth.php';
+
 
 $token = Auth::requireAuth();
 
 $db = (new Database())->connect();
 $property = new Properties($db);
 
-$propertyId = $_GET['propertyId'] ?? null;
+$propertyId = Validate::ValidateString($_GET['propertyId']) ?? null;
 
 if ($propertyId) {
     $result = $property->getMaintenanceTasks($propertyId);

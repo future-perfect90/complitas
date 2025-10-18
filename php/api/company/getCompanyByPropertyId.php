@@ -1,16 +1,12 @@
 <?php
-
-require_once __DIR__ . '/../../classes/Database.php';
+require_once __DIR__ . '/../../shared/classes.php';
 require_once __DIR__ . '/../../classes/Company.php';
-require_once __DIR__ . '/../../shared/headers.php';
-
-require_once __DIR__ . '/../../classes/Auth.php';
 
 $token = Auth::requireAuth();
 
 $conn = (new Database())->connect();
 $company = new Company($conn);
-$propertyId = $_GET['propertyId'] ?? null;
+$propertyId = Validate::ValidateString($_GET['propertyId']) ?? null;
 
 if ($propertyId) {
     $result = $company->getCompanyViaPropertyId($propertyId);

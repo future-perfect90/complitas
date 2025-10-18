@@ -1,16 +1,13 @@
 <?php
 
 use Ramsey\Uuid\Uuid;
-
-require_once __DIR__ . '/../../shared/headers.php';
-require_once __DIR__ . '/../../classes/Auth.php';
+require_once __DIR__ . '/../../shared/classes.php';
 
 $token = Auth::requireAuth();
 $createdBy = $token->{'https://complitas.dev/user_uuid'};
 $data = json_decode(file_get_contents("php://input"), true);
 
 if ($data) {
-    require_once __DIR__ . '/../../classes/Database.php';
     require_once __DIR__ . '/../../classes/Properties.php';
 
     $db = (new Database())->connect();
@@ -19,18 +16,18 @@ if ($data) {
     $uuid = $uuid = Uuid::uuid4()->toString();
     $propertyData = [
         'id' => $uuid,
-        'name' => $data['payload']['name'],
-        'address1' => $data['payload']['address1'] ?? '',
-        'address2' => $data['payload']['address2'] ?? '',
-        'address3' => $data['payload']['address3'] ?? '',
-        'city' => $data['payload']['city'] ?? '',
-        'county' => $data['payload']['county'] ?? '',
-        'postCode' => $data['payload']['postCode'] ?? '',
-        'country' => $data['payload']['country'] ?? '',
-        'managerName' => $data['payload']['managerName'],
-        'managerEmail' => $data['payload']['managerEmail'] ?? '',
-        'telephone' => $data['payload']['telephone'] ?? '',
-        'companyId' => $data['companyId']
+        'name' =>  Validate::ValidateString($data['payload']['name']),
+        'address1' =>  Validate::ValidateString($data['payload']['address1']) ?? '',
+        'address2' =>  Validate::ValidateString($data['payload']['address2']) ?? '',
+        'address3' =>  Validate::ValidateString($data['payload']['address3']) ?? '',
+        'city' =>  Validate::ValidateString($data['payload']['city']) ?? '',
+        'county' =>  Validate::ValidateString($data['payload']['county']) ?? '',
+        'postCode' =>  Validate::ValidateString($data['payload']['postCode']) ?? '',
+        'country' =>  Validate::ValidateString($data['payload']['country']) ?? '',
+        'managerName' =>  Validate::ValidateString($data['payload']['managerName']),
+        'managerEmail' =>  Validate::ValidateEmail($data['payload']['managerEmail']) ?? '',
+        'telephone' =>  Validate::ValidateString($data['payload']['telephone']) ?? '',
+        'companyId' =>  Validate::ValidateString($data['companyId'])
     ];
 
     $result = $property->create($propertyData, $createdBy);

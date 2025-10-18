@@ -1,31 +1,28 @@
 <?php
-require_once __DIR__ . '/../../shared/headers.php';
-
-require_once __DIR__ . '/../../classes/Auth.php';
+require_once __DIR__ . '/../../shared/classes.php';
+require_once __DIR__ . '/../../classes/Properties.php';
 
 $token = Auth::requireAuth();
 $data = json_decode(file_get_contents("php://input"), true);
 
 if ($data) {
-    require_once __DIR__ . '/../../classes/Database.php';
-    require_once __DIR__ . '/../../classes/Properties.php';
 
     $db = (new Database())->connect();
     $property = new Properties($db);
 
-    $maintenanceId = $data['id'] ?? null;
+    $maintenanceId = Validate::ValidateString($data['id']) ?? null;
 
     $completedByData = [
-        'name' => $data['payload']['name'],
-        'contactName' => $data['payload']['contactName'],
-        'contactAddress' => $data['payload']['contactAddress'],
-        'contactNumber' => $data['payload']['contactNumber']
+        'name' => Validate::ValidateString($data['payload']['name']),
+        'contactName' => Validate::ValidateString($data['payload']['contactName']),
+        'contactAddress' => Validate::ValidateString($data['payload']['contactAddress']),
+        'contactNumber' => Validate::ValidateString($data['payload']['contactNumber'])
     ];
 
     $maintenanceData = [
         'completedAt' => date('Y-m-d H:i:s'),
-        'evidence' => $data['payload']['evidence'] ?? null,
-        'propertyId' => $data['payload']['propertyId'] ?? null,
+        'evidence' => Validate::ValidateString($data['payload']['evidence']) ?? null,
+        'propertyId' => Validate::ValidateString($data['payload']['propertyId']) ?? null,
     ];
     $result = $property->completeMaintenanceTask($maintenanceId, $completedByData, $maintenanceData);
     if ($result['success']) {

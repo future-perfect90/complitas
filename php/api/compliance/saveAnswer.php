@@ -1,9 +1,6 @@
 <?php
-
-require_once __DIR__ . '/../../shared/headers.php';
+require_once __DIR__ . '/../../shared/classes.php';
 require_once __DIR__ . '/../../classes/Compliance.php';
-require_once __DIR__ . '/../../classes/Database.php';
-require_once __DIR__ . '/../../classes/Auth.php';
 
 $token = Auth::requireAuth();
 $data = json_decode(file_get_contents('php://input'), true);
@@ -14,25 +11,18 @@ if (!isset($data['questionId']) || !isset($data['answer']) || !isset($data['repo
     exit;
 }
 
-$questionId = $data['questionId'];
-$propertyId = $data['propertyId'];
-$reportId = $data['reportId'];
-switch ($data['answer']) {
-    case 'Yes':
-        $response = 1;
-        break;
-    case 'No':
-        $response = 2;
-        break;
-    case 'NA':
-        $response = 3;
-        break;
-    default:
-        $response = null;
-}
-$fileName = $data['fileName'] ?? '';
-$validUntil = $data['validUntil'] ?? NULL;
-$dateCompleted = $data['dateCompleted'] ?? NULL;
+$questionId = Validate::ValidateString($data['questionId']);
+$propertyId = Validate::ValidateString($data['propertyId']);
+$reportId = Validate::ValidateString($data['reportId']);
+$response = match(Validate::ValidateString($data['answer'])) {
+    'Yes' => 1,
+    'No' => 2,
+    'NA' => 3,
+    default => null,
+};
+$fileName = isset($data['fileName']) ? Validate::ValidateString($data['fileName']) : '';
+$validUntil = isset($data['validUntil']) ? Validate::ValidateString($data['validUntil']) : NULL;
+$dateCompleted = isset($data['dateCompleted']) ? Validate::ValidateString($data['dateCompleted']) : NULL;
 $completedBy = $token->{'https://complitas.dev/user_uuid'} ?? 'system';
 $database = (new Database())->connect();
 $compliance = new Compliance($database);

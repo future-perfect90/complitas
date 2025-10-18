@@ -19,7 +19,7 @@ export const ReportImageAttachmentPage = ({
 			<Text style={tw('absolute top-5 text-xs')} id={attachmentId}>
 				Attachment: {attachmentId}
 			</Text>
-			<Image style={tw('h-auto max-h-[90%] w-screen')} src={imageUrl} />
+			<Image style={tw('h-auto max-h-[90%] w-screen max-w-[90%]')} src={imageUrl} />
 		</Page>
 	);
 };

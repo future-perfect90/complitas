@@ -1,6 +1,6 @@
 <?php
-require_once __DIR__ . '/../../shared/headers.php';
-require_once __DIR__ . '/../../classes/Auth.php';
+require_once __DIR__ . '/../../shared/classes.php';
+require_once __DIR__ . '/../../classes/User.php';
 
 $auth = new Auth();
 $token = $auth->validateToken($_SERVER['HTTP_AUTHORIZATION']);
@@ -13,15 +13,14 @@ if (empty($token)) {
 $data = json_decode(file_get_contents("php://input"), true);
 
 if ($data) {
-    require_once __DIR__ . '/../../classes/Database.php';
-    require_once __DIR__ . '/../../classes/User.php';
+
 
     $db = (new Database())->connect();
     $user = new User($db);
 
-    $name = $data['payload']['name'];
-    $email = $data['payload']['email'];
-    $companyId = $data['companyId'];
+    $name = Validate::ValidateString($data['payload']['name']);
+    $email = Validate::ValidateEmail($data['payload']['email']);
+    $companyId = Validate::ValidateString($data['companyId']);
     $password = $data['payload']['password'];
     $createdBy = $token->{'https://complitas.dev/user_uuid'};
 

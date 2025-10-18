@@ -1,15 +1,13 @@
 <?php
-require_once __DIR__ . '/../../shared/headers.php';
-require_once __DIR__ . '/../../classes/Database.php';
+require_once __DIR__ . '/../../shared/classes.php';
 require_once __DIR__ . '/../../classes/User.php';
-require_once __DIR__ . '/../../classes/Auth.php';
 
 $token = Auth::requireAuth();
 $auth = new Auth();
 $companyId = '';
 $superAdmin = $auth->hasRole('SuperAdmin', $token);
 if (!$superAdmin) {
-    $companyId = $_GET['companyId'];
+    $companyId = Validate::ValidateString($_GET['companyId']);
     if (empty($companyId)) {
         http_response_code(401);
         echo json_encode(['message' => 'Company ID should be supplied']);
@@ -20,8 +18,7 @@ if (!$superAdmin) {
 $db = (new Database())->connect();
 $user = new User($db);
 
-
-$users = $user->listAll(companyId: $companyId);
+$users = $user->listAll($companyId);
 
 if (!empty($users)) {
     http_response_code(200);

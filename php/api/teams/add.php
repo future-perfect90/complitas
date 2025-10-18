@@ -1,19 +1,17 @@
 <?php
-require_once __DIR__ . '/../../shared/headers.php';
-require_once __DIR__ . '/../../classes/Auth.php';
+require_once __DIR__ . '/../../shared/classes.php';
+require_once __DIR__ . '/../../classes/Teams.php';
 
 $token = Auth::requireAuth();
 $data = json_decode(file_get_contents("php://input"), true);
 
 if ($data) {
-    require_once __DIR__ . '/../../classes/Database.php';
-    require_once __DIR__ . '/../../classes/Teams.php';
 
     $conn = (new Database())->connect();
     $teams = new Teams($conn);
 
-    $name = $data['name'];
-    $companyId = $data['companyId'];
+    $name = Validate::ValidateString($data['name']);
+    $companyId = Validate::ValidateString($data['companyId']);
 
     $result = $teams->createTeam($name, $companyId);
 

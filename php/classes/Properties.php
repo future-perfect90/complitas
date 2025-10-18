@@ -26,7 +26,7 @@ class Properties
         $lookup = "SELECT count(id) FROM properties WHERE name = :property_name and companyId = :company_id";
         $stmt = $this->pdo->prepare($lookup);
         $stmt->bindParam(':property_name', $propertyData['name']);
-        $stmt->bindParam(':company_id', $companyId);
+        $stmt->bindParam(':company_id', $propertyData['companyId']);
         $stmt->execute();
         $rowCount = $stmt->fetchColumn();
         if ($rowCount > 0) {
@@ -96,6 +96,12 @@ class Properties
             if (is_bool($value)) {
                 $value = (int)$value;
             }
+            if(is_float($value)) {
+                $value = Validate::ValidateFloat($value);
+            }
+            if(is_string($value)) {
+                $value = Validate::ValidateString($value);
+            }
             $setClauses[] = "$key = :$key";
             $bindings[":$key"] = $value;
         }
@@ -157,17 +163,17 @@ class Properties
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function addMaintenanceTask(array $taskData, string $createdBy): array
+    public function addMaintenanceTask(string $title, string $description, string $typeOfWork, string $propertyId, string $createdBy): array
     {
         $sql = "INSERT INTO maintenance_tasks (title, description, typeOfWork, propertyId, createdBy) 
                 VALUES (:title, :description, :typeOfWork, :propertyId, :created_by)";
 
         $stmt = $this->pdo->prepare($sql);
 
-        $stmt->bindParam(':title', $taskData['title']);
-        $stmt->bindParam(':description', $taskData['description']);
-        $stmt->bindParam(':typeOfWork', $taskData['typeOfWork']);
-        $stmt->bindParam(':propertyId', $taskData['propertyId']);
+        $stmt->bindParam(':title', $title);
+        $stmt->bindParam(':description', $description);
+        $stmt->bindParam(':typeOfWork', $typeOfWork);
+        $stmt->bindParam(':propertyId', $propertyId);
         $stmt->bindParam(':created_by', $createdBy);
 
 

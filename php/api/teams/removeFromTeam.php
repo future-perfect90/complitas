@@ -1,15 +1,13 @@
 <?php
-require_once __DIR__ . '/../../shared/headers.php';
-require_once __DIR__ . '/../../classes/Database.php';
+require_once __DIR__ . '/../../shared/classes.php';
 require_once __DIR__ . '/../../classes/Teams.php';
-require_once __DIR__ . '/../../classes/Auth.php';
 
 $token = Auth::requireAuth();
 $conn = (new Database())->connect();
 $teams = new Teams($conn);
 
-$userId = $_GET['userId'] ?? null;
-$teamId = $_GET['teamId'] ?? null;
+$userId = Validate::ValidateString($_GET['userId']) ?? null;
+$teamId = Validate::ValidateString($_GET['teamId']) ?? null;
 if ($userId && $teamId) {
     $result = $teams->removeTeamMembers($userId, $teamId);
 

@@ -526,7 +526,7 @@ export default function PropertyDetails({
 																				{task.contactNumber}
 																			</p>
 																		</div>
-																	}>
+																	} className="cursor-pointer">
 																	<span className="cursor-pointer">
 																		{task.name}
 																	</span>

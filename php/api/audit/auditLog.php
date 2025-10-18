@@ -1,12 +1,10 @@
 <?php
-require_once __DIR__ . '/../../shared/headers.php';
+require_once __DIR__ . '/../../shared/classes.php';
 require_once __DIR__ . '/../../classes/Audit.php';
-require_once __DIR__ . '/../../classes/Database.php';
-require_once __DIR__ . '/../../classes/Auth.php';
-require_once __DIR__ . '/../../../vendor/autoload.php';
+
 $token = Auth::requireAuth();
 
-$propertyId = $_GET['propertyId'] ?? null;
+$propertyId = Validate::ValidateString($_GET['propertyId']) ?? null;
 
 $pdo = (new Database())->connect();
 $audit = new Audit($pdo);

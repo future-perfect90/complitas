@@ -37,11 +37,11 @@ export default function Property() {
 		setIsPropertyLoading(true);
 		try {
 			const data = await getProperty(id);
-			const maintenaceData = await getMaintenanceTasks(id);
+			const maintenanceData = await getMaintenanceTasks(id);
 			const preferences = await getPreferences(id);
 			setPreferences(preferences);
 			setProperty(data);
-			setMaintenanceTasks(maintenaceData);
+			setMaintenanceTasks(maintenanceData);
 		} catch (error) {
 			console.error('Error fetching property:', error);
 		} finally {
