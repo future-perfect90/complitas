@@ -8,7 +8,8 @@
         "http-interop/http-factory-guzzle": "^1.2",
         "ramsey/uuid": "^4.9",
         "aws/aws-sdk-php": "^3.356",
-        "firebase/php-jwt": "^6.11"
+        "firebase/php-jwt": "^6.11",
+        "ext-pdo": "*"
     },
     "config": {
         "allow-plugins": {
