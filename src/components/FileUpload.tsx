@@ -14,7 +14,7 @@ interface FileUploadProps {
 
 export default function FileUpload({
                                        uploadApiUrl,
-                                       accept = '*/*',
+                                       accept = 'image/jpg,image/jpeg,image/png,image/gif,application/pdf',
                                        onUploadComplete,
                                        directory = '',
                                        label = 'Choose File',
@@ -82,36 +82,6 @@ export default function FileUpload({
         setUploading(false);
     };
 
-    // return (
-    //     <div className="border rounded-xl shadow-lg">
-    //         <div className="flex items-center justify-between px-4">
-    //             <Label label={label} htmlFor={'file-upload'} className={'bg-gray-200 dark:bg-gray-700 hover:bg-gray-200/10 dark:hover:bg-gray-700/10 cursor-pointer rounded-l-xl'} />
-    //             <input
-    //                 id="file-upload"
-    //                 type="file"
-    //                 accept={accept}
-    //                 onChange={handleFileChange}
-    //                 className="hidden"
-    //             />
-    //             <span className="text-gray-400 text-sm truncate">
-    //                 {file ? file.name : 'No file selected'}
-    //             </span>
-    //             <Button
-    //                 label={uploading ? 'Uploading...' : 'Upload'}
-    //                 disabled={uploading || !file}
-    //                 onClick={handleUpload}
-    //                 className="px-4 py-2 flex items-end justify-end"
-    //                 style="primary"
-    //             />
-    //         </div>
-    //
-    //         {message && (
-    //             <p className={`text-sm ${message.startsWith('✅') ? 'text-green-400' : 'text-red-400'}`}>
-    //                 {message}
-    //             </p>
-    //         )}
-    //     </div>
-    // );
     return (
         <div className="w-full space-y-2 mt-2">
             <div className="flex items-center">
@@ -123,7 +93,6 @@ export default function FileUpload({
                         className={'px-4 py-3 bg-[#293440]/10 dark:bg-[#F3F3EF]/20 text-[#212529] dark:text-[#F8F9FA] cursor-pointer hover:bg-[#293440]/20 dark:hover:bg-[#F3F3EF]/10 transition-colors rounded-l-lg'}
                     />
 
-                    {/* The hidden file input is still required */}
                     <input
                         id="file-upload"
                         type="file"
@@ -132,7 +101,6 @@ export default function FileUpload({
                         className="hidden bg-white dark:bg-[#293440] text-[#212529] dark:text-[#F8F9FA]"
                     />
 
-                    {/* This is the "No file chosen" text part */}
                     <span
                         className="bg-white dark:bg-[#293440] text-[#212529] dark:text-[#F8F9FA] text-sm truncate pl-3 pr-2 flex-2">
                         {file ? file.name : 'No file chosen'}
@@ -147,12 +115,8 @@ export default function FileUpload({
                         />
                     </div>
                 </div>
-
-                {/* Your existing Upload button */}
-
             </div>
 
-            {/* Your existing message logic */}
             {message && (
                 <p className={`text-sm ${message.startsWith('✅') ? 'text-green-400' : 'text-red-400'}`}>
                     {message}
