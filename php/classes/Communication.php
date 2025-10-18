@@ -73,9 +73,11 @@ class Communication
 
             ]);
             return "Email sent successfully! Email ID: {$result['MessageId']}\n";
+
         } catch (AwsException $e) {
             echo $e->getMessage();
             error_log("The email was not sent. Error: " . $e->getAwsErrorMessage() . "\n");
+            return "The email was not sent. Error: " . $e->getAwsErrorMessage() . "\n";
         }
     }
 
@@ -108,7 +110,7 @@ class Communication
     public function getExpiringCerts(string $days): array
     {
 
-        $sql = "SELECT p.id as propertyId, p.name, qr.id as questionResponseId, p.email, p.name, qr.validUntil, cq.question, cq.area, p.managerName
+        $sql = "SELECT p.id as propertyId, p.name, CONCAT(p.address1, ', ', p.address2, ', ', p.city, ', ', p.county, ', ', p.postCode) as propertyAddress, p.managerName, qr.id as questionResponseId, p.managerEmail, qr.validUntil, cq.question, cq.area
         FROM properties p join reports r on r.propertyId=p.id 
         JOIN question_responses qr on qr.reportId = r.id 
         JOIN compliance_questions cq on qr.questionId=cq.id 
