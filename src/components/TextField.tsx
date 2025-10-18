@@ -40,7 +40,7 @@ const TextField: React.FC<Props> = ({
                     onBlur={onBlur}
                     required={required}
                     disabled={disabled}
-                    className="px-2 border rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-[#212529] dark:text-[#F8F9FA] disabled:bg-gray-200 disabled:cursor-not-allowed dark:disabled:bg-gray-700 bg-white"
+                    className="px-2 border rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-[#212529] dark:text-[#F8F9FA] disabled:bg-gray-200 disabled:cursor-not-allowed dark:disabled:bg-gray-700 bg-white dark:bg-gray-600 dark:border-gray-500"
                 />
             </div>
         );
