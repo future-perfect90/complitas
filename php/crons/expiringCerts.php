@@ -65,7 +65,7 @@ foreach ($groupedProperties as $propertyId => $property) {
     $body = str_replace('{{propertyId}}', $propertyId, $body);
 
 
-    $communication->sendEmail([$property['managerEmail']], "Certification Expiration for {$property['propertyName']} expires in $days Days", $body);
+    $communication->sendEmail([$property['managerEmail']], "Certification Expiration for {$property['propertyName']} expires in $days days", $body);
     $count++;
 }
 echo "Email sent to {$count} properties.";
