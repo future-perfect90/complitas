@@ -130,30 +130,30 @@ const PropertyList: React.FC = () => {
 									<p className="break-words">{p.managerEmail}</p>
 								</div>
 							</CardContent>
-							<div className="p-4 flex flex-wrap justify-end gap-2 border-t border-gray-200 dark:border-gray-700 mt-4">
+							<div className="p-2 flex flex-wrap justify-end gap-2 border-t border-gray-200 dark:border-gray-700 mt-auto">
 								<Button
 									label="View"
 									onClick={() => p.id && navigate(`/properties/${p.id}`)}
-									className="px-2 sm:px-3 py-1 text-xs sm:text-sm"
+									className="px-2 sm:px-3 py-1 text-xs sm:text-sm flex-1"
 									style="primary"
 								/>
 								<Button
 									label="Edit"
 									onClick={() => p.id && handleEdit(p.id)}
-									className="px-2 sm:px-3 py-1 text-xs sm:text-sm"
+									className="px-2 sm:px-3 py-1 text-xs sm:text-sm flex-1"
 									style="secondary"
 								/>
 								<Button
 									label="Delete"
 									onClick={() => p.id && handleDelete(p.id)}
-									className="px-2 sm:px-3 py-1 text-xs sm:text-sm"
+									className="px-2 sm:px-3 py-1 text-xs sm:text-sm flex-1"
 									style="tertiary"
 								/>
 							</div>
 						</Card>
 					))}
 				</div>
-			:	<div className="max-w-5xl mx-auto text-center py-16">
+			:	<div className="max-w-5xl mx-auto text-center">
 					<p className="text-[#6C757D] dark:text-[#F8F9FA]">
 						No properties found.
 					</p>

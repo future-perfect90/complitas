@@ -16,6 +16,36 @@ interface Props {
 	initialData?: Property;
 }
 
+interface FormData {
+	name: string;
+	address1: string;
+	address2: string;
+	address3: string;
+	town: string;
+	city: string;
+	county: string;
+	postCode: string;
+	country: string;
+	managerName: string;
+	managerEmail: string;
+	telephone: string;
+}
+
+interface FormErrors {
+	name?: string;
+	address1?: string;
+	address2?: string;
+	address3?: string;
+	town?: string;
+	city?: string;
+	county?: string;
+	postCode?: string;
+	country?: string;
+	managerName?: string;
+	managerEmail?: string;
+	telephone?: string;
+}
+
 const emptyForm: Partial<Property> = {
 	name: '',
 	address1: '',
@@ -37,130 +67,161 @@ const PropertyModal: React.FC<Props> = ({
 	initialData,
 }) => {
 	const { user } = useAuth0();
-	const [form, setForm] = useState<Partial<Property>>(initialData || emptyForm);
+	const [formData, setFormData] = useState<Partial<Property>>(
+		initialData || emptyForm
+	);
+	const [errors, setErrors] = useState<FormErrors>({});
 
 	useEffect(() => {
-		setForm(initialData || emptyForm);
+		setFormData(initialData || emptyForm);
 	}, [initialData]);
 
+	const validate = (data: Partial<Property>): FormErrors => {
+		const newErrors: FormErrors = {};
+
+		if (!data.name?.trim()) newErrors.name = 'Property name is required.';
+		if (!data.address1?.trim())
+			newErrors.address1 = 'Address line 1 is required.';
+		if (!data.address2?.trim())
+			newErrors.address2 = 'Address line 2 is required.';
+		if (!data.city?.trim()) newErrors.city = 'Town/City is required.';
+		if (!data.postCode?.trim()) newErrors.postCode = 'Postcode is required.';
+		if (!data.managerName?.trim())
+			newErrors.managerName = 'Manager name is required.';
+		if (!data.managerEmail?.trim()) {
+			newErrors.managerEmail = 'Manager email is required.';
+		} else if (!/\S+@\S+\.\S+/.test(data.managerEmail)) {
+			newErrors.managerEmail = 'Email is not valid.';
+		}
+		if (!data.telephone?.trim()) {
+			newErrors.telephone = 'Telephone is required.';
+		}
+
+		return newErrors;
+	};
+
 	const handleSubmit = async () => {
-		// Validation
-		const phoneRegex = /^[0-9\-\+\s\(\)]+$/;
-		const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+		const validationErrors = validate(formData);
+		setErrors(validationErrors);
 
-		if (!form.name?.trim() || !form.address1?.trim()) {
-			toast.error('Please fill in all required fields.');
-			return;
-		}
-		if (form.telephone && !phoneRegex.test(form.telephone)) {
-			toast.error('Invalid phone number.');
-			return;
-		}
-		if (form.managerEmail && !emailRegex.test(form.managerEmail)) {
-			toast.error('Invalid email address.');
-			return;
-		}
-
-		try {
-			if (initialData) {
-				if (isEqual(initialData, form)) {
-					toast.info('No changes have been made.');
-					return;
+		if (Object.keys(validationErrors).length === 0) {
+			try {
+				if (initialData) {
+					if (isEqual(initialData, formData)) {
+						toast.info('No changes have been made.');
+						return;
+					}
 				}
-			}
 
-			if (initialData) {
-				await updateProperty(form, form.id!);
-				toast.success('Property updated successfully!');
-			} else {
-				const companyId = user?.['https://complitas.dev/company_uuid'] || '';
-				await createProperty(form, companyId);
-				toast.success('Property created successfully!');
+				if (initialData) {
+					await updateProperty(formData, formData.id!);
+					toast.success('Property updated successfully!');
+				} else {
+					const companyId = user?.['https://complitas.dev/company_uuid'] || '';
+					await createProperty(formData, companyId);
+					toast.success('Property created successfully!');
+				}
+				onSuccess();
+				handleClose();
+			} catch {
+				toast.error('Error saving property.');
 			}
-			onSuccess();
-			onClose();
-		} catch {
-			toast.error('Error saving property.');
 		}
 	};
 
-	const handleFieldChange = (field: keyof Property, value: any) => {
-		setForm((prev) => ({ ...prev, [field]: value }));
+	const handleChange = (field: keyof FormData, value: string) => {
+		setFormData((prev) => ({ ...prev, [field]: value }));
+		if (errors[field]) {
+			setErrors((prev) => ({ ...prev, [field]: undefined }));
+		}
+	};
+
+	const handleClose = () => {
+		onClose();
+		setErrors({});
 	};
 
 	return (
 		<Modal
 			isOpen={isOpen}
-			onClose={onClose}
+			onClose={handleClose}
 			title={initialData ? 'Edit Property' : 'Add Property'}>
 			<div className="grid grid-cols-2 gap-4">
 				<TextField
 					label="Property Name"
-					value={form.name || ''}
-					onChange={(e) => handleFieldChange('name', e.target.value)}
+					value={formData.name || ''}
+					onChange={(e) => handleChange('name', e.target.value)}
 					required
+					error={errors.name}
 				/>
 				<TextField
 					label="Address Line 1"
-					value={form.address1 || ''}
-					onChange={(e) => handleFieldChange('address1', e.target.value)}
+					value={formData.address1 || ''}
+					onChange={(e) => handleChange('address1', e.target.value)}
 					required
+					error={errors.address1}
 				/>
 				<TextField
 					label="Address Line 2"
-					value={form.address2 || ''}
-					onChange={(e) => handleFieldChange('address2', e.target.value)}
+					value={formData.address2 || ''}
+					onChange={(e) => handleChange('address2', e.target.value)}
+					error={errors.address2}
 				/>
 				<TextField
 					label="Address Line 3"
-					value={form.address3 || ''}
-					onChange={(e) => handleFieldChange('address3', e.target.value)}
+					value={formData.address3 || ''}
+					onChange={(e) => handleChange('address3', e.target.value)}
 				/>
 				<TextField
 					label="Town/City"
-					value={form.city || ''}
-					onChange={(e) => handleFieldChange('city', e.target.value)}
+					value={formData.city || ''}
+					onChange={(e) => handleChange('city', e.target.value)}
+					error={errors.city}
 				/>
 				<TextField
 					label="County"
-					value={form.county || ''}
-					onChange={(e) => handleFieldChange('county', e.target.value)}
+					value={formData.county || ''}
+					onChange={(e) => handleChange('county', e.target.value)}
 				/>
 				<TextField
-					label="Post Code"
-					value={form.postCode || ''}
-					onChange={(e) => handleFieldChange('postCode', e.target.value)}
+					label="Postcode"
+					value={formData.postCode || ''}
+					onChange={(e) => handleChange('postCode', e.target.value)}
+					error={errors.postCode}
 				/>
 				<TextField
 					label="Country"
-					value={form.country || ''}
-					onChange={(e) => handleFieldChange('country', e.target.value)}
+					value={formData.country || ''}
+					onChange={(e) => handleChange('country', e.target.value)}
 				/>
 				<TextField
 					label="Manager Name"
-					value={form.managerName || ''}
-					onChange={(e) => handleFieldChange('managerName', e.target.value)}
+					value={formData.managerName || ''}
+					onChange={(e) => handleChange('managerName', e.target.value)}
 					tooltip={true}
 					tooltipContent="Property manager name"
+					error={errors.managerName}
 				/>
 				<Telephone
 					label="Telephone Number"
-					value={form.telephone || ''}
-					onChange={(value) => handleFieldChange('telephone', value)}
+					value={formData.telephone || ''}
+					onChange={(value) => handleChange('telephone', value)}
 					required
+					error={errors.telephone}
 				/>
 				<TextField
 					label="Email Address"
 					type="email"
-					value={form.managerEmail || ''}
-					onChange={(e) => handleFieldChange('managerEmail', e.target.value)}
+					value={formData.managerEmail || ''}
+					onChange={(e) => handleChange('managerEmail', e.target.value)}
 					required
+					error={errors.managerEmail}
 				/>
 			</div>
 			<div className="flex justify-end gap-2 mt-4">
 				<Button
 					label="Cancel"
-					onClick={onClose}
+					onClick={handleClose}
 					className="py-2 px-5"
 					style="secondary"
 				/>
