@@ -48,42 +48,18 @@ const MaintenanceTaskModal: React.FC<Props> = ({
 	completed,
 	propertyId,
 }) => {
-	// const [id, setId] = useState('');
-	// const [title, setTitle] = useState('');
-	// const [description, setDescription] = useState('');
-	// const [typeOfWork, setTypeOfWork] = useState('');
 	const [evidence, setEvidence] = useState('');
-	// const [completedAt, setCompletedAt] = useState('');
-	// const [name, setName] = useState('');
-	// const [contactName, setContactName] = useState('');
-	// const [contactAddress, setContactAddress] = useState('');
-	// const [contactNumber, setContactNumber] = useState('');
 	const [changeEvidence, setChangeEvidence] = useState(false);
 	const [submitted, setSubmitted] = useState(false);
-	const emptyForm: Partial<MaintenanceTask> = {
-		id: '',
-		title: '',
-		description: '',
-		typeOfWork: '',
-		evidence: '',
-		completedAt: '',
-		completedBy: '',
-		propertyId: '',
-		createdAt: '',
-		name: '',
-		contactName: '',
-		contactAddress: '',
-		contactNumber: '',
-	};
 
 	const [formData, setFormData] = useState<Partial<MaintenanceTask>>(
-		initialData || emptyForm
+		initialData || {}
 	);
 
 	const [errors, setErrors] = useState<FormErrors>({});
 
 	useEffect(() => {
-		setFormData(initialData || emptyForm);
+		setFormData(initialData || {});
 	}, [initialData]);
 
 	const validate = (
