@@ -12,7 +12,7 @@ interface Props {
 }
 
 const Telephone: React.FC<Props> = ({ label, value, onChange, required, error }) => {
-	const errorClasses = error ? 'border-red-500' : 'dark:border-gray-500';
+	const errorClasses = error ? 'border-red-500 dark:border-red-300' : 'dark:border-gray-500';
 
 	return (
 		<div className="mb-2">
