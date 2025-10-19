@@ -148,21 +148,21 @@ const PropertyModal: React.FC<Props> = ({
 			title={initialData ? 'Edit Property' : 'Add Property'}>
 			<div className="grid grid-cols-2 gap-4">
 				<TextField
-					label="Property Name"
+					label="Property Name *"
 					value={formData.name || ''}
 					onChange={(e) => handleChange('name', e.target.value)}
 					required
 					error={errors.name}
 				/>
 				<TextField
-					label="Address Line 1"
+					label="Address Line 1 *"
 					value={formData.address1 || ''}
 					onChange={(e) => handleChange('address1', e.target.value)}
 					required
 					error={errors.address1}
 				/>
 				<TextField
-					label="Address Line 2"
+					label="Address Line 2 *"
 					value={formData.address2 || ''}
 					onChange={(e) => handleChange('address2', e.target.value)}
 					error={errors.address2}
@@ -173,7 +173,7 @@ const PropertyModal: React.FC<Props> = ({
 					onChange={(e) => handleChange('address3', e.target.value)}
 				/>
 				<TextField
-					label="Town/City"
+					label="Town/City *"
 					value={formData.city || ''}
 					onChange={(e) => handleChange('city', e.target.value)}
 					error={errors.city}
@@ -184,7 +184,7 @@ const PropertyModal: React.FC<Props> = ({
 					onChange={(e) => handleChange('county', e.target.value)}
 				/>
 				<TextField
-					label="Postcode"
+					label="Postcode *"
 					value={formData.postCode || ''}
 					onChange={(e) => handleChange('postCode', e.target.value)}
 					error={errors.postCode}
@@ -195,7 +195,7 @@ const PropertyModal: React.FC<Props> = ({
 					onChange={(e) => handleChange('country', e.target.value)}
 				/>
 				<TextField
-					label="Manager Name"
+					label="Manager Name *"
 					value={formData.managerName || ''}
 					onChange={(e) => handleChange('managerName', e.target.value)}
 					tooltip={true}
@@ -203,14 +203,14 @@ const PropertyModal: React.FC<Props> = ({
 					error={errors.managerName}
 				/>
 				<Telephone
-					label="Telephone Number"
+					label="Telephone Number *"
 					value={formData.telephone || ''}
 					onChange={(value) => handleChange('telephone', value)}
 					required
 					error={errors.telephone}
 				/>
 				<TextField
-					label="Email Address"
+					label="Email Address *"
 					type="email"
 					value={formData.managerEmail || ''}
 					onChange={(e) => handleChange('managerEmail', e.target.value)}
