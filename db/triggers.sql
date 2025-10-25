@@ -98,10 +98,6 @@ BEGIN
         INSERT INTO audit_log (performingUserId, propertyId, actionType, tableName, recordId, fieldName, oldValue, newValue) VALUES (changerId, OLD.id, 'UPDATE', 'properties', OLD.id, 'communalGasAppliances', OLD.communalGasAppliances, NEW.communalGasAppliances);
     END IF;
 
-    IF NOT (OLD.meterBank <=> NEW.meterBank) THEN
-        INSERT INTO audit_log (performingUserId, propertyId, actionType, tableName, recordId, fieldName, oldValue, newValue) VALUES (changerId, OLD.id, 'UPDATE', 'properties', OLD.id, 'meterBank', OLD.meterBank, NEW.meterBank);
-    END IF;
-
     IF NOT (OLD.voidAssets <=> NEW.voidAssets) THEN
         INSERT INTO audit_log (performingUserId, propertyId, actionType, tableName, recordId, fieldName, oldValue, newValue) VALUES (changerId, OLD.id, 'UPDATE', 'properties', OLD.id, 'voidAssets', OLD.voidAssets, NEW.voidAssets);
     END IF;
@@ -118,8 +114,8 @@ BEGIN
         INSERT INTO audit_log (performingUserId, propertyId, actionType, tableName, recordId, fieldName, oldValue, newValue) VALUES (changerId, OLD.id, 'UPDATE', 'properties', OLD.id, 'commercialUnits', OLD.commercialUnits, NEW.commercialUnits);
     END IF;
 
-    IF NOT (OLD.wellMaintained <=> NEW.wellMaintained) THEN
-        INSERT INTO audit_log (performingUserId, propertyId, actionType, tableName, recordId, fieldName, oldValue, newValue) VALUES (changerId, OLD.id, 'UPDATE', 'properties', OLD.id, 'wellMaintained', OLD.wellMaintained, NEW.wellMaintained);
+    IF NOT (OLD.maintenanceRegime <=> NEW.maintenanceRegime) THEN
+        INSERT INTO audit_log (performingUserId, propertyId, actionType, tableName, recordId, fieldName, oldValue, newValue) VALUES (changerId, OLD.id, 'UPDATE', 'properties', OLD.id, 'maintenanceRegime', OLD.maintenanceRegime, NEW.maintenanceRegime);
     END IF;
 
     IF NOT (OLD.mitigationPlan <=> NEW.mitigationPlan) THEN

@@ -283,12 +283,12 @@ export default function PropertyDetails({
 								</div>
 								<div className="space-y-4">
 									<p className="text-sm text-[#6C757D] dark:text-[#ADB5BD]">
-										Well maintained?
+										Maintenance Regime?
 									</p>
 									<p className="text-[#212529] dark:text-[#F8F9FA]">
-										{property.wellMaintained === null || '' ?
+										{property.maintenanceRegime === null || '' ?
 											'Not set'
-										: property.wellMaintained ?
+										: property.maintenanceRegime ?
 											'Yes'
 										:	'No'}
 									</p>

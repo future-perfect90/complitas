@@ -331,7 +331,6 @@ export default function EditPropertyModal({
 				label: 'Communal Gas Appliances',
 				type: 'boolean',
 			},
-			{ key: 'meterBank', label: 'Meter bank', type: 'boolean' },
 			{
 				key: 'voidAssets',
 				label: 'Assets in voids or boxing?',
@@ -344,7 +343,7 @@ export default function EditPropertyModal({
 			},
 
 			{
-				key: 'wellMaintained',
+				key: 'maintenanceRegime',
 				label: 'A good maintenance regime?',
 				type: 'boolean',
 			},
@@ -436,8 +435,8 @@ export default function EditPropertyModal({
 		fields = [];
 	}
 
-	const showWellMaintainedUpload =
-		(form.wellMaintained === true || form.wellMaintained === 1) &&
+	const showMaintenanceRegimeUpload =
+		(form.maintenanceRegime === true || form.maintenanceRegime === 1) &&
 		section === 'additional';
 	const showRefurbishedUpload =
 		(form.refurbished === true || form.refurbished === 1) &&
@@ -469,7 +468,7 @@ export default function EditPropertyModal({
 					}
 					return null;
 				})}
-				{showWellMaintainedUpload && (
+				{showMaintenanceRegimeUpload && (
 					<div className="mb-4">
 						<Label label="Mitigation Plan" />
 						{form.mitigationPlan && !changeMitigationPlan ?
@@ -477,7 +476,7 @@ export default function EditPropertyModal({
 								<PresignedDocument
 									fileName={form.mitigationPlan}
 									uploadApiUrl={`${import.meta.env.VITE_API_BASE_URL}/document/presignedUrl.php`}
-									directory={`property/wellMaintained/`}
+									directory={`property/maintenanceRegime/`}
 									linkTextPrefix="Evidence"
 								/>
 								<button
@@ -491,7 +490,7 @@ export default function EditPropertyModal({
 								onUploadComplete={(url, fileName) =>
 									handleUploadComplete('mitigationPlan', url, fileName)
 								}
-								directory={`property/wellMaintained/`}
+								directory={`property/maintenanceRegime/`}
 								label="Upload Mitigation Plan"
 							/>
 						}

@@ -35,12 +35,11 @@ export interface Property {
 	lifts?: boolean | 1 | 0;
 	communalUtilityAssets?: boolean | 1 | 0;
 	communalGasAppliances?: boolean | 1 | 0;
-	meterBank?: boolean | 1 | 0;
 	voidAssets?: boolean | 1 | 0;
 	residentalFlats?: number;
 	uniqueSupplyPoints?: number;
 	commercialUnits?: number;
-	wellMaintained?: boolean | 1 | 0;
+	maintenanceRegime?: boolean | 1 | 0;
 	mitigationPlan?: string;
 	refurbished?: boolean | 1 | 0;
 	refurbishedCDM?: string;

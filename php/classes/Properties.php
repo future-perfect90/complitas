@@ -67,12 +67,11 @@ class Properties
     public function getById(string $id): ?array
     {
         $sql = "SELECT id, name, address1, address2, address3, city, county, postCode, country, managerName, managerEmail, telephone, managerName, 
-        occupancyType, habitableHeight, buildingHeight, designDate, lifts, communalUtilityAssets, communalGasAppliances,
-        meterBank, voidAssets, residentalFlats, uniqueSupplyPoints, commercialUnits, wellMaintained, mitigationPlan, refurbished, 
+        occupancyType, habitableHeight, buildingHeight, designDate, lifts, communalUtilityAssets, communalGasAppliances, voidAssets, residentalFlats, uniqueSupplyPoints, commercialUnits, maintenanceRegime, mitigationPlan, refurbished, 
         refurbishedCDM, oms, managerTelephone, managerAddress, siteEmail, siteTelephone, emergencyName, emergencyEmail, emergencyTelephone, emergencyAddress, 
         localFireName, localFireEmail, localFireTelephone, localFireAddress, localFireDetails, carpark, uniqueReferenceNumber, residentialAwareness, logBook, 
         fireSafetyLogBook, electronicAuditCompleted, epc, energyCertificates, isolationValvesClear, accessControlled, hrbUniqueReferenceNumber, bsrRegistrationNumber,
-        principleName, principleEmail, principleTelephone, principleAddress FROM `properties` WHERE id = :id";
+        principleName, principleEmail, principleTelephone, principleAddress, timberFramed FROM `properties` WHERE id = :id";
 
         $stmt = $this->pdo->prepare($sql);
         $stmt->bindParam(':id', $id);
@@ -136,7 +135,7 @@ class Properties
 
     public function getPropertyQuestionRequirements(string $propertyId): ?array
     {
-        $sql = "SELECT lifts, communalGasAppliances, meterBank, carpark, isHRB FROM properties WHERE id = :id";
+        $sql = "SELECT lifts, communalGasAppliances, carpark, isHRB FROM properties WHERE id = :id";
 
         $stmt = $this->pdo->prepare($sql);
         $stmt->bindParam(':id', $propertyId);
