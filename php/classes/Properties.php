@@ -96,10 +96,10 @@ class Properties
             if (is_bool($value)) {
                 $value = (int)$value;
             }
-            if(is_float($value)) {
+            if (is_float($value)) {
                 $value = Validate::ValidateFloat($value);
             }
-            if(is_string($value)) {
+            if (is_string($value)) {
                 $value = Validate::ValidateString($value);
             }
             $setClauses[] = "$key = :$key";
@@ -136,9 +136,7 @@ class Properties
 
     public function getPropertyQuestionRequirements(string $propertyId): ?array
     {
-        // $sql = "SELECT lifts, communalGasAppliances, meterBank, carpark FROM properties WHERE id = :id";
-        $sql = "SELECT lifts FROM properties WHERE id = :id";
-
+        $sql = "SELECT lifts, communalGasAppliances, meterBank, carpark, isHRB FROM properties WHERE id = :id";
 
         $stmt = $this->pdo->prepare($sql);
         $stmt->bindParam(':id', $propertyId);

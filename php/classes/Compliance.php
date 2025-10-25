@@ -81,22 +81,18 @@ class Compliance
             'communalGasAppliances' => 'hasCommunalGas',
             'carpark' => 'hasBasementCarpark',
             'voidAssets' => 'hasVoids',
+            'isHRB' => 'isHRB',
         ];
 
-        $whereClauses = ['1'];
+        $whereClauses = ['byDefault = 1'];
 
         foreach ($conditionalColumns as $propertyColumn => $questionColumn) {
-
-            $baseCondition = "$questionColumn = 0 OR $questionColumn IS NULL";
-
             if (!empty($propertyMetadata[$propertyColumn])) {
-                $whereClauses[] = "($baseCondition OR $questionColumn = 1)";
-            } else {
-                $whereClauses[] = "($baseCondition)";
+                $whereClauses[] = "$questionColumn = 1";
             }
         }
 
-        $sql = "SELECT id, area, question, answerType, uploadRequired, validUntil, dateCompleted FROM compliance_questions WHERE " . implode(' AND ', $whereClauses);
+        $sql = "SELECT id, area, question, answerType, uploadRequired, validUntil, dateCompleted FROM compliance_questions WHERE " . implode(' OR ', $whereClauses);
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);

@@ -68,6 +68,7 @@ export interface Property {
 	isolationValvesClear?: boolean | 1 | 0;
 	accessControlled?: boolean | 1 | 0;
 	oms?: boolean | 1 | 0;
+	isHRB?: boolean;
 }
 export interface User {
 	id?: string;
