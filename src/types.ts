@@ -69,6 +69,7 @@ export interface Property {
 	accessControlled?: boolean | 1 | 0;
 	oms?: boolean | 1 | 0;
 	isHRB?: boolean;
+	timberFramed?: boolean;
 }
 export interface User {
 	id?: string;

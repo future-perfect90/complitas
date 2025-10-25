@@ -337,6 +337,12 @@ export default function EditPropertyModal({
 				label: 'Assets in voids or boxing?',
 				type: 'boolean',
 			},
+			{
+				key: 'timberFramed',
+				label: 'Timber framed building?',
+				type: 'boolean',
+			},
+
 			{ key: 'wellMaintained', label: 'Well maintained?', type: 'boolean' },
 			{ key: 'refurbished', label: 'Refurbished?', type: 'boolean' },
 		];
