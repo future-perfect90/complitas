@@ -343,8 +343,12 @@ export default function EditPropertyModal({
 				type: 'boolean',
 			},
 
-			{ key: 'wellMaintained', label: 'Well maintained?', type: 'boolean' },
-			{ key: 'refurbished', label: 'Refurbished?', type: 'boolean' },
+			{
+				key: 'wellMaintained',
+				label: 'A good maintenance regime?',
+				type: 'boolean',
+			},
+			{ key: 'refurbished', label: 'Refurbishment?', type: 'boolean' },
 		];
 	} else if (section === 'contacts') {
 		fields = [
@@ -439,11 +443,13 @@ export default function EditPropertyModal({
 		(form.refurbished === true || form.refurbished === 1) &&
 		section === 'additional';
 
+	let modalTitle = `Edit ${section.charAt(0).toUpperCase() + section.slice(1)} Section`;
+	modalTitle +=
+		section === 'additional' ?
+			' - Does the block comprise of the following:'
+		:	'';
 	return (
-		<Modal
-			isOpen={isOpen}
-			onClose={onClose}
-			title={`Edit ${section.charAt(0).toUpperCase() + section.slice(1)} Section`}>
+		<Modal isOpen={isOpen} onClose={onClose} title={modalTitle}>
 			<form>
 				{isSaving && (
 					<span className="text-sm text-[#F8F9FA] absolute top-4 right-24">
