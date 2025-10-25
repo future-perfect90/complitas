@@ -405,7 +405,7 @@ export default function PropertyDetails({
                                                 : 'No'}
                                     </p>
                                     <p className="text-sm text-[#6C757D] dark:text-[#ADB5BD]">
-                                        Energy Certificates (DEC's)
+                                        Energy Certificates
                                     </p>
                                     <p className="text-[#212529] dark:text-[#F8F9FA]">
                                         {property.energyCertificates === null || '' ?

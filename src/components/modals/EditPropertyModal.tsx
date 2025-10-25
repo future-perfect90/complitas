@@ -407,7 +407,7 @@ export default function EditPropertyModal({
 			{ key: 'epc', label: 'EPC', type: 'boolean' },
 			{
 				key: 'energyCertificates',
-				label: "Energy Certificates (DEC's)",
+				label: 'Energy Certificates',
 				type: 'boolean',
 			},
 			{ key: 'oms', label: "O&M's", type: 'boolean' },
