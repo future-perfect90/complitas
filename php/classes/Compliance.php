@@ -92,7 +92,8 @@ class Compliance
             }
         }
 
-        $sql = "SELECT id, area, question, answerType, uploadRequired, validUntil, dateCompleted FROM compliance_questions WHERE " . implode(' OR ', $whereClauses);
+        $sql = "SELECT cq.id, ca.area, cq.question, cq.answerType, cq.uploadRequired, cq.validUntil, cq.dateCompleted FROM compliance_questions cq 
+        LEFT JOIN compliance_area ca ON cq.area = ca.id WHERE " . implode(' OR ', $whereClauses) . " ORDER BY ca.displayOrder";
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
