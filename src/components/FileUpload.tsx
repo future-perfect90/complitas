@@ -12,6 +12,7 @@ interface FileUploadProps {
 	label?: string;
 	onClose?: () => void;
 	error?: string;
+	multiple?: boolean;
 }
 
 export default function FileUpload({
@@ -21,6 +22,7 @@ export default function FileUpload({
 	directory = '',
 	label = 'Choose File',
 	error,
+	multiple = true,
 }: FileUploadProps) {
 	const [file, setFile] = useState<File | null>(null);
 	const [uploading, setUploading] = useState(false);
@@ -107,6 +109,7 @@ export default function FileUpload({
 						accept={accept}
 						onChange={handleFileChange}
 						className="hidden bg-white dark:bg-[#293440] text-[#212529] dark:text-[#F8F9FA]"
+						multiple={multiple}
 					/>
 
 					<span className="bg-white dark:bg-[#293440] text-[#212529] dark:text-[#F8F9FA] text-sm truncate pl-3 pr-2 flex-2">
