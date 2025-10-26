@@ -12,7 +12,6 @@ if (!$reportId) {
     exit();
 }
 
-
 $pdo = (new Database())->connect();
 $document = new Document($pdo);
 

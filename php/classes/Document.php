@@ -48,14 +48,17 @@ class Document
     {
         $sql = "SELECT 
             (SELECT p.name FROM reports r JOIN properties p ON p.id = r.propertyId WHERE r.id = :reportId) AS propertyName, 
-            cq.area, 
+            ca.area, 
             cq.question, 
+            cq.dateType,
             qr.answer, 
             qr.fileName, 
-            qr.validUntil
+            qr.savedDate,
+            ca.displayOrder
         FROM compliance_questions cq 
         LEFT JOIN question_responses qr ON cq.id = qr.questionId AND qr.reportId = :reportId1
-        ORDER BY cq.area, cq.question";
+        LEFT JOIN compliance_area ca ON cq.area = ca.id
+        ORDER BY ca.displayOrder, cq.question";
 
         $stmt = $this->pdo->prepare($sql);
         $stmt->bindParam(':reportId', $reportId);

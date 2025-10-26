@@ -13,8 +13,8 @@ export interface Answer {
 	answer: 'Yes' | 'No' | 'NA' | null;
 	fileUrl?: string;
 	fileName?: string;
-	validUntil?: string | null;
-	dateCompleted?: string;
+	dateType?: string;
+	savedDate?: string | null;
 }
 
 interface QuestionItemProps {
@@ -22,9 +22,7 @@ interface QuestionItemProps {
 		id: string;
 		question: string;
 		uploadRequired: boolean | 0 | 1;
-		validUntil: boolean | 0 | 1;
-		dateCompleted: boolean | 0 | 1;
-		inspectionDate: boolean | 0 | 1;
+		dateType: string;
 	};
 	reportId: string;
 	propertyId: string;
@@ -57,6 +55,7 @@ export default function QuestionItem({
 		setError('');
 
 		try {
+			console.log(answerPayload);
 			await saveAnswer(answerPayload);
 			setCurrentAnswer(answerPayload);
 			setIsReplacingFile(false); // Hide upload form after successful save
@@ -97,9 +96,9 @@ export default function QuestionItem({
 	};
 
 	const handleValidUntilBlur = () => {
-		const newDate = currentAnswer.validUntil;
+		const newDate = currentAnswer.savedDate;
 		if (!newDate) {
-			handleSave({ ...currentAnswer, propertyId, validUntil: null });
+			handleSave({ ...currentAnswer, propertyId, savedDate: null });
 			return;
 		}
 
@@ -117,7 +116,7 @@ export default function QuestionItem({
 
 	const confirmDateAndSave = () => {
 		if (dateToConfirm) {
-			handleSave({ ...currentAnswer, validUntil: dateToConfirm, propertyId });
+			handleSave({ ...currentAnswer, savedDate: dateToConfirm, propertyId });
 		}
 		setIsConfirmationModalOpen(false);
 		setDateToConfirm(null);
@@ -126,7 +125,7 @@ export default function QuestionItem({
 	const cancelDateSelection = () => {
 		setCurrentAnswer((prev) => ({
 			...prev,
-			validUntil: savedAnswer?.validUntil || null,
+			validUntil: savedAnswer?.savedDate || null,
 		}));
 		setIsConfirmationModalOpen(false);
 		setDateToConfirm(null);
@@ -157,60 +156,30 @@ export default function QuestionItem({
 						<span>{option}</span>
 					</label>
 				))}
-				{questionObject.validUntil === 1 && currentAnswer.answer === 'Yes' && (
+				{currentAnswer.answer === 'Yes' && (
 					<div className="flex items-center">
 						<TextField
-							label="Valid until: "
+							label={`${questionObject.dateType}: `}
 							type="date"
 							layout="horizontal"
-							value={currentAnswer.validUntil?.split('T')[0] ?? ''}
+							value={currentAnswer.savedDate?.split('T')[0] ?? ''}
 							onChange={(e) => {
 								setCurrentAnswer((prev) => ({
 									...prev,
-									validUntil: e.target.value || null,
+									savedDate: e.target.value || null,
 								}));
 							}}
-							onBlur={handleValidUntilBlur}
-						/>
-					</div>
-				)}
-				{questionObject.dateCompleted === 1 && (
-					<div className="flex items-center">
-						<TextField
-							label="Date Completed: "
-							type="date"
-							layout="horizontal"
-							value={currentAnswer.dateCompleted?.split('T')[0] ?? ''}
-							onChange={(e) => {
-								setCurrentAnswer((prev) => ({
-									...prev,
-									dateCompleted: e.target.value,
-								}));
-							}}
-							onBlur={() => handleSave({ ...currentAnswer, propertyId })}
-						/>
-					</div>
-				)}
-				{questionObject.inspectionDate === 1 && (
-					<div className="flex items-center">
-						<TextField
-							label="Date of Inspection: "
-							type="date"
-							layout="horizontal"
-							value={currentAnswer.dateCompleted?.split('T')[0] ?? ''}
-							onChange={(e) => {
-								setCurrentAnswer((prev) => ({
-									...prev,
-									dateCompleted: e.target.value,
-								}));
-							}}
-							onBlur={() => handleSave({ ...currentAnswer, propertyId })}
+							onBlur={
+								questionObject.dateType === 'Valid until' ?
+									handleValidUntilBlur
+								:	() => handleSave({ ...currentAnswer, propertyId })
+							}
 						/>
 					</div>
 				)}
 			</div>
-			{questionObject.uploadRequired === 1 &&
-				currentAnswer.answer === 'Yes' && (
+			{currentAnswer.answer === 'Yes' &&
+				questionObject.uploadRequired === 1 && (
 					<div className="">
 						{currentAnswer.fileName && !isReplacingFile ?
 							<div className="flex items-center">

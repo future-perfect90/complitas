@@ -34,9 +34,9 @@ export const ReportComplianceAuditPage = ({
 							</Text>
 						)}
 						<Text style={tw('p-2 mb-2 text-base text-[#212529] leading-6')}>
-							{item.fieldName === 'validUntil' ?
+							{item.fieldName === 'savedDate' ?
 								<Text style={tw('p-2 mb-2 text-base text-[#212529] leading-6')}>
-									The expiry date for question{' '}
+									The date for question{' '}
 									<Text style={tw('font-bold')}>'{item.question}'</Text> was
 									changed from{' '}
 									{item.oldValue ?

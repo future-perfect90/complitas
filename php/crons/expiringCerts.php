@@ -34,9 +34,9 @@ foreach ($expiringData as $expiring) {
     $groupedProperties[$propertyId]['questions'][] = [
         'question'   => $expiring['question'],
         'area'       => $expiring['area'],
-        'validUntil'    => date('d-m-Y', strtotime($expiring['validUntil']))
+        'savedDate'  => date('d-m-Y', strtotime($expiring['savedDate'])),
     ];
-    $formattedDate = date('d-m-Y', strtotime($expiring['validUntil']));
+    $formattedDate = date('d-m-Y', strtotime($expiring['savedDate']));
 
     $groupedProperties[$propertyId]['expiring'][] = "<table role='presentation' style='margin-bottom: 10px; border-top: 1px solid #e0e0e0; width:100%;'>
                                 <tr>

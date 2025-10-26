@@ -309,9 +309,9 @@ BEGIN
         VALUES (changerId, NEW.propertyId, 'UPDATE', 'question_responses', NEW.id, 'answer', OLD.answer, NEW.answer);
     END IF;
 
-    IF NOT (OLD.validUntil <=> NEW.validUntil) THEN
+    IF NOT (OLD.savedDate <=> NEW.savedDate) THEN
         INSERT INTO audit_log (performingUserId, propertyId, actionType, tableName, recordId, fieldName, oldValue, newValue)
-        VALUES (changerId, NEW.propertyId, 'UPDATE', 'question_responses', NEW.id, 'validUntil', OLD.validUntil, NEW.validUntil);
+        VALUES (changerId, NEW.propertyId, 'UPDATE', 'question_responses', NEW.id, 'savedDate', OLD.savedDate, NEW.savedDate);
     END IF;
 END$$
 

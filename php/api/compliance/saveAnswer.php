@@ -14,20 +14,19 @@ if (!isset($data['questionId']) || !isset($data['answer']) || !isset($data['repo
 $questionId = Validate::ValidateString($data['questionId']);
 $propertyId = Validate::ValidateString($data['propertyId']);
 $reportId = Validate::ValidateString($data['reportId']);
-$response = match(Validate::ValidateString($data['answer'])) {
+$response = match (Validate::ValidateString($data['answer'])) {
     'Yes' => 1,
     'No' => 2,
     'NA' => 3,
     default => null,
 };
 $fileName = isset($data['fileName']) ? Validate::ValidateString($data['fileName']) : '';
-$validUntil = isset($data['validUntil']) ? Validate::ValidateString($data['validUntil']) : NULL;
-$dateCompleted = isset($data['dateCompleted']) ? Validate::ValidateString($data['dateCompleted']) : NULL;
+$savedDate = isset($data['savedDate']) ? Validate::ValidateString($data['savedDate']) : NULL;
 $completedBy = $token->{'https://complitas.dev/user_uuid'} ?? 'system';
 $database = (new Database())->connect();
 $compliance = new Compliance($database);
 
-$result = $compliance->questionResponse($reportId, $propertyId, $questionId, $response, $fileName, $validUntil, $completedBy, $dateCompleted);
+$result = $compliance->questionResponse($reportId, $propertyId, $questionId, $response, $fileName, $completedBy, $savedDate);
 
 if ($result) {
     http_response_code(201);

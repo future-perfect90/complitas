@@ -114,11 +114,11 @@ class Communication
     public function getExpiringCerts(string $days): array
     {
 
-        $sql = "SELECT p.id as propertyId, p.name, CONCAT(p.address1, ', ', p.address2, ', ', p.city, ', ', p.county, ', ', p.postCode) as propertyAddress, p.managerName, qr.id as questionResponseId, p.managerEmail, qr.validUntil, cq.question, cq.area
+        $sql = "SELECT p.id as propertyId, p.name, CONCAT(p.address1, ', ', p.address2, ', ', p.city, ', ', p.county, ', ', p.postCode) as propertyAddress, p.managerName, qr.id as questionResponseId, p.managerEmail, qr.savedDate, cq.question, cq.area
         FROM properties p join reports r on r.propertyId=p.id 
         JOIN question_responses qr on qr.reportId = r.id 
         JOIN compliance_questions cq on qr.questionId=cq.id 
-        WHERE qr.answer = 1 and qr.validUntil = DATE(date_add(now(), interval $days day))
+        WHERE qr.answer = 1 and qr.savedDate = DATE(date_add(now(), interval $days day))
         ORDER BY p.id, cq.area";
 
         $stmt = $this->pdo->prepare($sql);

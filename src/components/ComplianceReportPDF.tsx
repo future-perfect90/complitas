@@ -41,11 +41,12 @@ interface ReportDataItem {
 	propertyName: string;
 	area: string;
 	question: string;
-	answer: '1' | '2' | '3' | null;
+	answer: 1 | 2 | 3 | null;
 	fileName: string | null;
-	validUntil: string | null;
 	fileUrl?: string;
 	attachmentId?: string;
+	savedDate?: string | null;
+	dateType?: string;
 }
 
 interface AuditData {
@@ -85,7 +86,6 @@ const ReportDocument = ({
 	companyLogoUrl: string;
 	companyData: Company;
 }) => {
-	console.log(companyData);
 	if (!data || data.length === 0) {
 		return (
 			<Document>
@@ -130,10 +130,10 @@ const ReportDocument = ({
 									Answer:{' '}
 									{item.answer ? answerMap[item.answer] : 'Not Answered'}
 								</Text>
-								{item.answer === '1' && item.validUntil && (
+								{item.answer === 1 && item.savedDate && (
 									<Text style={tw('ml-4 text-[10px] text-[#6C757D]')}>
-										Valid Until:{' '}
-										{new Date(item.validUntil).toLocaleDateString()}
+										{item.dateType}:{' '}
+										{new Date(item.savedDate).toLocaleDateString()}
 									</Text>
 								)}
 								{item.fileName && (

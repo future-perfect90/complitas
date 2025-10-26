@@ -1,4 +1,3 @@
-// src/components/QuestionsModal.tsx
 import {Button} from '../Button';
 import QuestionItem from '../QuestionItem';
 
