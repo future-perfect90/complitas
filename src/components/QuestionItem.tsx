@@ -49,6 +49,10 @@ export default function QuestionItem({
 	const [newFile, setNewFile] = useState<string | null>(null);
 	const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
 	const [dateToConfirm, setDateToConfirm] = useState<string | null>(null);
+	const [confirmationMessage, setConfirmationMessage] = useState<{
+		title: string;
+		message: string;
+	}>({ title: '', message: '' });
 
 	const handleSave = async (answerPayload: Answer) => {
 		setIsSaving(true);
@@ -95,7 +99,7 @@ export default function QuestionItem({
 		setIsReplacingFile(false);
 	};
 
-	const handleValidUntilBlur = () => {
+	const handleDateBlur = (dateType: string) => {
 		const newDate = currentAnswer.savedDate;
 		if (!newDate) {
 			handleSave({ ...currentAnswer, propertyId, savedDate: null });
@@ -106,8 +110,21 @@ export default function QuestionItem({
 		today.setHours(0, 0, 0, 0);
 		const selectedDate = new Date(newDate);
 
-		if (selectedDate < today) {
+		if (dateType === 'Valid until' && selectedDate < today) {
 			setDateToConfirm(newDate);
+			setConfirmationMessage({
+				title: 'Past date confirmation',
+				message:
+					'The date you have selected is in the past. Are you sure you want to proceed?',
+			});
+			setIsConfirmationModalOpen(true);
+		} else if (dateType === 'Date of inspection' && selectedDate > today) {
+			setDateToConfirm(newDate);
+			setConfirmationMessage({
+				title: 'Future date of confirmation',
+				message:
+					'The date you have selected is in the future. Are you sure you want to proceed?',
+			});
 			setIsConfirmationModalOpen(true);
 		} else {
 			handleSave({ ...currentAnswer, propertyId });
@@ -125,7 +142,7 @@ export default function QuestionItem({
 	const cancelDateSelection = () => {
 		setCurrentAnswer((prev) => ({
 			...prev,
-			validUntil: savedAnswer?.savedDate || null,
+			savedDate: savedAnswer?.savedDate || null,
 		}));
 		setIsConfirmationModalOpen(false);
 		setDateToConfirm(null);
@@ -169,11 +186,12 @@ export default function QuestionItem({
 									savedDate: e.target.value || null,
 								}));
 							}}
-							onBlur={
-								questionObject.dateType === 'Valid until' ?
-									handleValidUntilBlur
-								:	() => handleSave({ ...currentAnswer, propertyId })
-							}
+							onBlur={() => handleDateBlur(questionObject.dateType)}
+							// onBlur={
+							// 	questionObject.dateType === 'Valid until' ?
+							// 		handleValidUntilBlur
+							// 	:	() => handleSave({ ...currentAnswer, propertyId })
+							// }
 						/>
 					</div>
 				)}
@@ -214,8 +232,8 @@ export default function QuestionItem({
 				isOpen={isConfirmationModalOpen}
 				onClose={cancelDateSelection}
 				onConfirm={confirmDateAndSave}
-				title="Past Date Confirmation"
-				message="The date you have selected is in the past. Are you sure you want to proceed?"
+				title={confirmationMessage?.title}
+				message={confirmationMessage?.message}
 				confirmText="Yes, I'm sure"
 				cancelText="No, cancel"
 			/>
