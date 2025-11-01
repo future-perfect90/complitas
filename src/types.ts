@@ -67,7 +67,7 @@ export interface Property {
 	isolationValvesClear?: boolean | 1 | 0;
 	accessControlled?: boolean | 1 | 0;
 	oms?: boolean | 1 | 0;
-	isHRB?: boolean;
+	isHRB: boolean | 1 | 0;
 	timberFramed?: boolean;
 }
 export interface User {

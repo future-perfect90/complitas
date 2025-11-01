@@ -8,6 +8,7 @@ import Modal from '../Modal';
 import PresignedDocument from '../PresignedDocument';
 import Telephone from '../Telephone';
 import TextField from '../TextField';
+import PropertyContacts from '../property/PropertyContacts';
 
 interface EditPropertyModalProps {
 	isOpen: boolean;
@@ -124,7 +125,7 @@ export default function EditPropertyModal({
 						onChange={(e) =>
 							handleFieldChange(key as keyof Property, e.target.value)
 						}
-						className="w-full border rounded px-2 py-1 text-[#212529] dark:text-[#F8F9FA] dark:bg-gray-600 dark:border-gray-500 bg-white"
+						className="w-full border rounded p-2 text-[#212529] dark:text-[#F8F9FA] dark:bg-gray-600 dark:border-gray-500 bg-white"
 					/>
 				</div>
 			);
@@ -138,7 +139,7 @@ export default function EditPropertyModal({
 						onChange={(e) =>
 							handleFieldChange(key as keyof Property, e.target.value)
 						}
-						className="w-full border rounded px-2 py-1 text-[#212529] dark:text-[#F8F9FA] dark:bg-gray-600 dark:border-gray-500 bg-white"
+						className="w-full border rounded p-2 text-[#212529] dark:text-[#F8F9FA] dark:bg-gray-600 dark:border-gray-500 bg-white"
 					/>
 				</div>
 			);
@@ -190,7 +191,7 @@ export default function EditPropertyModal({
 						onChange={(e) =>
 							handleFieldChange(key as keyof Property, e.target.value)
 						}
-						className="w-full border rounded px-2 py-2 text-[#212529] dark:text-[#F8F9FA] dark:bg-gray-600 dark:border-gray-500 bg-white">
+						className="w-full border rounded px-2 py-2.5 text-[#212529] dark:text-[#F8F9FA] dark:bg-gray-600 dark:border-gray-500 bg-white">
 						<option value="">Select Residential Awareness</option>
 						{residentialOptions.map((option) => (
 							<option key={option.value} value={option.value}>
@@ -213,7 +214,7 @@ export default function EditPropertyModal({
 					<select
 						value={(form[key as keyof Property] as string) ?? ''}
 						onChange={handleOccupancyChange}
-						className="w-full border rounded px-2 py-2 text-[#212529] bg-white dark:text-[#F8F9FA] dark:bg-gray-600 dark:border-gray-500">
+						className="w-full border rounded p-2 text-[#212529] bg-white dark:text-[#F8F9FA] dark:bg-gray-600 dark:border-gray-500">
 						<option value="">Select Occupancy Type</option>
 						{occupancyOptions.map((option) => (
 							<option key={option.value} value={option.value}>
@@ -227,7 +228,7 @@ export default function EditPropertyModal({
 		return null;
 	};
 
-	let fields: Array<{ key: string; label: string; type: string }>;
+	let fields: Array<{ key: string; label: string; type: string }> = [];
 	if (section === 'basic') {
 		fields = [
 			{ key: 'name', label: 'Name', type: 'text' },
@@ -341,64 +342,12 @@ export default function EditPropertyModal({
 				label: 'Timber framed building?',
 				type: 'boolean',
 			},
-
 			{
 				key: 'maintenanceRegime',
 				label: 'A good maintenance regime?',
 				type: 'boolean',
 			},
 			{ key: 'refurbished', label: 'Refurbishment?', type: 'boolean' },
-		];
-	} else if (section === 'contacts') {
-		fields = [
-			{ key: 'managerName', label: 'Property Manager Name', type: 'text' },
-			{
-				key: 'managerAddress',
-				label: 'Property Manager Address',
-				type: 'textarea',
-			},
-			{ key: 'managerEmail', label: 'Property Manager Email', type: 'email' },
-			{
-				key: 'managerTelephone',
-				label: 'Property Manager Telephone',
-				type: 'telephone',
-			},
-			{ key: 'emergencyName', label: 'Emergency Contact Name', type: 'text' },
-			{
-				key: 'emergencyAddress',
-				label: 'Emergency Contact Address',
-				type: 'textarea',
-			},
-			{
-				key: 'emergencyEmail',
-				label: 'Emergency Contact Email',
-				type: 'email',
-			},
-			{
-				key: 'emergencyTelephone',
-				label: 'Emergency Contact Telephone',
-				type: 'telephone',
-			},
-			{
-				key: 'localFireName',
-				label: 'Local Fire Authority Contact Name',
-				type: 'text',
-			},
-			{
-				key: 'localFireAddress',
-				label: 'Local Fire Authority Address',
-				type: 'textarea',
-			},
-			{
-				key: 'localFireEmail',
-				label: 'Local Fire Authority Email',
-				type: 'email',
-			},
-			{
-				key: 'localFireTelephone',
-				label: 'Local Fire Authority Telephone',
-				type: 'telephone',
-			},
 		];
 	} else if (section === 'audit') {
 		fields = [
@@ -442,32 +391,33 @@ export default function EditPropertyModal({
 		(form.refurbished === true || form.refurbished === 1) &&
 		section === 'additional';
 
-	let modalTitle = `Edit ${section.charAt(0).toUpperCase() + section.slice(1)} Section`;
-	modalTitle +=
-		section === 'additional' ?
-			' - Does the block comprise of the following:'
-		:	'';
 	return (
-		<Modal isOpen={isOpen} onClose={onClose} title={modalTitle}>
+		<Modal
+			isOpen={isOpen}
+			onClose={onClose}
+			title={`Edit ${section.charAt(0).toUpperCase() + section.slice(1)} Section`}>
 			<form>
 				{isSaving && (
 					<span className="text-sm text-[#F8F9FA] absolute top-4 right-24">
 						Saving...
 					</span>
 				)}
-				{fields.map((field, index) => {
-					if (index % 2 === 0) {
-						const nextField = fields[index + 1];
-						return (
-							<div key={field.key} className="grid grid-cols-2 gap-4">
-								{renderField(field.key, field.label, field.type)}
-								{nextField &&
-									renderField(nextField.key, nextField.label, nextField.type)}
-							</div>
-						);
-					}
-					return null;
-				})}
+				{section === 'contacts' ?
+					<PropertyContacts renderField={renderField} />
+				:	fields.map((field, index) => {
+						if (index % 2 === 0) {
+							const nextField = fields[index + 1];
+							return (
+								<div key={field.key} className="grid grid-cols-2 gap-4">
+									{renderField(field.key, field.label, field.type)}
+									{nextField &&
+										renderField(nextField.key, nextField.label, nextField.type)}
+								</div>
+							);
+						}
+						return null;
+					})
+				}
 				{showMaintenanceRegimeUpload && (
 					<div className="mb-4">
 						<Label label="Mitigation Plan" />

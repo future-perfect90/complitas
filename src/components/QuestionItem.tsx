@@ -187,11 +187,6 @@ export default function QuestionItem({
 								}));
 							}}
 							onBlur={() => handleDateBlur(questionObject.dateType)}
-							// onBlur={
-							// 	questionObject.dateType === 'Valid until' ?
-							// 		handleValidUntilBlur
-							// 	:	() => handleSave({ ...currentAnswer, propertyId })
-							// }
 						/>
 					</div>
 				)}

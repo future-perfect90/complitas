@@ -474,7 +474,7 @@ export default function PropertyDetails({
 									<Button
 										label="Add Maintenance Task"
 										onClick={handleOpenAddTask}
-										className="px-2 py-1 rounded float-right"
+										className="p-2 rounded float-right"
 										style="primary"
 									/>
 								</CardTitle>
@@ -510,19 +510,19 @@ export default function PropertyDetails({
 													<tr
 														key={task.id}
 														className="border-b dark:border-gray-700">
-														<td className="px-3 py-3 text-sm text-[#212529] dark:text-[#F8F9FA]">
+														<td className="p-3 text-sm text-[#212529] dark:text-[#F8F9FA]">
 															{task.title}
 														</td>
-														<td className="px-3 py-3 text-sm text-[#212529] dark:text-[#F8F9FA]">
+														<td className="p-3 text-sm text-[#212529] dark:text-[#F8F9FA]">
 															{task.typeOfWork}
 														</td>
-														<td className="px-3 py-3 text-sm text-[#212529] dark:text-[#F8F9FA]">
+														<td className="p-3 text-sm text-[#212529] dark:text-[#F8F9FA]">
 															{task.createdAt || '-'}
 														</td>
-														<td className="px-3 py-3 text-sm text-[#212529] dark:text-[#F8F9FA]">
+														<td className="p-3 text-sm text-[#212529] dark:text-[#F8F9FA]">
 															{task.completedAt || '-'}
 														</td>
-														<td className="px-3 py-3 text-sm text-[#212529] dark:text-[#F8F9FA]">
+														<td className="p-3 text-sm text-[#212529] dark:text-[#F8F9FA]">
 															{task.name ?
 																<Tooltip
 																	content={
@@ -548,12 +548,12 @@ export default function PropertyDetails({
 																</Tooltip>
 															:	'-'}
 														</td>
-														<td className="px-3 py-3 text-right">
+														<td className="p-3 text-right">
 															{!task.completedAt && (
 																<Button
 																	label="Complete Task"
 																	onClick={() => handleOpenCompleteTask(task)}
-																	className=" px-2 py-1"
+																	className="p-2"
 																	style="primary"
 																/>
 															)}

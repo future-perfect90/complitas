@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
+import { Button } from '../components/Button';
 import CompanyModal from '../components/modals/CompanyModal';
 import type { Company } from '../types';
 import { deleteCompany, getCompanies, getCompany } from '../utils/api';
@@ -48,15 +49,15 @@ const CompanyList: React.FC = () => {
 		<div className="max-w-4xl mx-auto p-4">
 			<div className="flex justify-between items-center mb-4">
 				<h1 className="text-2xl font-bold">Company List</h1>
-
-				<button
+				<Button
+					label="Add Company"
 					onClick={() => {
 						setEditData(undefined);
 						setIsModalOpen(true);
 					}}
-					className="px-4 py-2 bg-green-600 text-[#F8F9FA] rounded">
-					Add Company
-				</button>
+					className="p-2"
+					style="primary"
+				/>
 			</div>
 			<div className="bg-white shadow rounded-lg overflow-x-auto">
 				<table className="min-w-full min-w-xl w-full border dark:border-none">
@@ -81,16 +82,18 @@ const CompanyList: React.FC = () => {
 									<td className="px-4 py-2 text-slate-800">{c.telephone}</td>
 									<td className="px-4 py-2 text-slate-800">{c.email}</td>
 									<td className="px-4 py-2 flex gap-2">
-										<button
+										<Button
+											label="Edit"
 											onClick={() => c.id && handleEdit(c.id)}
-											className="px-2 py-1 bg-blue-500 text-[#F8F9FA] rounded">
-											Edit
-										</button>
-										<button
+											className="p-2"
+											style="primary"
+										/>
+										<Button
+											label="Delete"
 											onClick={() => c.id && handleDelete(c.id)}
-											className="px-2 py-1 bg-red-500 text-[#F8F9FA] rounded">
-											Delete
-										</button>
+											className="p-2"
+											style="secondary"
+										/>
 									</td>
 								</tr>
 							))

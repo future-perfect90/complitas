@@ -161,21 +161,21 @@ const TeamList: React.FC = () => {
 										<Button
 											label="Assign Members"
 											onClick={() => t.id && handleAssignClick(t.id, t.name)}
-											className="px-2 py-1 bg-blue-500 text-[#F8F9FA] rounded"
+											className="p-2 bg-blue-500 text-[#F8F9FA] rounded"
 										/>
 										<Button
 											label="View Members"
 											onClick={() =>
 												t.id && handleViewMembersClick(t.id, t.name)
 											}
-											className="px-2 py-1 bg-green-500 text-[#F8F9FA] rounded"
+											className="p-2 bg-green-500 text-[#F8F9FA] rounded"
 										/>
 										<Button
 											label="View properties"
 											onClick={() =>
 												t.id && handleViewAssignProperty(t.id, t.name)
 											}
-											className="px-2 py-1 bg-purple-500 text-[#F8F9FA] rounded"
+											className="p-2 bg-purple-500 text-[#F8F9FA] rounded"
 										/>
 									</td>
 								</tr>

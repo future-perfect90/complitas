@@ -66,7 +66,7 @@ export const ComplianceAuditList = () => {
 									() => setIsConfirmationModalOpen(true)
 								:	handleCreation
 							}
-							className="px-2 py-1 float-right"
+							className="p-2 float-right"
 							style="primary"
 						/>
 					</CardTitle>
@@ -89,7 +89,7 @@ export const ComplianceAuditList = () => {
 													`/properties/${id}/compliance-audits/${audit.id}`
 												)
 											}
-											className="px-2 py-1"
+											className="p-2"
 											style="primary"
 										/>
 										<Button
@@ -99,7 +99,7 @@ export const ComplianceAuditList = () => {
 													`/properties/${id}/compliance-audits/${audit.id}/pdf`
 												)
 											}
-											className="px-2 py-1"
+											className="p-2"
 											style="secondary"
 										/>
 									</div>

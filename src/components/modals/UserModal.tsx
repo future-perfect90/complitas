@@ -129,7 +129,7 @@ const UserModal: React.FC<Props> = ({
 									<select
 										value={selectedCompany}
 										onChange={(e) => setSelectedCompany(e.target.value)}
-										className="w-full border rounded px-2 py-2 text-[#212529] dark:text-[#F8F9FA] dark:bg-gray-600 dark:border-gray-500"
+										className="w-full border rounded p-2 text-[#212529] dark:text-[#F8F9FA] dark:bg-gray-600 dark:border-gray-500"
 										required>
 										<option value="" disabled>
 											Select a company

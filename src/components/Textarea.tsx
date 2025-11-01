@@ -34,7 +34,7 @@ const Textarea: React.FC<Props> = ({
 				onBlur={onBlur}
 				required={required}
 				disabled={disabled}
-				className={`mt-1 block w-full px-2 py-2 border rounded-md shadow-sm focus:outline-none focus:border-[#4D83AF] dark:focus:border-[#6DA0CE] text-[#212529] dark:text-[#F8F9FA] dark:bg-gray-600 bg-white disabled:bg-gray-200 disabled:cursor-not-allowed dark:disabled:bg-gray-700 ${errorClasses}`}
+				className={`mt-1 block w-full p-2 border rounded-md shadow-sm focus:outline-none focus:border-[#4D83AF] dark:focus:border-[#6DA0CE] text-[#212529] dark:text-[#F8F9FA] dark:bg-gray-600 bg-white disabled:bg-gray-200 disabled:cursor-not-allowed dark:disabled:bg-gray-700 ${errorClasses}`}
 			/>
 			<ValidationError message={error} />
 		</div>
