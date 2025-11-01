@@ -402,22 +402,9 @@ export default function EditPropertyModal({
 						Saving...
 					</span>
 				)}
-				{section === 'contacts' ?
+				{section === 'contacts' && (
 					<PropertyContacts renderField={renderField} />
-				:	fields.map((field, index) => {
-						if (index % 2 === 0) {
-							const nextField = fields[index + 1];
-							return (
-								<div key={field.key} className="grid grid-cols-2 gap-4">
-									{renderField(field.key, field.label, field.type)}
-									{nextField &&
-										renderField(nextField.key, nextField.label, nextField.type)}
-								</div>
-							);
-						}
-						return null;
-					})
-				}
+				)}
 				{showMaintenanceRegimeUpload && (
 					<div className="mb-4">
 						<Label label="Mitigation Plan" />
