@@ -18,7 +18,7 @@ export default function Label({
 }: Props) {
 	return (
 		<label
-			className={`flex items-center text-sm font-medium text-[#212529] mb-1 dark:text-slate-300 ${className}`}
+			className={`flex items-center text-sm font-medium text-[#212529] dark:text-slate-300 ${className}`}
 			htmlFor={htmlFor}>
 			{label}
 			{tooltip && (
