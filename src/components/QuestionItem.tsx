@@ -173,7 +173,7 @@ export default function QuestionItem({
 						<span>{option}</span>
 					</label>
 				))}
-				{currentAnswer.answer === 'Yes' && (
+				{currentAnswer.answer === 'Yes' && questionObject.dateType !== null && (
 					<div className="flex items-center">
 						<TextField
 							label={`${questionObject.dateType}: `}
