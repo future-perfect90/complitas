@@ -90,7 +90,7 @@ class Compliance
             }
         }
 
-        $sql = "SELECT cq.id, ca.area, cq.question, cq.answerType, cq.uploadRequired, cq.dateType, cq.triggerAnswer, cq.parentQuestionId FROM compliance_questions cq 
+        $sql = "SELECT cq.id, ca.area, cq.question, cq.answerType, cq.possibleAnswers, cq.uploadRequired, cq.dateType, cq.triggerAnswer, cq.parentQuestionId FROM compliance_questions cq 
         LEFT JOIN compliance_area ca ON cq.area = ca.id WHERE " . implode(' OR ', $whereClauses) . " ORDER BY ca.displayOrder";
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute();
@@ -99,12 +99,7 @@ class Compliance
 
     public function getAnswers(string $propertyComplianceId): array
     {
-        $stmt = $this->pdo->prepare("SELECT id, reportId, questionId, CASE answer
-        WHEN 1 THEN 'Yes'
-        WHEN 2 THEN 'No'
-        WHEN 3 THEN 'NA'
-        ELSE NULL
-        END AS answer, fileName, completedBy, savedDate FROM question_responses WHERE reportId=:propertyComplianceId");
+        $stmt = $this->pdo->prepare("SELECT id, reportId, questionId, answer, fileName, completedBy, savedDate FROM question_responses WHERE reportId=:propertyComplianceId");
         $stmt->bindParam(':propertyComplianceId', $propertyComplianceId);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);

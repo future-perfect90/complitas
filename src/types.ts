@@ -160,3 +160,28 @@ export interface PropertyLog {
 	actionedBy: string;
 	fieldName: string;
 }
+
+export interface Answer {
+	reportId: string;
+	propertyId: string;
+	questionId: string;
+	answer: string | null;
+	fileUrl?: string;
+	fileName?: string;
+	dateType?: string;
+	savedDate?: string | null;
+}
+
+export interface Question {
+	id: string;
+	question: string;
+	answerType: 'Single choice' | 'Date' | 'Upload' | 'Text';
+	possibleAnswers?: string;
+	uploadRequired: boolean | 0 | 1;
+	dateType: string;
+	triggerAnswer: string;
+	childQuestions?: Question[];
+	savedAnswer?: Answer;
+	parentQuestionId?: string;
+	area: string;
+}

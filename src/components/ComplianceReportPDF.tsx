@@ -65,11 +65,11 @@ const tw = createTw({
 	theme: {},
 });
 
-const answerMap = {
-	'1': 'Yes',
-	'2': 'No',
-	'3': 'N/A',
-};
+// const answerMap = {
+// 	'1': 'Yes',
+// 	'2': 'No',
+// 	'3': 'N/A',
+// };
 
 const ReportDocument = ({
 	data,
@@ -127,8 +127,7 @@ const ReportDocument = ({
 							<View key={index} style={tw('mb-2.5')} wrap={false}>
 								<Text style={tw('font-bold')}>{item.question}</Text>
 								<Text style={tw('ml-4')}>
-									Answer:{' '}
-									{item.answer ? answerMap[item.answer] : 'Not Answered'}
+									Answer: {item.answer ?? 'Not Answered'}
 								</Text>
 								{item.answer === 1 && item.savedDate && (
 									<Text style={tw('ml-4 text-[10px] text-[#6C757D]')}>

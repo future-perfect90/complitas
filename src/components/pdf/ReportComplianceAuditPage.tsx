@@ -57,28 +57,12 @@ export const ReportComplianceAuditPage = ({
 									updated from{' '}
 									{item.oldValue ?
 										<Text style={tw('font-semibold text-red-600')}>
-											'
-											{item.oldValue === '1' ?
-												'Yes'
-											: item.oldValue === '2' ?
-												'No'
-											: item.oldValue === '3' ?
-												'N/A'
-											:	item.oldValue}
-											'
+											{item.oldValue}
 										</Text>
 									:	<Text style={tw('italic text-[#6C757D]')}>blank</Text>}{' '}
 									to{' '}
 									<Text style={tw('font-semibold text-green-600')}>
-										'
-										{item.newValue === '1' ?
-											'Yes'
-										: item.newValue === '2' ?
-											'No'
-										: item.newValue === '3' ?
-											'N/A'
-										:	item.newValue}
-										'
+										{item.newValue}
 									</Text>{' '}
 									by <Text style={tw('font-semibold')}>{item.actionedBy}</Text>{' '}
 									on {formatTimestamp(item.timestamp)}.

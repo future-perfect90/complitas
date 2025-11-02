@@ -1,15 +1,6 @@
 import type { MultiValue } from 'react-select';
-import type { Company, Property, User } from '../types';
+import type { Answer, Company, Property, User } from '../types';
 import authService from './authService';
-
-export interface Answer {
-	questionId: string;
-	reportId: string;
-	propertyId: string;
-	answer: 'Yes' | 'No' | 'NA' | null;
-	fileUrl?: string;
-	fileName?: string;
-}
 
 const retrieveToken = async () =>
 	authService.getAccessTokenSilently ?

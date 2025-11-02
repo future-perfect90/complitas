@@ -1,31 +1,11 @@
 import React, { useState } from 'react';
 import { toast } from 'react-toastify';
 import { saveAnswer } from '../utils/api';
+import type { Answer, Question } from '../types';
 import FileUpload from './FileUpload';
 import PresignedDocument from './PresignedDocument';
 import TextField from './TextField';
 import ConfirmationModal from './modals/ConfirmationModal';
-
-export interface Answer {
-	reportId: string;
-	propertyId: string;
-	questionId: string;
-	answer: 'Yes' | 'No' | 'NA' | null;
-	fileUrl?: string;
-	fileName?: string;
-	dateType?: string;
-	savedDate?: string | null;
-}
-
-interface Question {
-	id: string;
-	question: string;
-	uploadRequired: boolean | 0 | 1;
-	dateType: string;
-	triggerAnswer: string;
-	childQuestions?: Question[];
-	savedAnswer?: Answer;
-}
 
 interface QuestionItemProps {
 	questionObject: Question;
@@ -153,19 +133,21 @@ export default function QuestionItem({
 		setDateToConfirm(null);
 	};
 
-	return (
-		<div className="p-4 relative">
-			<div className="flex justify-between items-start">
-				<p className="font-semibold text-[#212529] dark:text-slate-300 pr-4">
-					{questionObject.question}
-				</p>
-				{isSaving && <span className="text-sm text-[#F8F9FA]">Saving...</span>}
-			</div>
-			<div className="flex items-center justify-left space-x-4 mt-2">
-				{['Yes', 'No', 'NA'].map((option) => (
+	const renderAnswerOptions = () => {
+		switch (questionObject.answerType) {
+			case 'Single choice':
+				let possibleAnswers: string[] = [];
+				try {
+					if (questionObject.possibleAnswers) {
+						possibleAnswers = JSON.parse(questionObject.possibleAnswers).answers;
+					}
+				} catch (error) {
+					console.error('Failed to parse possibleAnswers:', error);
+				}
+				return (possibleAnswers ?? []).map((option) => (
 					<label
 						key={option}
-						className="flex items-center space-x-1 cursor-pointer  text-[#212529] dark:text-[#F8F9FA]">
+						className="flex items-center space-x-1 cursor-pointer text-[#212529] dark:text-[#F8F9FA]">
 						<input
 							type="radio"
 							name={questionObject.id}
@@ -177,7 +159,22 @@ export default function QuestionItem({
 						/>
 						<span>{option}</span>
 					</label>
-				))}
+				));
+			default:
+				return <p>Answer type not supported yet.</p>;
+		}
+	};
+
+	return (
+		<div className="p-4 relative">
+			<div className="flex justify-between items-start">
+				<p className="font-semibold text-[#212529] dark:text-slate-300 pr-4">
+					{questionObject.question}
+				</p>
+				{isSaving && <span className="text-sm text-[#F8F9FA]">Saving...</span>}
+			</div>
+			<div className="flex items-center justify-left space-x-4 mt-2">
+				{renderAnswerOptions()}
 				{currentAnswer.answer === 'Yes' && questionObject.dateType !== null && (
 					<div className="flex items-center">
 						<TextField

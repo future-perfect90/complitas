@@ -28,12 +28,24 @@ export const ReportPropertyAuditPage = ({
 						was updated from{' '}
 						{item.oldValue ?
 							<Text style={tw('font-semibold text-red-600')}>
-								'{item.oldValue}'
+								'
+								{item.oldValue === '1' ?
+									'Yes'
+								: item.oldValue === '0' ?
+									'No'
+								:	item.oldValue}
+								'
 							</Text>
 						:	<Text style={tw('italic text-[#6C757D]')}>'blank'</Text>}{' '}
 						to{' '}
 						<Text style={tw('font-semibold text-green-600')}>
-							'{item.newValue}'
+							'
+							{item.newValue === '1' ?
+								'Yes'
+							: item.newValue === '0' ?
+								'No'
+							:	item.newValue}
+							'
 						</Text>{' '}
 						by <Text style={tw('font-semibold')}>{item.actionedBy}</Text> at{' '}
 						{formatTimestamp(item.timestamp)}

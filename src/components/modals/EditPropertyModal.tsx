@@ -125,7 +125,7 @@ export default function EditPropertyModal({
 						onChange={(e) =>
 							handleFieldChange(key as keyof Property, e.target.value)
 						}
-						className="w-full border rounded p-2 text-[#212529] dark:text-[#F8F9FA] dark:bg-gray-600 dark:border-gray-500 bg-white"
+						className="mt-1 w-full border rounded p-2 text-[#212529] dark:text-[#F8F9FA] dark:bg-gray-600 dark:border-gray-500 bg-white"
 					/>
 				</div>
 			);
@@ -139,7 +139,7 @@ export default function EditPropertyModal({
 						onChange={(e) =>
 							handleFieldChange(key as keyof Property, e.target.value)
 						}
-						className="w-full border rounded p-2 text-[#212529] dark:text-[#F8F9FA] dark:bg-gray-600 dark:border-gray-500 bg-white"
+						className="mt-1 w-full border rounded p-2 text-[#212529] dark:text-[#F8F9FA] dark:bg-gray-600 dark:border-gray-500 bg-white"
 					/>
 				</div>
 			);
@@ -191,7 +191,7 @@ export default function EditPropertyModal({
 						onChange={(e) =>
 							handleFieldChange(key as keyof Property, e.target.value)
 						}
-						className="w-full border rounded px-2 py-2.5 text-[#212529] dark:text-[#F8F9FA] dark:bg-gray-600 dark:border-gray-500 bg-white">
+						className="mt-1 w-full border rounded px-2 py-2.5 text-[#212529] dark:text-[#F8F9FA] dark:bg-gray-600 dark:border-gray-500 bg-white">
 						<option value="">Select Residential Awareness</option>
 						{residentialOptions.map((option) => (
 							<option key={option.value} value={option.value}>
@@ -214,7 +214,7 @@ export default function EditPropertyModal({
 					<select
 						value={(form[key as keyof Property] as string) ?? ''}
 						onChange={handleOccupancyChange}
-						className="w-full border rounded p-2 text-[#212529] bg-white dark:text-[#F8F9FA] dark:bg-gray-600 dark:border-gray-500">
+						className="mt-1 w-full border rounded p-2 text-[#212529] bg-white dark:text-[#F8F9FA] dark:bg-gray-600 dark:border-gray-500">
 						<option value="">Select Occupancy Type</option>
 						{occupancyOptions.map((option) => (
 							<option key={option.value} value={option.value}>

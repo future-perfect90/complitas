@@ -1,18 +1,4 @@
-interface Question {
-	id: string;
-	area: string;
-	uploadRequired: boolean | 0 | 1;
-	dateType: string;
-	triggerAnswer: any;
-	parentQuestionId?: string | null;
-}
-
-interface Answer {
-	questionId: string;
-	answer: 'Yes' | 'No' | 'NA' | null;
-	fileName?: string;
-	savedDate?: string | null;
-}
+import type { Answer, Question } from '../types';
 
 interface AreaGroup {
 	questions: any[];

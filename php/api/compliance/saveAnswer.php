@@ -14,12 +14,13 @@ if (!isset($data['questionId']) || !isset($data['answer']) || !isset($data['repo
 $questionId = Validate::ValidateString($data['questionId']);
 $propertyId = Validate::ValidateString($data['propertyId']);
 $reportId = Validate::ValidateString($data['reportId']);
-$response = match (Validate::ValidateString($data['answer'])) {
-    'Yes' => 1,
-    'No' => 2,
-    'NA' => 3,
-    default => null,
-};
+// $response = match (Validate::ValidateString($data['answer'])) {
+//     'Yes' => 1,
+//     'No' => 2,
+//     'NA' => 3,
+//     default => $data['answer'],
+// };
+$response = Validate::ValidateString($data['answer']);
 $fileName = isset($data['fileName']) ? Validate::ValidateString($data['fileName']) : '';
 $savedDate = isset($data['savedDate']) ? Validate::ValidateString($data['savedDate']) : NULL;
 $completedBy = $token->{'https://complitas.dev/user_uuid'} ?? 'system';
