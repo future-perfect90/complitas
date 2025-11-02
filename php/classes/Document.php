@@ -58,7 +58,7 @@ class Document
         FROM compliance_questions cq 
         LEFT JOIN question_responses qr ON cq.id = qr.questionId AND qr.reportId = :reportId1
         LEFT JOIN compliance_area ca ON cq.area = ca.id
-        ORDER BY ca.displayOrder, cq.question";
+        ORDER BY ca.displayOrder, cq.displayOrder";
 
         $stmt = $this->pdo->prepare($sql);
         $stmt->bindParam(':reportId', $reportId);
