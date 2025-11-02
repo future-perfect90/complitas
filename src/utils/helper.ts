@@ -30,7 +30,6 @@ export const groupQuestionsByArea = (
 	const childQuestionsMap = new Map<string, Question[]>();
 	const parentQuestions: Question[] = [];
 
-	// Separate parent and child questions
 	for (const question of questions) {
 		if (question.parentQuestionId) {
 			const children = childQuestionsMap.get(question.parentQuestionId) || [];
@@ -83,9 +82,9 @@ export const groupQuestionsByArea = (
 				if (!childAnswer) return false;
 				if (checkMissingUploads(c, childAnswer)) {
 					area.missingUploadsCount++;
-				} else {
-					area.answeredCount++;
 				}
+				area.answeredCount++;
+
 				return true;
 			});
 			if (allTriggeredAnswered) {
