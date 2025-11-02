@@ -1,8 +1,10 @@
 interface Question {
 	id: string;
 	area: string;
+	uploadRequired: boolean | 0 | 1;
 	dateType: string;
 	triggerAnswer: any;
+	parentQuestionId?: string | null;
 }
 
 interface Answer {
@@ -25,35 +27,74 @@ export const groupQuestionsByArea = (
 	questions: Question[],
 	answers: Answer[]
 ) => {
-	const grouped = questions.reduce((acc: GroupedData, question) => {
-		const savedAnswer = answers.find((a) => a.questionId === question.id);
+	const childQuestionsMap = new Map<string, Question[]>();
+	const parentQuestions: Question[] = [];
 
-		if (!acc[question.area]) {
-			acc[question.area] = {
+	// Separate parent and child questions
+	for (const question of questions) {
+		if (question.parentQuestionId) {
+			const children = childQuestionsMap.get(question.parentQuestionId) || [];
+			children.push(question);
+			childQuestionsMap.set(question.parentQuestionId, children);
+		} else {
+			parentQuestions.push(question);
+		}
+	}
+	const grouped = parentQuestions.reduce((acc: GroupedData, parent) => {
+		if (!acc[parent.area]) {
+			acc[parent.area] = {
 				questions: [],
 				answeredCount: 0,
 				totalCount: 0,
 				missingUploadsCount: 0,
 			};
 		}
+		const area = acc[parent.area];
+		const parentAnswer = answers.find((a) => a.questionId === parent.id);
+		const children = childQuestionsMap.get(parent.id) || [];
+		const questionWithChildren = {
+			...parent,
+			savedAnswer: parentAnswer,
+			childQuestions: children.map((child) => ({
+				...child,
+				savedAnswer: answers.find((a) => a.questionId === child.id),
+			})),
+		};
+		area.questions.push(questionWithChildren);
+		area.totalCount++;
+		const checkMissingUploads = (q: Question, a?: Answer) => {
+			return (
+				a &&
+				a.answer === 'Yes' &&
+				((q.uploadRequired && !a.fileName) || (q.dateType && !a.savedDate))
+			);
+		};
 
-		acc[question.area].questions.push({ ...question, savedAnswer });
-		acc[question.area].totalCount++;
-
-		if (savedAnswer) {
-			acc[question.area].answeredCount++;
+		if (checkMissingUploads(parent, parentAnswer)) {
+			area.missingUploadsCount++;
 		}
-		if (
-			savedAnswer &&
-			savedAnswer.answer === 'Yes' &&
-			(savedAnswer.savedDate === null || !savedAnswer.fileName)
-		) {
-			acc[question.area].missingUploadsCount++;
+		if (parentAnswer) {
+			const triggeredChildren = children.filter(
+				(c) => c.triggerAnswer === parentAnswer.answer
+			);
+			area.totalCount += triggeredChildren.length;
+			const allTriggeredAnswered = triggeredChildren.every((c) => {
+				const childAnswer = answers.find((a) => a.questionId === c.id);
+				if (!childAnswer) return false;
+				if (checkMissingUploads(c, childAnswer)) {
+					area.missingUploadsCount++;
+				} else {
+					area.answeredCount++;
+				}
+				return true;
+			});
+			if (allTriggeredAnswered) {
+				area.answeredCount++;
+			}
 		}
 
 		return acc;
 	}, {} as GroupedData);
-
 	return Object.entries(grouped).map(([name, data]) => ({
 		name,
 		...data,

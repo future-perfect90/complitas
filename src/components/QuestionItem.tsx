@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { toast } from 'react-toastify';
-import { getChildQuestions, saveAnswer } from '../utils/api';
+import { saveAnswer } from '../utils/api';
 import FileUpload from './FileUpload';
 import PresignedDocument from './PresignedDocument';
 import TextField from './TextField';
@@ -23,6 +23,8 @@ interface Question {
 	uploadRequired: boolean | 0 | 1;
 	dateType: string;
 	triggerAnswer: string;
+	childQuestions?: Question[];
+	savedAnswer?: Answer;
 }
 
 interface QuestionItemProps {
@@ -30,7 +32,6 @@ interface QuestionItemProps {
 	reportId: string;
 	propertyId: string;
 	savedAnswer?: Answer;
-	savedChildAnswers?: Answer[];
 }
 
 export default function QuestionItem({
@@ -47,7 +48,8 @@ export default function QuestionItem({
 			propertyId: propertyId,
 		}
 	);
-	const [childQuestions, setChildQuestions] = useState<Question[]>([]);
+	const childQuestions = questionObject.childQuestions || [];
+	console.log(childQuestions);
 	const [isSaving, setIsSaving] = useState(false);
 	const [error, setError] = useState('');
 	const [isReplacingFile, setIsReplacingFile] = useState(false);
@@ -59,23 +61,6 @@ export default function QuestionItem({
 		message: string;
 	}>({ title: '', message: '' });
 
-	// useEffect(() => {
-	// 	if (currentAnswer.answer === questionObject.triggerAnswer) {
-	// 		fetchChildQuestions();
-	// 	}
-	// }, [currentAnswer.answer, questionObject.triggerAnswer]);
-
-	const fetchChildQuestions = async () => {
-		console.log('Fetching child questions for', questionObject.id);
-		try {
-			const children = await getChildQuestions(questionObject.id);
-			setChildQuestions(children);
-		} catch (error) {
-			console.error('Failed to fetch child questions:', error);
-			toast.error('Could not load additional questions.');
-		}
-	};
-
 	const handleSave = async (answerPayload: Answer) => {
 		setIsSaving(true);
 		setError('');
@@ -85,8 +70,6 @@ export default function QuestionItem({
 			setCurrentAnswer(answerPayload);
 			setIsReplacingFile(false); // Hide upload form after successful save
 			toast.success('Answer saved successfully');
-
-			await fetchChildQuestions();
 		} catch (err) {
 			setError('Failed to save. Please try again.');
 			console.error('Save failed:', err);
@@ -244,24 +227,21 @@ export default function QuestionItem({
 						}
 					</div>
 				)}
-
 			{childQuestions.length > 0 && (
 				<div className="ml-8 border-l-2 border-gray-300 pl-4">
-					{childQuestions.map((child) => (
-						<>
-							{child.triggerAnswer === currentAnswer.answer && (
+					{childQuestions.map((child) => {
+						return child.triggerAnswer === currentAnswer.answer ?
 								<QuestionItem
 									key={child.id}
 									questionObject={child}
 									reportId={reportId}
 									propertyId={propertyId}
+									savedAnswer={child.savedAnswer}
 								/>
-							)}
-						</>
-					))}
+							:	null;
+					})}
 				</div>
 			)}
-
 			{error && <p className="text-sm text-red-500 mt-2">{error}</p>}
 			<ConfirmationModal
 				isOpen={isConfirmationModalOpen}
