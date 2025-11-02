@@ -49,7 +49,6 @@ export default function QuestionItem({
 		}
 	);
 	const childQuestions = questionObject.childQuestions || [];
-	console.log(childQuestions);
 	const [isSaving, setIsSaving] = useState(false);
 	const [error, setError] = useState('');
 	const [isReplacingFile, setIsReplacingFile] = useState(false);
