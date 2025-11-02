@@ -2,6 +2,7 @@ interface Question {
 	id: string;
 	area: string;
 	dateType: string;
+	triggerAnswer: any;
 }
 
 interface Answer {
@@ -42,7 +43,6 @@ export const groupQuestionsByArea = (
 		if (savedAnswer) {
 			acc[question.area].answeredCount++;
 		}
-		console.log(savedAnswer);
 		if (
 			savedAnswer &&
 			savedAnswer.answer === 'Yes' &&

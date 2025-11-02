@@ -90,7 +90,7 @@ class Compliance
             }
         }
 
-        $sql = "SELECT cq.id, ca.area, cq.question, cq.answerType, cq.uploadRequired, cq.dateType FROM compliance_questions cq 
+        $sql = "SELECT cq.id, ca.area, cq.question, cq.answerType, cq.uploadRequired, cq.dateType, cq.triggerAnswer, cq.parentQuestionId FROM compliance_questions cq 
         LEFT JOIN compliance_area ca ON cq.area = ca.id WHERE " . implode(' OR ', $whereClauses) . " ORDER BY ca.displayOrder";
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute();
@@ -106,6 +106,14 @@ class Compliance
         ELSE NULL
         END AS answer, fileName, completedBy, savedDate FROM question_responses WHERE reportId=:propertyComplianceId");
         $stmt->bindParam(':propertyComplianceId', $propertyComplianceId);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function getChildQuestions(string $parentQuestionId): array
+    {
+        $stmt = $this->pdo->prepare("SELECT id, area, question, answerType, uploadRequired, dateType, triggerAnswer FROM compliance_questions WHERE parentQuestionId=:parentQuestionId");
+        $stmt->bindParam(':parentQuestionId', $parentQuestionId);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
