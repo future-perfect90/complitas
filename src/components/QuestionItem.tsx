@@ -17,13 +17,18 @@ export interface Answer {
 	savedDate?: string | null;
 }
 
+interface Question {
+	id: string;
+	question: string;
+	uploadRequired: boolean | 0 | 1;
+	dateType: string;
+	triggerAnswer: string;
+	childQuestions?: Question[];
+	savedAnswer?: Answer;
+}
+
 interface QuestionItemProps {
-	questionObject: {
-		id: string;
-		question: string;
-		uploadRequired: boolean | 0 | 1;
-		dateType: string;
-	};
+	questionObject: Question;
 	reportId: string;
 	propertyId: string;
 	savedAnswer?: Answer;
@@ -43,6 +48,7 @@ export default function QuestionItem({
 			propertyId: propertyId,
 		}
 	);
+	const childQuestions = questionObject.childQuestions || [];
 	const [isSaving, setIsSaving] = useState(false);
 	const [error, setError] = useState('');
 	const [isReplacingFile, setIsReplacingFile] = useState(false);
@@ -59,7 +65,6 @@ export default function QuestionItem({
 		setError('');
 
 		try {
-			console.log(answerPayload);
 			await saveAnswer(answerPayload);
 			setCurrentAnswer(answerPayload);
 			setIsReplacingFile(false); // Hide upload form after successful save
@@ -221,7 +226,21 @@ export default function QuestionItem({
 						}
 					</div>
 				)}
-
+			{childQuestions.length > 0 && (
+				<div className="ml-8 border-l-2 border-gray-300 pl-4">
+					{childQuestions.map((child) => {
+						return child.triggerAnswer === currentAnswer.answer ?
+								<QuestionItem
+									key={child.id}
+									questionObject={child}
+									reportId={reportId}
+									propertyId={propertyId}
+									savedAnswer={child.savedAnswer}
+								/>
+							:	null;
+					})}
+				</div>
+			)}
 			{error && <p className="text-sm text-red-500 mt-2">{error}</p>}
 			<ConfirmationModal
 				isOpen={isConfirmationModalOpen}
