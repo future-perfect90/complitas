@@ -112,6 +112,14 @@ export const formatTimestamp = (dateString: string): string => {
 	return `${day}-${month}-${year} ${hours}:${minutes}:${seconds}`;
 };
 
+export const formatTimestampDateOnly = (dateString: string): string => {
+	const date = new Date(dateString);
+	const day = String(date.getDate()).padStart(2, '0');
+	const month = String(date.getMonth() + 1).padStart(2, '0');
+	const year = String(date.getFullYear()).slice(-2);
+	return `${day}-${month}-${year}`;
+};
+
 export const formatFieldName = (fieldName: string): string => {
 	if (!fieldName) return '';
 	const withSpaces = fieldName.replace(/([A-Z])/g, ' $1');

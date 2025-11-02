@@ -1,7 +1,7 @@
 import { Page, Text, View } from '@react-pdf/renderer';
 import { createTw } from 'react-pdf-tailwind';
 import type { AuditReportResponseData } from '../../types';
-import { formatTimestamp } from '../../utils/helper';
+import { formatTimestamp, formatTimestampDateOnly } from '../../utils/helper';
 
 const tw = createTw({
 	theme: {},
@@ -41,12 +41,12 @@ export const ReportComplianceAuditPage = ({
 									changed from{' '}
 									{item.oldValue ?
 										<Text style={tw('font-semibold text-red-600')}>
-											'{formatTimestamp(item.oldValue)}'
+											'{formatTimestampDateOnly(item.oldValue)}'
 										</Text>
 									:	<Text style={tw('italic text-[#6C757D]')}>blank</Text>}{' '}
 									to{' '}
 									<Text style={tw('font-semibold text-green-600')}>
-										'{formatTimestamp(item.newValue)}'
+										'{formatTimestampDateOnly(item.newValue)}'
 									</Text>{' '}
 									by <Text style={tw('font-semibold')}>{item.actionedBy}</Text>{' '}
 									on {formatTimestamp(item.timestamp)}.
@@ -57,12 +57,28 @@ export const ReportComplianceAuditPage = ({
 									updated from{' '}
 									{item.oldValue ?
 										<Text style={tw('font-semibold text-red-600')}>
-											'{item.oldValue}'
+											'
+											{item.oldValue === '1' ?
+												'Yes'
+											: item.oldValue === '2' ?
+												'No'
+											: item.oldValue === '3' ?
+												'N/A'
+											:	item.oldValue}
+											'
 										</Text>
 									:	<Text style={tw('italic text-[#6C757D]')}>blank</Text>}{' '}
 									to{' '}
 									<Text style={tw('font-semibold text-green-600')}>
-										'{item.newValue}'
+										'
+										{item.newValue === '1' ?
+											'Yes'
+										: item.newValue === '2' ?
+											'No'
+										: item.newValue === '3' ?
+											'N/A'
+										:	item.newValue}
+										'
 									</Text>{' '}
 									by <Text style={tw('font-semibold')}>{item.actionedBy}</Text>{' '}
 									on {formatTimestamp(item.timestamp)}.
