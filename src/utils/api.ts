@@ -750,10 +750,10 @@ export const getCompanyByPropertyId = async (propertyId: string) => {
 	return response.json();
 };
 
-export const getExpiringCerts = async () => {
+export const getExpiringCerts = async (page = 1, limit = 5) => {
 	const jwt = await retrieveToken();
 	const response = await fetch(
-		`${import.meta.env.VITE_API_BASE_URL}/compliance/getExpiringCerts.php`,
+		`${import.meta.env.VITE_API_BASE_URL}/compliance/getExpiringCerts.php?page=${page}&limit=${limit}`,
 		{
 			method: 'GET',
 			headers: {

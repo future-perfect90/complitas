@@ -1,10 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {
-	DataHighlightWidget,
-	type Header,
-	type RowData,
-} from '../components/DashboardWidget';
+import { DataHighlightWidget } from '../components/ExpiryDateWidget/ExpiryDateWidget';
+
+import type { Header, RowData } from '../components/ExpiryDateWidget/types';
 import { useAuthMeta } from '../context/AuthProvider';
 import { getExpiringCerts } from '../utils/api';
 
@@ -28,26 +26,33 @@ export default function Dashboard() {
 	const authMeta = useAuthMeta();
 	const { isAuthenticated, isLoading } = authMeta;
 	const [expiringCerts, setExpiringCerts] = useState<ExpiringCert[]>([]);
+	const [totalCerts, setTotalCerts] = useState(0);
+	const [currentPage, setCurrentPage] = useState(1);
+	const itemsPerPage = 5;
 	const navigate = useNavigate();
 
 	useEffect(() => {
 		if (isAuthenticated) {
 			const fetchCerts = async () => {
 				try {
-					const data = await getExpiringCerts();
+					const response = await getExpiringCerts(currentPage, itemsPerPage);
+					setTotalCerts(response.total);
 					setExpiringCerts(
-						data.map((item: any) => ({
+						response.data.map((item: any) => ({
 							...item,
 							id: `${item.propertyId}-${item.auditId}-${item.question.replace(/\s/g, '-')}`,
 						}))
 					);
 				} catch (error) {
 					console.error('Failed to fetch expiring certs', error);
+					// Reset state on error
+					setExpiringCerts([]);
+					setTotalCerts(0);
 				}
 			};
 			fetchCerts();
 		}
-	}, [isAuthenticated]);
+	}, [isAuthenticated, currentPage]);
 	const handleRowClick = (row: RowData) => {
 		const cert = row as ExpiringCert;
 		if (cert.propertyId && cert.auditId) {
@@ -75,6 +80,10 @@ export default function Dashboard() {
 						title="Expiring Certifications (Next 3 Months)"
 						headers={expiringCertsHeaders}
 						rows={expiringCerts}
+						totalRows={totalCerts}
+						itemsPerPage={itemsPerPage}
+						currentPage={currentPage}
+						onPageChange={setCurrentPage}
 						onRowClick={handleRowClick}
 					/>
 				</>

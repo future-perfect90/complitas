@@ -1,19 +1,8 @@
-export interface Header {
-	key: string;
-	label: string;
-}
-
-export interface RowData {
-	id: string | number;
-	[key: string]: any;
-}
-
-export interface DataHighlightWidgetProps<T extends RowData> {
-	title: string;
-	headers: Header[];
-	rows: T[];
-	onRowClick?: (row: T) => void;
-}
+import { Button } from '../Button';
+import type {
+	RowData,
+	DataHighlightWidgetProps,
+} from './types';
 
 const getExpiryHighlightClass = (expiryDate: any): string => {
 	if (
@@ -52,11 +41,21 @@ export const DataHighlightWidget = <T extends RowData>({
 	headers = [],
 	rows = [],
 	onRowClick,
+	totalRows,
+	itemsPerPage,
+	currentPage,
+	onPageChange,
 }: DataHighlightWidgetProps<T>) => {
 	const hasData = rows && rows.length > 0;
+	const hasPagination =
+		totalRows && itemsPerPage && currentPage && onPageChange && totalRows > 0;
+	const totalPages = hasPagination ? Math.ceil(totalRows / itemsPerPage) : 0;
+	const startRow = hasPagination ? (currentPage - 1) * itemsPerPage + 1 : 0;
+	const endRow =
+		hasPagination ? Math.min(currentPage * itemsPerPage, totalRows) : 0;
 
 	return (
-		<div className="font-sans bg-white dark:bg-gray-800 rounded-xl shadow-lg dark:shadow-gray-950/50 p-6 flex flex-col max-h-[400px]">
+		<div className="font-sans bg-white dark:bg-gray-800 rounded-xl shadow-lg dark:shadow-gray-950/50 p-6 flex flex-col">
 			<h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
 				{title}
 			</h3>
@@ -104,6 +103,32 @@ export const DataHighlightWidget = <T extends RowData>({
 								))}
 							</tbody>
 						</table>
+					</div>
+				)}
+				{hasPagination && totalPages > 1 && (
+					<div className="flex justify-between items-center mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+						<span className="text-sm text-gray-500 dark:text-gray-400">
+							Showing {startRow} to {endRow} of {totalRows} results
+						</span>
+						<div className="flex gap-2">
+							<Button
+								label="Previous"
+								onClick={() => onPageChange(currentPage - 1)}
+								disabled={currentPage === 1}
+								className="px-4 py-1.5"
+								style="secondary"
+							/>
+							<span className="flex items-center px-4 py-1.5 text-sm font-medium text-gray-700 dark:text-gray-300">
+								Page {currentPage} of {totalPages}
+							</span>
+							<Button
+								label="Next"
+								onClick={() => onPageChange(currentPage + 1)}
+								disabled={currentPage === totalPages}
+								className="px-4 py-1.5"
+								style="secondary"
+							/>
+						</div>
 					</div>
 				)}
 			</div>

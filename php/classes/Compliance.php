@@ -113,27 +113,49 @@ class Compliance
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function getExpiringCerts(string $companyId): array
+    public function getExpiringCerts(string $companyId, int $limit, int $offset): array
     {
-        $sql = "SELECT 
-                    p.id as propertyId, 
-                    p.name as propertyName, 
-                    DATE_FORMAT(qr.savedDate,'%d-%m-%Y') AS expiryDate,
-                    cq.question, 
-                    ca.area,
-                    r.id as auditId
-                FROM properties p
-                JOIN reports r ON r.propertyId = p.id
-                JOIN question_responses qr ON qr.reportId = r.id
-                JOIN compliance_questions cq ON qr.questionId = cq.id
-                JOIN compliance_area ca ON cq.area = ca.id
-                WHERE p.companyId = :companyId
-                AND qr.answer = 'Yes' AND cq.dateType = 'Valid until'
-                AND qr.savedDate BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 3 MONTH)
-                ORDER BY p.id, ca.displayOrder, qr.savedDate ASC";
-        $stmt = $this->pdo->prepare($sql);
+        $baseQuery = "FROM properties p
+            JOIN (
+                SELECT id, propertyId, ROW_NUMBER() OVER(PARTITION BY propertyId ORDER BY createdAt DESC) as rn
+                FROM reports
+            ) r ON p.id = r.propertyId AND r.rn = 1
+            JOIN question_responses qr ON qr.reportId = r.id
+            JOIN compliance_questions cq ON qr.questionId = cq.id
+            JOIN compliance_area ca ON cq.area = ca.id
+            WHERE p.companyId = :companyId
+            AND qr.answer = 'Yes' AND cq.dateType = 'Valid until'
+            AND qr.savedDate BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 3 MONTH)";
+
+        // Get total count for pagination
+        $countSql = "SELECT COUNT(*) " . $baseQuery;
+        $countStmt = $this->pdo->prepare($countSql);
+        $countStmt->bindParam(':companyId', $companyId);
+        $countStmt->execute();
+        $total = $countStmt->fetchColumn();
+
+        // Get paginated data
+        $dataSql = "SELECT 
+                        p.id as propertyId, 
+                        p.name as propertyName, 
+                        DATE_FORMAT(qr.savedDate,'%d-%m-%Y') AS expiryDate,
+                        cq.question, 
+                        ca.area,
+                        r.id as auditId
+                    " . $baseQuery . "
+                    ORDER BY qr.savedDate ASC, p.name ASC
+                    LIMIT :limit OFFSET :offset";
+
+        $stmt = $this->pdo->prepare($dataSql);
         $stmt->bindParam(':companyId', $companyId);
+        $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
+        $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
         $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        return [
+            'total' => (int)$total,
+            'data' => $data
+        ];
     }
 }
