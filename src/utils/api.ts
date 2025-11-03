@@ -749,3 +749,19 @@ export const getCompanyByPropertyId = async (propertyId: string) => {
 	if (!response.ok) throw new Error('Failed to get company logo');
 	return response.json();
 };
+
+export const getExpiringCerts = async () => {
+	const jwt = await retrieveToken();
+	const response = await fetch(
+		`${import.meta.env.VITE_API_BASE_URL}/compliance/getExpiringCerts.php`,
+		{
+			method: 'GET',
+			headers: {
+				Authorization: `Bearer ${jwt}`,
+				'Content-Type': 'application/json',
+			},
+		}
+	);
+	if (!response.ok) throw new Error('Failed to get expiring certs');
+	return response.json();
+};

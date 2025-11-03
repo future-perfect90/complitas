@@ -112,4 +112,28 @@ class Compliance
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    public function getExpiringCerts(string $companyId): array
+    {
+        $sql = "SELECT 
+                    p.id as propertyId, 
+                    p.name as propertyName, 
+                    DATE_FORMAT(qr.savedDate,'%d-%m-%Y') AS expiryDate,
+                    cq.question, 
+                    ca.area,
+                    r.id as auditId
+                FROM properties p
+                JOIN reports r ON r.propertyId = p.id
+                JOIN question_responses qr ON qr.reportId = r.id
+                JOIN compliance_questions cq ON qr.questionId = cq.id
+                JOIN compliance_area ca ON cq.area = ca.id
+                WHERE p.companyId = :companyId
+                AND qr.answer = 'Yes' AND cq.dateType = 'Valid until'
+                AND qr.savedDate BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 3 MONTH)
+                ORDER BY p.id, ca.displayOrder, qr.savedDate ASC";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindParam(':companyId', $companyId);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }

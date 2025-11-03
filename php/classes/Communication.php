@@ -118,7 +118,7 @@ class Communication
         LEFT JOIN question_responses qr on qr.reportId = r.id 
         LEFT JOIN compliance_questions cq on qr.questionId=cq.id 
         LEFT JOIN compliance_area ca on cq.area = ca.id 
-        WHERE qr.answer = 1 and qr.savedDate = DATE(date_add(now(), interval $days day)) and cq.dateType = 'Valid until'
+        WHERE qr.answer = 'Yes' and qr.savedDate = DATE(date_add(now(), interval $days day)) and cq.dateType = 'Valid until'
         ORDER BY p.id, ca.displayOrder";
 
         $stmt = $this->pdo->prepare($sql);
