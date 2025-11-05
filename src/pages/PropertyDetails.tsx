@@ -12,6 +12,7 @@ import type {
 	NotificationPreferences,
 	Property,
 } from '../types';
+import { formatTimestampDateOnly } from '../utils/helper';
 
 const tabs = [
 	{ name: 'Overview' },
@@ -27,6 +28,70 @@ interface PropertyDetailsProps {
 	preferences: NotificationPreferences[];
 	maintenanceTasks: MaintenanceTask[];
 }
+
+const isBasicInfoComplete = (property: Property) => {
+	return (
+		!!property.address1 &&
+		!!property.city &&
+		!!property.postCode &&
+		!!property.county &&
+		!!property.country &&
+		!!property.designDate &&
+		!!property.managerName &&
+		!!property.managerEmail &&
+		!!property.telephone &&
+		!!property.uniqueReferenceNumber &&
+		!!property.residentialAwareness &&
+		!!property.habitableHeight &&
+		!!property.buildingHeight &&
+		!!property.occupancyType &&
+		property.residentalFlats != null &&
+		!!property.uniqueSupplyPoints &&
+		property.commercialUnits != null
+	);
+};
+
+const isAdditionalInfoComplete = (property: Property) => {
+	return (
+		property.lifts !== null &&
+		property.carpark !== null &&
+		property.timberFramed !== null &&
+		property.communalUtilityAssets !== null &&
+		property.communalGasAppliances !== null &&
+		property.maintenanceRegime !== null &&
+		property.refurbished !== null
+	);
+};
+
+const isContactsComplete = (property: Property) => {
+	return (
+		!!property.managerName &&
+		!!property.managerAddress &&
+		!!property.managerEmail &&
+		!!property.managerTelephone &&
+		!!property.emergencyName &&
+		!!property.emergencyAddress &&
+		!!property.emergencyEmail &&
+		!!property.emergencyTelephone &&
+		!!property.localFireName &&
+		!!property.localFireAddress &&
+		!!property.localFireEmail &&
+		!!property.localFireTelephone
+	);
+};
+
+const isAuditDetailsComplete = (property: Property) => {
+	return (
+		property.logBook !== null &&
+		property.fireSafetyLogBook !== null &&
+		property.electronicAuditCompleted !== null &&
+		property.epc !== null &&
+		property.energyCertificates !== null &&
+		property.oms !== null &&
+		property.isolationValvesClear !== null &&
+		property.accessControlled !== null
+	);
+};
 
 export default function PropertyDetails({
 	property,
@@ -100,9 +165,18 @@ export default function PropertyDetails({
 				<TabPanels className="mt-2">
 					<TabPanel>
 						<Card className="rounded-2xl shadow-lg">
-							<CardHeader className="w-full flex flex-nowrap gap-4">
-								<CardTitle className="text-xl font-semibold">
+							<CardHeader className="w-full flex flex-nowrap">
+								<CardTitle className="font-semibold">
 									Basic Information
+									{isBasicInfoComplete(property) && (
+										<span>
+											<img
+												src="/complitas_logo_without_text.png"
+												alt="Icon"
+												className="inline-block w-6 h-7 ml-3"
+											/>
+										</span>
+									)}
 									<Button
 										label="Edit"
 										onClick={() => onEdit('basic', property)}
@@ -143,7 +217,7 @@ export default function PropertyDetails({
 										Commission Date/Refurbishment Date
 									</p>
 									<p className="text-[#212529] dark:text-[#F8F9FA]">
-										{property.designDate ?? 'Not set'}
+										{formatTimestampDateOnly(property.designDate) ?? 'Not set'}
 									</p>
 								</div>
 								<div className="space-y-4">
@@ -218,6 +292,15 @@ export default function PropertyDetails({
 							<CardHeader className="w-full flex flex-nowrap gap-4">
 								<CardTitle className="text-xl font-semibold">
 									Additional Information
+									{isAdditionalInfoComplete(property) && (
+										<span>
+											<img
+												src="/complitas_logo_without_text.png"
+												alt="Icon"
+												className="inline-block w-6 h-7 ml-3"
+											/>
+										</span>
+									)}
 									<Button
 										label="Edit"
 										onClick={() => onEdit('additional', property)}
@@ -309,6 +392,15 @@ export default function PropertyDetails({
 							<CardHeader className="w-full flex flex-nowrap gap-4">
 								<CardTitle className="text-xl font-semibold">
 									Additional contacts
+									{isContactsComplete(property) && (
+										<span>
+											<img
+												src="/complitas_logo_without_text.png"
+												alt="Icon"
+												className="inline-block w-6 h-7 ml-3"
+											/>
+										</span>
+									)}
 									<Button
 										label="Edit"
 										onClick={() => onEdit('contacts', property)}
@@ -366,6 +458,15 @@ export default function PropertyDetails({
 							<CardHeader className="w-full flex flex-nowrap gap-4">
 								<CardTitle className="text-xl font-semibold">
 									Audit details
+									{isAuditDetailsComplete(property) && (
+										<span>
+											<img
+												src="/complitas_logo_without_text.png"
+												alt="Icon"
+												className="inline-block w-6 h-7 ml-3"
+											/>
+										</span>
+									)}
 									<Button
 										label="Edit"
 										onClick={() => onEdit('audit', property)}
