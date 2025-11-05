@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '../components/Card';
 import UserModal from '../components/modals/UserModal';
 import { useAuthMeta } from '../context/AuthProvider';
 
+import { Button } from '../components/Button';
 import SearchInput from '../components/SearchInput';
 import { useSearch } from '../hooks/useSearch';
 import type { User } from '../types';
@@ -74,14 +75,15 @@ const UserList: React.FC = () => {
 						onChange={setSearchTerm}
 						placeholder="Search users..."
 					/>
-					<button
+					<Button
+						label="Add User"
 						onClick={() => {
 							setEditData(undefined);
 							setIsModalOpen(true);
 						}}
-						className="px-4 py-2 bg-green-600 text-[#F8F9FA] rounded">
-						Add User
-					</button>
+						className="p-2 float-right"
+						style="primary"
+					/>
 				</div>
 			</div>
 			{filteredUsers.length > 0 ?

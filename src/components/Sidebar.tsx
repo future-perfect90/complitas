@@ -14,7 +14,7 @@ const Sidebar = () => {
 		(isAuthenticated && [
 			{ name: 'My Profile', href: '/profile', current: false },
 			{ name: 'Dashboard', href: '/dashboard', current: false },
-			{ name: 'Properties', href: '/properties', current: false },
+			{ name: 'All Properties', href: '/properties', current: false },
 			{ name: 'Users', href: '/users', current: false },
 		]) ||
 		[];
@@ -90,6 +90,9 @@ const Sidebar = () => {
 						</NavLink>
 					)}
 				</nav>
+				<span className="text-xs text-gray-500 dark:text-gray-400 p-4 text-center">
+					© Complitas Ltd {new Date().getFullYear()}
+				</span>
 			</div>
 
 			{/* Overlay for mobile */}
