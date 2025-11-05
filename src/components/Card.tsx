@@ -19,7 +19,7 @@ function Card({ children, className = '', onClick }: CardProps) {
 function CardHeader({ children, className = '' }: CardProps) {
 	return (
 		<div
-			className={`flex flex-col space-y-1.5 p-6 border-b dark:border-gray-700 ${className}`}>
+			className={`flex flex-col space-y-1.5 p-4 border-b dark:border-gray-700 ${className}`}>
 			{children}
 		</div>
 	);

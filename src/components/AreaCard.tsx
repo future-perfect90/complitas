@@ -24,8 +24,19 @@ export default function AreaCard({
 		<Card
 			className="rounded-xl shadow-md transition-transform hover:scale-105"
 			onClick={() => onSelect(areaName)}>
-			<CardHeader className="pb-2">
-				<CardTitle className="text-lg font-medium">{areaName}</CardTitle>
+			<CardHeader>
+				<CardTitle className="text-lg font-medium">
+					{areaName}{' '}
+					{isComplete && missingUploadsCount == 0 && (
+						<span>
+							<img
+								src="/complitas_logo_without_text.png"
+								alt="Icon"
+								className="inline-block w-6 h-6 float-right"
+							/>
+						</span>
+					)}
+				</CardTitle>
 			</CardHeader>
 			<CardContent>
 				<div className="mb-4">
