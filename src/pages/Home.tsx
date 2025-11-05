@@ -1,9 +1,12 @@
+import { useAuth0 } from '@auth0/auth0-react';
+import { useEffect } from 'react';
+
 function Home() {
-	return (
-		<>
-			<h1>Welcome to the Home Page</h1>
-			<p>This is the home page of our application.</p>
-		</>
-	);
+	const { loginWithRedirect } = useAuth0();
+	useEffect(() => {
+		loginWithRedirect({ appState: { returnTo: '/dashboard' } });
+	}, []);
+
+	return <></>;
 }
 export default Home;

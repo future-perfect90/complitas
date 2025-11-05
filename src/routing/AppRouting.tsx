@@ -1,5 +1,4 @@
 import { useRoutes, type RouteObject } from 'react-router-dom';
-import About from '../pages/AboutUs';
 import CompanyList from '../pages/CompanyList';
 import ComplianceOverview from '../pages/ComplianceOverview';
 import ComplianceReports from '../pages/ComplianceReports';
@@ -17,10 +16,7 @@ const AppRoutes = () => {
 	const appRoutes: RouteObject[] = [
 		{
 			element: <PublicRoute />,
-			children: [
-				{ path: '/', element: <Home /> },
-				{ path: '/about', element: <About /> },
-			],
+			children: [{ path: '/', element: <Home /> }],
 		},
 		{
 			element: <PrivateRoute />,

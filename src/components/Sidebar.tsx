@@ -6,22 +6,18 @@ import { NavLink } from 'react-router-dom';
 import { useAuthMeta } from '../context/AuthProvider';
 
 const Sidebar = () => {
-	const { isAuthenticated, loginWithRedirect, logout } = useAuth0();
+	const { isAuthenticated, logout } = useAuth0();
 	const authMeta = useAuthMeta();
 	const isSuperAdmin = authMeta?.roles?.includes('SuperAdmin');
 
 	let navigation =
-		!isAuthenticated ?
-			[
-				{ name: 'Home', href: '/', current: true },
-				{ name: 'About', href: '/about', current: false },
-			]
-		:	[
-				{ name: 'My Profile', href: '/profile', current: false },
-				{ name: 'Dashboard', href: '/dashboard', current: false },
-				{ name: 'Properties', href: '/properties', current: false },
-				{ name: 'Users', href: '/users', current: false },
-			];
+		(isAuthenticated && [
+			{ name: 'My Profile', href: '/profile', current: false },
+			{ name: 'Dashboard', href: '/dashboard', current: false },
+			{ name: 'Properties', href: '/properties', current: false },
+			{ name: 'Users', href: '/users', current: false },
+		]) ||
+		[];
 	if (isAuthenticated && isSuperAdmin) {
 		navigation.splice(1, 0, {
 			name: 'Companies',
@@ -79,7 +75,7 @@ const Sidebar = () => {
 							{item.name}
 						</NavLink>
 					))}
-					{isAuthenticated ?
+					{isAuthenticated && (
 						<NavLink
 							to="#"
 							onClick={() =>
@@ -92,15 +88,7 @@ const Sidebar = () => {
 							}>
 							Log out
 						</NavLink>
-					:	<NavLink
-							to="#"
-							onClick={() => loginWithRedirect()}
-							className={
-								'flex items-center px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200 text-[#212529] dark:text-[#F8F9FA] hover:bg-[#FFFFFF] hover:text-[#212529]'
-							}>
-							Log in
-						</NavLink>
-					}
+					)}
 				</nav>
 			</div>
 
