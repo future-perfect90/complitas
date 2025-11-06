@@ -176,19 +176,6 @@ class User
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function listUserProperties(string $companyId, string | null $userId): array
-    {
-        $sql = "SELECT id, name
-                FROM properties
-                WHERE companyId = :company_id AND assignedTo = :assigned_to";
-
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->bindParam(':company_id', $companyId);
-        $stmt->bindParam(':assigned_to', $userId);
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
-
     public function assignUserToProperty(string $userId, array $propertyIds): array
     {
 

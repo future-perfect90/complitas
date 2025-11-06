@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { DataHighlightWidget } from '../components/ExpiryDateWidget/ExpiryDateWidget';
 
+import AssignedPropertiesWidget from '../components/AssignedPropertiesWidget';
 import type { Header, RowData } from '../components/ExpiryDateWidget/types';
 import { useAuthMeta } from '../context/AuthProvider';
 import { getExpiringCerts } from '../utils/api';
@@ -66,28 +67,32 @@ export default function Dashboard() {
 		return <div>Loading...</div>;
 	}
 	return (
-		<>
+		<div className="flex flex-col gap-6">
 			{isAuthenticated ?
 				<>
-					<h2 className="text-3xl">Welcome to your dashboard</h2>
-					<br />
-					<p>
-						This is your personal dashboard where you can manage your settings
-						and view your data.
-					</p>
-					<br />
-					<DataHighlightWidget<ExpiringCert>
-						title="Expiring Certifications (Next 3 Months)"
-						headers={expiringCertsHeaders}
-						rows={expiringCerts}
-						totalRows={totalCerts}
-						itemsPerPage={itemsPerPage}
-						currentPage={currentPage}
-						onPageChange={setCurrentPage}
-						onRowClick={handleRowClick}
-					/>
+					<div className="flex flex-col gap-6">
+						<h2 className="text-3xl">Welcome to Complitas</h2>
+						<br />
+						<DataHighlightWidget<ExpiringCert>
+							title="Expiring Certifications (Next 3 Months)"
+							headers={expiringCertsHeaders}
+							rows={expiringCerts}
+							totalRows={totalCerts}
+							itemsPerPage={itemsPerPage}
+							currentPage={currentPage}
+							onPageChange={setCurrentPage}
+							onRowClick={handleRowClick}
+						/>
+						<br />
+					</div>
+					<div className="flex flex-col gap-4">
+						<h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+							My Assigned Properties
+						</h3>
+						<AssignedPropertiesWidget />
+					</div>
 				</>
 			:	'Error: Getting user information failed. Please try again later.'}
-		</>
+		</div>
 	);
 }

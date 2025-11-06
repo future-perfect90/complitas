@@ -1,8 +1,5 @@
 import { Button } from '../Button';
-import type {
-	RowData,
-	DataHighlightWidgetProps,
-} from './types';
+import type { DataHighlightWidgetProps, RowData } from './types';
 
 const getExpiryHighlightClass = (expiryDate: any): string => {
 	if (

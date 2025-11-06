@@ -4,11 +4,11 @@ require_once __DIR__ . '/../../classes/User.php';
 
 $token = Auth::requireAuth();
 $conn = (new Database())->connect();
-$user = new User($conn);
+$property = new Properties($conn);
 $companyId = Validate::ValidateString($_GET['companyId']);
 $userId = Validate::ValidateString($_GET['userId']) ?? null;
 
-$properties = $user->listUserProperties($companyId, $userId);
+$properties = $property->listAssignedProperties($companyId, $userId);
 
 if (!empty($properties)) {
     http_response_code(200);

@@ -769,7 +769,7 @@ export const getExpiringCerts = async (page = 1, limit = 5) => {
 export async function getUserProperties(companyId: string, userId: string) {
 	const jwt = await retrieveToken();
 	const response = await fetch(
-		`${import.meta.env.VITE_API_BASE_URL}/user-management/listProperties.php?companyId=${companyId}&userId=${userId}`,
+		`${import.meta.env.VITE_API_BASE_URL}/properties/listAssignedProperties.php?companyId=${companyId}&userId=${userId}`,
 		{
 			method: 'GET',
 			headers: {
@@ -823,3 +823,24 @@ export async function assignUserToProperty(
 	}
 	return response.json();
 }
+
+export const getPropertiesCompletion = async (
+	companyId: string,
+	userId: string
+) => {
+	const jwt = await retrieveToken();
+	const response = await fetch(
+		`${import.meta.env.VITE_API_BASE_URL}/properties/getPropertyCompletion.php?companyId=${companyId}&userId=${userId}`,
+		{
+			method: 'GET',
+			headers: {
+				Authorization: `Bearer ${jwt}`,
+				'Content-Type': 'application/json',
+			},
+		}
+	);
+	if (!response.ok) {
+		throw new Error(`Response status: ${response.status}`);
+	}
+	return response.json();
+};

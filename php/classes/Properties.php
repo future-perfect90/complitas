@@ -261,4 +261,91 @@ class Properties
             return ['success' => false, 'message' => 'Failed to update notification preferences.', 'error' => $e->getMessage()];
         }
     }
+
+    public function getPropertyCompletion(string $userId, string $companyId): array
+    {
+
+        try {
+
+            $properties = $this->listAssignedProperties($companyId, $userId);
+
+            $completionData = [];
+
+            foreach ($properties as $property) {
+                $basicInfoFields = ['address1', 'city', 'postCode', 'county', 'country', 'designDate', 'managerName', 'managerEmail', 'telephone', 'uniqueReferenceNumber', 'residentialAwareness', 'habitableHeight', 'buildingHeight', 'occupancyType', 'residentalFlats', 'uniqueSupplyPoints', 'commercialUnits'];
+                $additionalInfoFields = ['lifts', 'carpark', 'timberFramed', 'communalUtilityAssets', 'communalGasAppliances', 'maintenanceRegime', 'refurbished'];
+                $contactsFields = ['managerName', 'managerAddress', 'managerEmail', 'managerTelephone', 'emergencyName', 'emergencyAddress', 'emergencyEmail', 'emergencyTelephone', 'localFireName', 'localFireAddress', 'localFireEmail', 'localFireTelephone'];
+                $auditDetailsFields = ['logBook', 'fireSafetyLogBook', 'electronicAuditCompleted', 'epc', 'energyCertificates', 'oms', 'isolationValvesClear', 'accessControlled'];
+
+                $allFields = array_merge($basicInfoFields, $additionalInfoFields, $contactsFields, $auditDetailsFields);
+                $totalFields = count($allFields);
+                $completedFields = 0;
+                foreach ($allFields as $field) {
+                    if (isset($property[$field]) && $property[$field] !== '' && $property[$field] !== null) {
+                        $completedFields++;
+                    }
+                }
+                $propertyDetailsCompletion = ($totalFields > 0) ? ($completedFields / $totalFields) * 100 : 0;
+
+                $auditSql = "SELECT id FROM reports WHERE propertyId = :propertyId ORDER BY createdAt DESC LIMIT 1";
+                $auditStmt = $this->pdo->prepare($auditSql);
+                $auditStmt->bindParam(':propertyId', $property['id']);
+                $auditStmt->execute();
+                $latestAudit = $auditStmt->fetch(PDO::FETCH_ASSOC);
+
+                $complianceCompletion = 0;
+                if ($latestAudit) {
+                    $auditId = $latestAudit['id'];
+
+                    $totalQuestionsSql = "SELECT COUNT(id) as total FROM compliance_questions";
+                    $totalQuestionsStmt = $this->pdo->prepare($totalQuestionsSql);
+                    $totalQuestionsStmt->execute();
+                    $totalQuestionsResult = $totalQuestionsStmt->fetch(PDO::FETCH_ASSOC);
+                    $totalQuestions = $totalQuestionsResult ? (int)$totalQuestionsResult['total'] : 0;
+
+                    if ($totalQuestions > 0) {
+                        $answeredQuestionsSql = "SELECT COUNT(DISTINCT questionId) as answered 
+                                             FROM question_responses 
+                                             WHERE reportId = :auditId";
+                        $answeredQuestionsStmt = $this->pdo->prepare($answeredQuestionsSql);
+                        $answeredQuestionsStmt->bindParam(':auditId', $auditId);
+                        $answeredQuestionsStmt->execute();
+                        $answeredQuestionsResult = $answeredQuestionsStmt->fetch(PDO::FETCH_ASSOC);
+                        $answeredQuestions = $answeredQuestionsResult ? (int)$answeredQuestionsResult['answered'] : 0;
+
+                        $complianceCompletion = ($answeredQuestions / $totalQuestions) * 100;
+                    }
+                }
+
+                $completionData[] = [
+                    'id' => $property['id'],
+                    'name' => $property['name'],
+                    'propertyDetailsCompletion' => round($propertyDetailsCompletion, 2),
+                    'complianceCompletion' => round($complianceCompletion, 2),
+                ];
+            }
+            return $completionData;
+        } catch (Exception $e) {
+            http_response_code(500);
+            return ['success' => false, 'message' => 'Failed to retrieve property completion data.', 'error' => $e->getMessage()];
+        }
+    }
+
+    public function listAssignedProperties(string $companyId, string | null $userId): array
+    {
+        $sql = "SELECT id, name, address1, address2, address3, city, county, postCode, country, managerName, managerEmail, telephone, managerName, 
+        occupancyType, habitableHeight, buildingHeight, designDate, lifts, communalUtilityAssets, communalGasAppliances, voidAssets, residentalFlats, uniqueSupplyPoints, commercialUnits, maintenanceRegime, mitigationPlan, refurbished, 
+        refurbishedCDM, oms, managerTelephone, managerAddress, siteEmail, siteTelephone, emergencyName, emergencyEmail, emergencyTelephone, emergencyAddress, 
+        localFireName, localFireEmail, localFireTelephone, localFireAddress, localFireDetails, carpark, uniqueReferenceNumber, residentialAwareness, logBook, 
+        fireSafetyLogBook, electronicAuditCompleted, epc, energyCertificates, isolationValvesClear, accessControlled, hrbUniqueReferenceNumber, bsrRegistrationNumber,
+        principleName, principleEmail, principleTelephone, principleAddress, timberFramed
+                FROM properties
+                WHERE companyId = :company_id AND assignedTo = :assigned_to";
+
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindParam(':company_id', $companyId);
+        $stmt->bindParam(':assigned_to', $userId);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }
