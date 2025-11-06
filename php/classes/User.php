@@ -175,4 +175,44 @@ class User
 
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
+
+    public function listUserProperties(string $companyId, string | null $userId): array
+    {
+        $sql = "SELECT id, name
+                FROM properties
+                WHERE companyId = :company_id AND assignedTo = :assigned_to";
+
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindParam(':company_id', $companyId);
+        $stmt->bindParam(':assigned_to', $userId);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function assignUserToProperty(string $userId, array $propertyIds): array
+    {
+
+        $ids = '';
+        foreach ($propertyIds as $propertyId) {
+            $id = $propertyId;
+            $ids .= "'$id',";
+        }
+        $ids = rtrim($ids, ',');
+        $sql = "UPDATE properties SET assignedTo = :user_id where id IN ($ids)";
+
+        $lookup = "SELECT count(*) FROM properties WHERE assignedTo = :user_id and id IN ($ids)";
+        $stmt = $this->pdo->prepare($lookup);
+        $stmt->bindParam(':user_id', $userId);
+        $stmt->execute();
+        $rowCount = $stmt->fetchColumn();
+        if ($rowCount > 0) {
+            return ['success' => false, 'message' => 'User already assigned to property'];
+        }
+
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindParam(':user_id', $userId);
+        $stmt->execute();
+
+        return $stmt->rowCount() > 0 ?  ['success' => true, 'message' => 'Properties assigned to user'] :  ['success' => false, 'message' => 'Something went wrong'];
+    }
 }

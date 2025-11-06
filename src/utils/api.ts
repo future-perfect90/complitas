@@ -765,3 +765,61 @@ export const getExpiringCerts = async (page = 1, limit = 5) => {
 	if (!response.ok) throw new Error('Failed to get expiring certs');
 	return response.json();
 };
+
+export async function getUserProperties(companyId: string, userId: string) {
+	const jwt = await retrieveToken();
+	const response = await fetch(
+		`${import.meta.env.VITE_API_BASE_URL}/user-management/listProperties.php?companyId=${companyId}&userId=${userId}`,
+		{
+			method: 'GET',
+			headers: {
+				Authorization: `Bearer ${jwt}`,
+				'Content-Type': 'application/json',
+			},
+		}
+	);
+	if (!response.ok) {
+		throw new Error(`Response status: ${response.status}`);
+	}
+	return response.json();
+}
+
+export async function unassignedProperties(companyId: string) {
+	const jwt = await retrieveToken();
+	const response = await fetch(
+		`${import.meta.env.VITE_API_BASE_URL}/properties/list.php?companyId=${companyId}&unassignedOnly=true`,
+		{
+			method: 'GET',
+			headers: {
+				Authorization: `Bearer ${jwt}`,
+				'Content-Type': 'application/json',
+			},
+		}
+	);
+	if (!response.ok) {
+		throw new Error(`Response status: ${response.status}`);
+	}
+	return response.json();
+}
+
+export async function assignUserToProperty(
+	userId: string,
+	propertyIds: string[]
+) {
+	const jwt = await retrieveToken();
+	const response = await fetch(
+		`${import.meta.env.VITE_API_BASE_URL}/user-management/assignUserToProperty.php`,
+		{
+			method: 'POST',
+			body: JSON.stringify({ userId, propertyIds }),
+			headers: {
+				Authorization: `Bearer ${jwt}`,
+				'Content-Type': 'application/json',
+			},
+		}
+	);
+	if (!response.ok) {
+		throw new Error(`Response status: ${response.status}`);
+	}
+	return response.json();
+}

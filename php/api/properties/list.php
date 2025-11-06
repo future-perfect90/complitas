@@ -7,8 +7,8 @@ $token = Auth::requireAuth();
 $db = (new Database())->connect();
 $property = new Properties($db);
 $companyId = Validate::ValidateString($_GET['companyId']);
-
-$properties = $property->listAll(companyId: $companyId);
+$unassignedOnly = isset($_GET['unassignedOnly']) ? Validate::ValidateBoolean($_GET['unassignedOnly']) : false;
+$properties = $property->listAll(companyId: $companyId, unassignedOnly: $unassignedOnly);
 
 http_response_code(200);
 echo json_encode($properties);

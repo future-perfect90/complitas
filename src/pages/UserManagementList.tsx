@@ -1,11 +1,11 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { toast } from 'react-toastify';
-import { Card, CardContent, CardHeader, CardTitle } from '../components/Card';
-import UserModal from '../components/modals/UserModal';
-import { useAuthMeta } from '../context/AuthProvider';
-
 import { Button } from '../components/Button';
+import { Card, CardContent, CardHeader, CardTitle } from '../components/Card';
+import UserAssignmentModal from '../components/modals/UserAssignmentModal';
+import UserModal from '../components/modals/UserModal';
 import SearchInput from '../components/SearchInput';
+import { useAuthMeta } from '../context/AuthProvider';
 import { useSearch } from '../hooks/useSearch';
 import type { User } from '../types';
 import { getUsers } from '../utils/api';
@@ -15,6 +15,10 @@ const UserList: React.FC = () => {
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [editData, setEditData] = useState<User | undefined>(undefined);
 	const [searchTerm, setSearchTerm] = useState('');
+	const [modal, setModal] = useState<{
+		type: 'viewAssignProperties' | null;
+		user?: User;
+	}>({ type: null });
 
 	const authMeta = useAuthMeta();
 	const companyUuid = authMeta?.companyUuid || '';
@@ -27,6 +31,10 @@ const UserList: React.FC = () => {
 		} catch {
 			toast.error('Failed to load users.');
 		}
+	};
+
+	const handleOpenUserAssignmentModal = async (user: User) => {
+		setModal({ type: 'viewAssignProperties', user });
 	};
 
 	useEffect(() => {
@@ -93,7 +101,14 @@ const UserList: React.FC = () => {
 							key={user.id}
 							className="rounded-xl shadow-lg flex flex-col justify-between">
 							<CardHeader>
-								<CardTitle className="text-xl font-bold">{user.name}</CardTitle>
+								<CardTitle className="text-xl font-bold">
+									{user.name}
+									<Button
+										label="Assign"
+										className="float-right py-1 px-4"
+										onClick={() => handleOpenUserAssignmentModal(user)}
+									/>
+								</CardTitle>
 							</CardHeader>
 							<CardContent className="space-y-5 text-sm">
 								<div className="mt-3">
@@ -136,6 +151,16 @@ const UserList: React.FC = () => {
 				onSuccess={() => fetchUsers(companyUuid)}
 				initialData={editData}
 			/>
+			{modal.type === 'viewAssignProperties' && modal.user && (
+				<UserAssignmentModal
+					isOpen={modal.type === 'viewAssignProperties'}
+					onClose={() => setModal({ type: null })}
+					onSuccess={() => fetchUsers(companyUuid)}
+					userId={modal.user.id ?? ''}
+					userName={modal.user.name}
+					companyId={companyUuid}
+				/>
+			)}
 		</div>
 	);
 };

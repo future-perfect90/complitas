@@ -12,9 +12,13 @@ class Properties
         $this->pdo = $pdo;
     }
 
-    public function listAll(string $companyId): array
+    public function listAll(string $companyId, bool $unassignedOnly = false): array
     {
-        $stmt = $this->pdo->prepare("SELECT id, name, address1, address2, address3, city, county, postCode, country, managerEmail, telephone, managerName FROM properties where companyId = :company_id");
+        $sql = "SELECT id, name, address1, address2, address3, city, county, postCode, country, managerEmail, telephone, managerName FROM properties where companyId = :company_id";
+        if ($unassignedOnly) {
+            $sql .= " AND assignedTo IS NULL";
+        }
+        $stmt = $this->pdo->prepare($sql);
         $stmt->bindParam(':company_id', $companyId);
         $stmt->execute();
 
