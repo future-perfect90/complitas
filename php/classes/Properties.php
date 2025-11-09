@@ -2,6 +2,7 @@
 
 use Ramsey\Uuid\Uuid;
 
+require_once(__DIR__ . '/Compliance.php');
 
 class Properties
 {
@@ -139,7 +140,7 @@ class Properties
 
     public function getPropertyQuestionRequirements(string $propertyId): ?array
     {
-        $sql = "SELECT lifts, communalGasAppliances, carpark, isHRB FROM properties WHERE id = :id";
+        $sql = "SELECT lifts, communalGasAppliances, carpark, isHRB, communalUtilityAssets, voidAssets FROM properties WHERE id = :id";
 
         $stmt = $this->pdo->prepare($sql);
         $stmt->bindParam(':id', $propertyId);
@@ -297,22 +298,28 @@ class Properties
                 if ($latestAudit) {
                     $auditId = $latestAudit['id'];
 
-                    $totalQuestionsSql = "SELECT COUNT(id) as total FROM compliance_questions";
-                    $totalQuestionsStmt = $this->pdo->prepare($totalQuestionsSql);
-                    $totalQuestionsStmt->execute();
-                    $totalQuestionsResult = $totalQuestionsStmt->fetch(PDO::FETCH_ASSOC);
-                    $totalQuestions = $totalQuestionsResult ? (int)$totalQuestionsResult['total'] : 0;
+                    $propertyMetadata = $this->getPropertyQuestionRequirements($property['id']);
+                    $questions = (new Compliance($this->pdo))->getComplianceQuestions($propertyMetadata);
+                    $totalQuestions = count($questions);
+                    $answeredQuestions = 0;
 
                     if ($totalQuestions > 0) {
-                        $answeredQuestionsSql = "SELECT COUNT(DISTINCT questionId) as answered 
-                                             FROM question_responses 
-                                             WHERE reportId = :auditId";
+                        $answeredQuestionsSql = "SELECT
+                                                COUNT(DISTINCT qr.questionId) AS answered
+                                                FROM
+                                                    question_responses qr
+                                                JOIN
+                                                    compliance_questions cq ON qr.questionId = cq.id
+                                                WHERE
+                                                    qr.reportId = :auditId
+                                                    AND ((qr.answer = 'Yes' AND cq.uploadRequired = 1 AND qr.fileName IS NOT NULL AND qr.fileName != '' AND cq.dateType IS NOT NULL AND qr.savedDate IS NOT NULL)
+                                                    OR (qr.answer = 'No')
+                                                    OR (qr.answer = 'N/A'))";
                         $answeredQuestionsStmt = $this->pdo->prepare($answeredQuestionsSql);
                         $answeredQuestionsStmt->bindParam(':auditId', $auditId);
                         $answeredQuestionsStmt->execute();
                         $answeredQuestionsResult = $answeredQuestionsStmt->fetch(PDO::FETCH_ASSOC);
                         $answeredQuestions = $answeredQuestionsResult ? (int)$answeredQuestionsResult['answered'] : 0;
-
                         $complianceCompletion = ($answeredQuestions / $totalQuestions) * 100;
                     }
                 }
@@ -321,7 +328,7 @@ class Properties
                     'id' => $property['id'],
                     'name' => $property['name'],
                     'propertyDetailsCompletion' => round($propertyDetailsCompletion, 2),
-                    'complianceCompletion' => round($complianceCompletion, 2),
+                    'complianceCompletion' => round($complianceCompletion, 2) >= 100 ? 100 : round($complianceCompletion, 2)
                 ];
             }
             return $completionData;
