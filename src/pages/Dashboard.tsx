@@ -73,6 +73,9 @@ export default function Dashboard() {
 					<div className="flex flex-col gap-6">
 						<h2 className="text-3xl">Welcome to Complitas</h2>
 						<br />
+						<h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+							Expiring Certifications
+						</h3>
 						<DataHighlightWidget<ExpiringCert>
 							title="Expiring Certifications (Next 3 Months)"
 							headers={expiringCertsHeaders}
