@@ -1,10 +1,10 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import LoadingSpinner from '../components/Loading';
-import { useAuthMeta } from '../context/AuthProvider';
-import type { Property } from '../types';
-import { getPropertiesCompletion } from '../utils/api';
+import { useAuthMeta } from '../../context/AuthProvider';
+import type { Property } from '../../types';
+import { getPropertiesCompletion } from '../../utils/api';
+import LoadingSpinner from '../Loading';
 
 interface PropertyWithCompletion extends Property {
 	propertyDetailsCompletion: number;
@@ -117,32 +117,6 @@ const AssignedPropertiesWidget: React.FC = () => {
 						</table>
 					</div>
 				}
-				{/* {hasPagination && totalPages > 1 && (
-					<div className="flex justify-between items-center mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
-						<span className="text-sm text-gray-500 dark:text-gray-400">
-							Showing {startRow} to {endRow} of {totalRows} results
-						</span>
-						<div className="flex gap-2">
-							<Button
-								label="Previous"
-								onClick={() => onPageChange(currentPage - 1)}
-								disabled={currentPage === 1}
-								className="px-4 py-1.5"
-								style="secondary"
-							/>
-							<span className="flex items-center px-4 py-1.5 text-sm font-medium text-gray-700 dark:text-gray-300">
-								Page {currentPage} of {totalPages}
-							</span>
-							<Button
-								label="Next"
-								onClick={() => onPageChange(currentPage + 1)}
-								disabled={currentPage === totalPages}
-								className="px-4 py-1.5"
-								style="secondary"
-							/>
-						</div>
-					</div>
-				)} */}
 			</div>
 		</div>
 	);

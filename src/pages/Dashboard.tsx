@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { DataHighlightWidget } from '../components/ExpiryDateWidget/ExpiryDateWidget';
+import { DataHighlightWidget } from '../components/widgets/ExpiryDateWidget';
+import ToDoWidget from '../components/widgets/ToDoWidget';
 
-import AssignedPropertiesWidget from '../components/AssignedPropertiesWidget';
-import type { Header, RowData } from '../components/ExpiryDateWidget/types';
+import AssignedPropertiesWidget from '../components/widgets/AssignedPropertiesWidget';
+import type { Header, RowData } from '../components/widgets/ExpiryDate.types';
 import { useAuthMeta } from '../context/AuthProvider';
 import { getExpiringCerts } from '../utils/api';
 
@@ -73,9 +74,6 @@ export default function Dashboard() {
 					<div className="flex flex-col gap-6">
 						<h2 className="text-3xl">Welcome to Complitas</h2>
 						<br />
-						<h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-							Expiring Certifications
-						</h3>
 						<DataHighlightWidget<ExpiringCert>
 							title="Expiring Certifications (Next 3 Months)"
 							headers={expiringCertsHeaders}
@@ -88,11 +86,9 @@ export default function Dashboard() {
 						/>
 						<br />
 					</div>
-					<div className="flex flex-col gap-4">
-						<h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-							My Assigned Properties
-						</h3>
+					<div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
 						<AssignedPropertiesWidget />
+						<ToDoWidget />
 					</div>
 				</>
 			:	'Error: Getting user information failed. Please try again later.'}
