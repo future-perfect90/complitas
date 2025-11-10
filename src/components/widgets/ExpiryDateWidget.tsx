@@ -102,7 +102,7 @@ export const DataHighlightWidget = <T extends RowData>({
 						</table>
 					</div>
 				)}
-				{hasPagination && totalPages > 1 && (
+				{hasPagination && totalPages && totalPages > 1 && (
 					<div className="flex justify-between items-center mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
 						<span className="text-sm text-gray-500 dark:text-gray-400">
 							Showing {startRow} to {endRow} of {totalRows} results
