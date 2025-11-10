@@ -30,6 +30,7 @@ const AssignedPropertiesWidget: React.FC = () => {
 			try {
 				setIsPropertiesLoading(true);
 				const data = await getPropertiesCompletion(companyUuid, userUuid);
+				console.log(data);
 				setProperties(data);
 			} catch {
 				toast.error('Failed to load properties.');

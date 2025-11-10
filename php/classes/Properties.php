@@ -328,7 +328,9 @@ class Properties
                     'id' => $property['id'],
                     'name' => $property['name'],
                     'propertyDetailsCompletion' => round($propertyDetailsCompletion, 2),
-                    'complianceCompletion' => round($complianceCompletion, 2) >= 100 ? 100 : round($complianceCompletion, 2)
+                    'complianceCompletion' => round($complianceCompletion, 2) >= 100 ? 100 : round($complianceCompletion, 2),
+                    'answeredQuestions' => $answeredQuestions,
+                    'totalQuestions' => $totalQuestions
                 ];
             }
             return $completionData;
