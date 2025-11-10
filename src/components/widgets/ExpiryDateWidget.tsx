@@ -46,10 +46,10 @@ export const DataHighlightWidget = <T extends RowData>({
 	const hasData = rows && rows.length > 0;
 	const hasPagination =
 		totalRows && itemsPerPage && currentPage && onPageChange && totalRows > 0;
-	const totalPages = hasPagination ? Math.ceil(totalRows / itemsPerPage) : 0;
-	const startRow = hasPagination ? (currentPage - 1) * itemsPerPage + 1 : 0;
+	const totalPages = hasPagination && Math.ceil(totalRows / itemsPerPage);
+	const startRow = hasPagination && (currentPage - 1) * itemsPerPage + 1;
 	const endRow =
-		hasPagination ? Math.min(currentPage * itemsPerPage, totalRows) : 0;
+		hasPagination && Math.min(currentPage * itemsPerPage, totalRows);
 
 	return (
 		<div className="font-sans bg-white dark:bg-gray-800 rounded-xl shadow-lg dark:shadow-gray-950/50 p-6 flex flex-col">
