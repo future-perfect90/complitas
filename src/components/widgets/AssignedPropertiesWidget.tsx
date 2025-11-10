@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
 import { useAuthMeta } from '../../context/AuthProvider';
 import type { Property } from '../../types';
 import { getPropertiesCompletion } from '../../utils/api';
@@ -33,7 +32,7 @@ const AssignedPropertiesWidget: React.FC = () => {
 				console.log(data);
 				setProperties(data);
 			} catch {
-				toast.error('Failed to load properties.');
+				console.log('Failed to load properties.');
 			} finally {
 				setIsPropertiesLoading(false);
 			}
@@ -61,7 +60,7 @@ const AssignedPropertiesWidget: React.FC = () => {
 			<div className="flex-1 overflow-hidden flex flex-col">
 				{!hasData ?
 					<div className="flex items-center justify-center h-24 text-gray-400 dark:text-gray-500 italic">
-						<p>No data to display.</p>
+						<p>No properties currently assigned.</p>
 					</div>
 				:	<div className="flex-1 overflow-y-auto">
 						<table className="w-full border-collapse">
