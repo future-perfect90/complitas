@@ -10,13 +10,8 @@ $userId = Validate::ValidateString($_GET['userId']) ?? null;
 
 if ($companyId && $userId) {
     $result = $property->getPropertyCompletion($userId, $companyId);
-    if ($result) {
-        http_response_code(200);
-        echo json_encode($result);
-    } else {
-        http_response_code(404);
-        echo json_encode(['message' => 'Properties not found']);
-    }
+    http_response_code(200);
+    echo json_encode($result);
 } else {
     http_response_code(400);
     echo json_encode(['message' => 'Invalid request, company ID and user ID is required']);

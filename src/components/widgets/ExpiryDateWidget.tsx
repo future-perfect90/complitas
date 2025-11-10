@@ -58,7 +58,7 @@ export const DataHighlightWidget = <T extends RowData>({
 			<div className="flex-1 overflow-hidden flex flex-col">
 				{!hasData && (
 					<div className="flex items-center justify-center h-24 text-gray-400 dark:text-gray-500 italic">
-						<p>No data to display.</p>
+						<p>Nothing expiring within the next 90 days.</p>
 					</div>
 				)}
 
@@ -101,7 +101,7 @@ export const DataHighlightWidget = <T extends RowData>({
 						</table>
 					</div>
 				)}
-				{hasPagination && totalPages && totalPages > 1 && (
+				{hasPagination && totalPages && totalPages > 1 ?
 					<div className="flex justify-between items-center mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
 						<span className="text-sm text-gray-500 dark:text-gray-400">
 							Showing {startRow} to {endRow} of {totalRows} results
@@ -126,7 +126,7 @@ export const DataHighlightWidget = <T extends RowData>({
 							/>
 						</div>
 					</div>
-				)}
+				:	''}
 			</div>
 		</div>
 	);
