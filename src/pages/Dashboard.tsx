@@ -6,6 +6,7 @@ import ToDoWidget from '../components/widgets/ToDoWidget';
 import AssignedPropertiesWidget from '../components/widgets/AssignedPropertiesWidget';
 import type { Header, RowData } from '../components/widgets/ExpiryDate.types';
 import { useAuthMeta } from '../context/AuthProvider';
+import { useRequireAuth } from '../hooks/useRequireAuth';
 import { getExpiringCerts } from '../utils/api';
 
 const expiringCertsHeaders: Header[] = [
@@ -27,6 +28,7 @@ interface ExpiringCert extends RowData {
 export default function Dashboard() {
 	const authMeta = useAuthMeta();
 	const { isAuthenticated, isLoading } = authMeta;
+	useRequireAuth();
 	const [expiringCerts, setExpiringCerts] = useState<ExpiringCert[]>([]);
 	const [totalCerts, setTotalCerts] = useState(0);
 	const [currentPage, setCurrentPage] = useState(1);
