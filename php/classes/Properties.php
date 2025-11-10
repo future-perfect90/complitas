@@ -312,7 +312,7 @@ class Properties
                                                     compliance_questions cq ON qr.questionId = cq.id
                                                 WHERE
                                                     qr.reportId = :auditId
-                                                    AND ((qr.answer = 'Yes' AND cq.uploadRequired = 1 AND qr.fileName IS NOT NULL AND qr.fileName != '' AND cq.dateType IS NOT NULL AND qr.savedDate IS NOT NULL)
+                                                    AND (((qr.answer = 'Yes' OR qr.answer = 'Included in EWS1') AND cq.uploadRequired = 1 AND qr.fileName IS NOT NULL AND qr.fileName != '' AND cq.dateType IS NOT NULL AND qr.savedDate IS NOT NULL)
                                                     OR (qr.answer = 'No')
                                                     OR (qr.answer = 'N/A'))";
                         $answeredQuestionsStmt = $this->pdo->prepare($answeredQuestionsSql);
